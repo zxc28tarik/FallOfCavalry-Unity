@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <IsPackable>false</IsPackable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.1.0" />
+    <ProjectReference Include="FOC.Domain.csproj" />
+    <ProjectReference Include="FOC.Application.csproj" />
+    <ProjectReference Include="FOC.Infrastructure.csproj" />
+    <Compile Include="..\UnityProject\Assets\FOC\Tests\EditMode\**\*.cs" />
+  </ItemGroup>
+</Project>
+

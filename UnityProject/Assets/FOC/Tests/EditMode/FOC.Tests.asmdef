@@ -1,0 +1,11 @@
+{
+  "name": "FOC.Tests",
+  "rootNamespace": "FOC.Tests",
+  "references": ["FOC.Domain", "FOC.Application", "FOC.Infrastructure"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false,
+  "overrideReferences": false,
+  "noEngineReferences": false
+}
+

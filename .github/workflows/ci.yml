@@ -1,0 +1,25 @@
+name: Foundation CI
+
+on:
+  push:
+    branches: [master, "codex/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  foundation:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.103
+      - name: Restore
+        run: dotnet restore FallOfCavalry.sln
+      - name: Compile
+        run: dotnet build FallOfCavalry.sln --configuration Release --no-restore
+      - name: Test
+        run: dotnet test FallOfCavalry.sln --configuration Release --no-build --no-restore --logger "console;verbosity=normal"
+
