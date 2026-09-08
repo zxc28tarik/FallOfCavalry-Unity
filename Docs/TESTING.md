@@ -10,7 +10,7 @@ dotnet build FallOfCavalry.sln --configuration Release --no-restore
 dotnet test FallOfCavalry.sln --configuration Release --no-build --no-restore --logger "console;verbosity=normal"
 ```
 
-The `Build/*.csproj` projects compile the authoritative sources under `UnityProject/Assets/FOC`; they are not a second implementation. Warnings are errors. The suite covers architecture guards, stable IDs, deterministic RNG/time/order, definition registry failures, SaveData/runtime separation, roundtrip, migration chain/gap, validation, temp validation, replacement backup, recovery, and slot traversal.
+The `Build/*.csproj` projects compile the authoritative sources under `UnityProject/Assets/FOC`; they are not a second implementation. Warnings are errors. The suite covers foundation regression plus Character identity layers, stat bounds, independent dynamic values, sparse relations, canonical ordering, promotion continuity, single location, injury/captivity/death, A/B story guards, schema v1 migration and complete schema v2 semantic roundtrip.
 
 ## Unity Editor suite
 
@@ -29,4 +29,3 @@ The command runs EditMode tests in batch mode and writes XML/log output under ig
 ## Critical-skip policy
 
 No critical test may be ignored or skipped to close a package. Missing Editor/tooling is reported as `NOT RUN`, not inferred success.
-

@@ -18,6 +18,21 @@ namespace FOC.Tests
         }
 
         [Test]
+        public void CharacterDomain_DoesNotReferencePresentationOrPresentationTypes()
+        {
+            var domain = Path.Combine(FindRepositoryRoot(), "UnityProject", "Assets", "FOC", "Domain", "Characters");
+            foreach (var path in Directory.GetFiles(domain, "*.cs", SearchOption.AllDirectories))
+            {
+                var source = File.ReadAllText(path);
+                Assert.That(source, Does.Not.Contain("FOC.Presentation"), path);
+                Assert.That(source, Does.Not.Contain("MonoBehaviour"), path);
+                Assert.That(source, Does.Not.Contain("GameObject"), path);
+                Assert.That(source, Does.Not.Contain("System.Random"), path);
+                Assert.That(source, Does.Not.Contain("DateTime.Now"), path);
+            }
+        }
+
+        [Test]
         public void DomainAssemblyDefinition_HasNoEngineReferencesAndNoDependencies()
         {
             var path = Path.Combine(FindRepositoryRoot(), "UnityProject", "Assets", "FOC", "Domain", "FOC.Domain.asmdef");

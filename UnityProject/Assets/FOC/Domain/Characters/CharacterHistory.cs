@@ -60,6 +60,11 @@ namespace FOC.Domain.Characters
                     throw new ArgumentException("History entries must have unique increasing sequence numbers.", nameof(entries));
                 }
 
+                if (_entries.Count > 0 && entry.OccurredAt.CompareTo(_entries[_entries.Count - 1].OccurredAt) < 0)
+                {
+                    throw new ArgumentException("History time cannot move backwards.", nameof(entries));
+                }
+
                 _entries.Add(entry);
                 _nextSequence = entry.Sequence + 1;
             }
@@ -72,6 +77,8 @@ namespace FOC.Domain.Characters
 
         public CharacterHistoryEntry Add(WorldTimestamp occurredAt, CharacterHistoryEventKind kind, string summary)
         {
+            if (_entries.Count > 0 && occurredAt.CompareTo(_entries[_entries.Count - 1].OccurredAt) < 0)
+                throw new InvalidOperationException("Character history time cannot move backwards.");
             var entry = new CharacterHistoryEntry(_nextSequence++, occurredAt, kind, summary);
             if (_entries.Count == Capacity) _entries.RemoveAt(0);
             _entries.Add(entry);

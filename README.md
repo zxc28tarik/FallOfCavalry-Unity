@@ -2,7 +2,7 @@
 
 This repository contains the clean Unity/C# production baseline for Fall of Cavalry. It is intentionally separate from the legacy browser prototype.
 
-Implementation 0 establishes deterministic, save-safe foundations only. Gameplay packages begin only after this package passes its acceptance gate.
+Implementation 0 established the deterministic, save-safe foundation. Implementation 1 adds the persistent Character Core while leaving Organization, House, Clique and later gameplay packages untouched.
 
 ## Layout
 
@@ -20,4 +20,3 @@ dotnet test FallOfCavalry.sln --configuration Release --no-build --no-restore
 ```
 
 Unity Editor validation requires the version pinned in `UnityProject/ProjectSettings/ProjectVersion.txt`.
-

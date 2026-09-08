@@ -2,9 +2,9 @@
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 1`.
+`CampaignSaveData.CurrentSaveVersion = 2`.
 
-The Implementation 0 format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text values are base64-encoded UTF-8. The format is deliberately small and dependency-free; it is an infrastructure detail, not a Domain contract.
+The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 
 ## Version 1 root metadata
 
@@ -24,11 +24,15 @@ The Implementation 0 format is a deterministic UTF-8 text envelope. Its first li
 
 `CampaignSaveData` is a transport DTO. `CampaignRuntimeState`, `WorldClock`, and `SeededRandomSource` are runtime objects and are never serialized directly. `CampaignSaveMapper` is the explicit boundary in both directions.
 
+## Version 2 Character Core
+
+Version 2 adds ordered `Characters` and canonical `CharacterRelations` collections. Each character persists identity kind/provenance, name, importance, all nine stats, separate loyalty/satisfaction/reputation/standing values, one typed physical location, injury, captivity, death and bounded history. Relations contain only explicitly created pairs. Definition objects, runtime objects and caches are reconstructed rather than serialized directly.
+
 ## Migration policy
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.
 
-Version 1 is the first schema, so no production migration is required yet.
+`CampaignSaveV1ToV2Migration` deterministically carries all version 1 metadata forward and initializes empty Character collections. It never invents people or relations. The committed version 1 fixture remains a compatibility test.
 
 ## Atomic storage policy
 
@@ -39,4 +43,3 @@ Version 1 is the first schema, so no production migration is required yet.
 5. On read, use the current file when valid; otherwise return a valid backup and mark recovery.
 
 Slots are restricted to letters, digits, `_`, and `-` to prevent path traversal. Invalid state is reported, not silently repaired.
-

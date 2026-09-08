@@ -36,13 +36,26 @@ namespace FOC.Domain.Characters
         public string Summary { get; }
     }
 
+    public enum CharacterProtectedOutcomePreference
+    {
+        None = 0,
+        InjuryOrCaptivity = 1,
+    }
+
     public sealed class CharacterDeathDecision
     {
-        private CharacterDeathDecision(bool allowed, string reason) { Allowed = allowed; Reason = reason; }
+        private CharacterDeathDecision(bool allowed, string reason, CharacterProtectedOutcomePreference preferredAlternative)
+        {
+            Allowed = allowed;
+            Reason = reason;
+            PreferredAlternative = preferredAlternative;
+        }
         public bool Allowed { get; }
         public string Reason { get; }
-        public static CharacterDeathDecision Allow() => new CharacterDeathDecision(true, string.Empty);
-        public static CharacterDeathDecision Deny(string reason) => new CharacterDeathDecision(false, reason);
+        public CharacterProtectedOutcomePreference PreferredAlternative { get; }
+        public static CharacterDeathDecision Allow() => new CharacterDeathDecision(true, string.Empty, CharacterProtectedOutcomePreference.None);
+        public static CharacterDeathDecision Deny(string reason, CharacterProtectedOutcomePreference preferredAlternative = CharacterProtectedOutcomePreference.None) =>
+            new CharacterDeathDecision(false, reason, preferredAlternative);
     }
 
     public interface ICharacterDeathPolicy
@@ -60,7 +73,7 @@ namespace FOC.Domain.Characters
             if (context.Cause == CharacterDeathCause.ArbitraryRandom &&
                 (character.Importance == CharacterImportance.A || character.Importance == CharacterImportance.B))
             {
-                return CharacterDeathDecision.Deny("A/B story guard blocks arbitrary random death.");
+                return CharacterDeathDecision.Deny("A/B story guard blocks arbitrary random death.", CharacterProtectedOutcomePreference.InjuryOrCaptivity);
             }
 
             return CharacterDeathDecision.Allow();

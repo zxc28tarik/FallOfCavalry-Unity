@@ -10,7 +10,7 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
                    └─────────────────────> FOC.Domain
 ```
 
-`FOC.Domain` is pure C# and its assembly definition has no engine references. It owns stable IDs, deterministic random/time contracts, definitions, runtime-state markers, messages, and validation primitives. It may not reference Application, Infrastructure, Presentation, or UnityEngine.
+`FOC.Domain` is pure C# and its assembly definition has no engine references. It owns stable IDs, deterministic random/time contracts, definitions, runtime state, Character Core rules, messages, and validation primitives. It may not reference Application, Infrastructure, Presentation, or UnityEngine.
 
 `FOC.Application` orchestrates use cases and owns ports such as save serialization and atomic storage. It maps `CampaignRuntimeState` to and from `CampaignSaveData`; it does not perform filesystem I/O.
 
@@ -26,6 +26,9 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 - Gameplay random sequence: the injected `IRandomSource` state only.
 - Static content: immutable `IDefinition<TTag>` implementations in a `DefinitionRegistry`.
 - Mutable campaign foundation: `CampaignRuntimeState`.
+- Persistent human identity: immutable `CharacterDefinition` subtypes referenced by mutable `CharacterState`.
+- Character physical location: one `CharacterLocation` discriminated value; captivity is its typed payload rather than a second location field.
+- Character relations: one canonical, sorted, explicitly populated sparse relation collection on `CharacterRoster`.
 - Persistence representation: `CampaignSaveData`, never runtime objects.
 - Message ordering: the explicit sequence in `DeterministicMessageQueue`.
 
@@ -33,5 +36,4 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 
 Typed IDs are generic by tag, so unrelated domain identities cannot be mixed. Future packages should introduce domain-specific tags or wrappers rather than a universal entity abstraction. State changes belong behind bounded rule/application services; Presentation must not mutate fields directly.
 
-No gameplay package is implemented in this baseline.
-
+`CharacterCommandService` is the Implementation 1 orchestration boundary. It delegates promotion, importance, movement, injury, captivity, relation and death behavior to Character Domain state/rules. It does not implement Organization assignments or later gameplay systems.

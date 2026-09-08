@@ -60,6 +60,11 @@ namespace FOC.Application.Save
                 throw new InvalidOperationException("Campaign save data violates invariants and cannot become runtime state.");
             }
 
+            if (data.SaveVersion != CampaignSaveData.CurrentSaveVersion)
+            {
+                throw new InvalidOperationException("Save data must be migrated to the current schema before runtime reconstruction.");
+            }
+
             var roster = new CharacterRoster();
             foreach (var character in data.Characters)
             {

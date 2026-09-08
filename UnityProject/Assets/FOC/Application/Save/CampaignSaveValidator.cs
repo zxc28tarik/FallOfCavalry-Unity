@@ -196,15 +196,18 @@ namespace FOC.Application.Save
                 return;
             }
             long? previous = null;
+            long? previousTime = null;
             foreach (var entry in character.History)
             {
                 if (entry == null || entry.Sequence < 0 || entry.OccurredAt < 0 || string.IsNullOrWhiteSpace(entry.Summary) ||
-                    !Enum.IsDefined(typeof(CharacterHistoryEventKind), entry.Kind) || (previous.HasValue && entry.Sequence <= previous.Value))
+                    !Enum.IsDefined(typeof(CharacterHistoryEventKind), entry.Kind) || (previous.HasValue && entry.Sequence <= previous.Value) ||
+                    (previousTime.HasValue && entry.OccurredAt < previousTime.Value))
                 {
                     result.AddError("CHARACTER_HISTORY_ENTRY_INVALID", "Character history entry is invalid or unstable.");
                     return;
                 }
                 previous = entry.Sequence;
+                previousTime = entry.OccurredAt;
             }
         }
     }
