@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!129 &1
+PlayerSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 27
+  productGUID: 8f27cf119e244b34a106616f936da81d
+  companyName: Fall of Cavalry
+  productName: Fall of Cavalry
+  defaultScreenWidth: 1920
+  defaultScreenHeight: 1080
+  runInBackground: 1
+  resizableWindow: 1
+  fullScreenMode: 1
+  m_ActiveColorSpace: 1
+  targetFrameRate: -1
+  scriptingBackend:
+    Standalone: 1
+  il2cppCompilerConfiguration:
+    Standalone: 0
+  apiCompatibilityLevelPerPlatform:
+    Standalone: 6
+

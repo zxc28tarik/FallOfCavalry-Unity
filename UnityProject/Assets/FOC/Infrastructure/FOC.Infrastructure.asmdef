@@ -1,0 +1,9 @@
+{
+  "name": "FOC.Infrastructure",
+  "rootNamespace": "FOC.Infrastructure",
+  "references": ["FOC.Domain", "FOC.Application"],
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "noEngineReferences": true
+}
+

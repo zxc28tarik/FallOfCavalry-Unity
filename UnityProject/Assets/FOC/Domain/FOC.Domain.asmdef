@@ -1,0 +1,9 @@
+{
+  "name": "FOC.Domain",
+  "rootNamespace": "FOC.Domain",
+  "references": [],
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "noEngineReferences": true
+}
+
