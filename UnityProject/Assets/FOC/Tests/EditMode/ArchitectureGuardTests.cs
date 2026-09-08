@@ -27,6 +27,17 @@ namespace FOC.Tests
             Assert.That(definition, Does.Contain("\"noEngineReferences\":true"));
         }
 
+        [Test]
+        public void UnityTestRunner_WaitsForEditorAndPropagatesItsExitCode()
+        {
+            var path = Path.Combine(FindRepositoryRoot(), "Tools", "Test-Unity.ps1");
+            var script = File.ReadAllText(path);
+
+            Assert.That(script, Does.Contain("-Wait -PassThru"));
+            Assert.That(script, Does.Contain("exit $process.ExitCode"));
+            Assert.That(script, Does.Not.Contain("exit $LASTEXITCODE"));
+        }
+
         private static string FindRepositoryRoot()
         {
             var directory = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
@@ -45,4 +56,3 @@ namespace FOC.Tests
         }
     }
 }
-
