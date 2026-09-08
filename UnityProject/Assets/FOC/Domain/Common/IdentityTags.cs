@@ -13,5 +13,32 @@ namespace FOC.Domain.Common
         {
         }
     }
-}
 
+    public sealed class CharacterTag
+    {
+        private CharacterTag()
+        {
+        }
+    }
+
+    public sealed class CityTag
+    {
+        private CityTag()
+        {
+        }
+    }
+
+    public sealed class ArmyTag
+    {
+        private ArmyTag()
+        {
+        }
+    }
+
+    public sealed class CaravanTag
+    {
+        private CaravanTag()
+        {
+        }
+    }
+}

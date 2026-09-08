@@ -1,5 +1,6 @@
 using System;
 using FOC.Domain.Common;
+using FOC.Domain.Characters;
 using FOC.Domain.Random;
 using FOC.Domain.Time;
 
@@ -14,7 +15,8 @@ namespace FOC.Domain.Campaign
             ulong worldSeed,
             int worldGenRevision,
             WorldClock clock,
-            SeededRandomSource random)
+            SeededRandomSource random,
+            CharacterRoster? characters = null)
         {
             if (!campaignId.IsValid)
             {
@@ -33,6 +35,7 @@ namespace FOC.Domain.Campaign
             WorldGenRevision = worldGenRevision;
             Clock = clock ?? throw new ArgumentNullException(nameof(clock));
             Random = random ?? throw new ArgumentNullException(nameof(random));
+            Characters = characters ?? new CharacterRoster();
         }
 
         public StableId<CampaignTag> CampaignId { get; }
@@ -49,6 +52,8 @@ namespace FOC.Domain.Campaign
 
         public SeededRandomSource Random { get; }
 
+        public CharacterRoster Characters { get; }
+
         private static string RequireText(string value, string parameterName)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -60,4 +65,3 @@ namespace FOC.Domain.Campaign
         }
     }
 }
-
