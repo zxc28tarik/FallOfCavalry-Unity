@@ -36,6 +36,7 @@ namespace FOC.Tests
             Assert.That(script, Does.Contain("-Wait -PassThru"));
             Assert.That(script, Does.Contain("exit $process.ExitCode"));
             Assert.That(script, Does.Not.Contain("exit $LASTEXITCODE"));
+            Assert.That(script, Does.Not.Contain("'-quit'"), "Unity Test Framework owns shutdown for -runTests; early -quit can cancel first import/package resolution.");
         }
 
         private static string FindRepositoryRoot()

@@ -100,18 +100,15 @@ namespace FOC.Tests
 
         private static void AssertSaveDataEqual(CampaignSaveData expected, CampaignSaveData actual)
         {
-            Assert.Multiple(() =>
-            {
-                Assert.That(actual.SaveVersion, Is.EqualTo(expected.SaveVersion));
-                Assert.That(actual.CampaignId, Is.EqualTo(expected.CampaignId));
-                Assert.That(actual.GameVersion, Is.EqualTo(expected.GameVersion));
-                Assert.That(actual.ContentDataVersion, Is.EqualTo(expected.ContentDataVersion));
-                Assert.That(actual.WorldSeed, Is.EqualTo(expected.WorldSeed));
-                Assert.That(actual.WorldGenRevision, Is.EqualTo(expected.WorldGenRevision));
-                Assert.That(actual.WorldTime, Is.EqualTo(expected.WorldTime));
-                Assert.That(actual.RngState, Is.EqualTo(expected.RngState));
-                Assert.That(actual.RngDrawCount, Is.EqualTo(expected.RngDrawCount));
-            });
+            Assert.That(actual.SaveVersion, Is.EqualTo(expected.SaveVersion));
+            Assert.That(actual.CampaignId, Is.EqualTo(expected.CampaignId));
+            Assert.That(actual.GameVersion, Is.EqualTo(expected.GameVersion));
+            Assert.That(actual.ContentDataVersion, Is.EqualTo(expected.ContentDataVersion));
+            Assert.That(actual.WorldSeed, Is.EqualTo(expected.WorldSeed));
+            Assert.That(actual.WorldGenRevision, Is.EqualTo(expected.WorldGenRevision));
+            Assert.That(actual.WorldTime, Is.EqualTo(expected.WorldTime));
+            Assert.That(actual.RngState, Is.EqualTo(expected.RngState));
+            Assert.That(actual.RngDrawCount, Is.EqualTo(expected.RngDrawCount));
         }
 
         private sealed class CopyMigration : ISaveMigration
@@ -144,4 +141,3 @@ namespace FOC.Tests
         }
     }
 }
-

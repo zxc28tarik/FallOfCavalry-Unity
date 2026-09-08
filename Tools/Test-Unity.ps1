@@ -12,7 +12,6 @@ New-Item -ItemType Directory -Force -Path (Split-Path -Parent $resultsPath) | Ou
 $arguments = @(
     '-batchmode',
     '-nographics',
-    '-quit',
     '-projectPath', "`"$projectPath`"",
     '-runTests',
     '-testPlatform', 'EditMode',
