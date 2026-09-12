@@ -2,7 +2,7 @@
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 4`.
+`CampaignSaveData.CurrentSaveVersion = 5`.
 
 The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 
@@ -36,11 +36,15 @@ Version 3 adds deterministically ordered Organization, House and Clique aggregat
 
 Version 4 adds a separate deterministic religion-state payload. It preserves immutable Religion/Sect definition snapshots, optional Character sect affiliation, typed City/Faction/Region profiles, qualitative policy rules, and typed Religious Clique associations. Relative profile presence is an ordinal content value, not a claim of exact historical population percentage. Definitions and save DTOs remain separate from runtime state.
 
+## Version 5 City V2 foundation
+
+Version 5 adds a deterministic City payload. It persists City identity/name, all nine functional-area definitions and fullness states, building pools and active/locked IDs, future visual hooks, non-negative population plus unassessed metric hooks, invisible infrastructure state and references to real Organization assignments for officials. It contains no stock, price, production, recruitment, battle or construction simulation.
+
 ## Migration policy
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.
 
-`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` preserves Character data and initializes empty Organization, House and Clique collections. `CampaignSaveV3ToV4Migration` preserves all Character and social data and initializes empty Religion/Sect collections. No migration invents people, social entities, religions, sects, profiles, policies or associations. Hardcoded old-schema fixtures exercise the continuous chain.
+`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` preserves all earlier state and initializes Cities empty. No migration invents people, social entities, religions, profiles or cities. Hardcoded old-schema fixtures exercise the continuous chain.
 
 ## Atomic storage policy
 

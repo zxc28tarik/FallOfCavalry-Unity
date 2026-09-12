@@ -34,6 +34,8 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 - Internal politics: projections derived from explicit Character, House, Clique, policy/event inputs; never a hidden stockpile.
 - Religion identity: `ReligionId` and optional compatible `SectId`, separate from Character, Faction, House, Organization and Religious Clique identities.
 - Religion context: typed City/Faction/Region profiles and policy rules; difference alone has no unrest, loyalty, relation, rebellion, war or combat effect.
+- City state: persistent `CityState` aggregates immutable City/area/building definitions, explicit area fullness, invisible infrastructure, metrics hooks and references to real Organization assignments.
+- City structure: City, Area, Building and Infrastructure are separate contracts. Presentation, Economy, Army and Battle are not City-domain dependencies.
 - Persistence representation: `CampaignSaveData`, never runtime objects.
 - Message ordering: the explicit sequence in `DeterministicMessageQueue`.
 
@@ -41,4 +43,4 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 
 Typed IDs are generic by tag, so unrelated domain identities cannot be mixed. Future packages should introduce domain-specific tags or wrappers rather than a universal entity abstraction. State changes belong behind bounded rule/application services; Presentation must not mutate fields directly.
 
-`CharacterCommandService` remains the Character orchestration boundary. `OrganizationCommandService`, `HouseCommandService`, `CliqueCommandService` and `ReligionCommandService` validate cross-aggregate references and lifecycle restrictions. None implements later City V2, Economy, Army, AI or UI behavior.
+`CharacterCommandService` remains the Character orchestration boundary. Organization, House, Clique, Religion and City command services validate their bounded cross-aggregate references. `CityCommandService` reuses Organization assignments for Kethüda; it does not create a Character subtype or Organization branch. None implements Economy, Trade, Caravan, Army, Battle, AI or UI behavior.

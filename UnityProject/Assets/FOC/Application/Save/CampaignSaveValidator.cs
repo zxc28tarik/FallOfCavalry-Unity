@@ -6,6 +6,7 @@ using FOC.Domain.Organizations;
 using FOC.Domain.Houses;
 using FOC.Domain.Cliques;
 using FOC.Domain.Religion;
+using FOC.Domain.Cities;
 
 namespace FOC.Application.Save
 {
@@ -48,12 +49,14 @@ namespace FOC.Application.Save
             {
                 result.AddError("RELIGION_COLLECTION_NULL", "Religion collections are required.");
             }
+            if(subject.Cities==null)result.AddError("CITY_COLLECTION_NULL","City collection is required.");
 
             if (subject.Characters != null && subject.CharacterRelations != null)
             {
                 ValidateCharacters(subject, result);
                 if (subject.Organizations != null && subject.Houses != null && subject.Cliques != null) ValidateSocial(subject, result);
                 if (subject.Religions != null && subject.Sects != null && subject.CharacterReligions != null && subject.ReligionProfiles != null && subject.ReligionPolicies != null && subject.ReligiousCliqueAssociations != null) ValidateReligion(subject, result);
+                if(subject.Cities!=null&&subject.Organizations!=null)ValidateCities(subject,result);
             }
 
             if (string.IsNullOrWhiteSpace(subject.CampaignId))
@@ -100,6 +103,16 @@ namespace FOC.Application.Save
         }
         private static bool PairValid(string religion,string sect,HashSet<string> religions,Dictionary<string,string> sects)=>religions.Contains(religion)&&(string.IsNullOrEmpty(sect)||(sects.TryGetValue(sect,out var parent)&&StringComparer.Ordinal.Equals(parent,religion)));
         private static bool TargetValid(int kind,string id)=>Enum.IsDefined(typeof(ReligionProfileTargetKind),kind)&&!string.IsNullOrWhiteSpace(id);
+
+        private static void ValidateCities(CampaignSaveData subject,ValidationResult result)
+        {
+            var cityIds=new HashSet<string>(StringComparer.Ordinal);foreach(var city in subject.Cities){if(city==null||string.IsNullOrWhiteSpace(city.CityId)||string.IsNullOrWhiteSpace(city.Name)||!cityIds.Add(city.CityId)||city.PopulationCount<0||!Enum.IsDefined(typeof(CityMetricAssessment),city.Wealth)||!Enum.IsDefined(typeof(CityMetricAssessment),city.Order)||!Enum.IsDefined(typeof(CityMetricAssessment),city.Health)||!Enum.IsDefined(typeof(CityMetricAssessment),city.Security)){result.AddError("CITY_INVALID","City identity or metrics are invalid.");continue;}if(city.Areas==null||city.Infrastructure==null||city.Officials==null){result.AddError("CITY_COLLECTION_INVALID","City child collections are required.");continue;}var areaTypes=new HashSet<int>();var cityBuildingIds=new HashSet<string>(StringComparer.Ordinal);foreach(var area in city.Areas){if(area==null||!Enum.IsDefined(typeof(CityAreaType),area.Type)||!Enum.IsDefined(typeof(CityAreaFullness),area.Fullness)||!areaTypes.Add(area.Type)||area.BuildingPool==null||area.ActiveBuildingIds==null||area.LockedBuildingIds==null){result.AddError("CITY_AREA_INVALID","City area is invalid.");continue;}if(area.Type==(int)CityAreaType.InnerCastle&&area.Fullness!=(int)CityAreaFullness.Full)result.AddError("INNER_CASTLE_NOT_FULL","Inner Castle must remain Full.");var pool=new Dictionary<string,CityBuildingSaveData>(StringComparer.Ordinal);foreach(var b in area.BuildingPool){if(b==null||string.IsNullOrWhiteSpace(b.CityBuildingId)||string.IsNullOrWhiteSpace(b.Name)||!Enum.IsDefined(typeof(CityBuildingKind),b.Kind)||!Enum.IsDefined(typeof(CityAreaType),b.AreaType)||!Enum.IsDefined(typeof(CityBuildingContentStatus),b.Status)||b.AreaType!=area.Type||CityBuildingRules.RequiredArea((CityBuildingKind)b.Kind)!=(CityAreaType)area.Type||pool.ContainsKey(b.CityBuildingId)||cityBuildingIds.Contains(b.CityBuildingId)||b.EffectTags==null){result.AddError("CITY_BUILDING_INVALID","City building definition is invalid.");continue;}pool.Add(b.CityBuildingId,b);cityBuildingIds.Add(b.CityBuildingId);var tags=new HashSet<int>();foreach(var tag in b.EffectTags)if(!Enum.IsDefined(typeof(CityInstitutionEffectTag),tag)||!tags.Add(tag))result.AddError("CITY_BUILDING_EFFECT_TAG_INVALID","City building effect tags are invalid.");}var active=new HashSet<string>(StringComparer.Ordinal);foreach(var id in area.ActiveBuildingIds)if(!active.Add(id)||!pool.TryGetValue(id,out var b)||b.Status==(int)CityBuildingContentStatus.Removed)result.AddError("CITY_ACTIVE_BUILDING_INVALID","Active City building is invalid.");if(area.Fullness==(int)CityAreaFullness.Empty&&active.Count>0)result.AddError("EMPTY_CITY_AREA_ACTIVE_BUILDING","Empty City area cannot have active buildings.");var locked=new HashSet<string>(StringComparer.Ordinal);foreach(var id in area.LockedBuildingIds)if(!locked.Add(id)||!pool.ContainsKey(id)||active.Contains(id))result.AddError("CITY_LOCKED_BUILDING_INVALID","Locked City building is invalid.");}if(areaTypes.Count!=Enum.GetValues(typeof(CityAreaType)).Length)result.AddError("CITY_AREAS_INCOMPLETE","Every authoritative City area is required.");var infrastructure=new HashSet<int>();foreach(var x in city.Infrastructure)if(x==null||!Enum.IsDefined(typeof(CityInfrastructureType),x.Type)||!Enum.IsDefined(typeof(CityInfrastructureCondition),x.Condition)||!infrastructure.Add(x.Type)||(!x.Installed&&x.Condition!=(int)CityInfrastructureCondition.Unassessed))result.AddError("CITY_INFRASTRUCTURE_INVALID","City infrastructure is invalid.");var officialIds=new HashSet<string>(StringComparer.Ordinal);foreach(var x in city.Officials)if(x==null||!Enum.IsDefined(typeof(CityOfficialRole),x.Role)||string.IsNullOrWhiteSpace(x.OrganizationId)||string.IsNullOrWhiteSpace(x.AssignmentId)||!officialIds.Add(x.AssignmentId)||!OfficialValid(subject,city,x))result.AddError("CITY_OFFICIAL_INVALID","City official reference is invalid.");}
+        }
+
+        private static bool OfficialValid(CampaignSaveData subject,CitySaveData city,CityOfficialSaveData official)
+        {
+            OrganizationSaveData? organization=null;foreach(var candidate in subject.Organizations)if(candidate!=null&&StringComparer.Ordinal.Equals(candidate.OrganizationId,official.OrganizationId)){organization=candidate;break;}if(organization==null)return false;AssignmentSaveData? assignment=null;foreach(var candidate in organization.Assignments)if(candidate!=null&&StringComparer.Ordinal.Equals(candidate.AssignmentId,official.AssignmentId)){assignment=candidate;break;}if(assignment==null||assignment.Status!=(int)AssignmentStatus.Active||assignment.TargetKind!=(int)AssignmentTargetKind.City||!StringComparer.Ordinal.Equals(assignment.TargetId,city.CityId)||!StringComparer.Ordinal.Equals(assignment.RoleCode,CityOfficialRoles.KethudaAssignmentRoleCode))return false;foreach(var character in subject.Characters)if(character!=null&&StringComparer.Ordinal.Equals(character.CharacterId,assignment.CharacterId))return character.Death==null&&character.Location.Kind!=(int)CharacterLocationKind.Captivity;return false;
+        }
 
         private static void ValidateSocial(CampaignSaveData subject, ValidationResult result)
         {

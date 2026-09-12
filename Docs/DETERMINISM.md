@@ -23,6 +23,7 @@ One world tick is an abstract foundation unit. Mapping ticks to calendar semanti
 - Character histories use monotonic sequence numbers and bounded insertion order.
 - Organization, House and Clique registries sort by their typed stable IDs; assignment and membership views use stable typed-ID ordering.
 - Religion and Sect definitions, Character affiliations, typed profiles, policy rules and Religious Clique associations use canonical typed-ID/target ordering.
+- Cities sort by `CityId`; areas, building pools, active/locked buildings, infrastructure and official assignment references use canonical enum or stable-ID ordering.
 - Rules must never depend on the natural iteration order of dictionaries or hash sets.
 - Future equal-score decisions require an explicit stable-ID tie-break.
 

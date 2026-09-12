@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 4;
+        public const int CurrentSaveVersion = 5;
 
         public int SaveVersion { get; set; }
 
@@ -37,6 +37,7 @@ namespace FOC.Application.Save
         public List<ReligionProfileSaveData> ReligionProfiles { get; set; } = new List<ReligionProfileSaveData>();
         public List<ReligionPolicySaveData> ReligionPolicies { get; set; } = new List<ReligionPolicySaveData>();
         public List<ReligiousCliqueAssociationSaveData> ReligiousCliqueAssociations { get; set; } = new List<ReligiousCliqueAssociationSaveData>();
+        public List<CitySaveData> Cities { get; set; } = new List<CitySaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -182,4 +183,13 @@ namespace FOC.Application.Save
     public sealed class ReligionPolicyRuleSaveData { public string ReligionId { get; set; }=string.Empty; public string SectId { get; set; }=string.Empty; public int Recognition { get; set; } public int Treatment { get; set; } public int Enforcement { get; set; } }
     public sealed class ReligionPolicySaveData { public int TargetKind { get; set; } public string TargetId { get; set; }=string.Empty; public List<ReligionPolicyRuleSaveData> Rules { get; set; }=new List<ReligionPolicyRuleSaveData>(); }
     public sealed class ReligiousCliqueAssociationSaveData { public string CliqueId { get; set; }=string.Empty; public string ReligionId { get; set; }=string.Empty; public string SectId { get; set; }=string.Empty; }
+    public sealed class CitySaveData
+    {
+        public string CityId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public long PopulationCount{get;set;}public int Wealth{get;set;}public int Order{get;set;}public int Health{get;set;}public int Security{get;set;}
+        public List<CityAreaSaveData> Areas{get;set;}=new List<CityAreaSaveData>();public List<CityInfrastructureSaveData> Infrastructure{get;set;}=new List<CityInfrastructureSaveData>();public List<CityOfficialSaveData> Officials{get;set;}=new List<CityOfficialSaveData>();
+    }
+    public sealed class CityAreaSaveData { public int Type{get;set;}public int Fullness{get;set;}public string VisualVariantHook{get;set;}=string.Empty;public List<CityBuildingSaveData> BuildingPool{get;set;}=new List<CityBuildingSaveData>();public List<string> ActiveBuildingIds{get;set;}=new List<string>();public List<string> LockedBuildingIds{get;set;}=new List<string>(); }
+    public sealed class CityBuildingSaveData { public string CityBuildingId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int Kind{get;set;}public int AreaType{get;set;}public int Status{get;set;}public List<int> EffectTags{get;set;}=new List<int>(); }
+    public sealed class CityInfrastructureSaveData { public int Type{get;set;}public bool Installed{get;set;}public int Condition{get;set;} }
+    public sealed class CityOfficialSaveData { public int Role{get;set;}public string OrganizationId{get;set;}=string.Empty;public string AssignmentId{get;set;}=string.Empty; }
 }

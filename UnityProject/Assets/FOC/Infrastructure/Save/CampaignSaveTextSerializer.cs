@@ -51,6 +51,10 @@ namespace FOC.Infrastructure.Save
             {
                 Append(builder, "ReligionState", EncodeReligion(data));
             }
+            if (data.SaveVersion >= 5)
+            {
+                Append(builder, "CityState", EncodeCities(data));
+            }
             return builder.ToString();
         }
 
@@ -124,6 +128,10 @@ namespace FOC.Infrastructure.Save
                 if (data.SaveVersion >= 4)
                 {
                     DecodeReligion(Require(values, "ReligionState"), data);
+                }
+                if (data.SaveVersion >= 5)
+                {
+                    DecodeCities(Require(values, "CityState"), data);
                 }
 
                 return SaveReadResult.Succeeded(data);
@@ -441,6 +449,21 @@ namespace FOC.Infrastructure.Save
                 count=ReadCount(reader,"ReligionProfileCount");for(var i=0;i<count;i++){var x=new ReligionProfileSaveData{TargetKind=reader.ReadInt32(),TargetId=reader.ReadString()};var inner=ReadCount(reader,"ReligionProfileEntryCount");for(var j=0;j<inner;j++)x.Entries.Add(new ReligionProfileEntrySaveData{ReligionId=reader.ReadString(),SectId=reader.ReadString(),RelativePresence=reader.ReadInt32()});data.ReligionProfiles.Add(x);}
                 count=ReadCount(reader,"ReligionPolicyCount");for(var i=0;i<count;i++){var x=new ReligionPolicySaveData{TargetKind=reader.ReadInt32(),TargetId=reader.ReadString()};var inner=ReadCount(reader,"ReligionPolicyRuleCount");for(var j=0;j<inner;j++)x.Rules.Add(new ReligionPolicyRuleSaveData{ReligionId=reader.ReadString(),SectId=reader.ReadString(),Recognition=reader.ReadInt32(),Treatment=reader.ReadInt32(),Enforcement=reader.ReadInt32()});data.ReligionPolicies.Add(x);}
                 count=ReadCount(reader,"ReligiousCliqueAssociationCount");for(var i=0;i<count;i++)data.ReligiousCliqueAssociations.Add(new ReligiousCliqueAssociationSaveData{CliqueId=reader.ReadString(),ReligionId=reader.ReadString(),SectId=reader.ReadString()});RequireFullyConsumed(stream);
+            }
+        }
+
+        private static string EncodeCities(CampaignSaveData data)
+        {
+            using(var stream=new MemoryStream())using(var writer=new BinaryWriter(stream,Encoding.UTF8,true))
+            {
+                writer.Write(data.Cities.Count);foreach(var city in data.Cities){writer.Write(city.CityId);writer.Write(city.Name);writer.Write(city.PopulationCount);writer.Write(city.Wealth);writer.Write(city.Order);writer.Write(city.Health);writer.Write(city.Security);writer.Write(city.Areas.Count);foreach(var area in city.Areas){writer.Write(area.Type);writer.Write(area.Fullness);writer.Write(area.VisualVariantHook);writer.Write(area.BuildingPool.Count);foreach(var b in area.BuildingPool){writer.Write(b.CityBuildingId);writer.Write(b.Name);writer.Write(b.Kind);writer.Write(b.AreaType);writer.Write(b.Status);writer.Write(b.EffectTags.Count);foreach(var tag in b.EffectTags)writer.Write(tag);}writer.Write(area.ActiveBuildingIds.Count);foreach(var id in area.ActiveBuildingIds)writer.Write(id);writer.Write(area.LockedBuildingIds.Count);foreach(var id in area.LockedBuildingIds)writer.Write(id);}writer.Write(city.Infrastructure.Count);foreach(var x in city.Infrastructure){writer.Write(x.Type);writer.Write(x.Installed);writer.Write(x.Condition);}writer.Write(city.Officials.Count);foreach(var x in city.Officials){writer.Write(x.Role);writer.Write(x.OrganizationId);writer.Write(x.AssignmentId);}}writer.Flush();return Convert.ToBase64String(stream.ToArray());
+            }
+        }
+        private static void DecodeCities(string value,CampaignSaveData data)
+        {
+            using(var stream=new MemoryStream(Convert.FromBase64String(value)))using(var reader=new BinaryReader(stream,Encoding.UTF8,true))
+            {
+                var count=ReadCount(reader,"CityCount");for(var i=0;i<count;i++){var city=new CitySaveData{CityId=reader.ReadString(),Name=reader.ReadString(),PopulationCount=reader.ReadInt64(),Wealth=reader.ReadInt32(),Order=reader.ReadInt32(),Health=reader.ReadInt32(),Security=reader.ReadInt32()};var areaCount=ReadCount(reader,"CityAreaCount");for(var j=0;j<areaCount;j++){var area=new CityAreaSaveData{Type=reader.ReadInt32(),Fullness=reader.ReadInt32(),VisualVariantHook=reader.ReadString()};var poolCount=ReadCount(reader,"CityBuildingPoolCount");for(var k=0;k<poolCount;k++){var b=new CityBuildingSaveData{CityBuildingId=reader.ReadString(),Name=reader.ReadString(),Kind=reader.ReadInt32(),AreaType=reader.ReadInt32(),Status=reader.ReadInt32()};var tagCount=ReadCount(reader,"CityBuildingEffectTagCount");for(var n=0;n<tagCount;n++)b.EffectTags.Add(reader.ReadInt32());area.BuildingPool.Add(b);}var activeCount=ReadCount(reader,"CityActiveBuildingCount");for(var k=0;k<activeCount;k++)area.ActiveBuildingIds.Add(reader.ReadString());var lockedCount=ReadCount(reader,"CityLockedBuildingCount");for(var k=0;k<lockedCount;k++)area.LockedBuildingIds.Add(reader.ReadString());city.Areas.Add(area);}var infrastructureCount=ReadCount(reader,"CityInfrastructureCount");for(var j=0;j<infrastructureCount;j++)city.Infrastructure.Add(new CityInfrastructureSaveData{Type=reader.ReadInt32(),Installed=reader.ReadBoolean(),Condition=reader.ReadInt32()});var officialCount=ReadCount(reader,"CityOfficialCount");for(var j=0;j<officialCount;j++)city.Officials.Add(new CityOfficialSaveData{Role=reader.ReadInt32(),OrganizationId=reader.ReadString(),AssignmentId=reader.ReadString()});data.Cities.Add(city);}RequireFullyConsumed(stream);
             }
         }
     }

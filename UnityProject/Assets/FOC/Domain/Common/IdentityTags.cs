@@ -50,4 +50,5 @@ namespace FOC.Domain.Common
     public sealed class SectTag { private SectTag() { } }
     public sealed class FactionTag { private FactionTag() { } }
     public sealed class RegionTag { private RegionTag() { } }
+    public sealed class CityBuildingTag { private CityBuildingTag() { } }
 }
