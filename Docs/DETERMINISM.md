@@ -21,9 +21,10 @@ One world tick is an abstract foundation unit. Mapping ticks to calendar semanti
 - Domain messages receive monotonic sequence numbers and dispatch FIFO.
 - Character rosters sort by `CharacterId`; relation keys canonicalize their two endpoints and use stable ordinal ordering.
 - Character histories use monotonic sequence numbers and bounded insertion order.
+- Organization, House and Clique registries sort by their typed stable IDs; assignment and membership views use stable typed-ID ordering.
 - Rules must never depend on the natural iteration order of dictionaries or hash sets.
 - Future equal-score decisions require an explicit stable-ID tie-break.
 
 ## Verification
 
-Tests lock same-seed sequences, RNG state continuation, explicit time behavior, stable ID ordering, definition ordering, message order, Character story-guard decisions, relation ordering and Character save serialization. Any production mutation that swaps global randomness, wall-clock time, or unordered iteration should fail these guards or require an accompanying new guard.
+Tests lock same-seed sequences, RNG state continuation, explicit time behavior, stable ID ordering, definition ordering, message order, Character story-guard decisions, relation ordering and full Character/social save serialization. Any production mutation that swaps global randomness, wall-clock time, or unordered iteration should fail these guards or require an accompanying new guard.

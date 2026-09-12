@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 2;
+        public const int CurrentSaveVersion = 3;
 
         public int SaveVersion { get; set; }
 
@@ -27,6 +27,10 @@ namespace FOC.Application.Save
         public List<CharacterSaveData> Characters { get; set; } = new List<CharacterSaveData>();
 
         public List<CharacterRelationSaveData> CharacterRelations { get; set; } = new List<CharacterRelationSaveData>();
+
+        public List<OrganizationSaveData> Organizations { get; set; } = new List<OrganizationSaveData>();
+        public List<HouseSaveData> Houses { get; set; } = new List<HouseSaveData>();
+        public List<CliqueSaveData> Cliques { get; set; } = new List<CliqueSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -99,4 +103,69 @@ namespace FOC.Application.Save
         public string SecondCharacterId { get; set; } = string.Empty;
         public int Value { get; set; }
     }
+
+    public sealed class OrganizationSaveData
+    {
+        public string OrganizationId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public List<OrganizationMembershipSaveData> Memberships { get; set; } = new List<OrganizationMembershipSaveData>();
+        public List<AssignmentSaveData> Assignments { get; set; } = new List<AssignmentSaveData>();
+    }
+    public sealed class OrganizationMembershipSaveData
+    {
+        public string CharacterId { get; set; } = string.Empty;
+        public int Branch { get; set; }
+        public int MembershipType { get; set; }
+        public long StartedAt { get; set; }
+        public bool IsActive { get; set; }
+    }
+    public sealed class AssignmentSaveData
+    {
+        public string AssignmentId { get; set; } = string.Empty;
+        public string CharacterId { get; set; } = string.Empty;
+        public int Branch { get; set; }
+        public string RoleCode { get; set; } = string.Empty;
+        public int Authority { get; set; }
+        public int TargetKind { get; set; }
+        public string TargetId { get; set; } = string.Empty;
+        public long TargetX { get; set; }
+        public long TargetY { get; set; }
+        public int Presence { get; set; }
+        public long StartedAt { get; set; }
+        public int Status { get; set; }
+    }
+    public sealed class HouseSaveData
+    {
+        public string HouseId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string HeadCharacterId { get; set; } = string.Empty;
+        public bool SuccessionPending { get; set; }
+        public int Prestige { get; set; }
+        public long Wealth { get; set; }
+        public int Lifecycle { get; set; }
+        public List<HouseMemberSaveData> Members { get; set; } = new List<HouseMemberSaveData>();
+        public List<MarriageSaveData> Marriages { get; set; } = new List<MarriageSaveData>();
+        public List<FamilyLinkSaveData> FamilyLinks { get; set; } = new List<FamilyLinkSaveData>();
+        public List<HousePropertySaveData> Properties { get; set; } = new List<HousePropertySaveData>();
+        public List<InheritanceSaveData> Inheritances { get; set; } = new List<InheritanceSaveData>();
+    }
+    public sealed class HouseMemberSaveData { public string CharacterId { get; set; } = string.Empty; public long JoinedAt { get; set; } public bool IsActive { get; set; } }
+    public sealed class MarriageSaveData { public string FirstCharacterId { get; set; } = string.Empty; public string SecondCharacterId { get; set; } = string.Empty; public long StartedAt { get; set; } public bool IsActive { get; set; } }
+    public sealed class FamilyLinkSaveData { public string FirstCharacterId { get; set; } = string.Empty; public string SecondCharacterId { get; set; } = string.Empty; public int Kind { get; set; } }
+    public sealed class HousePropertySaveData { public string AssetId { get; set; } = string.Empty; public int Kind { get; set; } }
+    public sealed class InheritanceSaveData { public string AssetId { get; set; } = string.Empty; public int Kind { get; set; } public string HeirCharacterId { get; set; } = string.Empty; public int Status { get; set; } }
+    public sealed class CliqueSaveData
+    {
+        public string CliqueId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public int Type { get; set; }
+        public int Lifecycle { get; set; }
+        public int Attitude { get; set; }
+        public string ParentCliqueId { get; set; } = string.Empty;
+        public string LeaderCharacterId { get; set; } = string.Empty;
+        public List<CliqueMembershipSaveData> Memberships { get; set; } = new List<CliqueMembershipSaveData>();
+        public List<CliqueInfluenceSourceSaveData> InfluenceSources { get; set; } = new List<CliqueInfluenceSourceSaveData>();
+    }
+    public sealed class CliqueMembershipSaveData { public string CharacterId { get; set; } = string.Empty; public string RoleCode { get; set; } = string.Empty; public long JoinedAt { get; set; } public bool IsActive { get; set; } }
+    public sealed class CliqueInfluenceSourceSaveData { public string CharacterId { get; set; } = string.Empty; public int Kind { get; set; } public int Contribution { get; set; } }
 }

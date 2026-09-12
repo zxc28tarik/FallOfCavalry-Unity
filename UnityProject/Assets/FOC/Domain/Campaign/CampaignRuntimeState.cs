@@ -3,6 +3,9 @@ using FOC.Domain.Common;
 using FOC.Domain.Characters;
 using FOC.Domain.Random;
 using FOC.Domain.Time;
+using FOC.Domain.Organizations;
+using FOC.Domain.Houses;
+using FOC.Domain.Cliques;
 
 namespace FOC.Domain.Campaign
 {
@@ -16,7 +19,10 @@ namespace FOC.Domain.Campaign
             int worldGenRevision,
             WorldClock clock,
             SeededRandomSource random,
-            CharacterRoster? characters = null)
+            CharacterRoster? characters = null,
+            OrganizationRegistry? organizations = null,
+            HouseRegistry? houses = null,
+            CliqueRegistry? cliques = null)
         {
             if (!campaignId.IsValid)
             {
@@ -36,6 +42,9 @@ namespace FOC.Domain.Campaign
             Clock = clock ?? throw new ArgumentNullException(nameof(clock));
             Random = random ?? throw new ArgumentNullException(nameof(random));
             Characters = characters ?? new CharacterRoster();
+            Organizations = organizations ?? new OrganizationRegistry();
+            Houses = houses ?? new HouseRegistry();
+            Cliques = cliques ?? new CliqueRegistry();
         }
 
         public StableId<CampaignTag> CampaignId { get; }
@@ -53,6 +62,12 @@ namespace FOC.Domain.Campaign
         public SeededRandomSource Random { get; }
 
         public CharacterRoster Characters { get; }
+
+        public OrganizationRegistry Organizations { get; }
+
+        public HouseRegistry Houses { get; }
+
+        public CliqueRegistry Cliques { get; }
 
         private static string RequireText(string value, string parameterName)
         {

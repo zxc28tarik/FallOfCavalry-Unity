@@ -33,6 +33,21 @@ namespace FOC.Tests
         }
 
         [Test]
+        public void SocialDomain_DoesNotExposeForbiddenOwnershipOrLaterPackageContracts()
+        {
+            var root = Path.Combine(FindRepositoryRoot(), "UnityProject", "Assets", "FOC", "Domain");
+            var clique = File.ReadAllText(Path.Combine(root, "Cliques", "CliqueContracts.cs"));
+            Assert.That(clique, Does.Not.Contain("Inventory {"));
+            Assert.That(clique, Does.Not.Contain("SoldierIds {"));
+            Assert.That(clique, Does.Not.Contain("MoraleBonus {"));
+            Assert.That(clique, Does.Not.Contain("DamageBonus {"));
+            Assert.That(clique, Does.Not.Contain("ReligionId"));
+            Assert.That(clique, Does.Not.Contain("SectId"));
+            Assert.That(clique, Does.Not.Contain("Assassination"));
+            Assert.That(clique, Does.Not.Contain("Sabotage"));
+        }
+
+        [Test]
         public void DomainAssemblyDefinition_HasNoEngineReferencesAndNoDependencies()
         {
             var path = Path.Combine(FindRepositoryRoot(), "UnityProject", "Assets", "FOC", "Domain", "FOC.Domain.asmdef");

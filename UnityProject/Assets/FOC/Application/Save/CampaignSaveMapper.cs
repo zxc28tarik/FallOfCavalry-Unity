@@ -7,7 +7,7 @@ using FOC.Domain.Time;
 
 namespace FOC.Application.Save
 {
-    public static class CampaignSaveMapper
+    public static partial class CampaignSaveMapper
     {
         public static CampaignSaveData ToSaveData(CampaignRuntimeState state)
         {
@@ -45,6 +45,8 @@ namespace FOC.Application.Save
                 });
             }
 
+            AddSocialSaveData(state, data);
+
             return data;
         }
 
@@ -76,6 +78,7 @@ namespace FOC.Application.Save
                 roster.SetRelation(CharacterId.Create(relation.FirstCharacterId), CharacterId.Create(relation.SecondCharacterId), relation.Value);
             }
 
+            var social = RestoreSocial(data, roster);
             return new CampaignRuntimeState(
                 StableId<CampaignTag>.Create(data.CampaignId),
                 data.GameVersion,
@@ -84,7 +87,10 @@ namespace FOC.Application.Save
                 data.WorldGenRevision,
                 new WorldClock(new WorldTimestamp(data.WorldTime)),
                 new SeededRandomSource(new RandomState(data.RngState, data.RngDrawCount)),
-                roster);
+                roster,
+                social.Organizations,
+                social.Houses,
+                social.Cliques);
         }
 
         private static CharacterSaveData ToCharacterSaveData(CharacterState state)

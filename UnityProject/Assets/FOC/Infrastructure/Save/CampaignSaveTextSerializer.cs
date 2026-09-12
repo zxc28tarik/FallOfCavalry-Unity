@@ -43,6 +43,10 @@ namespace FOC.Infrastructure.Save
                     Append(builder, $"CharacterRelation.{index}", EncodeRelation(data.CharacterRelations[index]));
                 }
             }
+            if (data.SaveVersion >= 3)
+            {
+                Append(builder, "SocialState", EncodeSocial(data));
+            }
             return builder.ToString();
         }
 
@@ -107,6 +111,11 @@ namespace FOC.Infrastructure.Save
                     {
                         data.CharacterRelations.Add(DecodeRelation(Require(values, $"CharacterRelation.{index}")));
                     }
+                }
+
+                if (data.SaveVersion >= 3)
+                {
+                    DecodeSocial(Require(values, "SocialState"), data);
                 }
 
                 return SaveReadResult.Succeeded(data);
@@ -322,6 +331,84 @@ namespace FOC.Infrastructure.Save
         private static void RequireFullyConsumed(MemoryStream stream)
         {
             if (stream.Position != stream.Length) throw new FormatException("Encoded character save payload contains trailing data.");
+        }
+
+        private static string EncodeSocial(CampaignSaveData data)
+        {
+            using (var stream = new MemoryStream())
+            using (var writer = new BinaryWriter(stream, Encoding.UTF8, true))
+            {
+                writer.Write(data.Organizations.Count);
+                foreach (var organization in data.Organizations)
+                {
+                    writer.Write(organization.OrganizationId); writer.Write(organization.Name);
+                    writer.Write(organization.Memberships.Count);
+                    foreach (var member in organization.Memberships) { writer.Write(member.CharacterId); writer.Write(member.Branch); writer.Write(member.MembershipType); writer.Write(member.StartedAt); writer.Write(member.IsActive); }
+                    writer.Write(organization.Assignments.Count);
+                    foreach (var assignment in organization.Assignments) { writer.Write(assignment.AssignmentId); writer.Write(assignment.CharacterId); writer.Write(assignment.Branch); writer.Write(assignment.RoleCode); writer.Write(assignment.Authority); writer.Write(assignment.TargetKind); writer.Write(assignment.TargetId); writer.Write(assignment.TargetX); writer.Write(assignment.TargetY); writer.Write(assignment.Presence); writer.Write(assignment.StartedAt); writer.Write(assignment.Status); }
+                }
+                writer.Write(data.Houses.Count);
+                foreach (var house in data.Houses)
+                {
+                    writer.Write(house.HouseId); writer.Write(house.Name); writer.Write(house.HeadCharacterId); writer.Write(house.SuccessionPending); writer.Write(house.Prestige); writer.Write(house.Wealth); writer.Write(house.Lifecycle);
+                    writer.Write(house.Members.Count); foreach (var member in house.Members) { writer.Write(member.CharacterId); writer.Write(member.JoinedAt); writer.Write(member.IsActive); }
+                    writer.Write(house.Marriages.Count); foreach (var link in house.Marriages) { writer.Write(link.FirstCharacterId); writer.Write(link.SecondCharacterId); writer.Write(link.StartedAt); writer.Write(link.IsActive); }
+                    writer.Write(house.FamilyLinks.Count); foreach (var link in house.FamilyLinks) { writer.Write(link.FirstCharacterId); writer.Write(link.SecondCharacterId); writer.Write(link.Kind); }
+                    writer.Write(house.Properties.Count); foreach (var property in house.Properties) { writer.Write(property.AssetId); writer.Write(property.Kind); }
+                    writer.Write(house.Inheritances.Count); foreach (var inheritance in house.Inheritances) { writer.Write(inheritance.AssetId); writer.Write(inheritance.Kind); writer.Write(inheritance.HeirCharacterId); writer.Write(inheritance.Status); }
+                }
+                writer.Write(data.Cliques.Count);
+                foreach (var clique in data.Cliques)
+                {
+                    writer.Write(clique.CliqueId); writer.Write(clique.Name); writer.Write(clique.Type); writer.Write(clique.Lifecycle); writer.Write(clique.Attitude); writer.Write(clique.ParentCliqueId); writer.Write(clique.LeaderCharacterId);
+                    writer.Write(clique.Memberships.Count); foreach (var member in clique.Memberships) { writer.Write(member.CharacterId); writer.Write(member.RoleCode); writer.Write(member.JoinedAt); writer.Write(member.IsActive); }
+                    writer.Write(clique.InfluenceSources.Count); foreach (var source in clique.InfluenceSources) { writer.Write(source.CharacterId); writer.Write(source.Kind); writer.Write(source.Contribution); }
+                }
+                writer.Flush(); return Convert.ToBase64String(stream.ToArray());
+            }
+        }
+
+        private static void DecodeSocial(string value, CampaignSaveData data)
+        {
+            using (var stream = new MemoryStream(Convert.FromBase64String(value)))
+            using (var reader = new BinaryReader(stream, Encoding.UTF8, true))
+            {
+                var organizationCount = ReadCount(reader, "OrganizationCount");
+                for (var i = 0; i < organizationCount; i++)
+                {
+                    var organization = new OrganizationSaveData { OrganizationId = reader.ReadString(), Name = reader.ReadString() };
+                    var memberCount = ReadCount(reader, "OrganizationMembershipCount");
+                    for (var j = 0; j < memberCount; j++) organization.Memberships.Add(new OrganizationMembershipSaveData { CharacterId = reader.ReadString(), Branch = reader.ReadInt32(), MembershipType = reader.ReadInt32(), StartedAt = reader.ReadInt64(), IsActive = reader.ReadBoolean() });
+                    var assignmentCount = ReadCount(reader, "AssignmentCount");
+                    for (var j = 0; j < assignmentCount; j++) organization.Assignments.Add(new AssignmentSaveData { AssignmentId = reader.ReadString(), CharacterId = reader.ReadString(), Branch = reader.ReadInt32(), RoleCode = reader.ReadString(), Authority = reader.ReadInt32(), TargetKind = reader.ReadInt32(), TargetId = reader.ReadString(), TargetX = reader.ReadInt64(), TargetY = reader.ReadInt64(), Presence = reader.ReadInt32(), StartedAt = reader.ReadInt64(), Status = reader.ReadInt32() });
+                    data.Organizations.Add(organization);
+                }
+                var houseCount = ReadCount(reader, "HouseCount");
+                for (var i = 0; i < houseCount; i++)
+                {
+                    var house = new HouseSaveData { HouseId = reader.ReadString(), Name = reader.ReadString(), HeadCharacterId = reader.ReadString(), SuccessionPending = reader.ReadBoolean(), Prestige = reader.ReadInt32(), Wealth = reader.ReadInt64(), Lifecycle = reader.ReadInt32() };
+                    var memberCount = ReadCount(reader, "HouseMemberCount"); for (var j = 0; j < memberCount; j++) house.Members.Add(new HouseMemberSaveData { CharacterId = reader.ReadString(), JoinedAt = reader.ReadInt64(), IsActive = reader.ReadBoolean() });
+                    var marriageCount = ReadCount(reader, "MarriageCount"); for (var j = 0; j < marriageCount; j++) house.Marriages.Add(new MarriageSaveData { FirstCharacterId = reader.ReadString(), SecondCharacterId = reader.ReadString(), StartedAt = reader.ReadInt64(), IsActive = reader.ReadBoolean() });
+                    var familyCount = ReadCount(reader, "FamilyLinkCount"); for (var j = 0; j < familyCount; j++) house.FamilyLinks.Add(new FamilyLinkSaveData { FirstCharacterId = reader.ReadString(), SecondCharacterId = reader.ReadString(), Kind = reader.ReadInt32() });
+                    var propertyCount = ReadCount(reader, "HousePropertyCount"); for (var j = 0; j < propertyCount; j++) house.Properties.Add(new HousePropertySaveData { AssetId = reader.ReadString(), Kind = reader.ReadInt32() });
+                    var inheritanceCount = ReadCount(reader, "InheritanceCount"); for (var j = 0; j < inheritanceCount; j++) house.Inheritances.Add(new InheritanceSaveData { AssetId = reader.ReadString(), Kind = reader.ReadInt32(), HeirCharacterId = reader.ReadString(), Status = reader.ReadInt32() });
+                    data.Houses.Add(house);
+                }
+                var cliqueCount = ReadCount(reader, "CliqueCount");
+                for (var i = 0; i < cliqueCount; i++)
+                {
+                    var clique = new CliqueSaveData { CliqueId = reader.ReadString(), Name = reader.ReadString(), Type = reader.ReadInt32(), Lifecycle = reader.ReadInt32(), Attitude = reader.ReadInt32(), ParentCliqueId = reader.ReadString(), LeaderCharacterId = reader.ReadString() };
+                    var memberCount = ReadCount(reader, "CliqueMembershipCount"); for (var j = 0; j < memberCount; j++) clique.Memberships.Add(new CliqueMembershipSaveData { CharacterId = reader.ReadString(), RoleCode = reader.ReadString(), JoinedAt = reader.ReadInt64(), IsActive = reader.ReadBoolean() });
+                    var sourceCount = ReadCount(reader, "CliqueInfluenceSourceCount"); for (var j = 0; j < sourceCount; j++) clique.InfluenceSources.Add(new CliqueInfluenceSourceSaveData { CharacterId = reader.ReadString(), Kind = reader.ReadInt32(), Contribution = reader.ReadInt32() });
+                    data.Cliques.Add(clique);
+                }
+                RequireFullyConsumed(stream);
+            }
+        }
+
+        private static int ReadCount(BinaryReader reader, string fieldName)
+        {
+            var count = reader.ReadInt32(); if (count < 0) throw new FormatException(fieldName + " cannot be negative."); return count;
         }
     }
 }

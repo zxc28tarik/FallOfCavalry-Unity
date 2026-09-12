@@ -41,4 +41,9 @@ namespace FOC.Domain.Common
         {
         }
     }
+
+    public sealed class OrganizationTag { private OrganizationTag() { } }
+    public sealed class AssignmentTag { private AssignmentTag() { } }
+    public sealed class HouseTag { private HouseTag() { } }
+    public sealed class CliqueTag { private CliqueTag() { } }
 }

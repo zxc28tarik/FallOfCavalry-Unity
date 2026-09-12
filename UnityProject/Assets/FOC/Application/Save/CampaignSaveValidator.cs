@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using FOC.Domain.Characters;
 using FOC.Domain.Validation;
+using FOC.Domain.Organizations;
+using FOC.Domain.Houses;
+using FOC.Domain.Cliques;
 
 namespace FOC.Application.Save
 {
@@ -36,9 +39,15 @@ namespace FOC.Application.Save
                 result.AddError("CHARACTER_RELATIONS_NULL", "Character relations collection is required.");
             }
 
+            if (subject.Organizations == null || subject.Houses == null || subject.Cliques == null)
+            {
+                result.AddError("SOCIAL_COLLECTION_NULL", "Organization, House and Clique collections are required.");
+            }
+
             if (subject.Characters != null && subject.CharacterRelations != null)
             {
                 ValidateCharacters(subject, result);
+                if (subject.Organizations != null && subject.Houses != null && subject.Cliques != null) ValidateSocial(subject, result);
             }
 
             if (string.IsNullOrWhiteSpace(subject.CampaignId))
@@ -72,6 +81,61 @@ namespace FOC.Application.Save
             }
 
             return result;
+        }
+
+        private static void ValidateSocial(CampaignSaveData subject, ValidationResult result)
+        {
+            var characterIds = new HashSet<string>(StringComparer.Ordinal);
+            var charactersById = new Dictionary<string, CharacterSaveData>(StringComparer.Ordinal);
+            foreach (var character in subject.Characters) if (character != null) { characterIds.Add(character.CharacterId); charactersById[character.CharacterId] = character; }
+            var organizationIds = new HashSet<string>(StringComparer.Ordinal);
+            var assignmentIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var organization in subject.Organizations)
+            {
+                if (organization == null || string.IsNullOrWhiteSpace(organization.OrganizationId) || !organizationIds.Add(organization.OrganizationId) || string.IsNullOrWhiteSpace(organization.Name)) { result.AddError("ORGANIZATION_INVALID", "Organization identity must be unique and complete."); continue; }
+                if (organization.Memberships == null || organization.Assignments == null) { result.AddError("ORGANIZATION_COLLECTION_NULL", "Organization collections are required."); continue; }
+                var activeMemberships = new HashSet<string>(StringComparer.Ordinal);
+                foreach (var member in organization.Memberships)
+                {
+                    if (member == null || !characterIds.Contains(member.CharacterId) || !Enum.IsDefined(typeof(OrganizationBranch), member.Branch) || !Enum.IsDefined(typeof(OrganizationMembershipType), member.MembershipType) || member.StartedAt < 0) result.AddError("ORGANIZATION_MEMBERSHIP_INVALID", "Organization membership is invalid.");
+                    else if (member.IsActive && !activeMemberships.Add(member.CharacterId + "\n" + member.Branch)) result.AddError("ORGANIZATION_MEMBERSHIP_DUPLICATE", "Active branch membership is duplicated.");
+                }
+                var physical = new Dictionary<string, string>(StringComparer.Ordinal);
+                foreach (var assignment in organization.Assignments)
+                {
+                    if (assignment == null || string.IsNullOrWhiteSpace(assignment.AssignmentId) || !assignmentIds.Add(assignment.AssignmentId) || !characterIds.Contains(assignment.CharacterId) || string.IsNullOrWhiteSpace(assignment.RoleCode) || !Enum.IsDefined(typeof(OrganizationBranch), assignment.Branch) || !Enum.IsDefined(typeof(AssignmentAuthority), assignment.Authority) || !Enum.IsDefined(typeof(AssignmentTargetKind), assignment.TargetKind) || !Enum.IsDefined(typeof(AssignmentPresence), assignment.Presence) || !Enum.IsDefined(typeof(AssignmentStatus), assignment.Status) || assignment.StartedAt < 0) { result.AddError("ASSIGNMENT_INVALID", "Assignment is invalid."); continue; }
+                    var world = assignment.TargetKind == (int)AssignmentTargetKind.WorldPosition;
+                    if (world == !string.IsNullOrEmpty(assignment.TargetId)) result.AddError("ASSIGNMENT_TARGET_INVALID", "Assignment target payload conflicts with its typed kind.");
+                    if (assignment.Status == (int)AssignmentStatus.Active && charactersById[assignment.CharacterId].Death != null) result.AddError("DEAD_ASSIGNMENT_ACTIVE", "Dead Character cannot retain an active assignment.");
+                    if (assignment.Status == (int)AssignmentStatus.Active && assignment.Presence == (int)AssignmentPresence.PhysicalPresenceRequired)
+                    {
+                        var character = charactersById[assignment.CharacterId];
+                        if (character.Location.Kind == (int)CharacterLocationKind.Captivity) result.AddError("CAPTIVE_PHYSICAL_ASSIGNMENT", "Captive Character cannot perform a physical assignment.");
+                        var target = assignment.TargetKind + "\n" + assignment.TargetId + "\n" + assignment.TargetX + "\n" + assignment.TargetY;
+                        if (physical.TryGetValue(assignment.CharacterId, out var existing) && !StringComparer.Ordinal.Equals(existing, target)) result.AddError("PHYSICAL_ASSIGNMENT_CONFLICT", "Character has physically impossible active assignments."); else physical[assignment.CharacterId] = target;
+                    }
+                }
+            }
+            var houseIds = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var house in subject.Houses)
+            {
+                if (house == null || string.IsNullOrWhiteSpace(house.HouseId) || !houseIds.Add(house.HouseId) || string.IsNullOrWhiteSpace(house.Name) || house.Prestige < 0 || house.Wealth < 0 || !Enum.IsDefined(typeof(HouseLifecycle), house.Lifecycle)) { result.AddError("HOUSE_INVALID", "House identity or values are invalid."); continue; }
+                if (house.Members == null || house.Marriages == null || house.FamilyLinks == null || house.Properties == null || house.Inheritances == null) { result.AddError("HOUSE_COLLECTION_NULL", "House collections are required."); continue; }
+                var members = new HashSet<string>(StringComparer.Ordinal); var activeMembers = new HashSet<string>(StringComparer.Ordinal); foreach (var member in house.Members) if (member == null || !characterIds.Contains(member.CharacterId) || !members.Add(member.CharacterId) || member.JoinedAt < 0) result.AddError("HOUSE_MEMBER_INVALID", "House member is invalid."); else if (member.IsActive) activeMembers.Add(member.CharacterId);
+                if (house.Lifecycle == (int)HouseLifecycle.Active && string.IsNullOrEmpty(house.HeadCharacterId) && !house.SuccessionPending) result.AddError("HOUSE_HEAD_OR_SUCCESSION_REQUIRED", "Active House needs a head or succession-pending state.");
+                if (!string.IsNullOrEmpty(house.HeadCharacterId) && (!activeMembers.Contains(house.HeadCharacterId) || charactersById[house.HeadCharacterId].Death != null)) result.AddError("HOUSE_HEAD_INVALID", "House head must be a living active member.");
+                foreach (var inheritance in house.Inheritances) if (inheritance == null || !Enum.IsDefined(typeof(HousePropertyKind), inheritance.Kind) || !Enum.IsDefined(typeof(InheritanceStatus), inheritance.Status) || ((inheritance.Kind == (int)HousePropertyKind.StateOffice || inheritance.Kind == (int)HousePropertyKind.TimarDirlikServiceGrant) && !string.IsNullOrEmpty(inheritance.HeirCharacterId))) result.AddError("INHERITANCE_SEMANTICS_INVALID", "Inheritance violates asset semantics.");
+            }
+            var cliqueIds = new HashSet<string>(StringComparer.Ordinal); foreach (var clique in subject.Cliques) if (clique != null && !string.IsNullOrWhiteSpace(clique.CliqueId) && !cliqueIds.Add(clique.CliqueId)) result.AddError("CLIQUE_ID_DUPLICATE", "Clique IDs must be unique.");
+            foreach (var clique in subject.Cliques)
+            {
+                if (clique == null || string.IsNullOrWhiteSpace(clique.CliqueId) || string.IsNullOrWhiteSpace(clique.Name) || !Enum.IsDefined(typeof(CliqueType), clique.Type) || !Enum.IsDefined(typeof(CliqueLifecycle), clique.Lifecycle) || !Enum.IsDefined(typeof(CliqueAttitude), clique.Attitude)) { result.AddError("CLIQUE_INVALID", "Clique identity or type is invalid."); continue; }
+                if (!string.IsNullOrEmpty(clique.ParentCliqueId) && !cliqueIds.Contains(clique.ParentCliqueId)) result.AddError("CLIQUE_PARENT_DANGLING", "Clique parent is missing.");
+                var members = new HashSet<string>(StringComparer.Ordinal); var activeMembers = new HashSet<string>(StringComparer.Ordinal); foreach (var member in clique.Memberships) if (member == null || !characterIds.Contains(member.CharacterId) || string.IsNullOrWhiteSpace(member.RoleCode) || !members.Add(member.CharacterId)) result.AddError("CLIQUE_MEMBER_INVALID", "Clique member is invalid."); else if (member.IsActive) activeMembers.Add(member.CharacterId);
+                if (!string.IsNullOrEmpty(clique.LeaderCharacterId) && (!activeMembers.Contains(clique.LeaderCharacterId) || charactersById[clique.LeaderCharacterId].Death != null)) result.AddError("CLIQUE_LEADER_INVALID", "Clique leader must be a living active member.");
+                foreach (var source in clique.InfluenceSources) if (source == null || !members.Contains(source.CharacterId) || !Enum.IsDefined(typeof(InfluenceSourceKind), source.Kind) || source.Contribution < 0 || source.Contribution > 100) result.AddError("CLIQUE_INFLUENCE_SOURCE_INVALID", "Clique influence must come from a valid member source.");
+            }
+            foreach (var clique in subject.Cliques) if (clique != null && !string.IsNullOrEmpty(clique.ParentCliqueId)) { var parent = subject.Cliques.Find(x => x != null && x.CliqueId == clique.ParentCliqueId); if (parent != null && !string.IsNullOrEmpty(parent.ParentCliqueId)) result.AddError("CLIQUE_HIERARCHY_TOO_DEEP", "Clique hierarchy exceeds parent-to-subclique depth."); }
         }
 
         private static void ValidateCharacters(CampaignSaveData subject, ValidationResult result)

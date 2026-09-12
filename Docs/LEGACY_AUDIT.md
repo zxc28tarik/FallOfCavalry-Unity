@@ -19,3 +19,12 @@ Audited source: `C:\Users\zxc28\Desktop\FallOfCavalry`, branch `333`, commit `d4
 
 The new repository is not an incremental patch inside the legacy project. No legacy runtime file was copied. Relevant concepts were re-expressed behind new public contracts and mutation-risk tests.
 
+## Implementation 2 addendum
+
+Remote legacy refs `origin/main` and `origin/333` were re-audited for party, companion/network, assignment, household/family, faction/subgroup, political group, loyalty and ownership material. `js/core/state.js`, `js/entities/ai-party.js`, `js/managers/WorldPartyManager.js`, `js/systems/factions.js`, `js/systems/faction-wars.js`, quest/faction constants and settlement owner data contain no reusable typed social-domain contract.
+
+- KEEP: none.
+- ADAPT: party affiliation and owner-reference concepts only, behind new typed package authority.
+- REWRITE: identity, assignment, affiliation, ownership and persistence when their owning later package is implemented.
+- REMOVE: global mutable state, browser coupling, arbitrary string identity/ownership, wall-clock behavior and doctrine bonuses in social contracts.
+- REFERENCE_ONLY: faction art/names, world-party AI/movement, battle deployment assignments, quest guild vocabulary and settlement owner maps.
