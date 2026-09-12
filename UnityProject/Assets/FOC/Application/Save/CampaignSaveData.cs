@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 3;
+        public const int CurrentSaveVersion = 4;
 
         public int SaveVersion { get; set; }
 
@@ -31,6 +31,12 @@ namespace FOC.Application.Save
         public List<OrganizationSaveData> Organizations { get; set; } = new List<OrganizationSaveData>();
         public List<HouseSaveData> Houses { get; set; } = new List<HouseSaveData>();
         public List<CliqueSaveData> Cliques { get; set; } = new List<CliqueSaveData>();
+        public List<ReligionDefinitionSaveData> Religions { get; set; } = new List<ReligionDefinitionSaveData>();
+        public List<SectDefinitionSaveData> Sects { get; set; } = new List<SectDefinitionSaveData>();
+        public List<CharacterReligionSaveData> CharacterReligions { get; set; } = new List<CharacterReligionSaveData>();
+        public List<ReligionProfileSaveData> ReligionProfiles { get; set; } = new List<ReligionProfileSaveData>();
+        public List<ReligionPolicySaveData> ReligionPolicies { get; set; } = new List<ReligionPolicySaveData>();
+        public List<ReligiousCliqueAssociationSaveData> ReligiousCliqueAssociations { get; set; } = new List<ReligiousCliqueAssociationSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -168,4 +174,12 @@ namespace FOC.Application.Save
     }
     public sealed class CliqueMembershipSaveData { public string CharacterId { get; set; } = string.Empty; public string RoleCode { get; set; } = string.Empty; public long JoinedAt { get; set; } public bool IsActive { get; set; } }
     public sealed class CliqueInfluenceSourceSaveData { public string CharacterId { get; set; } = string.Empty; public int Kind { get; set; } public int Contribution { get; set; } }
+    public sealed class ReligionDefinitionSaveData { public string ReligionId { get; set; }=string.Empty; public string Name { get; set; }=string.Empty; public int Status { get; set; } }
+    public sealed class SectDefinitionSaveData { public string SectId { get; set; }=string.Empty; public string ParentReligionId { get; set; }=string.Empty; public string Name { get; set; }=string.Empty; public int Status { get; set; } }
+    public sealed class CharacterReligionSaveData { public string CharacterId { get; set; }=string.Empty; public string ReligionId { get; set; }=string.Empty; public string SectId { get; set; }=string.Empty; }
+    public sealed class ReligionProfileEntrySaveData { public string ReligionId { get; set; }=string.Empty; public string SectId { get; set; }=string.Empty; public int RelativePresence { get; set; } }
+    public sealed class ReligionProfileSaveData { public int TargetKind { get; set; } public string TargetId { get; set; }=string.Empty; public List<ReligionProfileEntrySaveData> Entries { get; set; }=new List<ReligionProfileEntrySaveData>(); }
+    public sealed class ReligionPolicyRuleSaveData { public string ReligionId { get; set; }=string.Empty; public string SectId { get; set; }=string.Empty; public int Recognition { get; set; } public int Treatment { get; set; } public int Enforcement { get; set; } }
+    public sealed class ReligionPolicySaveData { public int TargetKind { get; set; } public string TargetId { get; set; }=string.Empty; public List<ReligionPolicyRuleSaveData> Rules { get; set; }=new List<ReligionPolicyRuleSaveData>(); }
+    public sealed class ReligiousCliqueAssociationSaveData { public string CliqueId { get; set; }=string.Empty; public string ReligionId { get; set; }=string.Empty; public string SectId { get; set; }=string.Empty; }
 }

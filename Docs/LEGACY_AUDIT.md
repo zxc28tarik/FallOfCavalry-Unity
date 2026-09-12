@@ -28,3 +28,13 @@ Remote legacy refs `origin/main` and `origin/333` were re-audited for party, com
 - REWRITE: identity, assignment, affiliation, ownership and persistence when their owning later package is implemented.
 - REMOVE: global mutable state, browser coupling, arbitrary string identity/ownership, wall-clock behavior and doctrine bonuses in social contracts.
 - REFERENCE_ONLY: faction art/names, world-party AI/movement, battle deployment assignments, quest guild vocabulary and settlement owner maps.
+
+## Implementation 3 addendum
+
+Remote refs `origin/main` and `origin/333` were searched under `js`, `docs` and `tests` for religion, religious, faith, sect, confession, population faith, faction religion, tolerance and religion-driven diplomacy. Exact-word searches found no Religion/Sect domain implementation; broad `sect` hits were battle-sector text.
+
+- KEEP: none.
+- ADAPT: none.
+- REWRITE: future faction/culture affiliation only through typed content definitions and explicit policy/event context.
+- REMOVE: any automatic religious hostility, loyalty/unrest, rebellion/war or combat modifier and arbitrary string identity.
+- REFERENCE_ONLY: faction names and geography for later researched content, not gameplay authority.

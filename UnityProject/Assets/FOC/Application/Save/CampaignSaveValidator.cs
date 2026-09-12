@@ -5,6 +5,7 @@ using FOC.Domain.Validation;
 using FOC.Domain.Organizations;
 using FOC.Domain.Houses;
 using FOC.Domain.Cliques;
+using FOC.Domain.Religion;
 
 namespace FOC.Application.Save
 {
@@ -43,11 +44,16 @@ namespace FOC.Application.Save
             {
                 result.AddError("SOCIAL_COLLECTION_NULL", "Organization, House and Clique collections are required.");
             }
+            if (subject.Religions == null || subject.Sects == null || subject.CharacterReligions == null || subject.ReligionProfiles == null || subject.ReligionPolicies == null || subject.ReligiousCliqueAssociations == null)
+            {
+                result.AddError("RELIGION_COLLECTION_NULL", "Religion collections are required.");
+            }
 
             if (subject.Characters != null && subject.CharacterRelations != null)
             {
                 ValidateCharacters(subject, result);
                 if (subject.Organizations != null && subject.Houses != null && subject.Cliques != null) ValidateSocial(subject, result);
+                if (subject.Religions != null && subject.Sects != null && subject.CharacterReligions != null && subject.ReligionProfiles != null && subject.ReligionPolicies != null && subject.ReligiousCliqueAssociations != null) ValidateReligion(subject, result);
             }
 
             if (string.IsNullOrWhiteSpace(subject.CampaignId))
@@ -82,6 +88,18 @@ namespace FOC.Application.Save
 
             return result;
         }
+
+        private static void ValidateReligion(CampaignSaveData subject, ValidationResult result)
+        {
+            var religions=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.Religions)if(x==null||string.IsNullOrWhiteSpace(x.ReligionId)||string.IsNullOrWhiteSpace(x.Name)||!religions.Add(x.ReligionId)||!Enum.IsDefined(typeof(ContentStatus),x.Status))result.AddError("RELIGION_INVALID","Religion definition is invalid.");
+            var sects=new Dictionary<string,string>(StringComparer.Ordinal);foreach(var x in subject.Sects)if(x==null||string.IsNullOrWhiteSpace(x.SectId)||string.IsNullOrWhiteSpace(x.Name)||!religions.Contains(x.ParentReligionId)||sects.ContainsKey(x.SectId)||!Enum.IsDefined(typeof(ContentStatus),x.Status))result.AddError("SECT_INVALID","Sect definition is invalid.");else sects.Add(x.SectId,x.ParentReligionId);
+            var characters=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.Characters)if(x!=null)characters.Add(x.CharacterId);var assigned=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.CharacterReligions)if(x==null||!characters.Contains(x.CharacterId)||!assigned.Add(x.CharacterId)||!PairValid(x.ReligionId,x.SectId,religions,sects))result.AddError("CHARACTER_RELIGION_INVALID","Character religion is invalid.");
+            var profileTargets=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.ReligionProfiles){if(x==null||!TargetValid(x.TargetKind,x.TargetId)||!profileTargets.Add(x.TargetKind+"\n"+x.TargetId)||x.Entries==null){result.AddError("RELIGION_PROFILE_INVALID","Religion profile is invalid.");continue;}var pairs=new HashSet<string>(StringComparer.Ordinal);foreach(var e in x.Entries)if(e==null||e.RelativePresence<=0||!PairValid(e.ReligionId,e.SectId,religions,sects)||!pairs.Add(e.ReligionId+"\n"+e.SectId))result.AddError("RELIGION_PROFILE_ENTRY_INVALID","Religion profile entry is invalid.");}
+            var policyTargets=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.ReligionPolicies){if(x==null||!TargetValid(x.TargetKind,x.TargetId)||!policyTargets.Add(x.TargetKind+"\n"+x.TargetId)||x.Rules==null){result.AddError("RELIGION_POLICY_INVALID","Religion policy is invalid.");continue;}var pairs=new HashSet<string>(StringComparer.Ordinal);foreach(var e in x.Rules)if(e==null||!PairValid(e.ReligionId,e.SectId,religions,sects)||!pairs.Add(e.ReligionId+"\n"+e.SectId)||!Enum.IsDefined(typeof(ReligionRecognition),e.Recognition)||!Enum.IsDefined(typeof(ReligionTreatment),e.Treatment)||!Enum.IsDefined(typeof(ReligionEnforcement),e.Enforcement))result.AddError("RELIGION_POLICY_RULE_INVALID","Religion policy rule is invalid.");}
+            var cliques=new Dictionary<string,int>(StringComparer.Ordinal);foreach(var x in subject.Cliques)if(x!=null)cliques[x.CliqueId]=x.Type;var linked=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.ReligiousCliqueAssociations)if(x==null||!linked.Add(x.CliqueId)||!cliques.TryGetValue(x.CliqueId,out var type)||type!=(int)CliqueType.Religious||!PairValid(x.ReligionId,x.SectId,religions,sects))result.AddError("RELIGIOUS_CLIQUE_INVALID","Religious Clique association is invalid.");
+        }
+        private static bool PairValid(string religion,string sect,HashSet<string> religions,Dictionary<string,string> sects)=>religions.Contains(religion)&&(string.IsNullOrEmpty(sect)||(sects.TryGetValue(sect,out var parent)&&StringComparer.Ordinal.Equals(parent,religion)));
+        private static bool TargetValid(int kind,string id)=>Enum.IsDefined(typeof(ReligionProfileTargetKind),kind)&&!string.IsNullOrWhiteSpace(id);
 
         private static void ValidateSocial(CampaignSaveData subject, ValidationResult result)
         {

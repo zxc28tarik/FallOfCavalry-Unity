@@ -2,7 +2,7 @@
 
 This repository contains the clean Unity/C# production baseline for Fall of Cavalry. It is intentionally separate from the legacy browser prototype.
 
-Implementation 0 established the deterministic, save-safe foundation. Implementation 1 added the persistent Character Core. Implementation 2 adds the separate Organization, Family/Household/House and Clique/Internal Politics foundations while leaving Religion/Sect and later gameplay packages untouched.
+Implementation 0 established the deterministic, save-safe foundation. Implementation 1 added the persistent Character Core. Implementation 2 added separate Organization, Family/Household/House and Clique/Internal Politics foundations. Implementation 3 adds content-driven Religion/Sect identity, profile and policy contracts without automatic political or combat modifiers.
 
 ## Layout
 

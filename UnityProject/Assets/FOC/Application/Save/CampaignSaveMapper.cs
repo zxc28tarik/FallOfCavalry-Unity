@@ -46,6 +46,7 @@ namespace FOC.Application.Save
             }
 
             AddSocialSaveData(state, data);
+            AddReligionSaveData(state, data);
 
             return data;
         }
@@ -79,6 +80,7 @@ namespace FOC.Application.Save
             }
 
             var social = RestoreSocial(data, roster);
+            var religion = RestoreReligion(data);
             return new CampaignRuntimeState(
                 StableId<CampaignTag>.Create(data.CampaignId),
                 data.GameVersion,
@@ -90,7 +92,8 @@ namespace FOC.Application.Save
                 roster,
                 social.Organizations,
                 social.Houses,
-                social.Cliques);
+                social.Cliques,
+                religion);
         }
 
         private static CharacterSaveData ToCharacterSaveData(CharacterState state)

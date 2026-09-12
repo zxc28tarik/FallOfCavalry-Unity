@@ -24,7 +24,7 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 
 - Campaign time: `WorldClock` only.
 - Gameplay random sequence: the injected `IRandomSource` state only.
-- Static content: immutable `IDefinition<TTag>` implementations in a `DefinitionRegistry`.
+- Static content: immutable definitions in typed registries; Religion and Sect definitions are content-driven and Sect carries an explicit parent `ReligionId`.
 - Mutable campaign foundation: `CampaignRuntimeState`.
 - Persistent human identity: immutable `CharacterDefinition` subtypes referenced by mutable `CharacterState`.
 - Character physical location: one `CharacterLocation` discriminated value; captivity is its typed payload rather than a second location field.
@@ -32,6 +32,8 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 - Organization membership, assignment, authority and Character location: separate contracts; assignment feasibility reads but never mutates authoritative Character location.
 - Family, Household, House, Clique and Faction: separate identity/state boundaries.
 - Internal politics: projections derived from explicit Character, House, Clique, policy/event inputs; never a hidden stockpile.
+- Religion identity: `ReligionId` and optional compatible `SectId`, separate from Character, Faction, House, Organization and Religious Clique identities.
+- Religion context: typed City/Faction/Region profiles and policy rules; difference alone has no unrest, loyalty, relation, rebellion, war or combat effect.
 - Persistence representation: `CampaignSaveData`, never runtime objects.
 - Message ordering: the explicit sequence in `DeterministicMessageQueue`.
 
@@ -39,4 +41,4 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 
 Typed IDs are generic by tag, so unrelated domain identities cannot be mixed. Future packages should introduce domain-specific tags or wrappers rather than a universal entity abstraction. State changes belong behind bounded rule/application services; Presentation must not mutate fields directly.
 
-`CharacterCommandService` remains the Character orchestration boundary. `OrganizationCommandService`, `HouseCommandService` and `CliqueCommandService` validate cross-aggregate references and lifecycle restrictions. None implements later City, Economy, Army, Religion/Sect, AI or UI behavior.
+`CharacterCommandService` remains the Character orchestration boundary. `OrganizationCommandService`, `HouseCommandService`, `CliqueCommandService` and `ReligionCommandService` validate cross-aggregate references and lifecycle restrictions. None implements later City V2, Economy, Army, AI or UI behavior.

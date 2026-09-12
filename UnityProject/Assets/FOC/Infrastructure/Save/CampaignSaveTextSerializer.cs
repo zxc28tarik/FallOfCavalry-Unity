@@ -47,6 +47,10 @@ namespace FOC.Infrastructure.Save
             {
                 Append(builder, "SocialState", EncodeSocial(data));
             }
+            if (data.SaveVersion >= 4)
+            {
+                Append(builder, "ReligionState", EncodeReligion(data));
+            }
             return builder.ToString();
         }
 
@@ -116,6 +120,10 @@ namespace FOC.Infrastructure.Save
                 if (data.SaveVersion >= 3)
                 {
                     DecodeSocial(Require(values, "SocialState"), data);
+                }
+                if (data.SaveVersion >= 4)
+                {
+                    DecodeReligion(Require(values, "ReligionState"), data);
                 }
 
                 return SaveReadResult.Succeeded(data);
@@ -409,6 +417,31 @@ namespace FOC.Infrastructure.Save
         private static int ReadCount(BinaryReader reader, string fieldName)
         {
             var count = reader.ReadInt32(); if (count < 0) throw new FormatException(fieldName + " cannot be negative."); return count;
+        }
+
+        private static string EncodeReligion(CampaignSaveData data)
+        {
+            using(var stream=new MemoryStream())using(var writer=new BinaryWriter(stream,Encoding.UTF8,true))
+            {
+                writer.Write(data.Religions.Count);foreach(var x in data.Religions){writer.Write(x.ReligionId);writer.Write(x.Name);writer.Write(x.Status);}
+                writer.Write(data.Sects.Count);foreach(var x in data.Sects){writer.Write(x.SectId);writer.Write(x.ParentReligionId);writer.Write(x.Name);writer.Write(x.Status);}
+                writer.Write(data.CharacterReligions.Count);foreach(var x in data.CharacterReligions){writer.Write(x.CharacterId);writer.Write(x.ReligionId);writer.Write(x.SectId);}
+                writer.Write(data.ReligionProfiles.Count);foreach(var x in data.ReligionProfiles){writer.Write(x.TargetKind);writer.Write(x.TargetId);writer.Write(x.Entries.Count);foreach(var e in x.Entries){writer.Write(e.ReligionId);writer.Write(e.SectId);writer.Write(e.RelativePresence);}}
+                writer.Write(data.ReligionPolicies.Count);foreach(var x in data.ReligionPolicies){writer.Write(x.TargetKind);writer.Write(x.TargetId);writer.Write(x.Rules.Count);foreach(var e in x.Rules){writer.Write(e.ReligionId);writer.Write(e.SectId);writer.Write(e.Recognition);writer.Write(e.Treatment);writer.Write(e.Enforcement);}}
+                writer.Write(data.ReligiousCliqueAssociations.Count);foreach(var x in data.ReligiousCliqueAssociations){writer.Write(x.CliqueId);writer.Write(x.ReligionId);writer.Write(x.SectId);}writer.Flush();return Convert.ToBase64String(stream.ToArray());
+            }
+        }
+        private static void DecodeReligion(string value,CampaignSaveData data)
+        {
+            using(var stream=new MemoryStream(Convert.FromBase64String(value)))using(var reader=new BinaryReader(stream,Encoding.UTF8,true))
+            {
+                var count=ReadCount(reader,"ReligionCount");for(var i=0;i<count;i++)data.Religions.Add(new ReligionDefinitionSaveData{ReligionId=reader.ReadString(),Name=reader.ReadString(),Status=reader.ReadInt32()});
+                count=ReadCount(reader,"SectCount");for(var i=0;i<count;i++)data.Sects.Add(new SectDefinitionSaveData{SectId=reader.ReadString(),ParentReligionId=reader.ReadString(),Name=reader.ReadString(),Status=reader.ReadInt32()});
+                count=ReadCount(reader,"CharacterReligionCount");for(var i=0;i<count;i++)data.CharacterReligions.Add(new CharacterReligionSaveData{CharacterId=reader.ReadString(),ReligionId=reader.ReadString(),SectId=reader.ReadString()});
+                count=ReadCount(reader,"ReligionProfileCount");for(var i=0;i<count;i++){var x=new ReligionProfileSaveData{TargetKind=reader.ReadInt32(),TargetId=reader.ReadString()};var inner=ReadCount(reader,"ReligionProfileEntryCount");for(var j=0;j<inner;j++)x.Entries.Add(new ReligionProfileEntrySaveData{ReligionId=reader.ReadString(),SectId=reader.ReadString(),RelativePresence=reader.ReadInt32()});data.ReligionProfiles.Add(x);}
+                count=ReadCount(reader,"ReligionPolicyCount");for(var i=0;i<count;i++){var x=new ReligionPolicySaveData{TargetKind=reader.ReadInt32(),TargetId=reader.ReadString()};var inner=ReadCount(reader,"ReligionPolicyRuleCount");for(var j=0;j<inner;j++)x.Rules.Add(new ReligionPolicyRuleSaveData{ReligionId=reader.ReadString(),SectId=reader.ReadString(),Recognition=reader.ReadInt32(),Treatment=reader.ReadInt32(),Enforcement=reader.ReadInt32()});data.ReligionPolicies.Add(x);}
+                count=ReadCount(reader,"ReligiousCliqueAssociationCount");for(var i=0;i<count;i++)data.ReligiousCliqueAssociations.Add(new ReligiousCliqueAssociationSaveData{CliqueId=reader.ReadString(),ReligionId=reader.ReadString(),SectId=reader.ReadString()});RequireFullyConsumed(stream);
+            }
         }
     }
 }

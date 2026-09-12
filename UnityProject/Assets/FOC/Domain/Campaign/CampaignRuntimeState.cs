@@ -6,6 +6,7 @@ using FOC.Domain.Time;
 using FOC.Domain.Organizations;
 using FOC.Domain.Houses;
 using FOC.Domain.Cliques;
+using FOC.Domain.Religion;
 
 namespace FOC.Domain.Campaign
 {
@@ -22,7 +23,8 @@ namespace FOC.Domain.Campaign
             CharacterRoster? characters = null,
             OrganizationRegistry? organizations = null,
             HouseRegistry? houses = null,
-            CliqueRegistry? cliques = null)
+            CliqueRegistry? cliques = null,
+            ReligionCampaignState? religion = null)
         {
             if (!campaignId.IsValid)
             {
@@ -45,6 +47,7 @@ namespace FOC.Domain.Campaign
             Organizations = organizations ?? new OrganizationRegistry();
             Houses = houses ?? new HouseRegistry();
             Cliques = cliques ?? new CliqueRegistry();
+            Religion = religion ?? new ReligionCampaignState();
         }
 
         public StableId<CampaignTag> CampaignId { get; }
@@ -68,6 +71,8 @@ namespace FOC.Domain.Campaign
         public HouseRegistry Houses { get; }
 
         public CliqueRegistry Cliques { get; }
+
+        public ReligionCampaignState Religion { get; }
 
         private static string RequireText(string value, string parameterName)
         {

@@ -46,4 +46,8 @@ namespace FOC.Domain.Common
     public sealed class AssignmentTag { private AssignmentTag() { } }
     public sealed class HouseTag { private HouseTag() { } }
     public sealed class CliqueTag { private CliqueTag() { } }
+    public sealed class ReligionTag { private ReligionTag() { } }
+    public sealed class SectTag { private SectTag() { } }
+    public sealed class FactionTag { private FactionTag() { } }
+    public sealed class RegionTag { private RegionTag() { } }
 }
