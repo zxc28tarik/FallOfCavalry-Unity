@@ -10,7 +10,7 @@ dotnet build FallOfCavalry.sln --configuration Release --no-restore
 dotnet test FallOfCavalry.sln --configuration Release --no-build --no-restore --logger "console;verbosity=normal"
 ```
 
-The `Build/*.csproj` projects compile the authoritative sources under `UnityProject/Assets/FOC`; they are not a second implementation. Warnings are errors. The suite covers Implementation 0–4 regression plus typed goods, non-negative stocks, real recipe input/output flow, consumption/shortage, deterministic auditable prices, atomic goods-and-money transactions, Caravan ownership/manager/capacity/accounting, Economy invariants, schema v1→v2→v3→v4→v5→v6 migration and complete schema v6 semantic roundtrip.
+The `Build/*.csproj` projects compile the authoritative sources under `UnityProject/Assets/FOC`; they are not a second implementation. Warnings are errors. The suite covers Implementation 0–5 regression plus canonical diplomatic relations, separate factors/actions, authority-scoped Envoys, non-instant WorldClock communication, message/report replay guards, dated/stale observations, knowledge/world-truth separation, controlled agreements, schema v1→v2→v3→v4→v5→v6→v7 migration and schema v7 semantic roundtrip.
 
 ## Unity Editor suite
 

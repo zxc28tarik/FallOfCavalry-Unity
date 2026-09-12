@@ -2,7 +2,7 @@
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 6`.
+`CampaignSaveData.CurrentSaveVersion = 7`.
 
 The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 
@@ -44,11 +44,15 @@ Version 5 adds a deterministic City payload. It persists City identity/name, all
 
 Version 6 adds deterministic Trade Good and production-recipe definitions, authoritative per-City stock/demand/market cash, and persistent Caravans. A Caravan stores a typed owner, real Character manager, optional Trade-branch representative assignment, origin/destination, weight capacity, real cargo, operational cash, lifecycle/location stage, accounting totals and source-tagged future route-risk inputs. Prices themselves are formed from content reference values and explicit inputs and are not persisted as hidden mutable truth.
 
+## Version 7 Diplomacy / Envoy / Report
+
+Version 7 persists the minimum Faction actor registry, canonical relation pairs and explicit factors, diplomatic actions, role-scoped Envoy missions, messages, typed reports/observations, delivered actor information and controlled agreement terms. Envoy and carrier references point to real Characters; mission assignments reuse the Organization Diplomacy branch. Observed, dispatched and arrived timestamps remain distinct. Only delivered reports enter actor information, and report observations never replace authoritative world state.
+
 ## Migration policy
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.
 
-`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` preserves all earlier state and initializes Economy collections empty. No migration invents people, social entities, religions, profiles, cities, goods, markets or Caravans. Hardcoded old-schema fixtures exercise the continuous chain.
+`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` preserves all prior state and initializes Diplomacy/communication/information collections empty. No migration invents actors, relations, Envoys, messages or reports. Hardcoded old-schema fixtures exercise the continuous chain.
 
 ## Atomic storage policy
 

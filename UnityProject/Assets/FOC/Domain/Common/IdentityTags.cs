@@ -54,4 +54,10 @@ namespace FOC.Domain.Common
     public sealed class TradeGoodTag { private TradeGoodTag() { } }
     public sealed class ProductionRecipeTag { private ProductionRecipeTag() { } }
     public sealed class TradeRouteTag { private TradeRouteTag() { } }
+    public sealed class DiplomaticRelationTag { private DiplomaticRelationTag() { } }
+    public sealed class DiplomaticActionTag { private DiplomaticActionTag() { } }
+    public sealed class EnvoyMissionTag { private EnvoyMissionTag() { } }
+    public sealed class DiplomaticMessageTag { private DiplomaticMessageTag() { } }
+    public sealed class ReportTag { private ReportTag() { } }
+    public sealed class DiplomaticAgreementTag { private DiplomaticAgreementTag() { } }
 }

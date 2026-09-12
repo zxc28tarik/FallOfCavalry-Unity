@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 6;
+        public const int CurrentSaveVersion = 7;
 
         public int SaveVersion { get; set; }
 
@@ -42,6 +42,14 @@ namespace FOC.Application.Save
         public List<ProductionRecipeSaveData> ProductionRecipes{get;set;}=new List<ProductionRecipeSaveData>();
         public List<CityMarketSaveData> CityMarkets{get;set;}=new List<CityMarketSaveData>();
         public List<CaravanSaveData> Caravans{get;set;}=new List<CaravanSaveData>();
+        public List<DiplomaticActorSaveData> DiplomaticActors{get;set;}=new List<DiplomaticActorSaveData>();
+        public List<DiplomaticRelationSaveData> DiplomaticRelations{get;set;}=new List<DiplomaticRelationSaveData>();
+        public List<EnvoyMissionSaveData> EnvoyMissions{get;set;}=new List<EnvoyMissionSaveData>();
+        public List<DiplomaticMessageSaveData> DiplomaticMessages{get;set;}=new List<DiplomaticMessageSaveData>();
+        public List<DiplomaticActionSaveData> DiplomaticActions{get;set;}=new List<DiplomaticActionSaveData>();
+        public List<ReportSaveData> Reports{get;set;}=new List<ReportSaveData>();
+        public List<ActorInformationSaveData> ActorInformation{get;set;}=new List<ActorInformationSaveData>();
+        public List<DiplomaticAgreementSaveData> DiplomaticAgreements{get;set;}=new List<DiplomaticAgreementSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -204,4 +212,14 @@ namespace FOC.Application.Save
     public sealed class CityMarketSaveData{public string CityId{get;set;}=string.Empty;public long CashBalance{get;set;}public List<TradeGoodStockSaveData> Stocks{get;set;}=new List<TradeGoodStockSaveData>();public List<DemandSourceSaveData> DemandSources{get;set;}=new List<DemandSourceSaveData>();}
     public sealed class RouteRiskSaveData{public string SourceId{get;set;}=string.Empty;public int Source{get;set;}}
     public sealed class CaravanSaveData{public string CaravanId{get;set;}=string.Empty;public int OwnerKind{get;set;}public string OwnerId{get;set;}=string.Empty;public string ManagerCharacterId{get;set;}=string.Empty;public string RepresentativeCharacterId{get;set;}=string.Empty;public string RepresentativeOrganizationId{get;set;}=string.Empty;public string RepresentativeAssignmentId{get;set;}=string.Empty;public string OriginCityId{get;set;}=string.Empty;public string DestinationCityId{get;set;}=string.Empty;public string RouteId{get;set;}=string.Empty;public long WeightCapacity{get;set;}public long CashBalance{get;set;}public int Lifecycle{get;set;}public int LocationStage{get;set;}public long PurchaseCost{get;set;}public long SaleRevenue{get;set;}public long OperatingCost{get;set;}public long Tariffs{get;set;}public long Losses{get;set;}public List<TradeGoodStockSaveData> Cargo{get;set;}=new List<TradeGoodStockSaveData>();public List<RouteRiskSaveData> RiskInputs{get;set;}=new List<RouteRiskSaveData>();}
+    public sealed class DiplomaticActorSaveData{public string FactionId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int Lifecycle{get;set;}}
+    public sealed class DiplomaticFactorSaveData{public string SourceId{get;set;}=string.Empty;public int Source{get;set;}public int Direction{get;set;}public long OccurredAt{get;set;}}
+    public sealed class DiplomaticRelationSaveData{public string FirstActorId{get;set;}=string.Empty;public string SecondActorId{get;set;}=string.Empty;public int Disposition{get;set;}public long UpdatedAt{get;set;}public List<DiplomaticFactorSaveData> Factors{get;set;}=new List<DiplomaticFactorSaveData>();}
+    public sealed class EnvoyMissionSaveData{public string EnvoyMissionId{get;set;}=string.Empty;public string CharacterId{get;set;}=string.Empty;public string OrganizationId{get;set;}=string.Empty;public string AssignmentId{get;set;}=string.Empty;public string SourceActorId{get;set;}=string.Empty;public string TargetActorId{get;set;}=string.Empty;public int MissionType{get;set;}public int AuthorityScope{get;set;}public List<int> AllowedActions{get;set;}=new List<int>();public long CreatedAt{get;set;}public long? DepartedAt{get;set;}public long? ArrivedAt{get;set;}public long? CompletedAt{get;set;}public int Phase{get;set;}}
+    public sealed class DiplomaticMessageSaveData{public string DiplomaticMessageId{get;set;}=string.Empty;public string SenderActorId{get;set;}=string.Empty;public string RecipientActorId{get;set;}=string.Empty;public int Kind{get;set;}public int CarrierKind{get;set;}public string CarrierCharacterId{get;set;}=string.Empty;public string EnvoyMissionId{get;set;}=string.Empty;public string ResponseToId{get;set;}=string.Empty;public long CreatedAt{get;set;}public long? DispatchedAt{get;set;}public long? DeliveredAt{get;set;}public int Status{get;set;}}
+    public sealed class DiplomaticActionSaveData{public string DiplomaticActionId{get;set;}=string.Empty;public string SourceActorId{get;set;}=string.Empty;public string TargetActorId{get;set;}=string.Empty;public int Kind{get;set;}public string EnvoyMissionId{get;set;}=string.Empty;public string DiplomaticMessageId{get;set;}=string.Empty;public long OrderedAt{get;set;}public int Status{get;set;}public int? Outcome{get;set;}public long? ResolvedAt{get;set;}}
+    public sealed class ReportObservationSaveData{public int SubjectKind{get;set;}public string SubjectId{get;set;}=string.Empty;public int Kind{get;set;}public int Precision{get;set;}public long? Lower{get;set;}public long? Upper{get;set;}public int Qualitative{get;set;}}
+    public sealed class ReportSaveData{public string ReportId{get;set;}=string.Empty;public int Type{get;set;}public int SourceKind{get;set;}public string SourceId{get;set;}=string.Empty;public string SourceCityId{get;set;}=string.Empty;public string SourceBuildingId{get;set;}=string.Empty;public string RecipientActorId{get;set;}=string.Empty;public int Quality{get;set;}public int DetailLevel{get;set;}public long ObservedAt{get;set;}public long? DispatchedAt{get;set;}public long? ArrivedAt{get;set;}public int Status{get;set;}public List<ReportObservationSaveData> Observations{get;set;}=new List<ReportObservationSaveData>();}
+    public sealed class ActorInformationSaveData{public string ActorId{get;set;}=string.Empty;public List<string> AvailableReportIds{get;set;}=new List<string>();}
+    public sealed class DiplomaticAgreementSaveData{public string AgreementId{get;set;}=string.Empty;public string FirstActorId{get;set;}=string.Empty;public string SecondActorId{get;set;}=string.Empty;public int Kind{get;set;}public long SignedAt{get;set;}public long EffectiveAt{get;set;}public long? ExpiresAt{get;set;}public int Status{get;set;}public List<int> Terms{get;set;}=new List<int>();}
 }

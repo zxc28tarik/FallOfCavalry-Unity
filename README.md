@@ -2,7 +2,7 @@
 
 This repository contains the clean Unity/C# production baseline for Fall of Cavalry. It is intentionally separate from the legacy browser prototype.
 
-Implementation 0 established the deterministic, save-safe foundation. Implementation 1 added the persistent Character Core. Implementation 2 added Organization/House/Clique foundations. Implementation 3 added content-driven Religion/Sect identity. Implementation 4 added City V2. Implementation 5 adds real-goods production, stock, consumption, demand, auditable pricing, atomic trade transactions and persistent capacity-bound Caravans without introducing world movement or later gameplay packages.
+Implementation 0 established the deterministic, save-safe foundation. Implementation 1 added Character Core; Implementation 2 Organization/House/Clique; Implementation 3 Religion/Sect; Implementation 4 City V2; and Implementation 5 Trade/Production/Caravan. Implementation 6 adds canonical diplomatic relations and factors, role-scoped real-Character Envoy missions, delayed messages, dated reports and actor information that remains separate from world truth.
 
 ## Layout
 

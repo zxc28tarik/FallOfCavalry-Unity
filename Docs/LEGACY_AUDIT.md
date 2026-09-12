@@ -58,3 +58,13 @@ Remote legacy refs `origin/main` and `origin/333` were audited for trade goods, 
 - REWRITE: Trade Good identity/category, recipes, demand sources, pricing inputs, atomic transactions, ownership, Caravan cargo/capacity/accounting and schema v6 persistence.
 - REMOVE: global mutable state, browser coupling, arbitrary string ownership, random price drift, hardcoded legacy prices/coefficients and fake inventory transfers.
 - REFERENCE_ONLY: legacy numeric balance values, route/world movement, UI and content naming for later authority/content packages.
+
+## Implementation 6 addendum
+
+Remote refs `origin/main` and `origin/333` were audited for diplomacy, Faction relations, Envoys, messengers, reports, intelligence, communication, embassies, treaties, agreements, negotiation and reputation. Relevant material includes `DiplomacyManager.js`, `systems/diplomacy.js`, `systems/factions.js`, city-service UI, encounter/quest messenger data and City-overhaul Reisülküttab documents.
+
+- KEEP: none; legacy runtime is global/browser-coupled and does not satisfy typed delayed-information authority.
+- ADAPT: canonical Faction-pair intent, temporary messenger/Envoy concepts and Reisülküttab/record-office institution vocabulary.
+- REWRITE: actor identity, relation/factor/action separation, mandate validation, physical mission phases, message/report timelines, actor information and schema v7 persistence.
+- REMOVE: instant button diplomacy, single numeric relation truth, arbitrary string actors, purchased truce shortcuts, hidden numeric thresholds, direct global state mutation, omniscient information and random/uncontrolled effects.
+- REFERENCE_ONLY: legacy action costs, thresholds, war/encounter logic, quest content, UI and historical presentation for later authorized packages.

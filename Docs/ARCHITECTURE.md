@@ -39,6 +39,9 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 - Economy state: Trade Good definitions, production recipes, City markets, demand sources and Caravans are typed deterministic aggregates. City stock and Caravan cargo are the only goods authorities in this package.
 - Economic ownership: a Caravan owner may be a Character, House or Organization. Manager and optional Trade-branch representative are separate Character/assignment references; Merchant Clique and Trade Network never own goods.
 - Trade mutation: production and buy/sell operations run through Application services that preflight every stock, capacity, cash and accounting condition before mutating state.
+- Diplomacy state: typed Faction actors, canonical pair relations, explicit factors, actions, agreements, Envoy missions, messages, reports and actor information are separate aggregates.
+- Information boundary: delivered reports are actor knowledge; report observations never mutate or masquerade as world truth. Future player/AI query layers must consume `ActorInformationState` for remote knowledge rather than an omniscient `CampaignRuntimeState` reference.
+- Communication mutation: Application services validate real Characters, existing Organization Diplomacy assignments, mandate scope, WorldClock time and arrival before a remote action or report becomes available.
 - Persistence representation: `CampaignSaveData`, never runtime objects.
 - Message ordering: the explicit sequence in `DeterministicMessageQueue`.
 
@@ -46,4 +49,4 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 
 Typed IDs are generic by tag, so unrelated domain identities cannot be mixed. Future packages should introduce domain-specific tags or wrappers rather than a universal entity abstraction. State changes belong behind bounded rule/application services; Presentation must not mutate fields directly.
 
-`CharacterCommandService` remains the Character orchestration boundary. Organization, House, Clique, Religion and City command services validate their bounded cross-aggregate references. `CityCommandService` reuses Organization assignments for Kethüda; it does not create a Character subtype or Organization branch. `ProductionService` and `TradeTransactionService` own Implementation 5 economy mutations. None implements world movement, Army, Battle, Diplomacy, AI or UI behavior.
+`CharacterCommandService` remains the Character orchestration boundary. Organization, House, Clique, Religion and City command services validate their bounded cross-aggregate references. `ProductionService` and `TradeTransactionService` own economy mutations. `DiplomacyCommandService` and `ReportDeliveryService` own cross-aggregate communication transitions. No package implements pathfinding, Army, Battle, AI strategy or UI behavior.

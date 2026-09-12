@@ -25,9 +25,10 @@ One world tick is an abstract foundation unit. Mapping ticks to calendar semanti
 - Religion and Sect definitions, Character affiliations, typed profiles, policy rules and Religious Clique associations use canonical typed-ID/target ordering.
 - Cities sort by `CityId`; areas, building pools, active/locked buildings, infrastructure and official assignment references use canonical enum or stable-ID ordering.
 - Trade Goods, recipes, recipe lines, City markets, stock records, demand sources, Caravans, cargo and route-risk inputs use typed stable IDs or explicit enum/source keys and canonical ordering.
+- Diplomatic actors, canonical actor pairs, relation factors, actions, Envoy missions, messages, reports, observations, information records and agreements use typed IDs and stable source/subject keys.
 - Rules must never depend on the natural iteration order of dictionaries or hash sets.
 - Future equal-score decisions require an explicit stable-ID tie-break.
 
 ## Verification
 
-Tests lock same-seed sequences, RNG state continuation, explicit time behavior, stable ID ordering, definition ordering, message order, Character story-guard decisions, relation ordering and full Character/social/religion/city/economy save serialization. Economy prices use content reference values plus source-tagged signed inputs in canonical order; no hidden random drift or implicit coefficient exists.
+Tests lock same-seed sequences, RNG continuation, explicit time, stable ordering and full schema serialization. Diplomacy delivery accepts only the current `WorldClock` timestamp; a paused clock cannot be bypassed with a fabricated future timestamp. Report quality is explicit precision/detail state and never invokes randomness or changes world truth.
