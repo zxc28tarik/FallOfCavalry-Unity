@@ -28,20 +28,17 @@ namespace FOC.Tests
             var organization = restored.Organizations.GetRequired(OrganizationId.Create("org-main"));
             var house = restored.Houses.GetRequired(HouseId.Create("house-main"));
             var clique = restored.Cliques.GetRequired(CliqueId.Create("clique-child"));
-            Assert.Multiple(() =>
-            {
-                Assert.That(organization.Memberships.Single().CharacterId.Value, Is.EqualTo("character-a"));
-                Assert.That(organization.OrderedAssignments.Single().Authority, Is.EqualTo(AssignmentAuthority.Deputy));
-                Assert.That(house.HeadId!.Value.Value, Is.EqualTo("character-a"));
-                Assert.That(house.Wealth.Value, Is.EqualTo(900));
-                Assert.That(house.Prestige.Value, Is.EqualTo(12));
-                Assert.That(house.Properties.Single().Kind, Is.EqualTo(HousePropertyKind.TimarDirlikServiceGrant));
-                Assert.That(house.Marriages.Single().CreatesAlliance, Is.False);
-                Assert.That(clique.ParentId!.Value.Value, Is.EqualTo("clique-parent"));
-                Assert.That(clique.OrderedMemberships.Single().CharacterId.Value, Is.EqualTo("character-b"));
-                Assert.That(clique.InfluenceSources.Single().Contribution, Is.EqualTo(25));
-                Assert.That(clique.Attitude, Is.EqualTo(CliqueAttitude.Supportive));
-            });
+            Assert.That(organization.Memberships.Single().CharacterId.Value, Is.EqualTo("character-a"));
+            Assert.That(organization.OrderedAssignments.Single().Authority, Is.EqualTo(AssignmentAuthority.Deputy));
+            Assert.That(house.HeadId!.Value.Value, Is.EqualTo("character-a"));
+            Assert.That(house.Wealth.Value, Is.EqualTo(900));
+            Assert.That(house.Prestige.Value, Is.EqualTo(12));
+            Assert.That(house.Properties.Single().Kind, Is.EqualTo(HousePropertyKind.TimarDirlikServiceGrant));
+            Assert.That(house.Marriages.Single().CreatesAlliance, Is.False);
+            Assert.That(clique.ParentId!.Value.Value, Is.EqualTo("clique-parent"));
+            Assert.That(clique.OrderedMemberships.Single().CharacterId.Value, Is.EqualTo("character-b"));
+            Assert.That(clique.InfluenceSources.Single().Contribution, Is.EqualTo(25));
+            Assert.That(clique.Attitude, Is.EqualTo(CliqueAttitude.Supportive));
         }
 
         [Test]
