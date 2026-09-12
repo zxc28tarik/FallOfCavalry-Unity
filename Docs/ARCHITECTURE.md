@@ -42,6 +42,9 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 - Diplomacy state: typed Faction actors, canonical pair relations, explicit factors, actions, agreements, Envoy missions, messages, reports and actor information are separate aggregates.
 - Information boundary: delivered reports are actor knowledge; report observations never mutate or masquerade as world truth. Future player/AI query layers must consume `ActorInformationState` for remote knowledge rather than an omniscient `CampaignRuntimeState` reference.
 - Communication mutation: Application services validate real Characters, existing Organization Diplomacy assignments, mandate scope, WorldClock time and arrival before a remote action or report becomes available.
+- Military state: `CampaignMilitaryState` owns typed Army, Unit Group, recruitment-source and recruitment-record registries. `OrganizationBranch.Army` remains an assignment network and is not the Army aggregate.
+- Military mutation: Army creation/recruitment, City or Caravan supply transfer and payroll payment cross aggregate boundaries only through Application services. Goods and cash are removed from their real Economy owner before the Army receives them.
+- Military information: authoritative foreign `ArmyState` is not actor knowledge. Remote strength/location/supply observations enter the existing report pipeline and actor information only after delivery.
 - Persistence representation: `CampaignSaveData`, never runtime objects.
 - Message ordering: the explicit sequence in `DeterministicMessageQueue`.
 
@@ -49,4 +52,4 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 
 Typed IDs are generic by tag, so unrelated domain identities cannot be mixed. Future packages should introduce domain-specific tags or wrappers rather than a universal entity abstraction. State changes belong behind bounded rule/application services; Presentation must not mutate fields directly.
 
-`CharacterCommandService` remains the Character orchestration boundary. Organization, House, Clique, Religion and City command services validate their bounded cross-aggregate references. `ProductionService` and `TradeTransactionService` own economy mutations. `DiplomacyCommandService` and `ReportDeliveryService` own cross-aggregate communication transitions. No package implements pathfinding, Army, Battle, AI strategy or UI behavior.
+`CharacterCommandService` remains the Character orchestration boundary. Organization, House, Clique, Religion and City command services validate their bounded cross-aggregate references. `ProductionService` and `TradeTransactionService` own economy mutations. `DiplomacyCommandService` and `ReportDeliveryService` own communication transitions. `ArmyCommandService`, `ArmySupplyService` and `ArmyPayrollService` own military cross-aggregate mutations. No package implements Soldier loadouts, pathfinding, Battle, AI strategy or UI behavior.

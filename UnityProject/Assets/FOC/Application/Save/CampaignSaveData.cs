@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 7;
+        public const int CurrentSaveVersion = 8;
 
         public int SaveVersion { get; set; }
 
@@ -50,6 +50,9 @@ namespace FOC.Application.Save
         public List<ReportSaveData> Reports{get;set;}=new List<ReportSaveData>();
         public List<ActorInformationSaveData> ActorInformation{get;set;}=new List<ActorInformationSaveData>();
         public List<DiplomaticAgreementSaveData> DiplomaticAgreements{get;set;}=new List<DiplomaticAgreementSaveData>();
+        public List<ArmySaveData> Armies{get;set;}=new List<ArmySaveData>();
+        public List<RecruitmentSourceSaveData> RecruitmentSources{get;set;}=new List<RecruitmentSourceSaveData>();
+        public List<RecruitmentRecordSaveData> RecruitmentRecords{get;set;}=new List<RecruitmentRecordSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -222,4 +225,13 @@ namespace FOC.Application.Save
     public sealed class ReportSaveData{public string ReportId{get;set;}=string.Empty;public int Type{get;set;}public int SourceKind{get;set;}public string SourceId{get;set;}=string.Empty;public string SourceCityId{get;set;}=string.Empty;public string SourceBuildingId{get;set;}=string.Empty;public string RecipientActorId{get;set;}=string.Empty;public int Quality{get;set;}public int DetailLevel{get;set;}public long ObservedAt{get;set;}public long? DispatchedAt{get;set;}public long? ArrivedAt{get;set;}public int Status{get;set;}public List<ReportObservationSaveData> Observations{get;set;}=new List<ReportObservationSaveData>();}
     public sealed class ActorInformationSaveData{public string ActorId{get;set;}=string.Empty;public List<string> AvailableReportIds{get;set;}=new List<string>();}
     public sealed class DiplomaticAgreementSaveData{public string AgreementId{get;set;}=string.Empty;public string FirstActorId{get;set;}=string.Empty;public string SecondActorId{get;set;}=string.Empty;public int Kind{get;set;}public long SignedAt{get;set;}public long EffectiveAt{get;set;}public long? ExpiresAt{get;set;}public int Status{get;set;}public List<int> Terms{get;set;}=new List<int>();}
+    public sealed class ArmySaveData{public string ArmyId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int OwnerKind{get;set;}public string OwnerId{get;set;}=string.Empty;public int ControllerKind{get;set;}public string ControllerId{get;set;}=string.Empty;public int LocationKind{get;set;}public string CityId{get;set;}=string.Empty;public long LocationX{get;set;}public long LocationY{get;set;}public string CommanderCharacterId{get;set;}=string.Empty;public string CommanderOrganizationId{get;set;}=string.Empty;public string CommanderAssignmentId{get;set;}=string.Empty;public int Lifecycle{get;set;}public int Morale{get;set;}public int Fatigue{get;set;}public int Discipline{get;set;}public List<UnitGroupSaveData> Units{get;set;}=new List<UnitGroupSaveData>();public List<CommandRelationshipSaveData> CommandRelationships{get;set;}=new List<CommandRelationshipSaveData>();public List<ArmySupplySaveData> Supply{get;set;}=new List<ArmySupplySaveData>();public List<SupplyRequirementSaveData> SupplyRequirements{get;set;}=new List<SupplyRequirementSaveData>();public List<PayrollObligationSaveData> PayrollObligations{get;set;}=new List<PayrollObligationSaveData>();public List<PayrollPaymentSaveData> PayrollPayments{get;set;}=new List<PayrollPaymentSaveData>();}
+    public sealed class UnitGroupSaveData{public string UnitGroupId{get;set;}=string.Empty;public string RecruitmentSourceId{get;set;}=string.Empty;public string TroopDefinitionId{get;set;}=string.Empty;public long Headcount{get;set;}public string CommanderCharacterId{get;set;}=string.Empty;public int Morale{get;set;}public int Fatigue{get;set;}public int Discipline{get;set;}}
+    public sealed class CommandRelationshipSaveData{public int ParentKind{get;set;}public string ParentId{get;set;}=string.Empty;public int ChildKind{get;set;}public string ChildId{get;set;}=string.Empty;}
+    public sealed class ArmySupplySaveData{public string TradeGoodId{get;set;}=string.Empty;public long Quantity{get;set;}}
+    public sealed class SupplyRequirementSaveData{public string TradeGoodId{get;set;}=string.Empty;public int Purpose{get;set;}public long RequiredQuantity{get;set;}}
+    public sealed class PayrollObligationSaveData{public string PayrollObligationId{get;set;}=string.Empty;public long AmountOwed{get;set;}public long AmountPaid{get;set;}public long DueAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}
+    public sealed class PayrollPaymentSaveData{public string PayrollPaymentId{get;set;}=string.Empty;public string PayrollObligationId{get;set;}=string.Empty;public long Amount{get;set;}public long PaidAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}
+    public sealed class RecruitmentSourceSaveData{public string RecruitmentSourceId{get;set;}=string.Empty;public int Type{get;set;}public long AvailableHeadcount{get;set;}public string AuthorityCharacterId{get;set;}=string.Empty;public string AuthorityOrganizationId{get;set;}=string.Empty;public string AuthorityAssignmentId{get;set;}=string.Empty;public string CityId{get;set;}=string.Empty;public string InstitutionId{get;set;}=string.Empty;public string ObligationOrContractId{get;set;}=string.Empty;public bool IsActive{get;set;}}
+    public sealed class RecruitmentRecordSaveData{public string RecruitmentRecordId{get;set;}=string.Empty;public string RecruitmentSourceId{get;set;}=string.Empty;public string ArmyId{get;set;}=string.Empty;public string UnitGroupId{get;set;}=string.Empty;public long Headcount{get;set;}public long OccurredAt{get;set;}}
 }

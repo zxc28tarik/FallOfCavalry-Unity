@@ -60,4 +60,9 @@ namespace FOC.Domain.Common
     public sealed class DiplomaticMessageTag { private DiplomaticMessageTag() { } }
     public sealed class ReportTag { private ReportTag() { } }
     public sealed class DiplomaticAgreementTag { private DiplomaticAgreementTag() { } }
+    public sealed class UnitGroupTag { private UnitGroupTag() { } }
+    public sealed class RecruitmentSourceTag { private RecruitmentSourceTag() { } }
+    public sealed class RecruitmentRecordTag { private RecruitmentRecordTag() { } }
+    public sealed class PayrollObligationTag { private PayrollObligationTag() { } }
+    public sealed class PayrollPaymentTag { private PayrollPaymentTag() { } }
 }

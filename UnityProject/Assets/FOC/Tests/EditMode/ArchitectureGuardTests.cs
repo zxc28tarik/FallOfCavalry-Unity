@@ -100,6 +100,25 @@ namespace FOC.Tests
         }
 
         [Test]
+        public void MilitaryDomain_DoesNotDependOnPresentationBattleAiOrEngine()
+        {
+            var domain=Path.Combine(FindRepositoryRoot(),"UnityProject","Assets","FOC","Domain","Military");
+            foreach(var path in Directory.GetFiles(domain,"*.cs",SearchOption.AllDirectories))
+            {
+                var source=File.ReadAllText(path);
+                Assert.That(source,Does.Not.Contain("UnityEngine"),path);
+                Assert.That(source,Does.Not.Contain("FOC.Presentation"),path);
+                Assert.That(source,Does.Not.Contain("FOC.Domain.Battle"),path);
+                Assert.That(source,Does.Not.Contain("FOC.Domain.AI"),path);
+                Assert.That(source,Does.Not.Contain("System.Random"),path);
+                Assert.That(source,Does.Not.Contain("DateTime.Now"),path);
+                Assert.That(source,Does.Not.Contain("SoldierInstance"),path);
+                Assert.That(source,Does.Not.Contain("WeaponState"),path);
+                Assert.That(source,Does.Not.Contain("ArmorState"),path);
+            }
+        }
+
+        [Test]
         public void DomainAssemblyDefinition_HasNoEngineReferencesAndNoDependencies()
         {
             var path = Path.Combine(FindRepositoryRoot(), "UnityProject", "Assets", "FOC", "Domain", "FOC.Domain.asmdef");

@@ -21,10 +21,10 @@ namespace FOC.Domain.Diplomacy
     public enum MessageKind{DiplomaticOrder,Proposal,Demand,Warning,AudienceRequest,InformationRequest,Response,ReportDelivery}
     public enum MessageCarrierKind{MessengerCharacter,EnvoyMission}
     public enum CommunicationStatus{Created,Dispatched,Delivered}
-    public enum ReportType{City,Trade,Diplomatic,Character,Security}
+    public enum ReportType{City,Trade,Diplomatic,Character,Security,Military}
     public enum ReportSourceKind{Envoy,Messenger,Official,Merchant,Caravan,CityInstitution,DiplomaticContact}
-    public enum ReportSubjectKind{Faction,City,Caravan,Character,Market,Diplomacy}
-    public enum ReportObservationKind{CityCondition,MarketCondition,DiplomaticDisposition,CaravanStatus,CharacterStatus,SecurityCondition,NegotiationProgress}
+    public enum ReportSubjectKind{Faction,City,Caravan,Character,Market,Diplomacy,Army}
+    public enum ReportObservationKind{CityCondition,MarketCondition,DiplomaticDisposition,CaravanStatus,CharacterStatus,SecurityCondition,NegotiationProgress,ArmyEstimatedStrength,ArmyLocation,ArmySupplyCondition}
     public enum ReportQuality{Low,Medium,High}
     public enum ReportDetailLevel{Summary,Standard,Detailed}
     public enum ObservationPrecision{Exact,Approximate,Range,Qualitative,Unknown}

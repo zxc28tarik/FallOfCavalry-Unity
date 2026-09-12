@@ -68,3 +68,13 @@ Remote refs `origin/main` and `origin/333` were audited for diplomacy, Faction r
 - REWRITE: actor identity, relation/factor/action separation, mandate validation, physical mission phases, message/report timelines, actor information and schema v7 persistence.
 - REMOVE: instant button diplomacy, single numeric relation truth, arbitrary string actors, purchased truce shortcuts, hidden numeric thresholds, direct global state mutation, omniscient information and random/uncontrolled effects.
 - REFERENCE_ONLY: legacy action costs, thresholds, war/encounter logic, quest content, UI and historical presentation for later authorized packages.
+
+## Implementation 7 addendum
+
+Remote refs `origin/main` and `origin/333` were audited for Army, recruitment, troop, soldier, garrison, militia, levy, mercenary, Timar/Cebelü, supply, logistics, food, fodder, ammunition, salary, morale, fatigue and discipline. Relevant material includes browser state/managers, recruit UI/checklists and the Phaser Battle adapter/runtime.
+
+- KEEP: none; no browser/global Army runtime qualifies as typed persistent production truth.
+- ADAPT: broad Army/UnitGroup vocabulary, finite recruitment-pool intent and future campaign-to-battle reconciliation boundary.
+- REWRITE: typed identities, ownership/control, real-Character command, finite recruitment conservation, goods inventory, atomic supply transfer, payroll/arrears and schema v8 persistence.
+- REMOVE: global mutable Army truth, string-generated soldiers, instant/free recruitment, browser/localStorage authority, fake supply, silent infinite ammunition and direct morale hacks.
+- REFERENCE_ONLY: Phaser Battle code, numeric recruitment costs/wages/pool refreshes, combat balance, formations, visuals and unit content for later authorized packages.
