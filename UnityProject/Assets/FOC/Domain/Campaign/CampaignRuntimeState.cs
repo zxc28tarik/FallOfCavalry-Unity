@@ -8,6 +8,7 @@ using FOC.Domain.Houses;
 using FOC.Domain.Cliques;
 using FOC.Domain.Religion;
 using FOC.Domain.Cities;
+using FOC.Domain.Economy;
 
 namespace FOC.Domain.Campaign
 {
@@ -26,7 +27,8 @@ namespace FOC.Domain.Campaign
             HouseRegistry? houses = null,
             CliqueRegistry? cliques = null,
             ReligionCampaignState? religion = null,
-            CityRegistry? cities = null)
+            CityRegistry? cities = null,
+            EconomyState? economy = null)
         {
             if (!campaignId.IsValid)
             {
@@ -51,6 +53,7 @@ namespace FOC.Domain.Campaign
             Cliques = cliques ?? new CliqueRegistry();
             Religion = religion ?? new ReligionCampaignState();
             Cities = cities ?? new CityRegistry();
+            Economy = economy ?? new EconomyState();
         }
 
         public StableId<CampaignTag> CampaignId { get; }
@@ -78,6 +81,8 @@ namespace FOC.Domain.Campaign
         public ReligionCampaignState Religion { get; }
 
         public CityRegistry Cities { get; }
+
+        public EconomyState Economy { get; }
 
         private static string RequireText(string value, string parameterName)
         {

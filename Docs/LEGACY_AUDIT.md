@@ -48,3 +48,13 @@ Remote refs `origin/main` and `origin/333` were audited for city, settlement, to
 - REWRITE: identity, area/building/infrastructure state, officials and persistence as typed deterministic C# contracts.
 - REMOVE: global mutable state, arbitrary strings, DOM/localStorage coupling, hash/jitter inference, Port area, Istanbul hardcode, automatic bonuses/costs and parcel/slot truth.
 - REFERENCE_ONLY: art, scene manifests, city names/geography and old planning documents for later content/art work.
+
+## Implementation 5 addendum
+
+Remote legacy refs `origin/main` and `origin/333` were audited for trade goods, production, stock, consumption, demand, prices, market transactions, merchants, caravans, cargo and capacity. Relevant sources include `js/constants/trade-goods.js`, `economy.js`, City market code and browser-era state managers.
+
+- KEEP: none; no runtime contract meets the typed, deterministic and save-safe authority unchanged.
+- ADAPT: the high-level real-goods flow and the distinction between City stock, production input/output and transported cargo.
+- REWRITE: Trade Good identity/category, recipes, demand sources, pricing inputs, atomic transactions, ownership, Caravan cargo/capacity/accounting and schema v6 persistence.
+- REMOVE: global mutable state, browser coupling, arbitrary string ownership, random price drift, hardcoded legacy prices/coefficients and fake inventory transfers.
+- REFERENCE_ONLY: legacy numeric balance values, route/world movement, UI and content naming for later authority/content packages.

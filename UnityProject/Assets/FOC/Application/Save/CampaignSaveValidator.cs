@@ -7,6 +7,7 @@ using FOC.Domain.Houses;
 using FOC.Domain.Cliques;
 using FOC.Domain.Religion;
 using FOC.Domain.Cities;
+using FOC.Domain.Economy;
 
 namespace FOC.Application.Save
 {
@@ -50,6 +51,7 @@ namespace FOC.Application.Save
                 result.AddError("RELIGION_COLLECTION_NULL", "Religion collections are required.");
             }
             if(subject.Cities==null)result.AddError("CITY_COLLECTION_NULL","City collection is required.");
+            if(subject.TradeGoods==null||subject.ProductionRecipes==null||subject.CityMarkets==null||subject.Caravans==null)result.AddError("ECONOMY_COLLECTION_NULL","Economy collections are required.");
 
             if (subject.Characters != null && subject.CharacterRelations != null)
             {
@@ -57,6 +59,7 @@ namespace FOC.Application.Save
                 if (subject.Organizations != null && subject.Houses != null && subject.Cliques != null) ValidateSocial(subject, result);
                 if (subject.Religions != null && subject.Sects != null && subject.CharacterReligions != null && subject.ReligionProfiles != null && subject.ReligionPolicies != null && subject.ReligiousCliqueAssociations != null) ValidateReligion(subject, result);
                 if(subject.Cities!=null&&subject.Organizations!=null)ValidateCities(subject,result);
+                if(subject.TradeGoods!=null&&subject.ProductionRecipes!=null&&subject.CityMarkets!=null&&subject.Caravans!=null&&subject.Cities!=null&&subject.Organizations!=null&&subject.Houses!=null)ValidateEconomy(subject,result);
             }
 
             if (string.IsNullOrWhiteSpace(subject.CampaignId))
@@ -91,6 +94,18 @@ namespace FOC.Application.Save
 
             return result;
         }
+
+        private static void ValidateEconomy(CampaignSaveData subject,ValidationResult result)
+        {
+            var goods=new Dictionary<string,TradeGoodSaveData>(StringComparer.Ordinal);foreach(var x in subject.TradeGoods){if(x==null||string.IsNullOrWhiteSpace(x.TradeGoodId)||string.IsNullOrWhiteSpace(x.Name)||!Enum.IsDefined(typeof(TradeGoodCategory),x.Category)||x.UnitWeight<=0||(x.ReferenceUnitValue.HasValue&&x.ReferenceUnitValue.Value<=0)||x.IsFood!=(x.Category==(int)TradeGoodCategory.Food)||x.IsMilitaryGood!=(x.Category==(int)TradeGoodCategory.Military)||x.IsLuxury!=(x.Category==(int)TradeGoodCategory.Luxury)||goods.ContainsKey(x.TradeGoodId)){result.AddError("TRADE_GOOD_INVALID","Trade Good definition is invalid.");continue;}goods.Add(x.TradeGoodId,x);}
+            var recipes=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.ProductionRecipes){if(x==null||string.IsNullOrWhiteSpace(x.ProductionRecipeId)||string.IsNullOrWhiteSpace(x.Name)||!Enum.IsDefined(typeof(CityBuildingKind),x.BuildingKind)||x.Inputs==null||x.Outputs==null||x.Inputs.Count==0||x.Outputs.Count==0||!recipes.Add(x.ProductionRecipeId)||!RecipeAreaValid(x.BuildingKind)){result.AddError("PRODUCTION_RECIPE_INVALID","Production recipe is invalid.");continue;}ValidateRecipeLines(x.Inputs,goods,result);ValidateRecipeLines(x.Outputs,goods,result);}
+            var cityIds=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.Cities)if(x!=null)cityIds.Add(x.CityId);var markets=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.CityMarkets){if(x==null||!cityIds.Contains(x.CityId)||x.CashBalance<0||x.Stocks==null||x.DemandSources==null||!markets.Add(x.CityId)){result.AddError("CITY_MARKET_INVALID","City market is invalid.");continue;}var stockGoods=new HashSet<string>(StringComparer.Ordinal);foreach(var stock in x.Stocks)if(stock==null||!goods.ContainsKey(stock.TradeGoodId)||stock.Quantity<0||!stockGoods.Add(stock.TradeGoodId))result.AddError("CITY_STOCK_INVALID","City stock is invalid.");var demandKeys=new HashSet<string>(StringComparer.Ordinal);foreach(var demand in x.DemandSources)if(demand==null||string.IsNullOrWhiteSpace(demand.SourceId)||!Enum.IsDefined(typeof(DemandSourceKind),demand.Kind)||!goods.ContainsKey(demand.TradeGoodId)||demand.Quantity<=0||!demandKeys.Add(demand.TradeGoodId+"\n"+demand.Kind+"\n"+demand.SourceId))result.AddError("CITY_DEMAND_INVALID","City demand source is invalid.");}
+            var characters=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.Characters)if(x!=null)characters.Add(x.CharacterId);var houses=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.Houses)if(x!=null)houses.Add(x.HouseId);var organizations=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.Organizations)if(x!=null)organizations.Add(x.OrganizationId);var caravans=new HashSet<string>(StringComparer.Ordinal);foreach(var x in subject.Caravans){if(x==null||string.IsNullOrWhiteSpace(x.CaravanId)||!caravans.Add(x.CaravanId)||!Enum.IsDefined(typeof(EconomicOwnerKind),x.OwnerKind)||!OwnerValid(x.OwnerKind,x.OwnerId,characters,houses,organizations)||!characters.Contains(x.ManagerCharacterId)||!cityIds.Contains(x.OriginCityId)||!cityIds.Contains(x.DestinationCityId)||StringComparer.Ordinal.Equals(x.OriginCityId,x.DestinationCityId)||x.WeightCapacity<0||x.CashBalance<0||!Enum.IsDefined(typeof(CaravanLifecycle),x.Lifecycle)||!Enum.IsDefined(typeof(CaravanLocationStage),x.LocationStage)||x.PurchaseCost<0||x.SaleRevenue<0||x.OperatingCost<0||x.Tariffs<0||x.Losses<0||x.Cargo==null||x.RiskInputs==null){result.AddError("CARAVAN_INVALID","Caravan is invalid.");continue;}long used=0;var cargoGoods=new HashSet<string>(StringComparer.Ordinal);foreach(var cargo in x.Cargo){if(cargo==null||!goods.TryGetValue(cargo.TradeGoodId,out var good)||cargo.Quantity<0||!cargoGoods.Add(cargo.TradeGoodId)){result.AddError("CARAVAN_CARGO_INVALID","Caravan cargo is invalid.");continue;}try{checked{used+=cargo.Quantity*good.UnitWeight;}}catch(OverflowException){result.AddError("CARAVAN_CAPACITY_INVALID","Caravan cargo weight overflowed.");}}if(used>x.WeightCapacity)result.AddError("CARAVAN_CAPACITY_INVALID","Caravan capacity is exceeded.");var risks=new HashSet<string>(StringComparer.Ordinal);foreach(var risk in x.RiskInputs)if(risk==null||string.IsNullOrWhiteSpace(risk.SourceId)||!Enum.IsDefined(typeof(RouteRiskSource),risk.Source)||!risks.Add(risk.Source+"\n"+risk.SourceId))result.AddError("CARAVAN_RISK_INVALID","Caravan risk input is invalid.");if(!RepresentativeValid(subject,x))result.AddError("CARAVAN_REPRESENTATIVE_INVALID","Caravan representative assignment is invalid.");}
+        }
+        private static void ValidateRecipeLines(List<RecipeGoodsLineSaveData> lines,Dictionary<string,TradeGoodSaveData> goods,ValidationResult result){var ids=new HashSet<string>(StringComparer.Ordinal);foreach(var x in lines)if(x==null||!goods.ContainsKey(x.TradeGoodId)||x.Quantity<=0||!ids.Add(x.TradeGoodId))result.AddError("RECIPE_LINE_INVALID","Recipe goods line is invalid.");}
+        private static bool RecipeAreaValid(int kind){var area=CityBuildingRules.RequiredArea((CityBuildingKind)kind);return area==CityAreaType.ProductionCraft||area==CityAreaType.FoodSupply;}
+        private static bool OwnerValid(int kind,string id,HashSet<string> characters,HashSet<string> houses,HashSet<string> organizations)=>kind==(int)EconomicOwnerKind.Character?characters.Contains(id):kind==(int)EconomicOwnerKind.House?houses.Contains(id):kind==(int)EconomicOwnerKind.Organization&&organizations.Contains(id);
+        private static bool RepresentativeValid(CampaignSaveData subject,CaravanSaveData caravan){var any=!(string.IsNullOrWhiteSpace(caravan.RepresentativeCharacterId)&&string.IsNullOrWhiteSpace(caravan.RepresentativeOrganizationId)&&string.IsNullOrWhiteSpace(caravan.RepresentativeAssignmentId));if(!any)return true;if(string.IsNullOrWhiteSpace(caravan.RepresentativeCharacterId)||string.IsNullOrWhiteSpace(caravan.RepresentativeOrganizationId)||string.IsNullOrWhiteSpace(caravan.RepresentativeAssignmentId))return false;foreach(var organization in subject.Organizations)if(organization!=null&&StringComparer.Ordinal.Equals(organization.OrganizationId,caravan.RepresentativeOrganizationId))foreach(var assignment in organization.Assignments)if(assignment!=null&&StringComparer.Ordinal.Equals(assignment.AssignmentId,caravan.RepresentativeAssignmentId)&&StringComparer.Ordinal.Equals(assignment.CharacterId,caravan.RepresentativeCharacterId)&&assignment.Branch==(int)OrganizationBranch.Trade&&assignment.Status==(int)AssignmentStatus.Active)return true;return false;}
 
         private static void ValidateReligion(CampaignSaveData subject, ValidationResult result)
         {

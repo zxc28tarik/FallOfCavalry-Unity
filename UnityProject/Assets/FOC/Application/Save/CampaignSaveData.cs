@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 5;
+        public const int CurrentSaveVersion = 6;
 
         public int SaveVersion { get; set; }
 
@@ -38,6 +38,10 @@ namespace FOC.Application.Save
         public List<ReligionPolicySaveData> ReligionPolicies { get; set; } = new List<ReligionPolicySaveData>();
         public List<ReligiousCliqueAssociationSaveData> ReligiousCliqueAssociations { get; set; } = new List<ReligiousCliqueAssociationSaveData>();
         public List<CitySaveData> Cities { get; set; } = new List<CitySaveData>();
+        public List<TradeGoodSaveData> TradeGoods{get;set;}=new List<TradeGoodSaveData>();
+        public List<ProductionRecipeSaveData> ProductionRecipes{get;set;}=new List<ProductionRecipeSaveData>();
+        public List<CityMarketSaveData> CityMarkets{get;set;}=new List<CityMarketSaveData>();
+        public List<CaravanSaveData> Caravans{get;set;}=new List<CaravanSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -192,4 +196,12 @@ namespace FOC.Application.Save
     public sealed class CityBuildingSaveData { public string CityBuildingId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int Kind{get;set;}public int AreaType{get;set;}public int Status{get;set;}public List<int> EffectTags{get;set;}=new List<int>(); }
     public sealed class CityInfrastructureSaveData { public int Type{get;set;}public bool Installed{get;set;}public int Condition{get;set;} }
     public sealed class CityOfficialSaveData { public int Role{get;set;}public string OrganizationId{get;set;}=string.Empty;public string AssignmentId{get;set;}=string.Empty; }
+    public sealed class TradeGoodSaveData{public string TradeGoodId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int Category{get;set;}public long UnitWeight{get;set;}public bool IsFood{get;set;}public bool IsMilitaryGood{get;set;}public bool IsLuxury{get;set;}public long? ReferenceUnitValue{get;set;}}
+    public sealed class RecipeGoodsLineSaveData{public string TradeGoodId{get;set;}=string.Empty;public long Quantity{get;set;}}
+    public sealed class ProductionRecipeSaveData{public string ProductionRecipeId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int BuildingKind{get;set;}public List<RecipeGoodsLineSaveData> Inputs{get;set;}=new List<RecipeGoodsLineSaveData>();public List<RecipeGoodsLineSaveData> Outputs{get;set;}=new List<RecipeGoodsLineSaveData>();}
+    public sealed class TradeGoodStockSaveData{public string TradeGoodId{get;set;}=string.Empty;public long Quantity{get;set;}}
+    public sealed class DemandSourceSaveData{public string SourceId{get;set;}=string.Empty;public int Kind{get;set;}public string TradeGoodId{get;set;}=string.Empty;public long Quantity{get;set;}}
+    public sealed class CityMarketSaveData{public string CityId{get;set;}=string.Empty;public long CashBalance{get;set;}public List<TradeGoodStockSaveData> Stocks{get;set;}=new List<TradeGoodStockSaveData>();public List<DemandSourceSaveData> DemandSources{get;set;}=new List<DemandSourceSaveData>();}
+    public sealed class RouteRiskSaveData{public string SourceId{get;set;}=string.Empty;public int Source{get;set;}}
+    public sealed class CaravanSaveData{public string CaravanId{get;set;}=string.Empty;public int OwnerKind{get;set;}public string OwnerId{get;set;}=string.Empty;public string ManagerCharacterId{get;set;}=string.Empty;public string RepresentativeCharacterId{get;set;}=string.Empty;public string RepresentativeOrganizationId{get;set;}=string.Empty;public string RepresentativeAssignmentId{get;set;}=string.Empty;public string OriginCityId{get;set;}=string.Empty;public string DestinationCityId{get;set;}=string.Empty;public string RouteId{get;set;}=string.Empty;public long WeightCapacity{get;set;}public long CashBalance{get;set;}public int Lifecycle{get;set;}public int LocationStage{get;set;}public long PurchaseCost{get;set;}public long SaleRevenue{get;set;}public long OperatingCost{get;set;}public long Tariffs{get;set;}public long Losses{get;set;}public List<TradeGoodStockSaveData> Cargo{get;set;}=new List<TradeGoodStockSaveData>();public List<RouteRiskSaveData> RiskInputs{get;set;}=new List<RouteRiskSaveData>();}
 }

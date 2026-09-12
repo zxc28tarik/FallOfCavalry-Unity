@@ -48,6 +48,7 @@ namespace FOC.Application.Save
             AddSocialSaveData(state, data);
             AddReligionSaveData(state, data);
             AddCitySaveData(state, data);
+            AddEconomySaveData(state, data);
 
             return data;
         }
@@ -83,6 +84,7 @@ namespace FOC.Application.Save
             var social = RestoreSocial(data, roster);
             var religion = RestoreReligion(data);
             var cities = RestoreCities(data);
+            var economy = RestoreEconomy(data);
             return new CampaignRuntimeState(
                 StableId<CampaignTag>.Create(data.CampaignId),
                 data.GameVersion,
@@ -96,7 +98,8 @@ namespace FOC.Application.Save
                 social.Houses,
                 social.Cliques,
                 religion,
-                cities);
+                cities,
+                economy);
         }
 
         private static CharacterSaveData ToCharacterSaveData(CharacterState state)

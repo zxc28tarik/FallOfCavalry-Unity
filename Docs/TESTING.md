@@ -10,7 +10,7 @@ dotnet build FallOfCavalry.sln --configuration Release --no-restore
 dotnet test FallOfCavalry.sln --configuration Release --no-build --no-restore --logger "console;verbosity=normal"
 ```
 
-The `Build/*.csproj` projects compile the authoritative sources under `UnityProject/Assets/FOC`; they are not a second implementation. Warnings are errors. The suite covers Implementation 0–3 regression plus typed City identity, exact areas/fullness, fixed Inner Castle, building authority, invisible infrastructure, Kethüda assignment validation, real-City Religion integration, schema v1→v2→v3→v4→v5 migration and complete schema v5 semantic roundtrip.
+The `Build/*.csproj` projects compile the authoritative sources under `UnityProject/Assets/FOC`; they are not a second implementation. Warnings are errors. The suite covers Implementation 0–4 regression plus typed goods, non-negative stocks, real recipe input/output flow, consumption/shortage, deterministic auditable prices, atomic goods-and-money transactions, Caravan ownership/manager/capacity/accounting, Economy invariants, schema v1→v2→v3→v4→v5→v6 migration and complete schema v6 semantic roundtrip.
 
 ## Unity Editor suite
 

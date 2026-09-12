@@ -70,11 +70,11 @@ namespace FOC.Tests
             const string fixture = "FOC_CAMPAIGN_SAVE\nSaveVersion=1\nCampaignId=Y2FtcGFpZ24tYWxwaGE=\nGameVersion=MC4wLjE=\nContentDataVersion=Y29udGVudC0x\nWorldSeed=1648\nWorldGenRevision=1\nWorldTime=987654\nRngState=123456789\nRngDrawCount=42\n";
             var read = new CampaignSaveTextSerializer().Deserialize(fixture);
             Assert.That(read.Success, Is.True, read.Error);
-            var pipeline = new SaveMigrationPipeline(new ISaveMigration[] { new CampaignSaveV1ToV2Migration(), new CampaignSaveV2ToV3Migration(), new CampaignSaveV3ToV4Migration(), new CampaignSaveV4ToV5Migration() });
+            var pipeline = new SaveMigrationPipeline(new ISaveMigration[] { new CampaignSaveV1ToV2Migration(), new CampaignSaveV2ToV3Migration(), new CampaignSaveV3ToV4Migration(), new CampaignSaveV4ToV5Migration(), new CampaignSaveV5ToV6Migration() });
             var first = pipeline.Migrate(read.Data!, CampaignSaveData.CurrentSaveVersion);
             var second = pipeline.Migrate(read.Data!, CampaignSaveData.CurrentSaveVersion);
             Assert.That(first.Success, Is.True, first.Error);
-            Assert.That(first.Data!.SaveVersion, Is.EqualTo(5));
+            Assert.That(first.Data!.SaveVersion, Is.EqualTo(6));
             Assert.That(first.Data.CampaignId, Is.EqualTo("campaign-alpha"));
             Assert.That(first.Data.Characters.Count, Is.EqualTo(0));
             Assert.That(second.Data!.Characters.Count, Is.EqualTo(first.Data.Characters.Count));

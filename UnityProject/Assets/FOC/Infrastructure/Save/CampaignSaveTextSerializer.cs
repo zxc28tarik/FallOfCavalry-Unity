@@ -55,6 +55,7 @@ namespace FOC.Infrastructure.Save
             {
                 Append(builder, "CityState", EncodeCities(data));
             }
+            if(data.SaveVersion>=6)Append(builder,"EconomyState",EncodeEconomy(data));
             return builder.ToString();
         }
 
@@ -133,6 +134,7 @@ namespace FOC.Infrastructure.Save
                 {
                     DecodeCities(Require(values, "CityState"), data);
                 }
+                if(data.SaveVersion>=6)DecodeEconomy(Require(values,"EconomyState"),data);
 
                 return SaveReadResult.Succeeded(data);
             }
@@ -464,6 +466,21 @@ namespace FOC.Infrastructure.Save
             using(var stream=new MemoryStream(Convert.FromBase64String(value)))using(var reader=new BinaryReader(stream,Encoding.UTF8,true))
             {
                 var count=ReadCount(reader,"CityCount");for(var i=0;i<count;i++){var city=new CitySaveData{CityId=reader.ReadString(),Name=reader.ReadString(),PopulationCount=reader.ReadInt64(),Wealth=reader.ReadInt32(),Order=reader.ReadInt32(),Health=reader.ReadInt32(),Security=reader.ReadInt32()};var areaCount=ReadCount(reader,"CityAreaCount");for(var j=0;j<areaCount;j++){var area=new CityAreaSaveData{Type=reader.ReadInt32(),Fullness=reader.ReadInt32(),VisualVariantHook=reader.ReadString()};var poolCount=ReadCount(reader,"CityBuildingPoolCount");for(var k=0;k<poolCount;k++){var b=new CityBuildingSaveData{CityBuildingId=reader.ReadString(),Name=reader.ReadString(),Kind=reader.ReadInt32(),AreaType=reader.ReadInt32(),Status=reader.ReadInt32()};var tagCount=ReadCount(reader,"CityBuildingEffectTagCount");for(var n=0;n<tagCount;n++)b.EffectTags.Add(reader.ReadInt32());area.BuildingPool.Add(b);}var activeCount=ReadCount(reader,"CityActiveBuildingCount");for(var k=0;k<activeCount;k++)area.ActiveBuildingIds.Add(reader.ReadString());var lockedCount=ReadCount(reader,"CityLockedBuildingCount");for(var k=0;k<lockedCount;k++)area.LockedBuildingIds.Add(reader.ReadString());city.Areas.Add(area);}var infrastructureCount=ReadCount(reader,"CityInfrastructureCount");for(var j=0;j<infrastructureCount;j++)city.Infrastructure.Add(new CityInfrastructureSaveData{Type=reader.ReadInt32(),Installed=reader.ReadBoolean(),Condition=reader.ReadInt32()});var officialCount=ReadCount(reader,"CityOfficialCount");for(var j=0;j<officialCount;j++)city.Officials.Add(new CityOfficialSaveData{Role=reader.ReadInt32(),OrganizationId=reader.ReadString(),AssignmentId=reader.ReadString()});data.Cities.Add(city);}RequireFullyConsumed(stream);
+            }
+        }
+
+        private static string EncodeEconomy(CampaignSaveData data)
+        {
+            using(var stream=new MemoryStream())using(var w=new BinaryWriter(stream,Encoding.UTF8,true))
+            {
+                w.Write(data.TradeGoods.Count);foreach(var x in data.TradeGoods){w.Write(x.TradeGoodId);w.Write(x.Name);w.Write(x.Category);w.Write(x.UnitWeight);w.Write(x.IsFood);w.Write(x.IsMilitaryGood);w.Write(x.IsLuxury);w.Write(x.ReferenceUnitValue.HasValue);if(x.ReferenceUnitValue.HasValue)w.Write(x.ReferenceUnitValue.Value);}w.Write(data.ProductionRecipes.Count);foreach(var x in data.ProductionRecipes){w.Write(x.ProductionRecipeId);w.Write(x.Name);w.Write(x.BuildingKind);w.Write(x.Inputs.Count);foreach(var l in x.Inputs){w.Write(l.TradeGoodId);w.Write(l.Quantity);}w.Write(x.Outputs.Count);foreach(var l in x.Outputs){w.Write(l.TradeGoodId);w.Write(l.Quantity);}}w.Write(data.CityMarkets.Count);foreach(var x in data.CityMarkets){w.Write(x.CityId);w.Write(x.CashBalance);w.Write(x.Stocks.Count);foreach(var s in x.Stocks){w.Write(s.TradeGoodId);w.Write(s.Quantity);}w.Write(x.DemandSources.Count);foreach(var d in x.DemandSources){w.Write(d.SourceId);w.Write(d.Kind);w.Write(d.TradeGoodId);w.Write(d.Quantity);}}w.Write(data.Caravans.Count);foreach(var x in data.Caravans){w.Write(x.CaravanId);w.Write(x.OwnerKind);w.Write(x.OwnerId);w.Write(x.ManagerCharacterId);w.Write(x.RepresentativeCharacterId);w.Write(x.RepresentativeOrganizationId);w.Write(x.RepresentativeAssignmentId);w.Write(x.OriginCityId);w.Write(x.DestinationCityId);w.Write(x.RouteId);w.Write(x.WeightCapacity);w.Write(x.CashBalance);w.Write(x.Lifecycle);w.Write(x.LocationStage);w.Write(x.PurchaseCost);w.Write(x.SaleRevenue);w.Write(x.OperatingCost);w.Write(x.Tariffs);w.Write(x.Losses);w.Write(x.Cargo.Count);foreach(var c in x.Cargo){w.Write(c.TradeGoodId);w.Write(c.Quantity);}w.Write(x.RiskInputs.Count);foreach(var risk in x.RiskInputs){w.Write(risk.SourceId);w.Write(risk.Source);}}w.Flush();return Convert.ToBase64String(stream.ToArray());
+            }
+        }
+        private static void DecodeEconomy(string value,CampaignSaveData data)
+        {
+            using(var stream=new MemoryStream(Convert.FromBase64String(value)))using(var r=new BinaryReader(stream,Encoding.UTF8,true))
+            {
+                var count=ReadCount(r,"TradeGoodCount");for(var i=0;i<count;i++){var x=new TradeGoodSaveData{TradeGoodId=r.ReadString(),Name=r.ReadString(),Category=r.ReadInt32(),UnitWeight=r.ReadInt64(),IsFood=r.ReadBoolean(),IsMilitaryGood=r.ReadBoolean(),IsLuxury=r.ReadBoolean()};if(r.ReadBoolean())x.ReferenceUnitValue=r.ReadInt64();data.TradeGoods.Add(x);}count=ReadCount(r,"ProductionRecipeCount");for(var i=0;i<count;i++){var x=new ProductionRecipeSaveData{ProductionRecipeId=r.ReadString(),Name=r.ReadString(),BuildingKind=r.ReadInt32()};var n=ReadCount(r,"RecipeInputCount");for(var j=0;j<n;j++)x.Inputs.Add(new RecipeGoodsLineSaveData{TradeGoodId=r.ReadString(),Quantity=r.ReadInt64()});n=ReadCount(r,"RecipeOutputCount");for(var j=0;j<n;j++)x.Outputs.Add(new RecipeGoodsLineSaveData{TradeGoodId=r.ReadString(),Quantity=r.ReadInt64()});data.ProductionRecipes.Add(x);}count=ReadCount(r,"CityMarketCount");for(var i=0;i<count;i++){var x=new CityMarketSaveData{CityId=r.ReadString(),CashBalance=r.ReadInt64()};var n=ReadCount(r,"MarketStockCount");for(var j=0;j<n;j++)x.Stocks.Add(new TradeGoodStockSaveData{TradeGoodId=r.ReadString(),Quantity=r.ReadInt64()});n=ReadCount(r,"DemandSourceCount");for(var j=0;j<n;j++)x.DemandSources.Add(new DemandSourceSaveData{SourceId=r.ReadString(),Kind=r.ReadInt32(),TradeGoodId=r.ReadString(),Quantity=r.ReadInt64()});data.CityMarkets.Add(x);}count=ReadCount(r,"CaravanCount");for(var i=0;i<count;i++){var x=new CaravanSaveData{CaravanId=r.ReadString(),OwnerKind=r.ReadInt32(),OwnerId=r.ReadString(),ManagerCharacterId=r.ReadString(),RepresentativeCharacterId=r.ReadString(),RepresentativeOrganizationId=r.ReadString(),RepresentativeAssignmentId=r.ReadString(),OriginCityId=r.ReadString(),DestinationCityId=r.ReadString(),RouteId=r.ReadString(),WeightCapacity=r.ReadInt64(),CashBalance=r.ReadInt64(),Lifecycle=r.ReadInt32(),LocationStage=r.ReadInt32(),PurchaseCost=r.ReadInt64(),SaleRevenue=r.ReadInt64(),OperatingCost=r.ReadInt64(),Tariffs=r.ReadInt64(),Losses=r.ReadInt64()};var n=ReadCount(r,"CaravanCargoCount");for(var j=0;j<n;j++)x.Cargo.Add(new TradeGoodStockSaveData{TradeGoodId=r.ReadString(),Quantity=r.ReadInt64()});n=ReadCount(r,"RouteRiskCount");for(var j=0;j<n;j++)x.RiskInputs.Add(new RouteRiskSaveData{SourceId=r.ReadString(),Source=r.ReadInt32()});data.Caravans.Add(x);}RequireFullyConsumed(stream);
             }
         }
     }
