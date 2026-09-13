@@ -2,7 +2,7 @@
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 8`.
+`CampaignSaveData.CurrentSaveVersion = 9`.
 
 The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 
@@ -52,11 +52,15 @@ Version 7 persists the minimum Faction actor registry, canonical relation pairs 
 
 Version 8 persists typed Armies and Unit Groups, owner/controller and real-Character command references, physical location/lifecycle, finite recruitment sources and records, command relationships, real Trade Good supply inventory and requirements, separate morale/fatigue/discipline assessments, and payroll obligations/payments/arrears. It contains no SoldierInstance, equipment, Battle, casualty or pathfinding state.
 
+## Version 9 Soldier / Equipment / Weapon / Armor
+
+Version 9 adds immutable Troop, Weapon, Armor, Shield, Mount and Auxiliary Equipment definition snapshots; persistent Equipment Instances; and persistent Soldier Instances. A Soldier stores stable identity, Unit Group and recruitment provenance, qualitative experience/training/lifecycle values, and exact typed loadout assignments. Definition, instance, Soldier, Unit Group and economic-good identities remain separate. The schema stores no Battle, deployment, casualty, animation or pathfinding state.
+
 ## Migration policy
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.
 
-`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` preserves every prior domain and initializes empty persistent Army, Unit Group, recruitment or supply state. Hardcoded old-schema fixtures exercise the continuous chain.
+`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` preserves every prior domain and initializes empty persistent Army, Unit Group, recruitment or supply state. `CampaignSaveV8ToV9Migration` preserves all prior domains and initializes empty Soldier definitions, equipment and roster state; it never invents Soldiers from Unit Group headcount. Hardcoded old-schema fixtures exercise the continuous chain.
 
 ## Atomic storage policy
 

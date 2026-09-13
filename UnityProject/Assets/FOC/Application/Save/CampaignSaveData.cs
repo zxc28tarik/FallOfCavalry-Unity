@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 8;
+        public const int CurrentSaveVersion = 9;
 
         public int SaveVersion { get; set; }
 
@@ -53,6 +53,14 @@ namespace FOC.Application.Save
         public List<ArmySaveData> Armies{get;set;}=new List<ArmySaveData>();
         public List<RecruitmentSourceSaveData> RecruitmentSources{get;set;}=new List<RecruitmentSourceSaveData>();
         public List<RecruitmentRecordSaveData> RecruitmentRecords{get;set;}=new List<RecruitmentRecordSaveData>();
+        public List<TroopDefinitionSaveData> TroopDefinitions{get;set;}=new List<TroopDefinitionSaveData>();
+        public List<WeaponDefinitionSaveData> WeaponDefinitions{get;set;}=new List<WeaponDefinitionSaveData>();
+        public List<ArmorDefinitionSaveData> ArmorDefinitions{get;set;}=new List<ArmorDefinitionSaveData>();
+        public List<ShieldDefinitionSaveData> ShieldDefinitions{get;set;}=new List<ShieldDefinitionSaveData>();
+        public List<MountDefinitionSaveData> MountDefinitions{get;set;}=new List<MountDefinitionSaveData>();
+        public List<AuxiliaryEquipmentDefinitionSaveData> AuxiliaryEquipmentDefinitions{get;set;}=new List<AuxiliaryEquipmentDefinitionSaveData>();
+        public List<EquipmentInstanceSaveData> EquipmentInstances{get;set;}=new List<EquipmentInstanceSaveData>();
+        public List<SoldierSaveData> Soldiers{get;set;}=new List<SoldierSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -234,4 +242,15 @@ namespace FOC.Application.Save
     public sealed class PayrollPaymentSaveData{public string PayrollPaymentId{get;set;}=string.Empty;public string PayrollObligationId{get;set;}=string.Empty;public long Amount{get;set;}public long PaidAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}
     public sealed class RecruitmentSourceSaveData{public string RecruitmentSourceId{get;set;}=string.Empty;public int Type{get;set;}public long AvailableHeadcount{get;set;}public string AuthorityCharacterId{get;set;}=string.Empty;public string AuthorityOrganizationId{get;set;}=string.Empty;public string AuthorityAssignmentId{get;set;}=string.Empty;public string CityId{get;set;}=string.Empty;public string InstitutionId{get;set;}=string.Empty;public string ObligationOrContractId{get;set;}=string.Empty;public bool IsActive{get;set;}}
     public sealed class RecruitmentRecordSaveData{public string RecruitmentRecordId{get;set;}=string.Empty;public string RecruitmentSourceId{get;set;}=string.Empty;public string ArmyId{get;set;}=string.Empty;public string UnitGroupId{get;set;}=string.Empty;public long Headcount{get;set;}public long OccurredAt{get;set;}}
+    public sealed class TroopDefinitionSaveData{public string TroopDefinitionId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public string UnitClassId{get;set;}=string.Empty;public string DefaultCombatRoleId{get;set;}=string.Empty;public int MountContext{get;set;}public string VisualProfileId{get;set;}=string.Empty;public List<int> AllowedWeaponFamilies{get;set;}=new List<int>();public bool AllowsArmor{get;set;}public bool AllowsShield{get;set;}}
+    public sealed class WeaponAttackOptionSaveData{public int Mode{get;set;}public int DamageType{get;set;}}
+    public sealed class WeaponDefinitionSaveData{public string WeaponDefinitionId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int Family{get;set;}public List<int> AllowedSlots{get;set;}=new List<int>();public List<WeaponAttackOptionSaveData> AttackOptions{get;set;}=new List<WeaponAttackOptionSaveData>();public int MountContext{get;set;}public string EconomicGoodId{get;set;}=string.Empty;public string VisualProfileId{get;set;}=string.Empty;public bool IsRanged{get;set;}public string AmmoFamilyId{get;set;}=string.Empty;}
+    public sealed class ArmorDefinitionSaveData{public string ArmorDefinitionId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int Slot{get;set;}public string EconomicGoodId{get;set;}=string.Empty;public string VisualProfileId{get;set;}=string.Empty;public string QualityCode{get;set;}=string.Empty;}
+    public sealed class ShieldDefinitionSaveData{public string ShieldDefinitionId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public string EconomicGoodId{get;set;}=string.Empty;public string VisualProfileId{get;set;}=string.Empty;public string Classification{get;set;}=string.Empty;}
+    public sealed class MountDefinitionSaveData{public string MountDefinitionId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public string EconomicGoodId{get;set;}=string.Empty;public string VisualProfileId{get;set;}=string.Empty;public string MobilityClass{get;set;}=string.Empty;}
+    public sealed class AuxiliaryEquipmentDefinitionSaveData{public string AuxiliaryEquipmentDefinitionId{get;set;}=string.Empty;public string Name{get;set;}=string.Empty;public int Kind{get;set;}public string EconomicGoodId{get;set;}=string.Empty;public string VisualProfileId{get;set;}=string.Empty;public string AmmoFamilyId{get;set;}=string.Empty;}
+    public sealed class EquipmentInstanceSaveData{public string EquipmentInstanceId{get;set;}=string.Empty;public int DefinitionKind{get;set;}public string DefinitionId{get;set;}=string.Empty;public int OwnerKind{get;set;}public string OwnerId{get;set;}=string.Empty;public int AcquisitionKind{get;set;}public string AcquisitionSourceId{get;set;}=string.Empty;public string EconomicGoodId{get;set;}=string.Empty;public long AcquiredAt{get;set;}public string QualityCode{get;set;}=string.Empty;}
+    public sealed class WeaponSlotAssignmentSaveData{public int Slot{get;set;}public string EquipmentInstanceId{get;set;}=string.Empty;}
+    public sealed class ArmorSlotAssignmentSaveData{public int Slot{get;set;}public string EquipmentInstanceId{get;set;}=string.Empty;}
+    public sealed class SoldierSaveData{public string SoldierId{get;set;}=string.Empty;public string UnitGroupId{get;set;}=string.Empty;public string TroopDefinitionId{get;set;}=string.Empty;public string RecruitmentSourceId{get;set;}=string.Empty;public string RecruitmentRecordId{get;set;}=string.Empty;public string CombatRoleId{get;set;}=string.Empty;public int Experience{get;set;}public int Training{get;set;}public int Lifecycle{get;set;}public List<WeaponSlotAssignmentSaveData> Weapons{get;set;}=new List<WeaponSlotAssignmentSaveData>();public List<ArmorSlotAssignmentSaveData> Armor{get;set;}=new List<ArmorSlotAssignmentSaveData>();public string ShieldEquipmentId{get;set;}=string.Empty;public string MountEquipmentId{get;set;}=string.Empty;}
 }

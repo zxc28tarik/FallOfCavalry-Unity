@@ -11,6 +11,7 @@ using FOC.Domain.Cities;
 using FOC.Domain.Economy;
 using FOC.Domain.Diplomacy;
 using FOC.Domain.Military;
+using FOC.Domain.Soldiers;
 
 namespace FOC.Domain.Campaign
 {
@@ -32,7 +33,8 @@ namespace FOC.Domain.Campaign
             CityRegistry? cities = null,
             EconomyState? economy = null,
             DiplomacyState? diplomacy = null,
-            CampaignMilitaryState? military = null)
+            CampaignMilitaryState? military = null,
+            SoldierCampaignState? soldiers = null)
         {
             if (!campaignId.IsValid)
             {
@@ -60,6 +62,7 @@ namespace FOC.Domain.Campaign
             Economy = economy ?? new EconomyState();
             Diplomacy = diplomacy ?? new DiplomacyState();
             Military = military ?? new CampaignMilitaryState();
+            Soldiers = soldiers ?? new SoldierCampaignState();
         }
 
         public StableId<CampaignTag> CampaignId { get; }
@@ -93,6 +96,8 @@ namespace FOC.Domain.Campaign
         public DiplomacyState Diplomacy { get; }
 
         public CampaignMilitaryState Military { get; }
+
+        public SoldierCampaignState Soldiers { get; }
 
         private static string RequireText(string value, string parameterName)
         {

@@ -65,4 +65,16 @@ namespace FOC.Domain.Common
     public sealed class RecruitmentRecordTag { private RecruitmentRecordTag() { } }
     public sealed class PayrollObligationTag { private PayrollObligationTag() { } }
     public sealed class PayrollPaymentTag { private PayrollPaymentTag() { } }
+    public sealed class SoldierTag { private SoldierTag() { } }
+    public sealed class TroopDefinitionTag { private TroopDefinitionTag() { } }
+    public sealed class UnitClassTag { private UnitClassTag() { } }
+    public sealed class CombatRoleTag { private CombatRoleTag() { } }
+    public sealed class WeaponDefinitionTag { private WeaponDefinitionTag() { } }
+    public sealed class ArmorDefinitionTag { private ArmorDefinitionTag() { } }
+    public sealed class ShieldDefinitionTag { private ShieldDefinitionTag() { } }
+    public sealed class MountDefinitionTag { private MountDefinitionTag() { } }
+    public sealed class AuxiliaryEquipmentDefinitionTag { private AuxiliaryEquipmentDefinitionTag() { } }
+    public sealed class EquipmentInstanceTag { private EquipmentInstanceTag() { } }
+    public sealed class AmmoFamilyTag { private AmmoFamilyTag() { } }
+    public sealed class VisualProfileTag { private VisualProfileTag() { } }
 }

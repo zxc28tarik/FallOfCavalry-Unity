@@ -78,3 +78,13 @@ Remote refs `origin/main` and `origin/333` were audited for Army, recruitment, t
 - REWRITE: typed identities, ownership/control, real-Character command, finite recruitment conservation, goods inventory, atomic supply transfer, payroll/arrears and schema v8 persistence.
 - REMOVE: global mutable Army truth, string-generated soldiers, instant/free recruitment, browser/localStorage authority, fake supply, silent infinite ammunition and direct morale hacks.
 - REFERENCE_ONLY: Phaser Battle code, numeric recruitment costs/wages/pool refreshes, combat balance, formations, visuals and unit content for later authorized packages.
+
+## Implementation 8 addendum
+
+Remote refs `origin/main` and `origin/333` were re-audited for soldier, troop, loadout, equipment, weapon, armor, shield, mount, ammunition, attack and damage material. Relevant material is concentrated in browser-era Battle adapters/runtime, arbitrary string unit records, generated combatant IDs/loadouts and visual/content manifests.
+
+- KEEP: none; no legacy runtime contract satisfies typed persistent campaign identity, save safety and package boundaries unchanged.
+- ADAPT: multi-slot loadout and visual-profile intent behind immutable typed definitions and persistent instances.
+- REWRITE: Soldier identity/provenance, Troop capability, equipment ownership/acquisition, loadout persistence, City-stock conservation and schema v9 persistence.
+- REMOVE: battle-start-generated Soldier identity/loadouts, arbitrary string truth, global mutable templates, implicit rerolls, browser coupling and silent infinite ammunition.
+- REFERENCE_ONLY: Phaser Battle/deployment code, historical names, visuals, weapon/armor numeric balance and combat behavior for later authorized packages.

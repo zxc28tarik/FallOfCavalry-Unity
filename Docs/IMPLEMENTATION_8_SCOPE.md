@@ -28,13 +28,13 @@ Authority: the latest explicit Implementation 8 package, Parts 1–11 (especiall
 
 - Loadout is selected only by an explicit acquisition/issue operation, stored as state and changed only by an explicit equipment mutation.
 - Weapon slots are typed and compatibility is definition-driven. Armor cannot enter weapon slots; Shield and MountArmor remain distinct equipment kinds.
-- Equipment definitions are immutable content; equipment instances and their ownership/assignment are mutable campaign state. Full definitions are rebuilt from the content package rather than duplicated into save data.
+- Equipment definitions are immutable content; equipment instances and their ownership/assignment are mutable campaign state. Following the repository's existing snapshot policy, the current immutable definition snapshots are persisted separately from mutable instances.
 - Visual references are opaque content IDs only. Domain contains no Unity sprite, GameObject, Animator or fixed visual-layer count. Presentation-side VisualSoldier remains deferred.
 
 ## Determinism and economy
 
-- Any loadout choice uses injected campaign `IRandomSource`; no global random source, wall clock or query-time draw is allowed.
-- Candidate definitions are canonically ordered before a deterministic selection. Once saved, loadout is authoritative and is never regenerated.
+- Acquisition accepts an explicit content-authorized loadout request and therefore needs no random draw. Any later randomized selection must use injected campaign `IRandomSource`; no global random source, wall clock or query-time draw is allowed.
+- Definitions and instances are canonically ordered. Once acquired and saved, the loadout is authoritative and is never regenerated.
 - City equipment issue preflights every definition, mapping, stock quantity, Soldier/Unit Group/provenance reference and slot conflict before mutating. On success real City stock decreases exactly as persistent equipment ownership increases.
 - Army supply remains aggregate Trade Goods. A weapon definition, equipment instance, Army ammunition stock and Soldier weapon slot are four separate truths.
 
