@@ -57,8 +57,9 @@ Mappings carry body-family and socket compatibility. Missing mappings are valida
 
 - Authoring is modular: body, head, hair/beard hooks, clothing, armor, headgear, weapons, shield, auxiliary equipment, mount, harness and mount armor.
 - Standard runtime target is a cached consolidated body/clothing/armor variant plus separate rigid weapon/shield/mount renderers.
-- `VisualSoldierSignature` keys rebuildable bounded caches. Cache state is never saved.
-- `VisualSoldierPool` reuses view objects; returning a view clears Soldier identity/signature before rebind.
+- `VisualSoldierSignature` describes reusable visual configuration rather than gameplay identity. Soldier binding remains separate, so two Soldiers may reuse resources without sharing `SoldierId`.
+- `VisualSoldier3DAssembler` owns a bounded signature-keyed variant cache and a globally bounded pool of complete assembled hierarchies. A cached hierarchy is leased to only one view at a time.
+- `VisualSoldierPool` reuses outer view objects. Return clears Soldier identity, resets transient Animator state and returns the assembled hierarchy to its variant pool without normal-path child destruction.
 - Shared materials are used through `sharedMaterial`; the normal path never calls `new Material` per Soldier.
 - LOD0/LOD1/LOD2 are mandatory for catalog assets. A separate cheap far/crowd representation exists for measured future use; animated billboards are not the default.
 - Animator uses `CullUpdateTransforms`. `VisualDistancePolicy` supports full near, half-rate medium and quarter-rate far evaluation decisions without affecting gameplay simulation.
@@ -75,3 +76,11 @@ Animation Rigging is not currently installed. Built-in sockets and authored clip
 The project remains on the Built-in Render Pipeline for this package. Addressables is not installed and is deferred: the proof catalog is small, and adopting Addressables before real cultural/DLC packs would add operational complexity without measured benefit. The catalog uses direct Unity references while gameplay definitions stay engine-free.
 
 GPU Resident Drawer is not assumed to optimize skinned characters. It may help later static/far representations, but the production character decision requires a rendered battle-camera benchmark on target hardware.
+
+## Runtime reuse and invalidation
+
+Runtime quality policy is executable: Standard resolves to the consolidated body/clothing/body-armor proof plus rigid equipment and optional mount/harness; Narrative retains modular body parts; Crowd resolves to the dedicated one-renderer representation. This resolution is Presentation-only and does not flatten the persistent loadout.
+
+The variant cache has explicit variant and pooled-instance capacities. A miss creates one complete hierarchy; a later lease of the same signature reuses that hierarchy. FIFO variant eviction is deterministic. Idle instances are destroyed on eviction/invalidation; active leases are marked retired and remain valid until return, then are destroyed instead of re-entering the cache. `InvalidateCache()` is the explicit hot-reload hook, and a catalog revision change also invalidates before the next assembly.
+
+Mount, harness and rider stay separate objects. The harness remains under the mount; the consolidated/modular rider attaches to `Socket_Rider`. Pool return clears only Presentation binding and transient animation parameters. Shared meshes and materials remain asset references, and cache/pool state is rebuildable and absent from save data.

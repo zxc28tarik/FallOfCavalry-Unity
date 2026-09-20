@@ -46,3 +46,18 @@ Configured renderer counts include the three renderers registered in each LODGro
 ## Decision
 
 The production starting default is cached/prebuilt consolidated body/clothing/armor plus separate rigid equipment and mount. The proof comparison reduced configured renderers by 50% versus modular assembly and was faster in the warmed 100-actor comparison. Modular assembly remains the authoring model and Narrative exception. The far representation is retained as an experimental crowd tier pending a real GPU/animation benchmark.
+
+## Runtime visual hardening — actual pool lifecycle
+
+The following run exercises the production `Rent -> Assemble -> Return -> Rent -> Assemble` path. The Standard mounted proof resolves to six modules: consolidated rider, headgear, two rigid weapons, horse and harness.
+
+| Actors | Phase | Assembly ms | View create/reuse | Representation create/reuse | Module instantiates | Cache hit/miss | Pool hit/miss | Destroyed | Managed delta |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 100 | cold | 99.354 | 100 / 0 | 100 / 0 | 600 | 99 / 1 | 0 / 100 | 0 | 1,449,984 B |
+| 100 | warm | 38.471 | 0 / 100 | 0 / 100 | 0 | 100 / 0 | 100 / 0 | 0 | 1,138,688 B |
+| 250 | cold | 271.141 | 250 / 0 | 250 / 0 | 1,500 | 249 / 1 | 0 / 250 | 0 | 2,306,048 B |
+| 250 | warm | 115.990 | 0 / 250 | 0 / 250 | 0 | 250 / 0 | 250 / 0 | 0 | 303,104 B |
+| 500 | cold | 551.506 | 500 / 0 | 500 / 0 | 3,000 | 499 / 1 | 0 / 500 | 0 | 2,945,024 B |
+| 500 | warm | 212.801 | 0 / 500 | 0 / 500 | 0 | 500 / 0 | 500 / 0 | 0 | 1,216,512 B |
+
+Warm reuse is materially faster at every measured count and, critically, performs no view creation, assembled-hierarchy creation, module instantiation or destruction. Configured renderers remain 18 per mounted actor because each of the six proof modules carries three registered LOD renderers; five shared material assets serve all actors. GPU/render-thread/FPS claims remain unavailable in `-nographics`.

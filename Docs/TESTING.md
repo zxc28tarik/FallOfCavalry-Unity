@@ -28,7 +28,7 @@ Implementation 8.5 also runs the fully automated visual gate:
 .\Tools\Test-VisualPipeline.ps1 -UnityEditor 'C:\Users\zxc28\AppData\Local\Unity\Hub\Editor\6000.3.16f1\Editor\Unity.exe'
 ```
 
-It refreshes original procedural proof assets, validates catalog/rig/socket/LOD/material/animation/mount contracts, assembles generic historical configurations and produces a headless performance report. Exit code is authoritative; manual Editor wiring is not required.
+It refreshes original procedural proof assets, validates catalog/rig/socket/LOD/material/animation/mount contracts, assembles generic historical configurations and produces a headless performance report. Runtime-hardening coverage additionally proves same-signature hierarchy reuse, zero normal-return destruction, identity isolation, loadout-change replacement, bounded/active-safe eviction, explicit invalidation, mounted rider/harness reuse, Animator reset and executable Standard/Narrative/Crowd policies. Exit code is authoritative; manual Editor wiring is not required.
 
 ## CI
 

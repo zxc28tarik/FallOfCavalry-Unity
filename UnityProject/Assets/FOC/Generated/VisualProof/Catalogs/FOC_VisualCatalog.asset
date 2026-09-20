@@ -189,6 +189,14 @@ MonoBehaviour:
     rendererCount: 3
     materialCount: 1
     sockets: 
+  - id: CRWD_Far_Proof
+    category: 19
+    prefab: {fileID: 5701735338352119660, guid: 4df890a36007c2b44bd22faf4c6369e2, type: 3}
+    rigKind: 0
+    lodCount: 1
+    rendererCount: 1
+    materialCount: 1
+    sockets: 
   profiles:
   - visualProfileId: deli
     bodyFamily: standard-human
@@ -222,6 +230,22 @@ MonoBehaviour:
     headgearAssetId: HDG_Guard_Proof
     qualityTier: 1
     cultureFamily: european
+  - visualProfileId: proof-narrative
+    bodyFamily: standard-human
+    bodyAssetId: BODY_Human_Proof
+    headAssetId: HEAD_A_Proof
+    clothingAssetId: CLTH_Light_Proof
+    headgearAssetId: HDG_Wrapped_Proof
+    qualityTier: 0
+    cultureFamily: proof
+  - visualProfileId: proof-crowd
+    bodyFamily: standard-human
+    bodyAssetId: BODY_Human_Proof
+    headAssetId: HEAD_A_Proof
+    clothingAssetId: CLTH_Light_Proof
+    headgearAssetId: 
+    qualityTier: 2
+    cultureFamily: proof
   equipment:
   - definitionKind: 0
     definitionId: lance
@@ -288,3 +312,6 @@ MonoBehaviour:
     visualAssetId: AUX_Humbara_Proof
     socket: 6
     bodyFamily: standard-human
+  consolidatedCharacterAssetId: CHR_Consolidated_Proof
+  crowdAssetId: CRWD_Far_Proof
+  catalogRevision: 2
