@@ -2,8 +2,9 @@ name: Foundation CI
 
 on:
   push:
-    branches: [master, "codex/**"]
+    branches: [main, master, "codex/**"]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -22,4 +23,3 @@ jobs:
         run: dotnet build FallOfCavalry.sln --configuration Release --no-restore
       - name: Test
         run: dotnet test FallOfCavalry.sln --configuration Release --no-build --no-restore --logger "console;verbosity=normal"
-
