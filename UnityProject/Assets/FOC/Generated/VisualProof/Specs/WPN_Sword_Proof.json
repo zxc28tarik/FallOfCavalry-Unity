@@ -1,0 +1,28 @@
+{
+    "visualAssetId": "WPN_Sword_Proof",
+    "category": "Weapon",
+    "historicalPeriod": "1648-1650",
+    "culture": "multi-culture",
+    "visualRole": "one-handed sidearm",
+    "bodyFamily": "standard-human",
+    "requiredSkeleton": "Humanoid",
+    "sockets": [],
+    "compatibleBodyFamilies": [
+        "standard-human"
+    ],
+    "lodProfile": "battle-standard",
+    "textureProfile": "proof-low",
+    "scale": "meters-1.0",
+    "gameplayDefinitionMapping": "weapon:sword",
+    "historicalDescription": "Original non-final proof asset",
+    "styleTags": [
+        "grounded-semi-realism",
+        "proof"
+    ],
+    "generator": "Unity procedural generator",
+    "source": "repository-authored",
+    "license": "project-owned",
+    "generationDate": "2026-09-20",
+    "revision": "1",
+    "status": "Validated"
+}

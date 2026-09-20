@@ -1,0 +1,8 @@
+{
+  "name": "FOC.Visuals.Core",
+  "rootNamespace": "FOC.Visuals.Core",
+  "references": ["FOC.Domain"],
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "noEngineReferences": true
+}

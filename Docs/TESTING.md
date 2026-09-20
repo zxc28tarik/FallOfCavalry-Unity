@@ -22,6 +22,14 @@ Install the exact Unity version from `ProjectVersion.txt`, then run:
 
 The command runs EditMode tests in batch mode and writes XML/log output under ignored `TestResults/`. A package cannot claim Unity tests passed unless this command (or an equivalent Editor invocation) actually ran.
 
+Implementation 8.5 also runs the fully automated visual gate:
+
+```powershell
+.\Tools\Test-VisualPipeline.ps1 -UnityEditor 'C:\Users\zxc28\AppData\Local\Unity\Hub\Editor\6000.3.16f1\Editor\Unity.exe'
+```
+
+It refreshes original procedural proof assets, validates catalog/rig/socket/LOD/material/animation/mount contracts, assembles generic historical configurations and produces a headless performance report. Exit code is authoritative; manual Editor wiring is not required.
+
 ## CI
 
 `.github/workflows/ci.yml` restores, compiles, and tests the same solution on Windows, and each command fails the job on a non-zero exit code. A local green run does not imply remote CI green; CI status must be reported independently for the tested commit SHA.

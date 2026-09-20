@@ -1,0 +1,290 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f5df1c1ac3fbf74ebdbf94744b67ff6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FOC.Visuals.Unity::FOC.Presentation.Visuals.VisualCatalogAsset
+  assets:
+  - id: BODY_Human_Proof
+    category: 0
+    prefab: {fileID: 606597010373559544, guid: d3367b01b34d203448962d0a7fe86aa9, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 0000000001000000020000000300000004000000050000000600000007000000
+  - id: CHR_Consolidated_Proof
+    category: 18
+    prefab: {fileID: 6966334131908606552, guid: e897f55202a7bfb4399ddc2e44febc6b, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 0000000001000000020000000300000004000000050000000600000007000000
+  - id: HEAD_A_Proof
+    category: 1
+    prefab: {fileID: 8438091538220963904, guid: 2bc8a3fa2ba3a5142891c919638e349e, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: HEAD_B_Proof
+    category: 1
+    prefab: {fileID: 3829244670204431878, guid: a960147ab91b97e4c9cac2b78cf4ab8d, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: CLTH_Light_Proof
+    category: 4
+    prefab: {fileID: 1852459632179454102, guid: 2f1d95db7244ba0468574ea11f340d0a, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: CLTH_Specialist_Proof
+    category: 4
+    prefab: {fileID: 7135486442190193636, guid: e22a899d72213e7429f38b339195773d, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: ARM_Guard_Proof
+    category: 5
+    prefab: {fileID: 1309861287433135114, guid: cbeb696b836ff3641b5c59f9e73b0025, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: ARM_Heavy_Proof
+    category: 5
+    prefab: {fileID: 3966004065478414511, guid: b5e7c3cd2207bd34f877f9f17a2396b7, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: HDG_Wrapped_Proof
+    category: 7
+    prefab: {fileID: 1218434439778180092, guid: c0b2637581985d64a91bac06f930754d, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: HDG_Cap_Proof
+    category: 7
+    prefab: {fileID: 7774456165125767117, guid: 106fdeba366bf964c9a5e5d0f5dd680a, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: HDG_Guard_Proof
+    category: 7
+    prefab: {fileID: 8007760104916599971, guid: cd09b9d388094284e94471533ef0322b, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: WPN_Sword_Proof
+    category: 11
+    prefab: {fileID: 3342622794025006569, guid: 348ef1c09785cee448966d0e551fcac1, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: WPN_Lance_Proof
+    category: 11
+    prefab: {fileID: 3592228547336958176, guid: 9508717c77e23694894b2a6a4c25847f, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: WPN_Polearm_Proof
+    category: 11
+    prefab: {fileID: 8992489844828610009, guid: e7e6995a46f40e6499ff9dad5ac096e2, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: WPN_Firearm_Proof
+    category: 11
+    prefab: {fileID: 1416361665832439651, guid: 8962686558a46a4449f560c2e9e61c7c, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: WPN_Pistol_Proof
+    category: 11
+    prefab: {fileID: 33387669706330391, guid: 47d1b74878e19a84ea66371db45549f6, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: AUX_Humbara_Proof
+    category: 13
+    prefab: {fileID: 121804647233504473, guid: 7b50cc205e0590541b3394817b243df0, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: AUX_Ammo_Proof
+    category: 13
+    prefab: {fileID: 1481898229746310369, guid: eb4a70cc179e9454b9879d41cd76e790, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: SHD_Round_Proof
+    category: 12
+    prefab: {fileID: 7320991767887833477, guid: 92c280b115d808d4d9fceb331d769dc6, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: MNT_Horse_Proof
+    category: 14
+    prefab: {fileID: 7407628155554685888, guid: 4e8bafa5f8584d241bc6b4b4a96f62a4, type: 3}
+    rigKind: 1
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 08000000
+  - id: HAR_Harness_Proof
+    category: 15
+    prefab: {fileID: 9030572850934402030, guid: 98535cc63efbec949b192e6a14ebf5c3, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  - id: MARM_Proof
+    category: 16
+    prefab: {fileID: 7239269941771189417, guid: 4a34246e62afb30409df9bb6c6d32408, type: 3}
+    rigKind: 0
+    lodCount: 3
+    rendererCount: 3
+    materialCount: 1
+    sockets: 
+  profiles:
+  - visualProfileId: deli
+    bodyFamily: standard-human
+    bodyAssetId: BODY_Human_Proof
+    headAssetId: HEAD_A_Proof
+    clothingAssetId: CLTH_Light_Proof
+    headgearAssetId: HDG_Wrapped_Proof
+    qualityTier: 1
+    cultureFamily: ottoman
+  - visualProfileId: humbaraci
+    bodyFamily: standard-human
+    bodyAssetId: BODY_Human_Proof
+    headAssetId: HEAD_B_Proof
+    clothingAssetId: CLTH_Specialist_Proof
+    headgearAssetId: HDG_Cap_Proof
+    qualityTier: 1
+    cultureFamily: ottoman
+  - visualProfileId: bostanci
+    bodyFamily: standard-human
+    bodyAssetId: BODY_Human_Proof
+    headAssetId: HEAD_A_Proof
+    clothingAssetId: ARM_Guard_Proof
+    headgearAssetId: HDG_Guard_Proof
+    qualityTier: 1
+    cultureFamily: ottoman
+  - visualProfileId: generic-european
+    bodyFamily: standard-human
+    bodyAssetId: BODY_Human_Proof
+    headAssetId: HEAD_B_Proof
+    clothingAssetId: ARM_Heavy_Proof
+    headgearAssetId: HDG_Guard_Proof
+    qualityTier: 1
+    cultureFamily: european
+  equipment:
+  - definitionKind: 0
+    definitionId: lance
+    visualAssetId: WPN_Lance_Proof
+    socket: 0
+    bodyFamily: standard-human
+  - definitionKind: 0
+    definitionId: sword
+    visualAssetId: WPN_Sword_Proof
+    socket: 5
+    bodyFamily: standard-human
+  - definitionKind: 0
+    definitionId: yatagan
+    visualAssetId: WPN_Sword_Proof
+    socket: 5
+    bodyFamily: standard-human
+  - definitionKind: 0
+    definitionId: musket
+    visualAssetId: WPN_Firearm_Proof
+    socket: 0
+    bodyFamily: standard-human
+  - definitionKind: 0
+    definitionId: polearm
+    visualAssetId: WPN_Polearm_Proof
+    socket: 0
+    bodyFamily: standard-human
+  - definitionKind: 0
+    definitionId: pistol
+    visualAssetId: WPN_Pistol_Proof
+    socket: 6
+    bodyFamily: standard-human
+  - definitionKind: 0
+    definitionId: javelin
+    visualAssetId: WPN_Lance_Proof
+    socket: 3
+    bodyFamily: standard-human
+  - definitionKind: 1
+    definitionId: body-armor
+    visualAssetId: ARM_Guard_Proof
+    socket: 3
+    bodyFamily: standard-human
+  - definitionKind: 1
+    definitionId: mount-armor
+    visualAssetId: MARM_Proof
+    socket: 8
+    bodyFamily: standard-human
+  - definitionKind: 2
+    definitionId: shield
+    visualAssetId: SHD_Round_Proof
+    socket: 1
+    bodyFamily: standard-human
+  - definitionKind: 3
+    definitionId: fast-mount
+    visualAssetId: MNT_Horse_Proof
+    socket: 8
+    bodyFamily: standard-human
+  - definitionKind: 4
+    definitionId: shot
+    visualAssetId: AUX_Ammo_Proof
+    socket: 3
+    bodyFamily: standard-human
+  - definitionKind: 4
+    definitionId: humbara
+    visualAssetId: AUX_Humbara_Proof
+    socket: 6
+    bodyFamily: standard-human

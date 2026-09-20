@@ -2,7 +2,7 @@
 
 This repository contains the clean Unity/C# production baseline for Fall of Cavalry. It is intentionally separate from the legacy browser prototype.
 
-Implementation 0 established the deterministic, save-safe foundation. Implementations 1–7 added Character Core, Organization/House/Clique, Religion/Sect, City V2, Trade/Production/Caravan, Diplomacy/Envoy/Report and Army/Recruitment/Logistics. Implementation 8 adds persistent Soldiers, typed equipment definitions and instances, explicit multi-slot loadouts, City-stock acquisition and save v9 without introducing Battle semantics early.
+Implementation 0 established the deterministic, save-safe foundation. Implementations 1–7 added Character Core, Organization/House/Clique, Religion/Sect, City V2, Trade/Production/Caravan, Diplomacy/Envoy/Report and Army/Recruitment/Logistics. Implementation 8 adds persistent Soldiers, typed equipment definitions and instances, explicit multi-slot loadouts, City-stock acquisition and save v9. Implementation 8.5 establishes the automated modular 3D Presentation architecture, original proof assets, validation and performance tooling without introducing Battle semantics or changing save v9.
 
 ## Layout
 

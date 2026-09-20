@@ -1,0 +1,30 @@
+{
+    "visualAssetId": "MNT_Horse_Proof",
+    "category": "Mount",
+    "historicalPeriod": "1648-1650",
+    "culture": "multi-culture",
+    "visualRole": "mount",
+    "bodyFamily": "standard-human",
+    "requiredSkeleton": "GenericMount",
+    "sockets": [
+        "Rider"
+    ],
+    "compatibleBodyFamilies": [
+        "standard-human"
+    ],
+    "lodProfile": "battle-standard",
+    "textureProfile": "proof-low",
+    "scale": "meters-1.0",
+    "gameplayDefinitionMapping": "mount:fast-mount",
+    "historicalDescription": "Original non-final proof asset",
+    "styleTags": [
+        "grounded-semi-realism",
+        "proof"
+    ],
+    "generator": "Unity procedural generator",
+    "source": "repository-authored",
+    "license": "project-owned",
+    "generationDate": "2026-09-20",
+    "revision": "1",
+    "status": "Validated"
+}

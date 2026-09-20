@@ -1,0 +1,9 @@
+{
+  "name": "FOC.Editor.Visuals",
+  "rootNamespace": "FOC.Editor.Visuals",
+  "references": ["FOC.Domain", "FOC.Visuals.Core", "FOC.Visuals.Unity"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": false,
+  "overrideReferences": false,
+  "noEngineReferences": false
+}

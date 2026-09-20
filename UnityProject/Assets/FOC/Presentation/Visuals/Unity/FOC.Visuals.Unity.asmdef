@@ -1,0 +1,8 @@
+{
+  "name": "FOC.Visuals.Unity",
+  "rootNamespace": "FOC.Presentation.Visuals",
+  "references": ["FOC.Domain", "FOC.Visuals.Core"],
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "noEngineReferences": false
+}

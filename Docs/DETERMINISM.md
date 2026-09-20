@@ -28,6 +28,7 @@ One world tick is an abstract foundation unit. Mapping ticks to calendar semanti
 - Diplomatic actors, canonical actor pairs, relation factors, actions, Envoy missions, messages, reports, observations, information records and agreements use typed IDs and stable source/subject keys.
 - Armies, Unit Groups, recruitment sources/records, command relationships, Army goods, supply requirements, payroll obligations and payments use sorted typed IDs and canonical keys.
 - Soldier/Troop/equipment definitions, Equipment Instances, Soldier rosters and typed loadout slots use sorted typed IDs or canonical enum order.
+- Visual appearance signatures derive from stable Soldier identity, VisualProfileId and canonically ordered persistent loadout mappings. Rendering never draws gameplay RNG and visual caches do not enter save data.
 - Rules must never depend on the natural iteration order of dictionaries or hash sets.
 - Future equal-score decisions require an explicit stable-ID tie-break.
 

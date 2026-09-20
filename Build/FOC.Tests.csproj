@@ -15,7 +15,7 @@
     <ProjectReference Include="FOC.Domain.csproj" />
     <ProjectReference Include="FOC.Application.csproj" />
     <ProjectReference Include="FOC.Infrastructure.csproj" />
+    <ProjectReference Include="FOC.Visuals.Core.csproj" />
     <Compile Include="..\UnityProject\Assets\FOC\Tests\EditMode\**\*.cs" />
   </ItemGroup>
 </Project>
-

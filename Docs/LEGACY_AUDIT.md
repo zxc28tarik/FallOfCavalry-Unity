@@ -88,3 +88,9 @@ Remote refs `origin/main` and `origin/333` were re-audited for soldier, troop, l
 - REWRITE: Soldier identity/provenance, Troop capability, equipment ownership/acquisition, loadout persistence, City-stock conservation and schema v9 persistence.
 - REMOVE: battle-start-generated Soldier identity/loadouts, arbitrary string truth, global mutable templates, implicit rerolls, browser coupling and silent infinite ammunition.
 - REFERENCE_ONLY: Phaser Battle/deployment code, historical names, visuals, weapon/armor numeric balance and combat behavior for later authorized packages.
+
+## Implementation 8.5 addendum
+
+`Legacy Browser/Phaser Visual System = REFERENCE_ONLY`.
+
+The current Unity repository contains no legacy 2D Soldier renderer, canvas composition, Phaser scene or sprite-layer architecture. `No migration assumed.` No cleanup or fictional 2D-to-3D refactor was performed. Earlier legacy layered-Soldier visual ideas are superseded as final production direction by the new modular 3D Presentation architecture; historical/content ideas remain references only.

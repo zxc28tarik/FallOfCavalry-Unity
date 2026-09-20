@@ -48,6 +48,7 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 - Soldier state: `SoldierCampaignState` owns immutable Troop/equipment definitions, persistent Equipment Instances and persistent Soldier Instances. `CampaignMilitaryState` remains authoritative for Army/Unit Group aggregate headcount; instantiated Soldiers are a bounded roster that cannot exceed it.
 - Soldier loadout: exact typed slot assignments are persistent campaign truth. Acquisition and replacement run through `SoldierEquipmentService`; reads and the future-facing `SoldierCombatSnapshot` never reroll or mutate loadouts.
 - Equipment economy boundary: acquisition consumes real City stock through an explicit definition-to-Trade-Good mapping before creating owned instances. Equipment definitions, instances, City stock and Army supply are distinct contracts.
+- Visual Presentation: modular 3D is authoritative. Engine-independent `FOC.Visuals.Core` converts Soldier/Troop/loadout truth into deterministic visual plans; `FOC.Visuals.Unity` resolves those plans to Unity assets. Domain never references either assembly. Visual binding, pooling, caches, meshes, materials, Animator and LOD are rebuildable Presentation state and never save truth.
 - Persistence representation: `CampaignSaveData`, never runtime objects.
 - Message ordering: the explicit sequence in `DeterministicMessageQueue`.
 
