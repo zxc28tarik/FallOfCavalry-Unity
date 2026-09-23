@@ -1,5 +1,9 @@
 # Testing
 
+## Implementation 11 AI gate
+
+`Tools/Test-AIPipeline.ps1` runs the .NET and Unity EditMode `AIDecisionMakingTests`. Coverage includes perception isolation, delivered-report/staleness metadata, deterministic utility/tie-break, hard eligibility, priority/personality proof profiles, decision-quality fairness, Application-service symmetry, tactical orders, low-importance aggregation, source/boundary audits, v12 migration/roundtrip/canonical save, and deterministic post-load continuation. The full Unity, Visual, Battle, and Encounter/Contract gates remain mandatory regressions.
+
 ## Implementation 10
 
 Encounter/Contract coverage locks exact authoritative families/types/categories, removed-type absence, definition/instance separation, lifecycle guards, deterministic RNG continuation, atomic preflight, typed variable targets, issuer/assignee validation, evidence-driven progress, separate task profiles, Encounter↔Contract links, real Battle/Trade/Report/City integration, schema v11 semantic roundtrip, v10 migration and canonical serialization.

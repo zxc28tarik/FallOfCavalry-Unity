@@ -94,4 +94,14 @@ namespace FOC.Domain.Common
     public sealed class ContractTargetSlotTag { private ContractTargetSlotTag() { } }
     public sealed class ContractEvidenceTag { private ContractEvidenceTag() { } }
     public sealed class ContractResolutionProfileTag { private ContractResolutionProfileTag() { } }
+    public sealed class AIControllerTag { private AIControllerTag() { } }
+    public sealed class AIPriorityProfileTag { private AIPriorityProfileTag() { } }
+    public sealed class CharacterAIProfileTag { private CharacterAIProfileTag() { } }
+    public sealed class AIDecisionQualityProfileTag { private AIDecisionQualityProfileTag() { } }
+    public sealed class AISchedulingProfileTag { private AISchedulingProfileTag() { } }
+    public sealed class AICandidateTag { private AICandidateTag() { } }
+    public sealed class AIActionPolicyTag { private AIActionPolicyTag() { } }
+    public sealed class AIUtilityFactorTag { private AIUtilityFactorTag() { } }
+    public sealed class AIPlanTag { private AIPlanTag() { } }
+    public sealed class AIGoalTag { private AIGoalTag() { } }
 }

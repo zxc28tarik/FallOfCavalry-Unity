@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 11;
+        public const int CurrentSaveVersion = 12;
 
         public int SaveVersion { get; set; }
 
@@ -64,6 +64,7 @@ namespace FOC.Application.Save
         public List<BattleSaveData> Battles{get;set;}=new List<BattleSaveData>();
         public List<EncounterSaveData> Encounters{get;set;}=new List<EncounterSaveData>();
         public List<ContractSaveData> Contracts{get;set;}=new List<ContractSaveData>();
+        public List<AIControllerSaveData> AIControllers{get;set;}=new List<AIControllerSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -263,6 +264,8 @@ namespace FOC.Application.Save
     public sealed class ContractEvidenceSaveData{public string EvidenceId{get;set;}=string.Empty;public int Kind{get;set;}public int TargetKind{get;set;}public string TargetId{get;set;}=string.Empty;public long OccurredAt{get;set;}}
     public sealed class ContractObjectiveSaveData{public string ObjectiveId{get;set;}=string.Empty;public int EvidenceKind{get;set;}public string TargetSlotId{get;set;}=string.Empty;public int RequiredEvidenceCount{get;set;}public List<ContractEvidenceSaveData>Evidence{get;set;}=new List<ContractEvidenceSaveData>();}
     public sealed class ContractSaveData{public string ContractId{get;set;}=string.Empty;public string DefinitionId{get;set;}=string.Empty;public int Category{get;set;}public int IssuerKind{get;set;}public string IssuerId{get;set;}=string.Empty;public List<ContractTargetSaveData>Targets{get;set;}=new List<ContractTargetSaveData>();public List<ContractObjectiveSaveData>Objectives{get;set;}=new List<ContractObjectiveSaveData>();public long OfferedAt{get;set;}public string AssigneeCharacterId{get;set;}=string.Empty;public long? AcceptedAt{get;set;}public long? Deadline{get;set;}public long? TerminalAt{get;set;}public string LinkedEncounterId{get;set;}=string.Empty;public string LinkedBattleId{get;set;}=string.Empty;public int Lifecycle{get;set;}public bool OutcomeApplied{get;set;}}
+    public sealed class AIControllerSaveData{public string ControllerId{get;set;}=string.Empty;public int OwnerKind{get;set;}public string OwnerId{get;set;}=string.Empty;public string PriorityProfileId{get;set;}=string.Empty;public string CharacterProfileId{get;set;}=string.Empty;public string QualityProfileId{get;set;}=string.Empty;public string SchedulingProfileId{get;set;}=string.Empty;public ulong RngState{get;set;}public ulong RngDrawCount{get;set;}public long? LastDecisionAt{get;set;}public long? NextDecisionAt{get;set;}public int Lifecycle{get;set;}public AIPlanSaveData? CurrentPlan{get;set;}}
+    public sealed class AIPlanSaveData{public string PlanId{get;set;}=string.Empty;public string GoalId{get;set;}=string.Empty;public string CandidateId{get;set;}=string.Empty;public int Domain{get;set;}public string PolicyId{get;set;}=string.Empty;public bool HasTarget{get;set;}public int TargetKind{get;set;}public string TargetId{get;set;}=string.Empty;public long CreatedAt{get;set;}public long? ReconsiderAt{get;set;}public int Lifecycle{get;set;}public long? TerminalAt{get;set;}public int? TerminalReason{get;set;}}
     public sealed class SupplyRequirementSaveData{public string TradeGoodId{get;set;}=string.Empty;public int Purpose{get;set;}public long RequiredQuantity{get;set;}}
     public sealed class PayrollObligationSaveData{public string PayrollObligationId{get;set;}=string.Empty;public long AmountOwed{get;set;}public long AmountPaid{get;set;}public long DueAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}
     public sealed class PayrollPaymentSaveData{public string PayrollPaymentId{get;set;}=string.Empty;public string PayrollObligationId{get;set;}=string.Empty;public long Amount{get;set;}public long PaidAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}

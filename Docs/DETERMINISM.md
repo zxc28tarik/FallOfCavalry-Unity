@@ -1,5 +1,9 @@
 # Determinism
 
+## AI decisions
+
+AI uses integer contributions, stable typed IDs, canonical owner/candidate/factor ordering, explicit stable tie-breaks, `WorldClock`, and persisted `RandomState`. Query evaluation does not consume gameplay RNG. Same state, information, definitions, policies, clock, and RNG continuation yields the same proposal and trace. Scheduler aggregation is deterministic and only shares explicitly equivalent proof work.
+
 ## Encounter and Contract
 
 Encounter triggering is explicit and policy-driven; no default probability exists. Resolution starts from the instance's saved `RandomState` and accepts only the matching choice, policy and captured continuation state. Contract progress consumes explicit, uniquely identified evidence from real systems and performs no random or per-frame world scan. Encounter, Contract, target, objective and evidence registries use sorted typed IDs, so save output is insertion-order independent.

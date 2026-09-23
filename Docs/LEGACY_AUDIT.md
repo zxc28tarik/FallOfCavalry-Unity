@@ -1,5 +1,13 @@
 # Legacy FOC Audit — Implementation 0
 
+## Implementation 11 — AI audit
+
+- KEEP: deterministic IDs/time/RNG, ActorInformation/report delivery, Application services, BattleOrder authority, and save/migration conventions.
+- ADAPT: high-level priority and tactical-intent ideas only through the new typed/data-driven contracts.
+- REWRITE: omniscient reads, global AI state, direct gameplay mutation, frame-driven decisions, hidden random, and opaque scores.
+- REMOVE: cheating resources, instant travel, direct casualties/outcomes, authority bypass, faction-name hardcodes, and secret religion/betrayal rules.
+- REFERENCE_ONLY: legacy browser AI behavior and tuning; it is not production authority.
+
 Audited source: `C:\Users\zxc28\Desktop\FallOfCavalry`, branch `333`, commit `d46e8bab06e73c9dcb9369ed2c313d787251c7a0`. Its pre-existing modified `output/web-game/vite-open.out.log` was not changed.
 
 ## Classification

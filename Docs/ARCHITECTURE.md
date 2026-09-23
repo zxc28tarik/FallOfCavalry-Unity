@@ -1,5 +1,9 @@
 # Architecture
 
+## Implementation 11 AI boundary
+
+AI Domain contracts are Unity-free definitions/runtime state. Application constructs perception contexts, evaluates deterministic utility, schedules world-time decisions, validates invariants, and adapts inert proposals to existing gameplay services. AI never owns a parallel economy, military, diplomacy, encounter, contract, or combat resolver. `CampaignRuntimeState.AI` stores only controller/plan scheduling semantics; decision contexts and traces are transient read models.
+
 ## Implementation 10 Encounter / Contract boundary
 
 `FOC.Domain.EncountersContracts` owns immutable definitions, typed identities, persistent instances, lifecycle and deterministic ordered registries without Unity dependencies. `FOC.Application.EncountersContracts` validates cross-aggregate references, orchestrates deterministic Encounter resolution, delegates optional battles to Implementation 9, and advances Contracts only from verified typed evidence. Definition content, runtime state and save DTOs remain separate. Encounter, Contract and Battle remain distinct aggregates.

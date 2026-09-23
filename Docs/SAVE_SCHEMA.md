@@ -1,5 +1,11 @@
 # Save Schema
 
+## v12 — AI semantic continuation
+
+Schema v12 adds canonical AI controller records: typed owner, stable priority/Character/decision-quality/scheduling profile IDs, lifecycle, last/next decision timestamps, deterministic RNG continuation, and optional active-plan semantics (goal, proposal identity, domain/policy, target, timing, lifecycle).
+
+Migration v11→v12 preserves all earlier state and initializes an empty AI collection. It creates no actor, plan, report/ActorInformation, resource, or candidate cache. Perception contexts, utility candidates, traces, foreign truth copies, Unity objects, and presentation state are never persisted. Profile/bootstrap content remains an explicit post-load/content responsibility.
+
 ## Current version
 
 `CampaignSaveData.CurrentSaveVersion = 11`.
