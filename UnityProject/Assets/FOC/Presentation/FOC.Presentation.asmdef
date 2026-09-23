@@ -1,9 +1,8 @@
 {
-  "name": "FOC.Presentation",
-  "rootNamespace": "FOC.Presentation",
-  "references": ["FOC.Domain", "FOC.Application", "FOC.Infrastructure"],
+  "name": "FOC.Presentation.Unity",
+  "rootNamespace": "FOC.Presentation.Unity",
+  "references": ["FOC.Domain", "FOC.Application", "FOC.Presentation.Core", "FOC.Visuals.Core", "FOC.Visuals.Unity"],
   "autoReferenced": true,
   "overrideReferences": false,
   "noEngineReferences": false
 }
-

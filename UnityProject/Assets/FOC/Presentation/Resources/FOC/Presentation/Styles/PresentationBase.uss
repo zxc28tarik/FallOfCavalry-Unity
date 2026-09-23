@@ -1,0 +1,13 @@
+.foc-shell { flex-grow: 1; background-color: var(--foc-bg-deep); color: var(--foc-text); }
+.foc-campaign-header { height: 52px; flex-direction: row; align-items: center; padding-left: 16px; padding-right: 12px; background-color: rgb(25, 28, 28); border-bottom-width: 1px; border-bottom-color: var(--foc-border); }
+.foc-brand { font-size: 18px; -unity-font-style: bold; color: var(--foc-accent); letter-spacing: 1px; }
+.foc-clock { margin-left: 28px; color: var(--foc-text-muted); }
+.foc-header-spacer { flex-grow: 1; }
+.foc-main { flex-grow: 1; flex-direction: row; }
+.foc-navigation { width: 188px; padding: 12px 8px; background-color: rgb(25, 28, 28); border-right-width: 1px; border-right-color: var(--foc-border); }
+.foc-workspace { flex-grow: 1; padding: 18px 22px 28px 22px; }
+.foc-context-panel { width: 272px; padding: 16px; background-color: var(--foc-bg-panel); border-left-width: 1px; border-left-color: var(--foc-border); }
+.foc-muted, .foc-status--neutral { color: var(--foc-text-muted); }
+.foc-screen-title { font-size: 26px; -unity-font-style: bold; margin-bottom: 14px; }
+.foc-breadcrumb { font-size: 11px; color: var(--foc-text-muted); margin-bottom: 4px; }
+.foc-section-kicker { font-size: 10px; color: var(--foc-text-muted); margin: 4px 8px 10px 8px; letter-spacing: 1px; }

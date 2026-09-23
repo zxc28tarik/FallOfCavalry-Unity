@@ -1,0 +1,9 @@
+.foc-layout--compact .foc-context-panel { display: none; }
+.foc-layout--compact .foc-navigation { width: 164px; }
+.foc-layout--compact .foc-card, .foc-layout--compact .foc-card--primary { width: 47%; min-width: 220px; }
+.foc-layout--wide .foc-context-panel { width: 340px; }
+.foc-layout--wide .foc-navigation { width: 216px; }
+.foc-layout--wide .foc-card { width: 31%; }
+.foc-layout--wide .foc-card--primary { width: 64%; }
+.foc-virtual-list { flex-shrink: 0; border-width: 0; background-color: rgba(0,0,0,0); }
+.foc-details { margin-top: 8px; }

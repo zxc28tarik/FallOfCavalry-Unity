@@ -122,3 +122,11 @@ Legacy browser Encounter, quest, roaming event, dialogue choice and reward mater
 - REWRITE: identities, lifecycle, deterministic resolution, typed target slots, objectives, cross-system evidence, validation and schema v11 persistence.
 - REMOVE: global/browser state, string entity targets, hidden randomness, automatic generic rewards/penalties, hardcoded probabilities/formulas, Agent/Informant, Village Delegation roaming encounter, Deserter, Duel and Night encounter.
 - REFERENCE_ONLY: legacy dialogue, names, art, numeric tables and quest content until separately authorized.
+
+## Implementation 12 Presentation re-audit
+
+- KEEP: existing typed gameplay/Application contracts and modular Unity 3D `VisualSoldier3D` pipeline.
+- ADAPT: only authority-compatible high-level ideas such as dense strategy navigation, contextual drill-down and report/ledger surfaces.
+- REWRITE: all production Presentation as engine-independent read models/view models plus Unity UI Toolkit UXML/USS and Application command adapters.
+- REMOVE: no current Unity artifact required removal.
+- REFERENCE_ONLY: every legacy HTML, DOM, CSS web layout, browser router, canvas/Phaser scene UI and localStorage UI state. None is runtime architecture or save truth.

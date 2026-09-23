@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="project://database/Assets/FOC/Presentation/Resources/FOC/Presentation/Styles/PresentationTokens.uss" />
+    <Style src="project://database/Assets/FOC/Presentation/Resources/FOC/Presentation/Styles/PresentationBase.uss" />
+    <Style src="project://database/Assets/FOC/Presentation/Resources/FOC/Presentation/Styles/PresentationComponents.uss" />
+    <Style src="project://database/Assets/FOC/Presentation/Resources/FOC/Presentation/Styles/PresentationScreens.uss" />
+    <ui:VisualElement name="presentation-shell" class="foc-shell">
+        <ui:VisualElement class="foc-campaign-header">
+            <ui:Label text="FALL OF CAVALRY" class="foc-brand" />
+            <ui:Label name="campaign-clock" text="presentation.clock.unavailable" class="foc-clock" />
+            <ui:VisualElement class="foc-header-spacer" />
+            <ui:Label text="presentation.alerts" class="foc-muted" />
+            <ui:Label name="alert-count" text="0" class="foc-alert-count" />
+            <ui:Button name="nav-back" text="‹" tooltip="presentation.navigation.back" class="foc-icon-button" />
+            <ui:Button name="nav-forward" text="›" tooltip="presentation.navigation.forward" class="foc-icon-button" />
+        </ui:VisualElement>
+        <ui:VisualElement class="foc-main">
+            <ui:VisualElement class="foc-navigation">
+                <ui:Label text="presentation.navigation.campaign" class="foc-section-kicker" />
+                <ui:Button name="nav-map" class="foc-nav-button" />
+                <ui:Button name="nav-city" class="foc-nav-button" />
+                <ui:Button name="nav-character" class="foc-nav-button" />
+                <ui:Button name="nav-organization" class="foc-nav-button" />
+                <ui:Button name="nav-trade" class="foc-nav-button" />
+                <ui:Button name="nav-army" class="foc-nav-button" />
+                <ui:Button name="nav-diplomacy" class="foc-nav-button" />
+                <ui:Button name="nav-battle" class="foc-nav-button" />
+                <ui:VisualElement class="foc-nav-divider" />
+                <ui:Button name="nav-reports" text="presentation.screen.reports" class="foc-nav-button" />
+                <ui:Button name="nav-ledger" text="presentation.screen.ledger" class="foc-nav-button" />
+            </ui:VisualElement>
+            <ui:ScrollView class="foc-workspace" horizontal-scroller-visibility="Hidden">
+                <ui:Label name="breadcrumb" text="presentation.navigation.root" class="foc-breadcrumb" />
+                <ui:Label name="screen-title" text="presentation.screen.map" class="foc-screen-title" />
+                <ui:VisualElement class="foc-summary-grid">
+                    <ui:VisualElement class="foc-card foc-card--primary">
+                        <ui:Label text="presentation.section.current" class="foc-card-title" />
+                        <ui:VisualElement name="current-content" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="foc-card">
+                        <ui:Label text="presentation.section.trend" class="foc-card-title" />
+                        <ui:Label name="trend-value" class="foc-status--unknown" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="foc-card">
+                        <ui:Label text="presentation.section.why" class="foc-card-title" />
+                        <ui:VisualElement name="why-content" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="foc-card">
+                        <ui:Label text="presentation.section.risk" class="foc-card-title" />
+                        <ui:VisualElement name="risk-content" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="foc-card">
+                        <ui:Label text="presentation.section.opportunity" class="foc-card-title" />
+                        <ui:VisualElement name="opportunity-content" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="foc-card foc-card--actions">
+                        <ui:Label text="presentation.section.actions" class="foc-card-title" />
+                        <ui:VisualElement name="action-content" />
+                        <ui:Label name="action-feedback" class="foc-action-feedback" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="details-content" class="foc-details" />
+            </ui:ScrollView>
+            <ui:VisualElement class="foc-context-panel">
+                <ui:Label text="presentation.context.title" class="foc-card-title" />
+                <ui:Label text="presentation.context.no-selection" class="foc-status--neutral" />
+                <ui:VisualElement class="foc-context-preview">
+                    <ui:Label text="presentation.preview.visual-soldier-reuse" class="foc-muted" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

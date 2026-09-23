@@ -1,0 +1,18 @@
+:root {
+    --foc-bg-deep: rgb(20, 23, 24);
+    --foc-bg-panel: rgb(30, 34, 34);
+    --foc-bg-raised: rgb(40, 44, 43);
+    --foc-border: rgb(83, 84, 75);
+    --foc-text: rgb(229, 223, 201);
+    --foc-text-muted: rgb(166, 164, 150);
+    --foc-accent: rgb(183, 139, 64);
+    --foc-success: rgb(106, 157, 105);
+    --foc-warning: rgb(205, 153, 68);
+    --foc-danger: rgb(176, 78, 67);
+    --foc-unknown: rgb(119, 126, 129);
+    --foc-space-1: 4px;
+    --foc-space-2: 8px;
+    --foc-space-3: 12px;
+    --foc-space-4: 16px;
+    --foc-control-height: 34px;
+}

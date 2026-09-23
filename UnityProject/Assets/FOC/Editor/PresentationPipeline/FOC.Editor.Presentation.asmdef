@@ -1,0 +1,9 @@
+{
+  "name": "FOC.Editor.Presentation",
+  "rootNamespace": "FOC.Editor.Presentation",
+  "references": ["FOC.Presentation.Core", "FOC.Presentation.Unity", "FOC.Visuals.Core", "FOC.Visuals.Unity"],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": false,
+  "overrideReferences": false,
+  "noEngineReferences": false
+}

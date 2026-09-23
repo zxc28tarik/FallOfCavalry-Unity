@@ -1,0 +1,8 @@
+{
+  "name": "FOC.Presentation.Core",
+  "rootNamespace": "FOC.Presentation.Core",
+  "references": ["FOC.Domain", "FOC.Application"],
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "noEngineReferences": true
+}

@@ -1,5 +1,15 @@
 # Testing
 
+## Implementation 12 Presentation gate
+
+Run:
+
+```powershell
+.\Tools\Test-PresentationPipeline.ps1 -UnityEditor 'C:\Users\zxc28\AppData\Local\Unity\Hub\Editor\6000.3.16f1\Editor\Unity.exe'
+```
+
+The gate runs Presentation-focused .NET tests, Presentation Unity EditMode tests and an actual Unity batch method. It validates UXML/USS imports, all registered screens, 12 shell bindings, back/forward lifecycle, command registry, foreign-information isolation, fixed-height ListView virtualization, 1366×768/1920×1080/2560×1440/3440×1440 structural layouts and measured 100/500/1000/5000-row construction. `-nographics` means screenshots, rendered FPS and real scroll latency are reported `NOT RUN`, never inferred.
+
 ## Implementation 11 AI gate
 
 `Tools/Test-AIPipeline.ps1` runs the .NET and Unity EditMode `AIDecisionMakingTests`. Coverage includes perception isolation, delivered-report/staleness metadata, deterministic utility/tie-break, hard eligibility, priority/personality proof profiles, decision-quality fairness, Application-service symmetry, tactical orders, low-importance aggregation, source/boundary audits, v12 migration/roundtrip/canonical save, and deterministic post-load continuation. The full Unity, Visual, Battle, and Encounter/Contract gates remain mandatory regressions.

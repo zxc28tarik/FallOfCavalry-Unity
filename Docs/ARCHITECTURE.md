@@ -1,5 +1,9 @@
 # Architecture
 
+## Implementation 12 Presentation boundary
+
+`FOC.Presentation.Core` projects gameplay truth through an explicit `PresentationViewerContext` into immutable/read-only screen models. `FOC.Presentation.Unity` renders those models with UI Toolkit. State flows one way into the UI; player intent returns through registered command bindings and typed Application-service adapters. Views do not reference `CampaignRuntimeState`, do not consume gameplay RNG and do not mutate Domain state. Foreign projections read delivered `ActorInformationState`, not hidden world truth. Navigation, selection, foldouts and scroll position are ephemeral Presentation state and do not enter save v12.
+
 ## Implementation 11 AI boundary
 
 AI Domain contracts are Unity-free definitions/runtime state. Application constructs perception contexts, evaluates deterministic utility, schedules world-time decisions, validates invariants, and adapts inert proposals to existing gameplay services. AI never owns a parallel economy, military, diplomacy, encounter, contract, or combat resolver. `CampaignRuntimeState.AI` stores only controller/plan scheduling semantics; decision contexts and traces are transient read models.
@@ -30,7 +34,7 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 
 `FOC.Infrastructure` implements Application ports. The Implementation 0 adapter provides deterministic text serialization and an atomic file store with temp validation, replacement, backup, and backup read recovery.
 
-`FOC.Presentation` is an outer layer. Implementation 0 contains no gameplay UI and no state mutation path.
+`FOC.Presentation.Core` and `FOC.Presentation.Unity` are outer layers. Implementation 12 supplies gameplay read models and the UI Toolkit shell; mutation is available only through Application command adapters.
 
 `FOC.Tests` is an Editor test assembly. The same engine-independent test sources are compiled by the .NET mirror projects in `Build/`, allowing local and CI validation without duplicating production source.
 

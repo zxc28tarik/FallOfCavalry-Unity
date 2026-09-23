@@ -1,7 +1,7 @@
 {
-  "name": "FOC.Tests",
+  "name": "FOC.Presentation.Tests",
   "rootNamespace": "FOC.Tests",
-  "references": ["FOC.Domain", "FOC.Application", "FOC.Infrastructure", "FOC.Visuals.Core", "FOC.Presentation.Core", "FOC.Presentation.Unity", "FOC.Visuals.Unity"],
+  "references": ["FOC.Presentation.Core", "FOC.Presentation.Unity", "FOC.Visuals.Core", "FOC.Visuals.Unity"],
   "includePlatforms": ["Editor"],
   "optionalUnityReferences": ["TestAssemblies"],
   "autoReferenced": false,
