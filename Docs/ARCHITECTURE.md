@@ -1,5 +1,11 @@
 # Architecture
 
+## Implementation 9 Battle boundary
+
+`FOC.Domain.Battle` owns UnityEngine-free battle snapshots, lifecycle, sides, sectors, deployment, orders, combat intents/events, results, and deterministic continuation state. `FOC.Application.Battle` is the only campaign integration boundary for creation, capability validation, and atomic reconciliation. Campaign objects are read during snapshot creation and changed only through explicit completed-result reconciliation.
+
+Battle Presentation depends inward on Battle/Soldier contracts. `BattleCombatantViewBinding` reuses the Implementation 8.5 `VisualSoldier3DAssembler`; Domain never references Presentation. Save DTOs remain separate from runtime Battle objects.
+
 ## Boundary rule
 
 Dependencies point inward:

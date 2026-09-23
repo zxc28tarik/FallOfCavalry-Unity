@@ -1,0 +1,15 @@
+using System;
+using System.Collections.Generic;
+
+namespace FOC.Application.Save
+{
+    public sealed class CampaignSaveV9ToV10Migration:ISaveMigration
+    {
+        public int FromVersion=>9;public int ToVersion=>10;
+        public CampaignSaveData Apply(CampaignSaveData s)
+        {
+            if(s==null)throw new ArgumentNullException(nameof(s));
+            return new CampaignSaveData{SaveVersion=10,CampaignId=s.CampaignId,GameVersion=s.GameVersion,ContentDataVersion=s.ContentDataVersion,WorldSeed=s.WorldSeed,WorldGenRevision=s.WorldGenRevision,WorldTime=s.WorldTime,RngState=s.RngState,RngDrawCount=s.RngDrawCount,Characters=s.Characters??new List<CharacterSaveData>(),CharacterRelations=s.CharacterRelations??new List<CharacterRelationSaveData>(),Organizations=s.Organizations??new List<OrganizationSaveData>(),Houses=s.Houses??new List<HouseSaveData>(),Cliques=s.Cliques??new List<CliqueSaveData>(),Religions=s.Religions??new List<ReligionDefinitionSaveData>(),Sects=s.Sects??new List<SectDefinitionSaveData>(),CharacterReligions=s.CharacterReligions??new List<CharacterReligionSaveData>(),ReligionProfiles=s.ReligionProfiles??new List<ReligionProfileSaveData>(),ReligionPolicies=s.ReligionPolicies??new List<ReligionPolicySaveData>(),ReligiousCliqueAssociations=s.ReligiousCliqueAssociations??new List<ReligiousCliqueAssociationSaveData>(),Cities=s.Cities??new List<CitySaveData>(),TradeGoods=s.TradeGoods??new List<TradeGoodSaveData>(),ProductionRecipes=s.ProductionRecipes??new List<ProductionRecipeSaveData>(),CityMarkets=s.CityMarkets??new List<CityMarketSaveData>(),Caravans=s.Caravans??new List<CaravanSaveData>(),DiplomaticActors=s.DiplomaticActors??new List<DiplomaticActorSaveData>(),DiplomaticRelations=s.DiplomaticRelations??new List<DiplomaticRelationSaveData>(),EnvoyMissions=s.EnvoyMissions??new List<EnvoyMissionSaveData>(),DiplomaticMessages=s.DiplomaticMessages??new List<DiplomaticMessageSaveData>(),DiplomaticActions=s.DiplomaticActions??new List<DiplomaticActionSaveData>(),Reports=s.Reports??new List<ReportSaveData>(),ActorInformation=s.ActorInformation??new List<ActorInformationSaveData>(),DiplomaticAgreements=s.DiplomaticAgreements??new List<DiplomaticAgreementSaveData>(),Armies=s.Armies??new List<ArmySaveData>(),RecruitmentSources=s.RecruitmentSources??new List<RecruitmentSourceSaveData>(),RecruitmentRecords=s.RecruitmentRecords??new List<RecruitmentRecordSaveData>(),TroopDefinitions=s.TroopDefinitions??new List<TroopDefinitionSaveData>(),WeaponDefinitions=s.WeaponDefinitions??new List<WeaponDefinitionSaveData>(),ArmorDefinitions=s.ArmorDefinitions??new List<ArmorDefinitionSaveData>(),ShieldDefinitions=s.ShieldDefinitions??new List<ShieldDefinitionSaveData>(),MountDefinitions=s.MountDefinitions??new List<MountDefinitionSaveData>(),AuxiliaryEquipmentDefinitions=s.AuxiliaryEquipmentDefinitions??new List<AuxiliaryEquipmentDefinitionSaveData>(),EquipmentInstances=s.EquipmentInstances??new List<EquipmentInstanceSaveData>(),Soldiers=s.Soldiers??new List<SoldierSaveData>(),Battles=new List<BattleSaveData>()};
+        }
+    }
+}

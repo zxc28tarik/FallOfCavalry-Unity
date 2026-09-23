@@ -1,5 +1,9 @@
 # Determinism
 
+## Battle
+
+Battle progression uses explicit step/event sequence, WorldTimestamp, and captured `RandomState`. Identical snapshots, orders/intents, resolver policy, and RNG state produce identical ordered outcomes and continuation state. Sector, side, Army, Unit Group, Soldier, equipment, deployment, order, and event collections serialize canonically by stable typed identity or sequence. Unity frames, physics, animation, wall clock, `System.Random`, and `UnityEngine.Random` are not simulation inputs.
+
 ## Randomness
 
 All gameplay randomness must enter through `IRandomSource`. `SeededRandomSource` uses a fixed xorshift64* transition and SplitMix64 seed normalization. A save stores both the internal non-zero state and draw count. Restoring `RandomState` resumes the exact next result.

@@ -56,6 +56,8 @@ Version 8 persists typed Armies and Unit Groups, owner/controller and real-Chara
 
 Version 9 adds immutable Troop, Weapon, Armor, Shield, Mount and Auxiliary Equipment definition snapshots; persistent Equipment Instances; and persistent Soldier Instances. A Soldier stores stable identity, Unit Group and recruitment provenance, qualitative experience/training/lifecycle values, and exact typed loadout assignments. Definition, instance, Soldier, Unit Group and economic-good identities remain separate. The schema stores no Battle, deployment, casualty, animation or pathfinding state.
 
+Version 10 adds persistent active/completed Battle state: typed sides, participant snapshots, aggregate and instantiated strength, exact persistent Soldier/equipment references, sectors and adjacency, deployment/formations, typed orders/events, explicit battle ammunition, lifecycle/step, deterministic RNG continuation, optional BattleResult, and one-time reconciliation state. It serializes no GameObject, Transform, Animator, mesh, visual pool, cache, or scene coordinate. The v9→v10 migration creates an empty valid Battle registry and invents no Battle, Soldier, casualty, or result.
+
 ## Migration policy
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.

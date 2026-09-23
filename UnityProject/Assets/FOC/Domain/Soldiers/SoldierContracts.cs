@@ -10,7 +10,7 @@ namespace FOC.Domain.Soldiers
 {
     public enum EquipmentOwnerKind { Soldier, Character, ArmyInventory, Institution, Caravan }
     public enum EquipmentAcquisitionKind { CityMarket, RecruitmentProvided }
-    public enum SoldierLifecycle { Active, Unavailable, Retired }
+    public enum SoldierLifecycle { Active, Unavailable, Retired, Wounded, Killed, Captured }
     public enum SoldierExperienceAssessment { Unassessed, Inexperienced, Experienced, Veteran }
     public enum SoldierTrainingAssessment { Unassessed, Untrained, Trained, Drilled }
 
@@ -65,7 +65,7 @@ namespace FOC.Domain.Soldiers
         public SoldierInstance(SoldierId id,UnitGroupId unitGroupId,TroopDefinitionId troopDefinitionId,SoldierRecruitmentProvenance recruitment,SoldierLoadout loadout,CombatRoleId combatRoleId,SoldierExperienceAssessment experience=SoldierExperienceAssessment.Unassessed,SoldierTrainingAssessment training=SoldierTrainingAssessment.Unassessed,SoldierLifecycle lifecycle=SoldierLifecycle.Active)
         {if(!id.IsValid||!unitGroupId.IsValid||!troopDefinitionId.IsValid||!combatRoleId.IsValid||recruitment==null||loadout==null)throw new ArgumentException("Soldier references are invalid.");if(!Enum.IsDefined(typeof(SoldierExperienceAssessment),experience)||!Enum.IsDefined(typeof(SoldierTrainingAssessment),training)||!Enum.IsDefined(typeof(SoldierLifecycle),lifecycle))throw new ArgumentOutOfRangeException(nameof(experience));Id=id;UnitGroupId=unitGroupId;TroopDefinitionId=troopDefinitionId;Recruitment=recruitment;Loadout=loadout;CombatRoleId=combatRoleId;Experience=experience;Training=training;Lifecycle=lifecycle;}
         public SoldierId Id{get;}public UnitGroupId UnitGroupId{get;}public TroopDefinitionId TroopDefinitionId{get;}public SoldierRecruitmentProvenance Recruitment{get;}public SoldierLoadout Loadout{get;private set;}public CombatRoleId CombatRoleId{get;private set;}public SoldierExperienceAssessment Experience{get;private set;}public SoldierTrainingAssessment Training{get;private set;}public SoldierLifecycle Lifecycle{get;private set;}
-        internal void ReplaceLoadout(SoldierLoadout loadout){Loadout=loadout??throw new ArgumentNullException(nameof(loadout));}
+        internal void ReplaceLoadout(SoldierLoadout loadout){Loadout=loadout??throw new ArgumentNullException(nameof(loadout));}public void ApplyBattleOutcome(SoldierLifecycle outcome){if(Lifecycle!=SoldierLifecycle.Active)throw new InvalidOperationException("Only an active Soldier can receive a battle outcome.");if(outcome!=SoldierLifecycle.Wounded&&outcome!=SoldierLifecycle.Killed&&outcome!=SoldierLifecycle.Captured)throw new ArgumentException("Battle outcome lifecycle is invalid.",nameof(outcome));Lifecycle=outcome;}
     }
 
     public sealed class EquipmentInstanceRegistry
@@ -74,7 +74,7 @@ namespace FOC.Domain.Soldiers
     }
     public sealed class SoldierRegistry
     {
-        private readonly SortedDictionary<SoldierId,SoldierInstance> _items=new SortedDictionary<SoldierId,SoldierInstance>();public IReadOnlyCollection<SoldierInstance> OrderedSoldiers=>_items.Values;public bool Contains(SoldierId id)=>_items.ContainsKey(id);public SoldierInstance GetRequired(SoldierId id){if(!_items.TryGetValue(id,out var x))throw new KeyNotFoundException("Soldier was not found.");return x;}public long CountFor(UnitGroupId id)=>_items.Values.LongCount(x=>x.UnitGroupId.Equals(id));internal void Add(SoldierInstance x){if(x==null)throw new ArgumentNullException(nameof(x));if(_items.ContainsKey(x.Id))throw new InvalidOperationException("Duplicate SoldierId.");_items.Add(x.Id,x);}
+        private readonly SortedDictionary<SoldierId,SoldierInstance> _items=new SortedDictionary<SoldierId,SoldierInstance>();public IReadOnlyCollection<SoldierInstance> OrderedSoldiers=>_items.Values;public bool Contains(SoldierId id)=>_items.ContainsKey(id);public SoldierInstance GetRequired(SoldierId id){if(!_items.TryGetValue(id,out var x))throw new KeyNotFoundException("Soldier was not found.");return x;}public long CountFor(UnitGroupId id)=>_items.Values.LongCount(x=>x.UnitGroupId.Equals(id)&&x.Lifecycle!=SoldierLifecycle.Retired&&x.Lifecycle!=SoldierLifecycle.Killed&&x.Lifecycle!=SoldierLifecycle.Captured);internal void Add(SoldierInstance x){if(x==null)throw new ArgumentNullException(nameof(x));if(_items.ContainsKey(x.Id))throw new InvalidOperationException("Duplicate SoldierId.");_items.Add(x.Id,x);}
     }
     public sealed class SoldierCampaignState
     {

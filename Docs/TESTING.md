@@ -1,5 +1,11 @@
 # Testing
 
+## Implementation 9
+
+Battle coverage includes typed identity/lifecycle, no fake Soldier expansion, no loadout reroll, no active-battle campaign mutation, multi-Unit deployment and sector validation, command authority/adjacency/hostility, declared weapon capabilities, explicit ranged ammunition consumption, deterministic RNG continuation, one-time atomic reconciliation, survivor/equipment identity, killed Soldier historical identity, schema v10 active-battle roundtrip, hardcoded v9 migration, canonical insertion ordering, Unity-free Domain guards, existing visual-pipeline binding, generated proof scene, and 100/250/500 actor batch smoke.
+
+Run `Tools/Test-BattlePipeline.ps1` with the exact Unity executable for the agent/CI-friendly Battle smoke. It runs Battle-filtered .NET tests, generates/validates the Unity proof scene, records measured actor assembly/release data, and exits nonzero on failure.
+
 ## Engine-independent suite
 
 Run from repository root:

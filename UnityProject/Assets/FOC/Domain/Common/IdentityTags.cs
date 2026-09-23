@@ -77,4 +77,10 @@ namespace FOC.Domain.Common
     public sealed class EquipmentInstanceTag { private EquipmentInstanceTag() { } }
     public sealed class AmmoFamilyTag { private AmmoFamilyTag() { } }
     public sealed class VisualProfileTag { private VisualProfileTag() { } }
+    public sealed class BattleTag { private BattleTag() { } }
+    public sealed class BattleSideTag { private BattleSideTag() { } }
+    public sealed class BattleSectorTag { private BattleSectorTag() { } }
+    public sealed class DeploymentGroupTag { private DeploymentGroupTag() { } }
+    public sealed class BattleOrderTag { private BattleOrderTag() { } }
+    public sealed class BattleEventTag { private BattleEventTag() { } }
 }

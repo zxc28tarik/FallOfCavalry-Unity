@@ -52,6 +52,7 @@ namespace FOC.Application.Save
             AddDiplomacySaveData(state, data);
             AddMilitarySaveData(state, data);
             AddSoldierSaveData(state, data);
+            AddBattleSaveData(state, data);
 
             return data;
         }
@@ -91,6 +92,7 @@ namespace FOC.Application.Save
             var diplomacy = RestoreDiplomacy(data);
             var military = RestoreMilitary(data);
             var soldiers = RestoreSoldiers(data);
+            var battles = RestoreBattles(data);
             return new CampaignRuntimeState(
                 StableId<CampaignTag>.Create(data.CampaignId),
                 data.GameVersion,
@@ -108,7 +110,8 @@ namespace FOC.Application.Save
                 economy,
                 diplomacy,
                 military,
-                soldiers);
+                soldiers,
+                battles);
         }
 
         private static CharacterSaveData ToCharacterSaveData(CharacterState state)

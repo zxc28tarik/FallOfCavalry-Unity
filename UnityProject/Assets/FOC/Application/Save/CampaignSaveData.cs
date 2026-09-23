@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 9;
+        public const int CurrentSaveVersion = 10;
 
         public int SaveVersion { get; set; }
 
@@ -61,6 +61,7 @@ namespace FOC.Application.Save
         public List<AuxiliaryEquipmentDefinitionSaveData> AuxiliaryEquipmentDefinitions{get;set;}=new List<AuxiliaryEquipmentDefinitionSaveData>();
         public List<EquipmentInstanceSaveData> EquipmentInstances{get;set;}=new List<EquipmentInstanceSaveData>();
         public List<SoldierSaveData> Soldiers{get;set;}=new List<SoldierSaveData>();
+        public List<BattleSaveData> Battles{get;set;}=new List<BattleSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -237,6 +238,22 @@ namespace FOC.Application.Save
     public sealed class UnitGroupSaveData{public string UnitGroupId{get;set;}=string.Empty;public string RecruitmentSourceId{get;set;}=string.Empty;public string TroopDefinitionId{get;set;}=string.Empty;public long Headcount{get;set;}public string CommanderCharacterId{get;set;}=string.Empty;public int Morale{get;set;}public int Fatigue{get;set;}public int Discipline{get;set;}}
     public sealed class CommandRelationshipSaveData{public int ParentKind{get;set;}public string ParentId{get;set;}=string.Empty;public int ChildKind{get;set;}public string ChildId{get;set;}=string.Empty;}
     public sealed class ArmySupplySaveData{public string TradeGoodId{get;set;}=string.Empty;public long Quantity{get;set;}}
+
+    public sealed class BattleSaveData{public string BattleId{get;set;}=string.Empty;public long StartedAt{get;set;}public int Lifecycle{get;set;}public long Step{get;set;}public ulong RngState{get;set;}public ulong RngDrawCount{get;set;}public bool IsReconciled{get;set;}public List<BattleSideSaveData>Sides{get;set;}=new List<BattleSideSaveData>();public List<BattleSectorSaveData>Sectors{get;set;}=new List<BattleSectorSaveData>();public List<BattleDeploymentSaveData>Deployments{get;set;}=new List<BattleDeploymentSaveData>();public List<BattleOrderSaveData>Orders{get;set;}=new List<BattleOrderSaveData>();public List<BattleEventSaveData>Events{get;set;}=new List<BattleEventSaveData>();public List<BattleAmmoSaveData>Ammunition{get;set;}=new List<BattleAmmoSaveData>();public BattleResultSaveData? Result{get;set;}}
+    public sealed class BattleSideSaveData{public string SideId{get;set;}=string.Empty;public string CommanderCharacterId{get;set;}=string.Empty;public List<BattleParticipantSaveData>Participants{get;set;}=new List<BattleParticipantSaveData>();}
+    public sealed class BattleParticipantSaveData{public string ArmyId{get;set;}=string.Empty;public string CommanderCharacterId{get;set;}=string.Empty;public List<BattleUnitSnapshotSaveData>Units{get;set;}=new List<BattleUnitSnapshotSaveData>();public List<ArmySupplySaveData>Supply{get;set;}=new List<ArmySupplySaveData>();}
+    public sealed class BattleUnitSnapshotSaveData{public string ArmyId{get;set;}=string.Empty;public string UnitGroupId{get;set;}=string.Empty;public string CommanderCharacterId{get;set;}=string.Empty;public long CampaignHeadcount{get;set;}public int Morale{get;set;}public int Fatigue{get;set;}public int Discipline{get;set;}public List<BattleCombatantSaveData>Combatants{get;set;}=new List<BattleCombatantSaveData>();}
+    public sealed class BattleCombatantSaveData{public string SoldierId{get;set;}=string.Empty;public string UnitGroupId{get;set;}=string.Empty;public string TroopDefinitionId{get;set;}=string.Empty;public string CombatRoleId{get;set;}=string.Empty;public bool IsMounted{get;set;}public List<string>EquipmentInstanceIds{get;set;}=new List<string>();}
+    public sealed class BattleSectorSaveData{public string SectorId{get;set;}=string.Empty;public List<int>Terrain{get;set;}=new List<int>();public List<string>EligibleSideIds{get;set;}=new List<string>();public List<string>AdjacentSectorIds{get;set;}=new List<string>();}
+    public sealed class BattleDeploymentSaveData{public string DeploymentGroupId{get;set;}=string.Empty;public string SideId{get;set;}=string.Empty;public string ArmyId{get;set;}=string.Empty;public string UnitGroupId{get;set;}=string.Empty;public string SectorId{get;set;}=string.Empty;public int Formation{get;set;}public bool IsReserve{get;set;}}
+    public sealed class BattleOrderSaveData{public string BattleOrderId{get;set;}=string.Empty;public long Sequence{get;set;}public int Kind{get;set;}public string SideId{get;set;}=string.Empty;public string IssuerCharacterId{get;set;}=string.Empty;public string DeploymentGroupId{get;set;}=string.Empty;public string TargetSectorId{get;set;}=string.Empty;public string TargetGroupId{get;set;}=string.Empty;public int? Formation{get;set;}}
+    public sealed class BattleEventSaveData{public string BattleEventId{get;set;}=string.Empty;public long Sequence{get;set;}public string TargetSoldierId{get;set;}=string.Empty;public int Outcome{get;set;}}
+    public sealed class BattleAmmoSaveData{public string SoldierId{get;set;}=string.Empty;public string AmmoFamilyId{get;set;}=string.Empty;public long Quantity{get;set;}}
+    public sealed class BattleResultSaveData{public int EndReason{get;set;}public long CompletedAt{get;set;}public long ElapsedSteps{get;set;}public string WinningSideId{get;set;}=string.Empty;public List<string>ParticipatingSideIds{get;set;}=new List<string>();public List<BattleUnitOutcomeSaveData>Units{get;set;}=new List<BattleUnitOutcomeSaveData>();public List<BattleSoldierOutcomeSaveData>Soldiers{get;set;}=new List<BattleSoldierOutcomeSaveData>();public List<BattleCharacterOutcomeSaveData>Characters{get;set;}=new List<BattleCharacterOutcomeSaveData>();public List<BattleAmmoOutcomeSaveData>Ammunition{get;set;}=new List<BattleAmmoOutcomeSaveData>();}
+    public sealed class BattleUnitOutcomeSaveData{public string UnitGroupId{get;set;}=string.Empty;public long AggregateLosses{get;set;}public int Morale{get;set;}public int Fatigue{get;set;}public int Discipline{get;set;}}
+    public sealed class BattleSoldierOutcomeSaveData{public string SoldierId{get;set;}=string.Empty;public int Outcome{get;set;}}
+    public sealed class BattleCharacterOutcomeSaveData{public string CharacterId{get;set;}=string.Empty;public int Outcome{get;set;}public int? InjurySeverity{get;set;}public string CaptorCharacterId{get;set;}=string.Empty;public string CaptorArmyId{get;set;}=string.Empty;}
+    public sealed class BattleAmmoOutcomeSaveData{public string SoldierId{get;set;}=string.Empty;public string AmmoFamilyId{get;set;}=string.Empty;public long RemainingQuantity{get;set;}}
     public sealed class SupplyRequirementSaveData{public string TradeGoodId{get;set;}=string.Empty;public int Purpose{get;set;}public long RequiredQuantity{get;set;}}
     public sealed class PayrollObligationSaveData{public string PayrollObligationId{get;set;}=string.Empty;public long AmountOwed{get;set;}public long AmountPaid{get;set;}public long DueAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}
     public sealed class PayrollPaymentSaveData{public string PayrollPaymentId{get;set;}=string.Empty;public string PayrollObligationId{get;set;}=string.Empty;public long Amount{get;set;}public long PaidAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}

@@ -89,6 +89,16 @@ Remote refs `origin/main` and `origin/333` were re-audited for soldier, troop, l
 - REMOVE: battle-start-generated Soldier identity/loadouts, arbitrary string truth, global mutable templates, implicit rerolls, browser coupling and silent infinite ammunition.
 - REFERENCE_ONLY: Phaser Battle/deployment code, historical names, visuals, weapon/armor numeric balance and combat behavior for later authorized packages.
 
+## Implementation 9 Battle re-audit
+
+`legacy-origin/main` battle adapter/runtime, sector manager/state/renderer, deploy mode/UI, formation controller, tactical orders, unit/combatant classes, ranged/morale/counter/reward systems, AI, sprites, FX, and tests were reviewed as browser-era reference material.
+
+- KEEP: no browser implementation artifact; accepted campaign Army/Soldier contracts remain the current repository's authority.
+- ADAPT: broad sector/deployment/order vocabulary and the campaign-to-battle/result-to-campaign boundary.
+- REWRITE: lifecycle, snapshots, sectors, deployment, typed orders/intents, deterministic events, casualty result, reconciliation, save and 3D presentation binding in C#.
+- REMOVE: battle-start identity/loadout generation, hidden/global randomness, infinite ammunition, direct campaign mutation, troop-name behavior, invented numeric modifiers, automatic deletion, omniscient result propagation and visual/physics gameplay truth.
+- REFERENCE_ONLY: every Phaser/JS runtime, numeric table, AI heuristic, browser rendering/input path, sprite and legacy battle asset.
+
 ## Implementation 8.5 addendum
 
 `Legacy Browser/Phaser Visual System = REFERENCE_ONLY`.
