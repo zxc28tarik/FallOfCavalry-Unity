@@ -9,6 +9,10 @@
             <ui:Label text="FALL OF CAVALRY" class="foc-brand" />
             <ui:Label name="campaign-clock" text="presentation.clock.unavailable" class="foc-clock" />
             <ui:VisualElement class="foc-header-spacer" />
+            <ui:TextField name="save-slot" value="proof_slot" tooltip="Save slot" class="foc-save-slot" />
+            <ui:Button name="save-campaign" text="SAVE" tooltip="Save campaign" class="foc-header-button" />
+            <ui:Button name="load-campaign" text="LOAD" tooltip="Load campaign" class="foc-header-button" />
+            <ui:Label name="save-feedback" text="READY" class="foc-save-feedback" />
             <ui:Label text="presentation.alerts" class="foc-muted" />
             <ui:Label name="alert-count" text="0" class="foc-alert-count" />
             <ui:Button name="nav-back" text="‹" tooltip="presentation.navigation.back" class="foc-icon-button" />

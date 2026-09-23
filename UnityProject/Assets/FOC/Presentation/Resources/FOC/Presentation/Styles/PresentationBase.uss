@@ -3,6 +3,9 @@
 .foc-brand { font-size: 18px; -unity-font-style: bold; color: var(--foc-accent); letter-spacing: 1px; }
 .foc-clock { margin-left: 28px; color: var(--foc-text-muted); }
 .foc-header-spacer { flex-grow: 1; }
+.foc-save-slot { width: 130px; margin-right: 4px; }
+.foc-header-button { height: 28px; min-width: 52px; margin-left: 2px; margin-right: 2px; background-color: rgb(53, 59, 56); color: var(--foc-text); border-width: 1px; border-color: var(--foc-border); }
+.foc-save-feedback { width: 92px; margin-left: 6px; margin-right: 12px; font-size: 10px; color: var(--foc-text-muted); white-space: normal; }
 .foc-main { flex-grow: 1; flex-direction: row; }
 .foc-navigation { width: 188px; padding: 12px 8px; background-color: rgb(25, 28, 28); border-right-width: 1px; border-right-color: var(--foc-border); }
 .foc-workspace { flex-grow: 1; padding: 18px 22px 28px 22px; }

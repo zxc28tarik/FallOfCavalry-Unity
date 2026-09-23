@@ -130,3 +130,11 @@ Legacy browser Encounter, quest, roaming event, dialogue choice and reward mater
 - REWRITE: all production Presentation as engine-independent read models/view models plus Unity UI Toolkit UXML/USS and Application command adapters.
 - REMOVE: no current Unity artifact required removal.
 - REFERENCE_ONLY: every legacy HTML, DOM, CSS web layout, browser router, canvas/Phaser scene UI and localStorage UI state. None is runtime architecture or save truth.
+
+## Implementation 13 save/integration re-audit
+
+- KEEP: current typed v12 DTO/mappers, migration steps, validator, serializer ports and package boundaries.
+- ADAPT: the existing atomic store and recovery contract with durable flush, fault boundaries, serialized same-slot access and explicit recovery status.
+- REWRITE: no gameplay system; only the development composition/bootstrap and integrated proof fixture were created as new production-facing validation infrastructure.
+- REMOVE: no accepted runtime artifact; no legacy save was deleted or silently rewritten.
+- REFERENCE_ONLY: all browser `localStorage`, JSON/global state, Phaser runtime, legacy saves and historical content. They are not migration input unless a later authority package supplies a specific importer and fixture.

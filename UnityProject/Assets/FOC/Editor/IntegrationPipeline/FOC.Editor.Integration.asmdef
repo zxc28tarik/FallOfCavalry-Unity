@@ -1,0 +1,16 @@
+{
+  "name": "FOC.Editor.Integration",
+  "rootNamespace": "FOC.Editor.Integration",
+  "references": [
+    "FOC.Domain",
+    "FOC.Application",
+    "FOC.Infrastructure",
+    "FOC.Presentation.Core",
+    "FOC.Presentation.Unity",
+    "FOC.Bootstrap.Unity"
+  ],
+  "includePlatforms": ["Editor"],
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "noEngineReferences": false
+}

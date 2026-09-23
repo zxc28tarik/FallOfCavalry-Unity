@@ -1,5 +1,11 @@
 # Architecture
 
+## Implementation 13 persistence and executable integration boundary
+
+The existing inward dependency rule remains unchanged. `CampaignSaveCoordinator` is the Application-facing production save/load facade; serialization and filesystem durability remain Infrastructure concerns. The coordinator never turns SaveData into a second runtime authority and rejects content/world-generation incompatibility explicitly. `IntegratedProofCampaignFactory` is deterministic `PROOF_ONLY` development data shared by tests and the executable bootstrap, not production content authority.
+
+`FOC.Bootstrap.Unity` is an outer composition root: it constructs existing Application/Infrastructure/Presentation services and owns no gameplay rules. Save/Load controls call the coordinator and then replace/reproject the reconstructed `CampaignRuntimeState`; they never mutate Domain fields directly. `FOC.Editor.Integration` validates proof data, creates the development scene and builds the player. Neither assembly is referenced inward by Domain, Application, Infrastructure or Presentation Core.
+
 ## Implementation 12 Presentation boundary
 
 `FOC.Presentation.Core` projects gameplay truth through an explicit `PresentationViewerContext` into immutable/read-only screen models. `FOC.Presentation.Unity` renders those models with UI Toolkit. State flows one way into the UI; player intent returns through registered command bindings and typed Application-service adapters. Views do not reference `CampaignRuntimeState`, do not consume gameplay RNG and do not mutate Domain state. Foreign projections read delivered `ActorInformationState`, not hidden world truth. Navigation, selection, foldouts and scroll position are ephemeral Presentation state and do not enter save v12.

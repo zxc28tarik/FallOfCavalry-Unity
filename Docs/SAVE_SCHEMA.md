@@ -8,7 +8,7 @@ Migration v11→v12 preserves all earlier state and initializes an empty AI coll
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 11`.
+`CampaignSaveData.CurrentSaveVersion = 12`.
 
 The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 

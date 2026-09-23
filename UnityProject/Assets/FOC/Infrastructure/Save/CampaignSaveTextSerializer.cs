@@ -10,6 +10,8 @@ namespace FOC.Infrastructure.Save
     public sealed class CampaignSaveTextSerializer : ISaveSerializer
     {
         private const string Header = "FOC_CAMPAIGN_SAVE";
+        public const int MaximumPayloadCharacters = 64 * 1024 * 1024;
+        public const int MaximumCollectionEntries = 1_000_000;
 
         public string Serialize(CampaignSaveData data)
         {
@@ -70,6 +72,10 @@ namespace FOC.Infrastructure.Save
             if (string.IsNullOrWhiteSpace(content))
             {
                 return SaveReadResult.Failed("Save content is empty.");
+            }
+            if (content.Length > MaximumPayloadCharacters)
+            {
+                return SaveReadResult.Failed("Save payload exceeds the technical safety limit.");
             }
 
             try
@@ -187,6 +193,7 @@ namespace FOC.Infrastructure.Save
         {
             var count = ParseInt(value);
             if (count < 0) throw new FormatException($"{fieldName} cannot be negative.");
+            if (count > MaximumCollectionEntries) throw new FormatException($"{fieldName} exceeds the technical safety limit.");
             return count;
         }
 

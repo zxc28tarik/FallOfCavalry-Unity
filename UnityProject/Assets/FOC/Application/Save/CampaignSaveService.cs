@@ -56,7 +56,10 @@ namespace FOC.Application.Save
 
             var validation = _validator.Validate(migrated.Data);
             return validation.IsValid
-                ? SaveReadResult.Succeeded(migrated.Data)
+                ? SaveReadResult.Succeeded(
+                    migrated.Data,
+                    stored.RecoveredFromBackup ? SaveRecoveryStatus.RecoveredFromBackup : SaveRecoveryStatus.LoadedCurrent,
+                    stored.RecoveredFromBackup ? "Current save was invalid or unavailable; the validated backup was loaded." : null)
                 : SaveReadResult.Failed("Loaded save violates campaign invariants.");
         }
 
@@ -67,4 +70,3 @@ namespace FOC.Application.Save
         }
     }
 }
-

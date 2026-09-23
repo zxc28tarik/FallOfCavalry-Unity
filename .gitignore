@@ -24,5 +24,6 @@ crashlytics-build.properties
 **/TestResults/
 **/bin/
 **/obj/
+/Artifacts/
 !Build/*.csproj
 !FallOfCavalry.sln

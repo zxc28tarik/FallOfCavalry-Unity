@@ -1,0 +1,14 @@
+{
+  "name": "FOC.Bootstrap.Unity",
+  "rootNamespace": "FOC.Bootstrap.Unity",
+  "references": [
+    "FOC.Domain",
+    "FOC.Application",
+    "FOC.Infrastructure",
+    "FOC.Presentation.Core",
+    "FOC.Presentation.Unity"
+  ],
+  "autoReferenced": true,
+  "overrideReferences": false,
+  "noEngineReferences": false
+}

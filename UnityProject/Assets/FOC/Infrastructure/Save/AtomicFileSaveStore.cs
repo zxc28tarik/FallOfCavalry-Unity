@@ -1,16 +1,35 @@
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
 using FOC.Application.Save;
 
 namespace FOC.Infrastructure.Save
 {
+    public enum AtomicSaveStage
+    {
+        TempCreate,
+        TempWrite,
+        DurableFlush,
+        TempValidation,
+        Backup,
+        Replace,
+        FinalRead,
+    }
+
+    public interface IAtomicSaveFaultInjector
+    {
+        void BeforeStage(AtomicSaveStage stage);
+    }
+
     public sealed class AtomicFileSaveStore : IAtomicSaveStore
     {
+        private static readonly ConcurrentDictionary<string, object> SlotGates = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private readonly string _rootDirectory;
         private readonly Encoding _encoding = new UTF8Encoding(false, true);
+        private readonly IAtomicSaveFaultInjector? _faultInjector;
 
-        public AtomicFileSaveStore(string rootDirectory)
+        public AtomicFileSaveStore(string rootDirectory, IAtomicSaveFaultInjector? faultInjector = null)
         {
             if (string.IsNullOrWhiteSpace(rootDirectory))
             {
@@ -18,6 +37,7 @@ namespace FOC.Infrastructure.Save
             }
 
             _rootDirectory = Path.GetFullPath(rootDirectory);
+            _faultInjector = faultInjector;
         }
 
         public SaveStoreResult Write(string slotName, string content, Func<string, bool> validateContent)
@@ -30,38 +50,52 @@ namespace FOC.Infrastructure.Save
             try
             {
                 var paths = ResolvePaths(slotName);
-                Directory.CreateDirectory(_rootDirectory);
-
-                using (var stream = new FileStream(paths.Temp, FileMode.Create, FileAccess.Write, FileShare.None))
-                using (var writer = new StreamWriter(stream, _encoding))
+                lock (SlotGates.GetOrAdd(paths.Current, _ => new object()))
                 {
-                    writer.Write(content);
-                    writer.Flush();
-                    stream.Flush(true);
+                    return WriteLocked(paths, content, validateContent);
                 }
-
-                var written = File.ReadAllText(paths.Temp, _encoding);
-                if (!validateContent(written))
-                {
-                    File.Delete(paths.Temp);
-                    return SaveStoreResult.Failed("Temporary save failed validation; current save was not replaced.");
-                }
-
-                if (File.Exists(paths.Current))
-                {
-                    ReplaceWithBackup(paths);
-                }
-                else
-                {
-                    File.Move(paths.Temp, paths.Current);
-                }
-
-                return SaveStoreResult.Written();
             }
             catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException || exception is ArgumentException)
             {
                 return SaveStoreResult.Failed(exception.Message);
             }
+        }
+
+        private SaveStoreResult WriteLocked(SavePaths paths, string content, Func<string, bool> validateContent)
+        {
+            Directory.CreateDirectory(_rootDirectory);
+            Inject(AtomicSaveStage.TempCreate);
+
+            using (var stream = new FileStream(paths.Temp, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var writer = new StreamWriter(stream, _encoding))
+            {
+                Inject(AtomicSaveStage.TempWrite);
+                writer.Write(content);
+                writer.Flush();
+                Inject(AtomicSaveStage.DurableFlush);
+                stream.Flush(true);
+            }
+
+            Inject(AtomicSaveStage.TempValidation);
+            var written = File.ReadAllText(paths.Temp, _encoding);
+            if (!validateContent(written))
+            {
+                File.Delete(paths.Temp);
+                return SaveStoreResult.Failed("Temporary save failed validation; current save was not replaced.");
+            }
+
+            if (File.Exists(paths.Current)) ReplaceWithBackup(paths);
+            else
+            {
+                Inject(AtomicSaveStage.Replace);
+                File.Move(paths.Temp, paths.Current);
+            }
+
+            Inject(AtomicSaveStage.FinalRead);
+            var committed = File.ReadAllText(paths.Current, _encoding);
+            return validateContent(committed)
+                ? SaveStoreResult.Written()
+                : SaveStoreResult.Failed("Committed save failed final validation; backup remains available.");
         }
 
         public SaveStoreResult Read(string slotName, Func<string, bool> validateContent)
@@ -74,17 +108,14 @@ namespace FOC.Infrastructure.Save
             try
             {
                 var paths = ResolvePaths(slotName);
-                if (TryReadValid(paths.Current, validateContent, out var current))
+                lock (SlotGates.GetOrAdd(paths.Current, _ => new object()))
                 {
-                    return SaveStoreResult.Read(current!, false);
-                }
+                    if (TryReadValid(paths.Current, validateContent, out var current)) return SaveStoreResult.Read(current!, false);
 
-                if (TryReadValid(paths.Backup, validateContent, out var backup))
-                {
-                    return SaveStoreResult.Read(backup!, true);
-                }
+                    if (TryReadValid(paths.Backup, validateContent, out var backup)) return SaveStoreResult.Read(backup!, true);
 
-                return SaveStoreResult.Failed("Neither current save nor backup is present and valid.");
+                    return SaveStoreResult.Failed("Neither current save nor backup is present and valid.");
+                }
             }
             catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException || exception is ArgumentException)
             {
@@ -127,13 +158,15 @@ namespace FOC.Infrastructure.Save
             return validateContent(content);
         }
 
-        private static void ReplaceWithBackup(SavePaths paths)
+        private void ReplaceWithBackup(SavePaths paths)
         {
+            Inject(AtomicSaveStage.Backup);
             if (File.Exists(paths.Backup))
             {
                 File.Delete(paths.Backup);
             }
 
+            Inject(AtomicSaveStage.Replace);
             try
             {
                 File.Replace(paths.Temp, paths.Current, paths.Backup, true);
@@ -141,10 +174,12 @@ namespace FOC.Infrastructure.Save
             catch (PlatformNotSupportedException)
             {
                 File.Copy(paths.Current, paths.Backup, true);
-                File.Delete(paths.Current);
-                File.Move(paths.Temp, paths.Current);
+                File.Copy(paths.Temp, paths.Current, true);
+                File.Delete(paths.Temp);
             }
         }
+
+        private void Inject(AtomicSaveStage stage) => _faultInjector?.BeforeStage(stage);
 
         private readonly struct SavePaths
         {
@@ -163,4 +198,3 @@ namespace FOC.Infrastructure.Save
         }
     }
 }
-

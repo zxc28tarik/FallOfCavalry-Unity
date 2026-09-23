@@ -1,5 +1,11 @@
 # Testing
 
+## Implementation 13 integration and persistence gate
+
+Run `Tools/Test-SaveHardeningPipeline.ps1`, `Tools/Test-IntegrationPipeline.ps1`, `Tools/Test-LongRunPipeline.ps1`, `Tools/Benchmark-ProductionFoundation.ps1` and `Tools/Build-Windows-Development.ps1`. The focused gates cover atomic interruption/recovery/concurrency/path safety, exact v1→v12 migration, whole-campaign roundtrip/continuation/replay, deterministic periodic reload, real production mapping/serialization performance, a Unity batch integration proof and a real Windows x64 Development player. The complete .NET and Unity suites plus every earlier package pipeline remain mandatory regressions.
+
+`-focSmokeTest` is accepted only by the Development proof bootstrap. It runs the real player save/load path and quits; it is not a gameplay feature or release mode.
+
 ## Implementation 12 Presentation gate
 
 Run:
