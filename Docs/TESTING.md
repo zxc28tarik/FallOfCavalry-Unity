@@ -1,5 +1,17 @@
 # Testing
 
+## Implementation 10
+
+Encounter/Contract coverage locks exact authoritative families/types/categories, removed-type absence, definition/instance separation, lifecycle guards, deterministic RNG continuation, atomic preflight, typed variable targets, issuer/assignee validation, evidence-driven progress, separate task profiles, Encounter↔Contract links, real Battle/Trade/Report/City integration, schema v11 semantic roundtrip, v10 migration and canonical serialization.
+
+Run the focused gate with the exact Editor executable:
+
+```powershell
+.\Tools\Test-EncounterContractPipeline.ps1 -UnityEditor 'C:\Users\zxc28\AppData\Local\Unity\Hub\Editor\6000.3.16f1\Editor\Unity.exe'
+```
+
+It runs the focused .NET suite and the same focused tests through Unity EditMode. Nonzero exit means the package gate failed.
+
 ## Implementation 9
 
 Battle coverage includes typed identity/lifecycle, no fake Soldier expansion, no loadout reroll, no active-battle campaign mutation, multi-Unit deployment and sector validation, command authority/adjacency/hostility, declared weapon capabilities, explicit ranged ammunition consumption, deterministic RNG continuation, one-time atomic reconciliation, survivor/equipment identity, killed Soldier historical identity, schema v10 active-battle roundtrip, hardcoded v9 migration, canonical insertion ordering, Unity-free Domain guards, existing visual-pipeline binding, generated proof scene, and 100/250/500 actor batch smoke.

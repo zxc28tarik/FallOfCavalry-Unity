@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 10;
+        public const int CurrentSaveVersion = 11;
 
         public int SaveVersion { get; set; }
 
@@ -62,6 +62,8 @@ namespace FOC.Application.Save
         public List<EquipmentInstanceSaveData> EquipmentInstances{get;set;}=new List<EquipmentInstanceSaveData>();
         public List<SoldierSaveData> Soldiers{get;set;}=new List<SoldierSaveData>();
         public List<BattleSaveData> Battles{get;set;}=new List<BattleSaveData>();
+        public List<EncounterSaveData> Encounters{get;set;}=new List<EncounterSaveData>();
+        public List<ContractSaveData> Contracts{get;set;}=new List<ContractSaveData>();
     }
 
     public sealed class CharacterSaveData
@@ -254,6 +256,13 @@ namespace FOC.Application.Save
     public sealed class BattleSoldierOutcomeSaveData{public string SoldierId{get;set;}=string.Empty;public int Outcome{get;set;}}
     public sealed class BattleCharacterOutcomeSaveData{public string CharacterId{get;set;}=string.Empty;public int Outcome{get;set;}public int? InjurySeverity{get;set;}public string CaptorCharacterId{get;set;}=string.Empty;public string CaptorArmyId{get;set;}=string.Empty;}
     public sealed class BattleAmmoOutcomeSaveData{public string SoldierId{get;set;}=string.Empty;public string AmmoFamilyId{get;set;}=string.Empty;public long RemainingQuantity{get;set;}}
+    public sealed class EncounterEntityRefSaveData{public int Kind{get;set;}public string Id{get;set;}=string.Empty;}
+    public sealed class EncounterResolutionSaveData{public string OutcomeId{get;set;}=string.Empty;public string SelectedChoiceId{get;set;}=string.Empty;public string PolicyId{get;set;}=string.Empty;public long ResolvedAt{get;set;}public ulong RngState{get;set;}public ulong RngDrawCount{get;set;}}
+    public sealed class EncounterSaveData{public string EncounterId{get;set;}=string.Empty;public string DefinitionId{get;set;}=string.Empty;public int Family{get;set;}public int Type{get;set;}public long CreatedAt{get;set;}public int SourceKind{get;set;}public string SourceId{get;set;}=string.Empty;public List<EncounterEntityRefSaveData>Participants{get;set;}=new List<EncounterEntityRefSaveData>();public ulong RngState{get;set;}public ulong RngDrawCount{get;set;}public int Lifecycle{get;set;}public long? EngagedAt{get;set;}public string SelectedChoiceId{get;set;}=string.Empty;public EncounterResolutionSaveData? Resolution{get;set;}public string LinkedContractId{get;set;}=string.Empty;public string LinkedBattleId{get;set;}=string.Empty;public bool OutcomeApplied{get;set;}}
+    public sealed class ContractTargetSaveData{public string SlotId{get;set;}=string.Empty;public int Kind{get;set;}public string TargetId{get;set;}=string.Empty;}
+    public sealed class ContractEvidenceSaveData{public string EvidenceId{get;set;}=string.Empty;public int Kind{get;set;}public int TargetKind{get;set;}public string TargetId{get;set;}=string.Empty;public long OccurredAt{get;set;}}
+    public sealed class ContractObjectiveSaveData{public string ObjectiveId{get;set;}=string.Empty;public int EvidenceKind{get;set;}public string TargetSlotId{get;set;}=string.Empty;public int RequiredEvidenceCount{get;set;}public List<ContractEvidenceSaveData>Evidence{get;set;}=new List<ContractEvidenceSaveData>();}
+    public sealed class ContractSaveData{public string ContractId{get;set;}=string.Empty;public string DefinitionId{get;set;}=string.Empty;public int Category{get;set;}public int IssuerKind{get;set;}public string IssuerId{get;set;}=string.Empty;public List<ContractTargetSaveData>Targets{get;set;}=new List<ContractTargetSaveData>();public List<ContractObjectiveSaveData>Objectives{get;set;}=new List<ContractObjectiveSaveData>();public long OfferedAt{get;set;}public string AssigneeCharacterId{get;set;}=string.Empty;public long? AcceptedAt{get;set;}public long? Deadline{get;set;}public long? TerminalAt{get;set;}public string LinkedEncounterId{get;set;}=string.Empty;public string LinkedBattleId{get;set;}=string.Empty;public int Lifecycle{get;set;}public bool OutcomeApplied{get;set;}}
     public sealed class SupplyRequirementSaveData{public string TradeGoodId{get;set;}=string.Empty;public int Purpose{get;set;}public long RequiredQuantity{get;set;}}
     public sealed class PayrollObligationSaveData{public string PayrollObligationId{get;set;}=string.Empty;public long AmountOwed{get;set;}public long AmountPaid{get;set;}public long DueAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}
     public sealed class PayrollPaymentSaveData{public string PayrollPaymentId{get;set;}=string.Empty;public string PayrollObligationId{get;set;}=string.Empty;public long Amount{get;set;}public long PaidAt{get;set;}public int FundingSourceKind{get;set;}public string FundingSourceId{get;set;}=string.Empty;}

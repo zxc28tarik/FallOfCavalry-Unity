@@ -2,7 +2,7 @@
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 9`.
+`CampaignSaveData.CurrentSaveVersion = 11`.
 
 The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 
@@ -58,11 +58,15 @@ Version 9 adds immutable Troop, Weapon, Armor, Shield, Mount and Auxiliary Equip
 
 Version 10 adds persistent active/completed Battle state: typed sides, participant snapshots, aggregate and instantiated strength, exact persistent Soldier/equipment references, sectors and adjacency, deployment/formations, typed orders/events, explicit battle ammunition, lifecycle/step, deterministic RNG continuation, optional BattleResult, and one-time reconciliation state. It serializes no GameObject, Transform, Animator, mesh, visual pool, cache, or scene coordinate. The v9→v10 migration creates an empty valid Battle registry and invents no Battle, Soldier, casualty, or result.
 
+## Version 11 Encounter / Contract
+
+Version 11 persists Encounter instances and Contract instances, not their immutable content definitions. Encounter records preserve typed definition/family/type identity, timestamps, typed source/participants, lifecycle, selected choice, deterministic RNG continuation, resolution, optional Battle/Contract links and one-time application state. Contract records preserve category, typed issuer/assignee/target bindings, objective evidence, lifecycle, optional explicit deadline and Encounter/Battle links. The v10→v11 migration initializes both registries empty and invents no gameplay state.
+
 ## Migration policy
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.
 
-`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` preserves every prior domain and initializes empty persistent Army, Unit Group, recruitment or supply state. `CampaignSaveV8ToV9Migration` preserves all prior domains and initializes empty Soldier definitions, equipment and roster state; it never invents Soldiers from Unit Group headcount. Hardcoded old-schema fixtures exercise the continuous chain.
+`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` initializes military state. `CampaignSaveV8ToV9Migration` initializes Soldier definitions/equipment/roster without inventing Soldiers. `CampaignSaveV9ToV10Migration` initializes Battle state without inventing battles. `CampaignSaveV10ToV11Migration` initializes Encounter/Contract state without inventing instances. Hardcoded old-schema fixtures exercise the continuous chain.
 
 ## Atomic storage policy
 

@@ -83,4 +83,15 @@ namespace FOC.Domain.Common
     public sealed class DeploymentGroupTag { private DeploymentGroupTag() { } }
     public sealed class BattleOrderTag { private BattleOrderTag() { } }
     public sealed class BattleEventTag { private BattleEventTag() { } }
+    public sealed class EncounterTag { private EncounterTag() { } }
+    public sealed class EncounterDefinitionTag { private EncounterDefinitionTag() { } }
+    public sealed class EncounterChoiceTag { private EncounterChoiceTag() { } }
+    public sealed class EncounterOutcomeTag { private EncounterOutcomeTag() { } }
+    public sealed class EncounterPolicyTag { private EncounterPolicyTag() { } }
+    public sealed class ContractTag { private ContractTag() { } }
+    public sealed class ContractDefinitionTag { private ContractDefinitionTag() { } }
+    public sealed class ContractObjectiveTag { private ContractObjectiveTag() { } }
+    public sealed class ContractTargetSlotTag { private ContractTargetSlotTag() { } }
+    public sealed class ContractEvidenceTag { private ContractEvidenceTag() { } }
+    public sealed class ContractResolutionProfileTag { private ContractResolutionProfileTag() { } }
 }

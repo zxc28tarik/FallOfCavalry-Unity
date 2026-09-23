@@ -13,6 +13,7 @@ using FOC.Domain.Diplomacy;
 using FOC.Domain.Military;
 using FOC.Domain.Soldiers;
 using FOC.Domain.Battle;
+using FOC.Domain.EncountersContracts;
 
 namespace FOC.Domain.Campaign
 {
@@ -36,7 +37,8 @@ namespace FOC.Domain.Campaign
             DiplomacyState? diplomacy = null,
             CampaignMilitaryState? military = null,
             SoldierCampaignState? soldiers = null,
-            BattleCampaignState? battles = null)
+            BattleCampaignState? battles = null,
+            EncounterContractCampaignState? encounterContracts = null)
         {
             if (!campaignId.IsValid)
             {
@@ -66,6 +68,7 @@ namespace FOC.Domain.Campaign
             Military = military ?? new CampaignMilitaryState();
             Soldiers = soldiers ?? new SoldierCampaignState();
             Battles = battles ?? new BattleCampaignState();
+            EncounterContracts = encounterContracts ?? new EncounterContractCampaignState();
         }
 
         public StableId<CampaignTag> CampaignId { get; }
@@ -103,6 +106,8 @@ namespace FOC.Domain.Campaign
         public SoldierCampaignState Soldiers { get; }
 
         public BattleCampaignState Battles { get; }
+
+        public EncounterContractCampaignState EncounterContracts { get; }
 
         private static string RequireText(string value, string parameterName)
         {

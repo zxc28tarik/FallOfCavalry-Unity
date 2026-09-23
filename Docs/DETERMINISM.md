@@ -1,5 +1,9 @@
 # Determinism
 
+## Encounter and Contract
+
+Encounter triggering is explicit and policy-driven; no default probability exists. Resolution starts from the instance's saved `RandomState` and accepts only the matching choice, policy and captured continuation state. Contract progress consumes explicit, uniquely identified evidence from real systems and performs no random or per-frame world scan. Encounter, Contract, target, objective and evidence registries use sorted typed IDs, so save output is insertion-order independent.
+
 ## Battle
 
 Battle progression uses explicit step/event sequence, WorldTimestamp, and captured `RandomState`. Identical snapshots, orders/intents, resolver policy, and RNG state produce identical ordered outcomes and continuation state. Sector, side, Army, Unit Group, Soldier, equipment, deployment, order, and event collections serialize canonically by stable typed identity or sequence. Unity frames, physics, animation, wall clock, `System.Random`, and `UnityEngine.Random` are not simulation inputs.
@@ -33,6 +37,7 @@ One world tick is an abstract foundation unit. Mapping ticks to calendar semanti
 - Armies, Unit Groups, recruitment sources/records, command relationships, Army goods, supply requirements, payroll obligations and payments use sorted typed IDs and canonical keys.
 - Soldier/Troop/equipment definitions, Equipment Instances, Soldier rosters and typed loadout slots use sorted typed IDs or canonical enum order.
 - Visual appearance signatures derive from stable Soldier identity, VisualProfileId and canonically ordered persistent loadout mappings. Rendering never draws gameplay RNG and visual caches do not enter save data.
+- Encounter definitions/instances, participants, choices, Contracts, target slots, objectives and evidence use typed stable-ID ordering.
 - Rules must never depend on the natural iteration order of dictionaries or hash sets.
 - Future equal-score decisions require an explicit stable-ID tie-break.
 

@@ -1,5 +1,9 @@
 # Architecture
 
+## Implementation 10 Encounter / Contract boundary
+
+`FOC.Domain.EncountersContracts` owns immutable definitions, typed identities, persistent instances, lifecycle and deterministic ordered registries without Unity dependencies. `FOC.Application.EncountersContracts` validates cross-aggregate references, orchestrates deterministic Encounter resolution, delegates optional battles to Implementation 9, and advances Contracts only from verified typed evidence. Definition content, runtime state and save DTOs remain separate. Encounter, Contract and Battle remain distinct aggregates.
+
 ## Implementation 9 Battle boundary
 
 `FOC.Domain.Battle` owns UnityEngine-free battle snapshots, lifecycle, sides, sectors, deployment, orders, combat intents/events, results, and deterministic continuation state. `FOC.Application.Battle` is the only campaign integration boundary for creation, capability validation, and atomic reconciliation. Campaign objects are read during snapshot creation and changed only through explicit completed-result reconciliation.
@@ -56,10 +60,11 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 - Equipment economy boundary: acquisition consumes real City stock through an explicit definition-to-Trade-Good mapping before creating owned instances. Equipment definitions, instances, City stock and Army supply are distinct contracts.
 - Visual Presentation: modular 3D is authoritative. Engine-independent `FOC.Visuals.Core` converts Soldier/Troop/loadout truth into deterministic visual plans; `FOC.Visuals.Unity` resolves those plans to Unity assets. Domain never references either assembly. Visual binding, pooling, caches, meshes, materials, Animator and LOD are rebuildable Presentation state and never save truth.
 - Persistence representation: `CampaignSaveData`, never runtime objects.
+- Encounter/Contract state: definitions are content; instances live in `EncounterContractCampaignState`; progress is explicit evidence, never a global per-frame world scan.
 - Message ordering: the explicit sequence in `DeterministicMessageQueue`.
 
 ## Public-contract policy
 
 Typed IDs are generic by tag, so unrelated domain identities cannot be mixed. Future packages should introduce domain-specific tags or wrappers rather than a universal entity abstraction. State changes belong behind bounded rule/application services; Presentation must not mutate fields directly.
 
-`CharacterCommandService` remains the Character orchestration boundary. Organization, House, Clique, Religion and City command services validate their bounded cross-aggregate references. `ProductionService` and `TradeTransactionService` own economy mutations. `DiplomacyCommandService` and `ReportDeliveryService` own communication transitions. `ArmyCommandService`, `ArmySupplyService` and `ArmyPayrollService` own military cross-aggregate mutations. `SoldierEquipmentService` owns Soldier acquisition and explicit loadout replacement. No package implements Battle resolution, deployment, pathfinding, AI strategy or gameplay UI behavior.
+`CharacterCommandService` remains the Character orchestration boundary. Organization, House, Clique, Religion and City command services validate their bounded cross-aggregate references. `ProductionService` and `TradeTransactionService` own economy mutations. `DiplomacyCommandService` and `ReportDeliveryService` own communication transitions. `ArmyCommandService`, `ArmySupplyService` and `ArmyPayrollService` own military cross-aggregate mutations. `SoldierEquipmentService` owns Soldier acquisition and explicit loadout replacement. `EncounterService` and `ContractService` own their cross-system orchestration. No package implements world pathfinding, Implementation 11 AI strategy or final gameplay UI behavior.

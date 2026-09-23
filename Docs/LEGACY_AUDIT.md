@@ -104,3 +104,13 @@ Remote refs `origin/main` and `origin/333` were re-audited for soldier, troop, l
 `Legacy Browser/Phaser Visual System = REFERENCE_ONLY`.
 
 The current Unity repository contains no legacy 2D Soldier renderer, canvas composition, Phaser scene or sprite-layer architecture. `No migration assumed.` No cleanup or fictional 2D-to-3D refactor was performed. Earlier legacy layered-Soldier visual ideas are superseded as final production direction by the new modular 3D Presentation architecture; historical/content ideas remain references only.
+
+## Implementation 10 Encounter / Contract re-audit
+
+Legacy browser Encounter, quest, roaming event, dialogue choice and reward material remains `REFERENCE_ONLY`; no JS/Phaser runtime was migrated.
+
+- KEEP: none.
+- ADAPT: broad encounter/choice/quest intent only, behind typed definitions, policies and evidence.
+- REWRITE: identities, lifecycle, deterministic resolution, typed target slots, objectives, cross-system evidence, validation and schema v11 persistence.
+- REMOVE: global/browser state, string entity targets, hidden randomness, automatic generic rewards/penalties, hardcoded probabilities/formulas, Agent/Informant, Village Delegation roaming encounter, Deserter, Duel and Night encounter.
+- REFERENCE_ONLY: legacy dialogue, names, art, numeric tables and quest content until separately authorized.
