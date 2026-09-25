@@ -7,3 +7,33 @@
 .foc-layout--wide .foc-card--primary { width: 64%; }
 .foc-virtual-list { flex-shrink: 0; border-width: 0; background-color: rgba(0,0,0,0); }
 .foc-details { margin-top: 8px; }
+.foc-world-map {
+    height: 460px;
+    margin-bottom: 14px;
+    border-width: 1px;
+    border-color: rgba(176, 151, 101, 0.8);
+    background-color: rgb(31, 45, 48);
+    -unity-background-scale-mode: scale-and-crop;
+    overflow: hidden;
+}
+
+.foc-map-marker {
+    min-width: 82px;
+    height: 28px;
+    margin-left: -41px;
+    margin-top: -14px;
+    color: rgb(245, 227, 184);
+    background-color: rgba(45, 33, 22, 0.88);
+    border-color: rgb(190, 151, 79);
+    border-width: 1px;
+    font-size: 11px;
+}
+
+.foc-map-progress {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    padding: 7px 12px;
+    color: rgb(248, 231, 193);
+    background-color: rgba(29, 24, 19, 0.92);
+}

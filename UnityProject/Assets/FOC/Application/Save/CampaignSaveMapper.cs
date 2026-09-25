@@ -55,6 +55,7 @@ namespace FOC.Application.Save
             AddBattleSaveData(state, data);
             AddEncounterContractSaveData(state, data);
             AddAISaveData(state, data);
+            AddGeographySaveData(state, data);
 
             return data;
         }
@@ -97,6 +98,7 @@ namespace FOC.Application.Save
             var battles = RestoreBattles(data);
             var encounterContracts = RestoreEncounterContracts(data);
             var ai = RestoreAI(data);
+            var geography = RestoreGeography(data);
             return new CampaignRuntimeState(
                 StableId<CampaignTag>.Create(data.CampaignId),
                 data.GameVersion,
@@ -117,7 +119,8 @@ namespace FOC.Application.Save
                 soldiers,
                 battles,
                 encounterContracts,
-                ai);
+                ai,
+                geography);
         }
 
         private static CharacterSaveData ToCharacterSaveData(CharacterState state)

@@ -13,6 +13,7 @@ PlayerSettings:
   resizableWindow: 1
   fullScreenMode: 1
   m_ActiveColorSpace: 1
+  activeInputHandler: 0
   targetFrameRate: -1
   scriptingBackend:
     Standalone: 1
@@ -20,4 +21,3 @@ PlayerSettings:
     Standalone: 0
   apiCompatibilityLevelPerPlatform:
     Standalone: 6
-

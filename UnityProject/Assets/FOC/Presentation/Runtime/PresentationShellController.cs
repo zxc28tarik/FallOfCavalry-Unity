@@ -90,6 +90,7 @@ namespace FOC.Presentation.Unity
             RenderActions(_root.Q<VisualElement>("action-content"), state.Actions);
             RenderDetails(_root.Q<VisualElement>("details-content"), state.Details);
             SetText("alert-count", state.Alerts.Count.ToString());
+            RenderMap(state);
         }
 
         private void RenderSection(VisualElement? container, PresentationSection section)
@@ -117,7 +118,7 @@ namespace FOC.Presentation.Unity
                 {
                     var row = new VisualElement(); row.AddToClassList("foc-field-row");
                     var label = new Label { name = "field-label" }; label.AddToClassList("foc-field-label");
-                    var value = new Label { name = "field-value" }; value.AddToClassList("foc-field-value");
+                    var value = new Button { name = "field-value" }; value.AddToClassList("foc-field-value"); value.clicked += () => { if (value.userData is PresentationEntityRef target) OpenEntity(target); };
                     var quality = new Label { name = "field-quality" }; quality.AddToClassList("foc-quality-chip");
                     row.Add(label); row.Add(value); row.Add(quality); return row;
                 },
@@ -125,7 +126,7 @@ namespace FOC.Presentation.Unity
                 {
                     var field = fields[index];
                     element.Q<Label>("field-label").text = _localizer.Get(field.LabelKey);
-                    element.Q<Label>("field-value").text = _localizer.Get(field.DisplayValue);
+                    var value=element.Q<Button>("field-value"); value.text = _localizer.Get(field.DisplayValue); value.userData=field.Link.HasValue?(object)field.Link.Value:null; value.SetEnabled(field.Link.HasValue);
                     element.Q<Label>("field-quality").text = _localizer.Get("presentation.precision." + field.Knowledge.Precision.ToString().ToLowerInvariant());
                     element.tooltip = string.IsNullOrEmpty(field.TooltipKey) ? _localizer.Get(field.Knowledge.SourceKey) : _localizer.Get(field.TooltipKey);
                 }
@@ -195,6 +196,18 @@ namespace FOC.Presentation.Unity
         }
 
         private Label StatusLabel(string key, string className) { var label = new Label(_localizer.Get(key)); label.AddToClassList(className); return label; }
+        private void RenderMap(ScreenPresentationState state)
+        {
+            var panel=_root.Q<VisualElement>("world-map-panel");if(panel==null)return;panel.style.display=state.ScreenId==PresentationScreenId.Map?DisplayStyle.Flex:DisplayStyle.None;panel.Clear();if(state.ScreenId!=PresentationScreenId.Map||state.Map==null)return;
+            var texture=Resources.Load<Texture2D>("FOC/Geography/MarmaraStrategyMap");if(texture!=null)panel.style.backgroundImage=new StyleBackground(texture);
+            var routes=new VisualElement();routes.style.position=Position.Absolute;routes.style.left=0;routes.style.right=0;routes.style.top=0;routes.style.bottom=0;routes.pickingMode=PickingMode.Ignore;var routeSnapshot=state.Map.Routes;routes.generateVisualContent+=context=>{var painter=context.painter2D;painter.lineWidth=2f;foreach(var route in routeSnapshot){painter.strokeColor=route.Active?new Color(0.9f,0.25f,0.12f,0.95f):new Color(0.26f,0.19f,0.11f,0.72f);painter.BeginPath();painter.MoveTo(new Vector2(route.FirstX*routes.contentRect.width,route.FirstY*routes.contentRect.height));painter.LineTo(new Vector2(route.SecondX*routes.contentRect.width,route.SecondY*routes.contentRect.height));painter.Stroke();}};panel.Add(routes);
+            foreach(var marker in state.Map.Markers){var button=new Button{ text=_localizer.Get(marker.LabelKey),tooltip=marker.Knowledge.SourceKey};button.AddToClassList("foc-map-marker");button.style.position=Position.Absolute;button.style.left=Length.Percent(marker.NormalizedX*92f+2f);button.style.top=Length.Percent(marker.NormalizedY*86f+4f);if(marker.NavigationTarget.HasValue){var target=marker.NavigationTarget.Value;button.clicked+=()=>OpenEntity(target);}panel.Add(button);}
+            if(state.Map.Journeys.Count>0){var journey=state.Map.Journeys[0];var label=new Label(journey.ActorLabel+"  "+journey.OriginLabel+" → "+journey.DestinationLabel+"  "+journey.SegmentIndex+"/"+journey.SegmentCount);label.AddToClassList("foc-map-progress");panel.Add(label);}
+        }
+        private void OpenEntity(PresentationEntityRef target)
+        {
+            switch(target.Kind){case PresentationEntityKind.City:_viewModel.Open(new PresentationRoute(PresentationScreenId.City,target));break;case PresentationEntityKind.Character:_viewModel.Open(new PresentationRoute(PresentationScreenId.Character,target));break;case PresentationEntityKind.Army:_viewModel.Open(new PresentationRoute(PresentationScreenId.Army,target));break;case PresentationEntityKind.WorldLocation:_viewModel.Open(new PresentationRoute(PresentationScreenId.Map,target));break;}
+        }
         private void SetText(string name, string key) { var label = _root.Q<Label>(name); if (label != null) label.text = _localizer.Get(key); }
         private void OnKeyDown(KeyDownEvent evt) { if (evt.keyCode == KeyCode.Escape && _viewModel.Back()) evt.StopPropagation(); }
         private void OnGeometryChanged(GeometryChangedEvent evt)

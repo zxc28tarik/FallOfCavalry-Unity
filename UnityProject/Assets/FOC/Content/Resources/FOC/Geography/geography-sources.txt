@@ -1,0 +1,12 @@
+# source-id|title|author/institution|date|url|role|license-or-use-note
+SRC_ALTUNAN_2006|XVII. Yüzyıl Sonlarında İstanbul-Edirne Arasındaki Menziller ve Bazı Menzilkeş Köyler|Sema Altunan / Tarih Araştırmaları Dergisi|2006|https://dergipark.org.tr/tr/download/article-file/782336|Rumeli middle-road sequence and menzil context|Research citation only
+SRC_EVLIYA_RUMELI|Seyahatnâme Rumeli route observations|Evliya Çelebi / scholarly transcriptions|17th century|https://islamansiklopedisi.org.tr/evliya-celebi|Contemporary travel witness and aliases|Research citation only; route claims cross-checked
+SRC_EVLIYA_EDIRNE|Evliya Çelebi’ye Göre 17. Yüzyılda Edirne'nin Şehir Coğrafyası|Academic study|2013|https://www.indexacademicdocs.org/paper/1899/471/3834|Edirne period context|Research citation only
+SRC_TDV_ISTANBUL|İstanbul|TDV İslâm Ansiklopedisi|n.d.|https://islamansiklopedisi.org.tr/istanbul|Capital identity and period naming|Research citation only
+SRC_KARAKAYA_2012|Bizans Döneminde Bağdat Yolu (Üsküdar-İzmit Arası)|Enis Karakaya / Sanat Tarihi Yıllığı|2012|https://dergipark.org.tr/en/pub/iusty/article/263371|Long-lived Üsküdar-İzmit road and settlement corridor|Research citation only
+SRC_HALACOGLU_ROUTE|Osmanlılarda Ulaşım ve Haberleşme (Menziller)|Yusuf Halaçoğlu|2002|book|Ottoman Anatolian route framework|Bibliographic reference
+SRC_GEBZE_MENZIL|XVIII-XIX. Yüzyılın İlk Yarısında Gebze|Academic study|2013|https://www.researchgate.net/publication/271012044_XVIII-XIX_Yuzyilin_Ilk_Yarisinda_Gebze|Gebze menzil continuity; later corroboration|Research citation only
+SRC_KOCAELI_HISTORY|Gazi Akça Koca ve Kocaeli Tarihi|Kocaeli Büyükşehir Belediyesi|2015|https://www.kocaeli.bel.tr/files/uploads/publications/documents/GaziAkcaKocaVeKocaeliTarihiCilt2.pdf|İzmit as Ottoman menzil on Üsküdar-Bağdat road|Research citation only
+SRC_FAROQHI_URBAN|Urban Development in Ottoman Anatolia (16th-17th Centuries)|Suraiya Faroqhi|1984|https://makale.isam.org.tr/bitstreams/adbf1ebe-044c-487c-94e6-eed24ced3826/download|Mudanya-Istanbul ferry and Bursa connection|Research citation only
+SRC_ISTANBUL_ENCYCLOPEDIA|Bursa-Mudanya Gemileri İskelesi|Reşad Ekrem Koçu İstanbul Ansiklopedisi|20th century|https://istanbulansiklopedisi.org/handle/rek/7349|Evliya's Istanbul-Mudanya departure evidence|Research citation only
+SRC_EVLIYA_BURSA|Evliya Çelebi Seyahatnâmesi Bursa journey|Evliya Çelebi|17th century|https://istanbulansiklopedisi.org/handle/rek/7349|Contemporary Istanbul-Mudanya-Bursa journey|Research citation only

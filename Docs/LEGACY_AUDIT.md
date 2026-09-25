@@ -1,5 +1,13 @@
 # Legacy FOC Audit — Implementation 0
 
+## Implementation 14A historical geography / travel re-audit
+
+- KEEP: current typed IDs, WorldClock, Character/Army/Caravan location contracts, report-based information boundary and save infrastructure.
+- ADAPT: only broad legacy map-navigation and journey intent through the new authored graph and Application service.
+- REWRITE: locations, coordinates, routes, pathfinding, travel persistence, map presentation and runtime bootstrap in Unity-free deterministic contracts plus UI Toolkit.
+- REMOVE: teleport movement, omniscient live actor markers, random/unversioned route costs, browser globals, DOM/canvas authority and hardcoded proof markers in production bootstrap.
+- REFERENCE_ONLY: all legacy browser map art, Phaser map code, old coordinates, travel numbers and content. No legacy art or runtime file was copied.
+
 ## Implementation 11 — AI audit
 
 - KEEP: deterministic IDs/time/RNG, ActorInformation/report delivery, Application services, BattleOrder authority, and save/migration conventions.

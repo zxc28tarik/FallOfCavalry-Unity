@@ -15,6 +15,7 @@ using FOC.Domain.Soldiers;
 using FOC.Domain.Battle;
 using FOC.Domain.EncountersContracts;
 using FOC.Domain.AI;
+using FOC.Domain.Geography;
 
 namespace FOC.Domain.Campaign
 {
@@ -40,7 +41,8 @@ namespace FOC.Domain.Campaign
             SoldierCampaignState? soldiers = null,
             BattleCampaignState? battles = null,
             EncounterContractCampaignState? encounterContracts = null,
-            AICampaignState? ai = null)
+            AICampaignState? ai = null,
+            GeographyCampaignState? geography = null)
         {
             if (!campaignId.IsValid)
             {
@@ -72,6 +74,7 @@ namespace FOC.Domain.Campaign
             Battles = battles ?? new BattleCampaignState();
             EncounterContracts = encounterContracts ?? new EncounterContractCampaignState();
             AI = ai ?? new AICampaignState();
+            Geography = geography ?? new GeographyCampaignState();
         }
 
         public StableId<CampaignTag> CampaignId { get; }
@@ -113,6 +116,8 @@ namespace FOC.Domain.Campaign
         public EncounterContractCampaignState EncounterContracts { get; }
 
         public AICampaignState AI { get; }
+
+        public GeographyCampaignState Geography { get; }
 
         private static string RequireText(string value, string parameterName)
         {

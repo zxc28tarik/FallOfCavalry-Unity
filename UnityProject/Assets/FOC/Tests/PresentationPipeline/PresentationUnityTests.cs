@@ -94,6 +94,8 @@ namespace FOC.Tests
                 host.Configure(new Source(2));
                 var document = gameObject.GetComponent<UIDocument>();
                 Assert.That(document, Is.Not.Null);
+                Assert.That(document.panelSettings, Is.Not.Null, "A runtime player needs a PanelSettings instance to render the shell.");
+                Assert.That(document.panelSettings.themeStyleSheet, Is.Not.Null, "The runtime panel needs the default UI Toolkit theme for text and controls.");
                 Assert.That(document.rootVisualElement.Q<Label>("screen-title"), Is.Not.Null);
                 Assert.That(document.rootVisualElement.Query<ListView>().ToList(), Is.Not.Empty);
             }

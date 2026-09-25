@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace FOC.Application.Save
 {
-    public sealed class CampaignSaveData
+    public sealed partial class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 12;
+        public const int CurrentSaveVersion = 13;
 
         public int SaveVersion { get; set; }
 

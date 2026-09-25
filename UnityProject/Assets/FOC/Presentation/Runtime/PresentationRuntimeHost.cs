@@ -12,6 +12,7 @@ namespace FOC.Presentation.Unity
         private PresentationNavigator? _navigator;
         private PresentationShellViewModel? _viewModel;
         private PresentationShellController? _controller;
+        private PanelSettings? _runtimePanelSettings;
 
         public void Configure(IPresentationScreenSource source, IPresentationLocalizer? localizer = null, IPresentationActionDispatcher? dispatcher = null)
         {
@@ -19,6 +20,15 @@ namespace FOC.Presentation.Unity
             Release();
             var document = GetComponent<UIDocument>();
             if (document == null) document = gameObject.AddComponent<UIDocument>();
+            if (document.panelSettings == null)
+            {
+                _runtimePanelSettings ??= ScriptableObject.CreateInstance<PanelSettings>();
+                _runtimePanelSettings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
+                _runtimePanelSettings.referenceResolution = new Vector2Int(1600, 900);
+                _runtimePanelSettings.themeStyleSheet = Resources.Load<ThemeStyleSheet>("FOC/Presentation/UnityDefaultRuntimeTheme")
+                    ?? throw new InvalidOperationException("Runtime UI Toolkit theme is missing.");
+                document.panelSettings = _runtimePanelSettings;
+            }
             var template = Resources.Load<VisualTreeAsset>("FOC/Presentation/PresentationShell");
             if (template == null) throw new InvalidOperationException("PresentationShell UXML resource is missing.");
             document.visualTreeAsset = template;
@@ -35,6 +45,11 @@ namespace FOC.Presentation.Unity
         }
 
         private void OnDisable() { Release(); }
+        private void OnDestroy()
+        {
+            if (_runtimePanelSettings != null) Destroy(_runtimePanelSettings);
+            _runtimePanelSettings = null;
+        }
         private void Release() { _controller?.Dispose(); _viewModel?.Dispose(); _navigator?.Dispose(); _controller = null; _viewModel = null; _navigator = null; }
     }
 }

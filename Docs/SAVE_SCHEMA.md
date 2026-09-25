@@ -1,5 +1,11 @@
 # Save Schema
 
+## v13 — Historical geography and world travel
+
+Schema v13 adds immutable world-location and explicit route-graph snapshots plus persistent travel journeys. A journey stores actor kind/ID, origin, destination, ordered route IDs, departure and last-advanced timestamps, current segment, integer elapsed segment ticks, lifecycle and optional arrival time. Character/Army/Caravan authoritative location or lifecycle remains in its existing aggregate and must agree with the journey.
+
+Migration v12→v13 initializes empty geography, routes and journeys. It invents no location, route, actor or active trip. Authored slice geography is content bootstrap responsibility. Mid-travel saves resume from exact integer progress; no float position is save authority.
+
 ## v12 — AI semantic continuation
 
 Schema v12 adds canonical AI controller records: typed owner, stable priority/Character/decision-quality/scheduling profile IDs, lifecycle, last/next decision timestamps, deterministic RNG continuation, and optional active-plan semantics (goal, proposal identity, domain/policy, target, timing, lifecycle).
@@ -8,7 +14,7 @@ Migration v11→v12 preserves all earlier state and initializes an empty AI coll
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 12`.
+`CampaignSaveData.CurrentSaveVersion = 13`.
 
 The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 
@@ -72,7 +78,7 @@ Version 11 persists Encounter instances and Contract instances, not their immuta
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.
 
-`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` initializes military state. `CampaignSaveV8ToV9Migration` initializes Soldier definitions/equipment/roster without inventing Soldiers. `CampaignSaveV9ToV10Migration` initializes Battle state without inventing battles. `CampaignSaveV10ToV11Migration` initializes Encounter/Contract state without inventing instances. Hardcoded old-schema fixtures exercise the continuous chain.
+`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` initializes military state. `CampaignSaveV8ToV9Migration` initializes Soldier definitions/equipment/roster without inventing Soldiers. `CampaignSaveV9ToV10Migration` initializes Battle state without inventing battles. `CampaignSaveV10ToV11Migration` initializes Encounter/Contract state without inventing instances. `CampaignSaveV11ToV12Migration` initializes AI state without inventing controllers or plans. `CampaignSaveV12ToV13Migration` initializes geography/travel collections without inventing a world or journey. Hardcoded old-schema fixtures exercise the continuous chain.
 
 ## Atomic storage policy
 

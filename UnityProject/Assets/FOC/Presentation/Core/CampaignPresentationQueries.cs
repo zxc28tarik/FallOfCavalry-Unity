@@ -13,12 +13,15 @@ using FOC.Domain.EncountersContracts;
 using FOC.Domain.Military;
 using FOC.Domain.Organizations;
 using FOC.Domain.Religion;
+using FOC.Domain.Geography;
 
 namespace FOC.Presentation.Core
 {
     public interface IMapPresentationDataProvider
     {
         IReadOnlyList<MapMarkerPresentation> GetKnownMarkers(PresentationViewerContext viewer);
+        IReadOnlyList<MapRoutePresentation> GetKnownRoutes(PresentationViewerContext viewer);
+        IReadOnlyList<MapJourneyPresentation> GetKnownJourneys(PresentationViewerContext viewer);
     }
 
     public sealed class ProofOnlyMapPresentationDataProvider : IMapPresentationDataProvider
@@ -30,6 +33,8 @@ namespace FOC.Presentation.Core
             _markers = markers.Select(x => x.ProofOnly ? x : throw new InvalidOperationException("Proof map positions must be marked PROOF_ONLY.")).ToList().AsReadOnly();
         }
         public IReadOnlyList<MapMarkerPresentation> GetKnownMarkers(PresentationViewerContext viewer) { if (viewer == null) throw new ArgumentNullException(nameof(viewer)); return _markers; }
+        public IReadOnlyList<MapRoutePresentation> GetKnownRoutes(PresentationViewerContext viewer) { if (viewer == null) throw new ArgumentNullException(nameof(viewer)); return Array.Empty<MapRoutePresentation>(); }
+        public IReadOnlyList<MapJourneyPresentation> GetKnownJourneys(PresentationViewerContext viewer) { if (viewer == null) throw new ArgumentNullException(nameof(viewer)); return Array.Empty<MapJourneyPresentation>(); }
     }
 
     public sealed class CampaignPresentationQueries
@@ -44,8 +49,14 @@ namespace FOC.Presentation.Core
         {
             if (viewer == null || provider == null) throw new ArgumentNullException();
             var markers = provider.GetKnownMarkers(viewer).OrderBy(x => x.Entity).ToList().AsReadOnly();
-            var fields = new[] { Field("presentation.map.known-markers", markers.Count.ToString(), PresentationKnowledge.ExactSelf) };
-            return new MapReadModel(Standard(PresentationScreenId.Map, "presentation.screen.map", null, fields, null, null, null), markers);
+            var routes = provider.GetKnownRoutes(viewer).OrderBy(x=>x.RouteId,StringComparer.Ordinal).ToList().AsReadOnly();
+            var journeys = provider.GetKnownJourneys(viewer).OrderBy(x=>x.JourneyId,StringComparer.Ordinal).ToList().AsReadOnly();
+            var snapshot=new MapPresentationSnapshot(markers,routes,journeys);
+            var fields = new[] { Field("presentation.map.slice", "İstanbul · Marmara · Trakya", PresentationKnowledge.ExactSelf), Field("presentation.map.known-markers", markers.Count.ToString(), PresentationKnowledge.ExactSelf), Field("presentation.map.routes", routes.Count.ToString(), PresentationKnowledge.ExactSelf), Field("presentation.map.active-journeys", journeys.Count.ToString(), PresentationKnowledge.ExactSelf), Field("presentation.map.selected", "İstanbul", PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.City,"city-home")) };
+            var details=new[]{new PresentationSection("presentation.map.locations",PresentationAvailability.Available,markers.Select(x=>Field("presentation.map.location",x.LabelKey,x.Knowledge,x.NavigationTarget))),new PresentationSection("presentation.map.route-graph",PresentationAvailability.Available,routes.Select(x=>Field("presentation.map.route",x.RouteId+" · "+x.ModeKey,PresentationKnowledge.ExactSelf))),new PresentationSection("presentation.map.travel-progress",PresentationAvailability.Available,journeys.Select(x=>Field("presentation.map.journey",x.ActorLabel+" · "+x.OriginLabel+" → "+x.DestinationLabel+" · "+x.SegmentIndex+"/"+x.SegmentCount,PresentationKnowledge.ExactSelf)))};
+            var actions=markers.Where(x=>x.Entity.Kind==PresentationEntityKind.WorldLocation&&!StringComparer.Ordinal.Equals(x.Entity.Id,"istanbul")).Select(x=>new PresentationActionDescriptor("travel.start:"+x.Entity.Id,"presentation.action.travel-to."+x.LabelKey,journeys.Count==0,journeys.Count==0?string.Empty:"presentation.action.already-travelling",x.Entity,PresentationConfirmationPolicy.None,"travel-command-adapter")).Concat(new[]{new PresentationActionDescriptor("travel.advance-one-hour","presentation.action.advance-one-hour",journeys.Count>0,journeys.Count>0?string.Empty:"presentation.action.no-active-journey",new PresentationEntityRef(PresentationEntityKind.Character,"slice-player-sipahi"),PresentationConfirmationPolicy.None,"travel-command-adapter")});
+            var state=new ScreenPresentationState(PresentationScreenId.Map,"presentation.screen.map",new PresentationEntityRef(PresentationEntityKind.WorldLocation,"istanbul"),new PresentationSection("presentation.section.current",PresentationAvailability.Available,fields),PresentationTrend.InsufficientHistory,PresentationAvailability.Unavailable,null,"presentation.why.not-exposed-by-gameplay",null,null,actions,null,details,snapshot);
+            return new MapReadModel(state,snapshot);
         }
 
         public CityReadModel BuildCity(PresentationViewerContext viewer, CityId cityId)

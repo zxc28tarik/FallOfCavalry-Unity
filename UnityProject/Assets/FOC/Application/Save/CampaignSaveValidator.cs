@@ -19,7 +19,7 @@ using FOC.Domain.AI;
 
 namespace FOC.Application.Save
 {
-    public sealed class CampaignSaveValidator : IInvariantValidator<CampaignSaveData>
+    public sealed partial class CampaignSaveValidator : IInvariantValidator<CampaignSaveData>
     {
         public ValidationResult Validate(CampaignSaveData subject)
         {
@@ -66,6 +66,7 @@ namespace FOC.Application.Save
             if(subject.Battles==null)result.AddError("BATTLE_COLLECTION_NULL","Battle collection is required.");
             if(subject.Encounters==null||subject.Contracts==null)result.AddError("ENCOUNTER_CONTRACT_COLLECTION_NULL","Encounter and Contract collections are required.");
             if(subject.AIControllers==null)result.AddError("AI_COLLECTION_NULL","AI controller collection is required.");
+            if(subject.WorldLocations==null||subject.TravelRoutes==null||subject.TravelJourneys==null)result.AddError("GEOGRAPHY_COLLECTION_NULL","Geography and travel collections are required.");
 
             if (subject.Characters != null && subject.CharacterRelations != null)
             {
@@ -80,6 +81,7 @@ namespace FOC.Application.Save
                 if(subject.Battles!=null&&subject.Armies!=null&&subject.Soldiers!=null&&subject.EquipmentInstances!=null)ValidateBattles(subject,result);
                 if(subject.Encounters!=null&&subject.Contracts!=null)ValidateEncounterContracts(subject,result);
                 if(subject.AIControllers!=null)ValidateAI(subject,result);
+                if(subject.WorldLocations!=null&&subject.TravelRoutes!=null&&subject.TravelJourneys!=null)ValidateGeography(subject,result);
             }
 
             if (string.IsNullOrWhiteSpace(subject.CampaignId))

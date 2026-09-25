@@ -68,9 +68,9 @@ namespace FOC.Tests
         [Test] public void ContractCategoriesRemainExact() => Assert.That(Enum.GetValues(typeof(ContractCategory)).Length, Is.EqualTo(4));
 
         [Test]
-        public void SaveSchema_RemainsTwelveAndHasNoPresentationState()
+        public void SaveSchema_RemainsThirteenAndHasNoPresentationState()
         {
-            Assert.That(CampaignSaveData.CurrentSaveVersion, Is.EqualTo(12));
+            Assert.That(CampaignSaveData.CurrentSaveVersion, Is.EqualTo(13));
             Assert.That(typeof(CampaignSaveData).GetProperties().Any(x => x.Name.IndexOf("Presentation", StringComparison.OrdinalIgnoreCase) >= 0 || x.Name.IndexOf("Screen", StringComparison.OrdinalIgnoreCase) >= 0), Is.False);
         }
 

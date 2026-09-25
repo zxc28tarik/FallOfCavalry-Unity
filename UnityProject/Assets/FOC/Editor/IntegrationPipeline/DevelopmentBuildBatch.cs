@@ -1,10 +1,11 @@
 #nullable enable
 using System;
 using System.IO;
-using FOC.Application.Proof;
+using FOC.Application.Geography;
 using FOC.Application.Save;
 using FOC.Bootstrap.Unity;
 using FOC.Infrastructure.Save;
+using FOC.Domain.Validation;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.SceneManagement;
@@ -15,7 +16,7 @@ namespace FOC.Editor.Integration
     public static class DevelopmentBuildBatch
     {
         private const string SceneDirectory = "Assets/FOC/Generated/Development";
-        private const string ScenePath = SceneDirectory + "/IntegratedProof.unity";
+        private const string ScenePath = SceneDirectory + "/VerticalSlice.unity";
 
         public static void BuildWindowsDevelopment()
         {
@@ -81,14 +82,18 @@ namespace FOC.Editor.Integration
 
         private static void ValidateProductionBootstrapData()
         {
-            var campaign = IntegratedProofCampaignFactory.Create();
+            var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice locations were not imported.");
+            var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice routes were not imported.");
+            if(Resources.Load<Texture2D>("FOC/Geography/MarmaraStrategyMap")==null)throw new InvalidOperationException("Production-candidate map art was not imported.");
+            var campaign = VerticalSliceCampaignFactory.Create(locations.text,routes.text);
             var validator = new CampaignSaveValidator();
             var serializer = new CampaignSaveTextSerializer();
             var data = CampaignSaveMapper.ToSaveData(campaign);
             var validation = validator.Validate(data);
-            if (!validation.IsValid) throw new InvalidOperationException("Integrated proof campaign violates save invariants.");
+            if (!validation.IsValid) throw new InvalidOperationException("Vertical-slice campaign violates save invariants.");
+            if(!new GeographyInvariantValidator().Validate(campaign).IsValid)throw new InvalidOperationException("Vertical-slice geography violates runtime invariants.");
             var read = serializer.Deserialize(serializer.Serialize(data));
-            if (!read.Success || read.Data == null) throw new InvalidOperationException(read.Error ?? "Integrated proof round-trip failed.");
+            if (!read.Success || read.Data == null) throw new InvalidOperationException(read.Error ?? "Vertical-slice round-trip failed.");
             CampaignSaveMapper.ToRuntimeState(read.Data);
         }
 
@@ -102,7 +107,7 @@ namespace FOC.Editor.Integration
             if (!AssetDatabase.IsValidFolder("Assets/FOC/Generated")) AssetDatabase.CreateFolder("Assets/FOC", "Generated");
             if (!AssetDatabase.IsValidFolder(SceneDirectory)) AssetDatabase.CreateFolder("Assets/FOC/Generated", "Development");
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            var root = new GameObject("FOC Integrated Development Bootstrap");
+            var root = new GameObject("FOC Vertical Slice Development Bootstrap");
             root.AddComponent<DevelopmentCampaignBootstrap>();
             EditorSceneManager.SaveScene(scene, ScenePath);
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };

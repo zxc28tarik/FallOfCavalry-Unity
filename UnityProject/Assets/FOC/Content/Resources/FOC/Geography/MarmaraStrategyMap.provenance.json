@@ -1,0 +1,13 @@
+{
+  "asset": "MarmaraStrategyMap.png",
+  "status": "PRODUCTION_CANDIDATE",
+  "createdFor": "Fall of Cavalry Implementation 14A",
+  "generator": "OpenAI built-in image generation",
+  "createdAt": "2026-09-25",
+  "sourceImages": [],
+  "sha256": "82BF40681CDD8E0B75C10955B2D73A16DD61F311F546DDCCCED146CD40DDC7F7",
+  "copiedHistoricalMap": false,
+  "simulationAuthority": false,
+  "promptSummary": "Original unlabeled parchment strategy-map background centered on Marmara, eastern Thrace and northwestern Anatolia; no labels, routes, markers, borders, flags or watermark.",
+  "usageNote": "Decorative UI background only. Authored MapPoint data and route content are authoritative."
+}

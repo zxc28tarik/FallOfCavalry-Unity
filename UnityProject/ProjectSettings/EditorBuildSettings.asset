@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/FOC/Generated/Development/IntegratedProof.unity
-    guid: fdeb3522ed5d87d4998202220fcf15f5
+    path: Assets/FOC/Generated/Development/VerticalSlice.unity
+    guid: 8590b5ec1d4c1d34cb877643d0b6ad12
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

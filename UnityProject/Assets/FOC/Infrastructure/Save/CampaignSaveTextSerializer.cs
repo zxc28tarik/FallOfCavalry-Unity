@@ -7,7 +7,7 @@ using FOC.Application.Save;
 
 namespace FOC.Infrastructure.Save
 {
-    public sealed class CampaignSaveTextSerializer : ISaveSerializer
+    public sealed partial class CampaignSaveTextSerializer : ISaveSerializer
     {
         private const string Header = "FOC_CAMPAIGN_SAVE";
         public const int MaximumPayloadCharacters = 64 * 1024 * 1024;
@@ -64,6 +64,7 @@ namespace FOC.Infrastructure.Save
             if(data.SaveVersion>=10)Append(builder,"BattleState",EncodeBattles(data));
             if(data.SaveVersion>=11)Append(builder,"EncounterContractState",EncodeEncounterContracts(data));
             if(data.SaveVersion>=12)Append(builder,"AIState",EncodeAI(data));
+            if(data.SaveVersion>=13)Append(builder,"GeographyTravelState",EncodeGeographyTravel(data));
             return builder.ToString();
         }
 
@@ -153,6 +154,7 @@ namespace FOC.Infrastructure.Save
                 if(data.SaveVersion>=10)DecodeBattles(Require(values,"BattleState"),data);
                 if(data.SaveVersion>=11)DecodeEncounterContracts(Require(values,"EncounterContractState"),data);
                 if(data.SaveVersion>=12)DecodeAI(Require(values,"AIState"),data);
+                if(data.SaveVersion>=13)DecodeGeographyTravel(Require(values,"GeographyTravelState"),data);
 
                 return SaveReadResult.Succeeded(data);
             }

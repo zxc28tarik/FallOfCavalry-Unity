@@ -1,0 +1,13 @@
+# id|display-name|kind|region-id|aliases|city-id|latitude-e6|longitude-e6|source-ids|confidence|status|notes
+istanbul|İstanbul|Capital|region-istanbul|Konstantiniyye;Kostantiniyye|city-home|41008200|28978400|SRC_TDV_ISTANBUL;SRC_ALTUNAN_2006|High|ProductionCandidate|City V2 bridge: city-home until 14B content pass
+kucukcekmece|Küçükçekmece|Waystation|region-thrace-marmara|Küçük Çekmece||40999500|28771500|SRC_EVLIYA_RUMELI;SRC_ALTUNAN_2006|High|ProductionCandidate|Rumeli middle road
+buyukcekmece|Büyükçekmece|Waystation|region-thrace-marmara|Büyük Çekmece||41020500|28578500|SRC_ALTUNAN_2006|High|ProductionCandidate|Rumeli middle road
+silivri|Silivri|Town|region-thrace-marmara|Silivri||41073400|28246900|SRC_ALTUNAN_2006;SRC_EVLIYA_RUMELI|High|ProductionCandidate|Rumeli middle road and port
+corlu|Çorlu|Town|region-thrace-marmara|Çorlu||41159100|27802000|SRC_ALTUNAN_2006;SRC_EVLIYA_RUMELI|High|ProductionCandidate|Rumeli middle road
+luleburgaz|Lüleburgaz|Waystation|region-thrace-marmara|Burgaz||41403900|27359000|SRC_ALTUNAN_2006|High|ProductionCandidate|Rumeli middle road
+edirne|Edirne|City|region-thrace-marmara|Adrianople;Edrene||41677100|26555700|SRC_ALTUNAN_2006;SRC_EVLIYA_EDIRNE|High|ProductionCandidate|Major western terminus of slice
+uskudar|Üsküdar|Crossing|region-anatolia-marmara|Scutari;Khrysopolis||41026000|29015000|SRC_KARAKAYA_2012;SRC_HALACOGLU_ROUTE|High|ProductionCandidate|Anatolian road head
+gebze|Gebze|Waystation|region-anatolia-marmara|Gekbuze||40802800|29430700|SRC_KARAKAYA_2012;SRC_GEBZE_MENZIL|Medium|ProductionCandidate|Anatolian road
+izmit|İzmit|City|region-anatolia-marmara|Nicomedia||40766900|29916900|SRC_KARAKAYA_2012;SRC_KOCAELI_HISTORY|High|ProductionCandidate|Anatolian road menzil
+mudanya|Mudanya|Port|region-anatolia-marmara|Mudania||40376700|28883300|SRC_FAROQHI_URBAN;SRC_ISTANBUL_ENCYCLOPEDIA|High|ProductionCandidate|Bursa sea gate
+bursa|Bursa|City|region-anatolia-marmara|Prusa|city-other|40195000|29060000|SRC_FAROQHI_URBAN;SRC_EVLIYA_BURSA|High|ProductionCandidate|City V2 bridge: city-other until 14B content pass

@@ -14,7 +14,7 @@ namespace FOC.Presentation.Core
     public enum PresentationEntityKind
     {
         None, City, Character, Organization, House, Clique, Caravan, Army,
-        UnitGroup, Soldier, Faction, Battle, Report, Encounter, Contract
+        UnitGroup, Soldier, Faction, Battle, Report, Encounter, Contract, WorldLocation
     }
 
     public readonly struct PresentationEntityRef : IEquatable<PresentationEntityRef>, IComparable<PresentationEntityRef>
@@ -230,7 +230,8 @@ namespace FOC.Presentation.Core
             IEnumerable<PresentationAttentionItem>? opportunities,
             IEnumerable<PresentationActionDescriptor>? actions,
             IEnumerable<PresentationAttentionItem>? alerts = null,
-            IEnumerable<PresentationSection>? details = null)
+            IEnumerable<PresentationSection>? details = null,
+            MapPresentationSnapshot? map = null)
         {
             if (string.IsNullOrWhiteSpace(titleKey)) throw new ArgumentException("Screen title key is required.", nameof(titleKey));
             if (whyAvailability != PresentationAvailability.Available && string.IsNullOrWhiteSpace(whyUnavailableReasonKey))
@@ -248,6 +249,7 @@ namespace FOC.Presentation.Core
             _actions = (actions ?? Array.Empty<PresentationActionDescriptor>()).ToList().AsReadOnly();
             _alerts = (alerts ?? Array.Empty<PresentationAttentionItem>()).ToList().AsReadOnly();
             _details = (details ?? Array.Empty<PresentationSection>()).ToList().AsReadOnly();
+            Map = map;
         }
 
         public PresentationScreenId ScreenId { get; }
@@ -263,6 +265,7 @@ namespace FOC.Presentation.Core
         public IReadOnlyList<PresentationActionDescriptor> Actions => _actions;
         public IReadOnlyList<PresentationAttentionItem> Alerts => _alerts;
         public IReadOnlyList<PresentationSection> Details => _details;
+        public MapPresentationSnapshot? Map { get; }
     }
 
     public abstract class PresentationReadModel
@@ -271,7 +274,7 @@ namespace FOC.Presentation.Core
         public ScreenPresentationState State { get; }
     }
 
-    public sealed class MapReadModel : PresentationReadModel { public MapReadModel(ScreenPresentationState state, IReadOnlyList<MapMarkerPresentation> markers) : base(state) { Markers = markers ?? throw new ArgumentNullException(nameof(markers)); } public IReadOnlyList<MapMarkerPresentation> Markers { get; } }
+    public sealed class MapReadModel : PresentationReadModel { public MapReadModel(ScreenPresentationState state, MapPresentationSnapshot map) : base(state) { Map = map ?? throw new ArgumentNullException(nameof(map)); } public MapPresentationSnapshot Map { get; } public IReadOnlyList<MapMarkerPresentation> Markers => Map.Markers; }
     public sealed class CityReadModel : PresentationReadModel { public CityReadModel(ScreenPresentationState state) : base(state) { } }
     public sealed class CharacterReadModel : PresentationReadModel { public CharacterReadModel(ScreenPresentationState state) : base(state) { } }
     public sealed class OrganizationReadModel : PresentationReadModel { public OrganizationReadModel(ScreenPresentationState state) : base(state) { } }
@@ -284,10 +287,10 @@ namespace FOC.Presentation.Core
 
     public sealed class MapMarkerPresentation
     {
-        public MapMarkerPresentation(PresentationEntityRef entity, string labelKey, float normalizedX, float normalizedY, PresentationKnowledge knowledge, bool proofOnly)
+        public MapMarkerPresentation(PresentationEntityRef entity, string labelKey, float normalizedX, float normalizedY, PresentationKnowledge knowledge, bool proofOnly, PresentationEntityRef? navigationTarget = null)
         {
             if (normalizedX < 0 || normalizedX > 1 || normalizedY < 0 || normalizedY > 1) throw new ArgumentOutOfRangeException(nameof(normalizedX));
-            Entity = entity; LabelKey = labelKey ?? throw new ArgumentNullException(nameof(labelKey)); NormalizedX = normalizedX; NormalizedY = normalizedY; Knowledge = knowledge ?? throw new ArgumentNullException(nameof(knowledge)); ProofOnly = proofOnly;
+            Entity = entity; LabelKey = labelKey ?? throw new ArgumentNullException(nameof(labelKey)); NormalizedX = normalizedX; NormalizedY = normalizedY; Knowledge = knowledge ?? throw new ArgumentNullException(nameof(knowledge)); ProofOnly = proofOnly; NavigationTarget = navigationTarget;
         }
         public PresentationEntityRef Entity { get; }
         public string LabelKey { get; }
@@ -295,6 +298,23 @@ namespace FOC.Presentation.Core
         public float NormalizedY { get; }
         public PresentationKnowledge Knowledge { get; }
         public bool ProofOnly { get; }
+        public PresentationEntityRef? NavigationTarget { get; }
+    }
+
+    public sealed class MapRoutePresentation
+    {
+        public MapRoutePresentation(string routeId,float firstX,float firstY,float secondX,float secondY,string modeKey,bool active){RouteId=routeId??throw new ArgumentNullException(nameof(routeId));FirstX=firstX;FirstY=firstY;SecondX=secondX;SecondY=secondY;ModeKey=modeKey??throw new ArgumentNullException(nameof(modeKey));Active=active;}
+        public string RouteId{get;}public float FirstX{get;}public float FirstY{get;}public float SecondX{get;}public float SecondY{get;}public string ModeKey{get;}public bool Active{get;}
+    }
+    public sealed class MapJourneyPresentation
+    {
+        public MapJourneyPresentation(string journeyId,string actorLabel,string originLabel,string destinationLabel,int segmentIndex,int segmentCount,long segmentElapsedTicks){JourneyId=journeyId;ActorLabel=actorLabel;OriginLabel=originLabel;DestinationLabel=destinationLabel;SegmentIndex=segmentIndex;SegmentCount=segmentCount;SegmentElapsedTicks=segmentElapsedTicks;}
+        public string JourneyId{get;}public string ActorLabel{get;}public string OriginLabel{get;}public string DestinationLabel{get;}public int SegmentIndex{get;}public int SegmentCount{get;}public long SegmentElapsedTicks{get;}
+    }
+    public sealed class MapPresentationSnapshot
+    {
+        public MapPresentationSnapshot(IReadOnlyList<MapMarkerPresentation> markers,IReadOnlyList<MapRoutePresentation> routes,IReadOnlyList<MapJourneyPresentation> journeys){Markers=markers??throw new ArgumentNullException(nameof(markers));Routes=routes??throw new ArgumentNullException(nameof(routes));Journeys=journeys??throw new ArgumentNullException(nameof(journeys));}
+        public IReadOnlyList<MapMarkerPresentation> Markers{get;}public IReadOnlyList<MapRoutePresentation> Routes{get;}public IReadOnlyList<MapJourneyPresentation> Journeys{get;}
     }
 
     public sealed class ReportRowPresentation

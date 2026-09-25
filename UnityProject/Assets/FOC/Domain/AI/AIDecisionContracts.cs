@@ -11,7 +11,7 @@ namespace FOC.Domain.AI
 {
     public enum AIDecisionOwnerKind { Character, Faction }
     public enum AIDecisionDomain { Diplomacy, EconomyTrade, MilitaryLogistics, InternalCityManagement, EncounterContract, BattleTactical }
-    public enum AITargetKind { Character, Faction, City, Army, Caravan, Clique, Battle, Encounter, Contract, DeploymentGroup, BattleSector, Region }
+    public enum AITargetKind { Character, Faction, City, Army, Caravan, Clique, Battle, Encounter, Contract, DeploymentGroup, BattleSector, Region, WorldLocation }
     public enum AIPlanLifecycle { Active, Completed, Invalidated, Cancelled }
     public enum AIControllerLifecycle { Active, Suspended, Retired }
     public enum AIReconsiderationReason { Scheduled, Completed, Invalidated, PrerequisiteLost, InformationChanged }
@@ -56,6 +56,7 @@ namespace FOC.Domain.AI
         public static AITargetRef DeploymentGroup(DeploymentGroupId id) => New(AITargetKind.DeploymentGroup, id.IsValid, id.Value);
         public static AITargetRef BattleSector(BattleSectorId id) => New(AITargetKind.BattleSector, id.IsValid, id.Value);
         public static AITargetRef Region(RegionId id) => New(AITargetKind.Region, id.IsValid, id.Value);
+        public static AITargetRef WorldLocation(FOC.Domain.Geography.WorldLocationId id) => New(AITargetKind.WorldLocation, id.IsValid, id.Value);
         internal static AITargetRef Restore(AITargetKind kind, string id) => new AITargetRef(kind, id);
         private static AITargetRef New(AITargetKind kind, bool valid, string id) { if (!valid) throw new ArgumentException("Typed target ID is invalid."); return new AITargetRef(kind, id); }
         public int CompareTo(AITargetRef other) { var c = Kind.CompareTo(other.Kind); return c != 0 ? c : StringComparer.Ordinal.Compare(Id, other.Id); }

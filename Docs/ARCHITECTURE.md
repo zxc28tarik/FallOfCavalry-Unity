@@ -1,8 +1,16 @@
 # Architecture
 
+## Implementation 14A geography and travel boundary
+
+`FOC.Domain.Geography` owns typed `WorldLocationId`, `TravelRouteId` and `JourneyId` contracts, immutable location/route definitions, deterministic fixed-integer map coordinates and persistent journey state. `WorldLocation` is not `City`; a location may optionally reference one existing `CityId`. `RegionId` is reused rather than duplicated. Latitude/longitude is descriptive metadata. `MapPoint` millionths are the projection/UI authority.
+
+`FOC.Application.Geography` loads authored content, performs ordinal-tie-broken integer Dijkstra pathfinding and is the only travel orchestration boundary. `TravelCommandService` validates origin and destination, changes existing Character/Army/Caravan lifecycle through their public contracts, advances the single `WorldClock`, and exposes read-only segment hooks for Encounter and Battle location integration. AI calls the same service and speed policy; difficulty is not a movement input.
+
+`FOC.Presentation.Core.WorldMapPresentationDataProvider` projects public geography while exposing a live journey only if the viewer can read that actor exactly. The Unity map is presentation only: generated parchment art, marker placement and route display never become simulation truth.
+
 ## Implementation 13 persistence and executable integration boundary
 
-The existing inward dependency rule remains unchanged. `CampaignSaveCoordinator` is the Application-facing production save/load facade; serialization and filesystem durability remain Infrastructure concerns. The coordinator never turns SaveData into a second runtime authority and rejects content/world-generation incompatibility explicitly. `IntegratedProofCampaignFactory` is deterministic `PROOF_ONLY` development data shared by tests and the executable bootstrap, not production content authority.
+The existing inward dependency rule remains unchanged. `CampaignSaveCoordinator` is the Application-facing production save/load facade; serialization and filesystem durability remain Infrastructure concerns. The coordinator never turns SaveData into a second runtime authority and rejects content/world-generation incompatibility explicitly. `IntegratedProofCampaignFactory` remains deterministic `PROOF_ONLY` test/integration data; the executable bootstrap now uses `VerticalSliceCampaignFactory` and authored geography.
 
 `FOC.Bootstrap.Unity` is an outer composition root: it constructs existing Application/Infrastructure/Presentation services and owns no gameplay rules. Save/Load controls call the coordinator and then replace/reproject the reconstructed `CampaignRuntimeState`; they never mutate Domain fields directly. `FOC.Editor.Integration` validates proof data, creates the development scene and builds the player. Neither assembly is referenced inward by Domain, Application, Infrastructure or Presentation Core.
 
@@ -47,6 +55,8 @@ FOC.Infrastructure ├─> FOC.Application ─> FOC.Domain
 ## Source of truth
 
 - Campaign time: `WorldClock` only.
+- World geography: authored `WorldGeography` content with typed locations and explicit routes; no City registry or bitmap may substitute for it.
+- World travel: `GeographyCampaignState.Travel`; no character, Army, Caravan or AI teleport path.
 - Gameplay random sequence: the injected `IRandomSource` state only.
 - Static content: immutable definitions in typed registries; Religion and Sect definitions are content-driven and Sect carries an explicit parent `ReligionId`.
 - Mutable campaign foundation: `CampaignRuntimeState`.

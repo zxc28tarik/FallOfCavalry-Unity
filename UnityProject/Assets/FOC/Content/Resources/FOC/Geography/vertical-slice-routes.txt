@@ -1,0 +1,12 @@
+# id|first|second|mode|distance-m|source-ids|confidence|status|bidirectional|notes
+road-istanbul-kucukcekmece|istanbul|kucukcekmece|Road|20000|SRC_ALTUNAN_2006;SRC_EVLIYA_RUMELI|High|SliceTuning|true|Distance is approximate gameplay tuning
+road-kucukcekmece-buyukcekmece|kucukcekmece|buyukcekmece|Road|24000|SRC_ALTUNAN_2006|High|SliceTuning|true|Distance is approximate gameplay tuning
+road-buyukcekmece-silivri|buyukcekmece|silivri|Road|35000|SRC_ALTUNAN_2006|High|SliceTuning|true|Distance is approximate gameplay tuning
+road-silivri-corlu|silivri|corlu|Road|55000|SRC_ALTUNAN_2006|High|SliceTuning|true|Distance is approximate gameplay tuning
+road-corlu-luleburgaz|corlu|luleburgaz|Road|45000|SRC_ALTUNAN_2006|High|SliceTuning|true|Distance is approximate gameplay tuning
+road-luleburgaz-edirne|luleburgaz|edirne|Road|75000|SRC_ALTUNAN_2006|High|SliceTuning|true|Distance is approximate gameplay tuning
+crossing-istanbul-uskudar|istanbul|uskudar|Crossing|3000|SRC_KARAKAYA_2012|High|SliceTuning|true|Bosphorus crossing abstracted
+road-uskudar-gebze|uskudar|gebze|Road|50000|SRC_KARAKAYA_2012;SRC_GEBZE_MENZIL|High|SliceTuning|true|Distance is approximate gameplay tuning
+road-gebze-izmit|gebze|izmit|Road|50000|SRC_KARAKAYA_2012;SRC_KOCAELI_HISTORY|High|SliceTuning|true|Distance is approximate gameplay tuning
+sea-istanbul-mudanya|istanbul|mudanya|Sea|75000|SRC_FAROQHI_URBAN;SRC_ISTANBUL_ENCYCLOPEDIA|High|SliceTuning|true|Weather not yet modeled
+road-mudanya-bursa|mudanya|bursa|Road|30000|SRC_FAROQHI_URBAN;SRC_EVLIYA_BURSA|High|SliceTuning|true|Distance is approximate gameplay tuning

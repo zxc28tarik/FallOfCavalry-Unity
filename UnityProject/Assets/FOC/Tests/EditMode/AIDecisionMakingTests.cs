@@ -228,9 +228,9 @@ namespace FOC.Tests
         }
 
         [Test]
-        public void TravelBoundaryCannotTeleportWithoutARealProvider()
+        public void TravelBoundaryHasARealProviderInsteadOfTeleportFallback()
         {
-            Assert.That(typeof(IAITravelActionProvider).IsInterface,Is.True);Assert.That(typeof(IAITravelActionProvider).Assembly.GetTypes().Any(x=>x.IsClass&&typeof(IAITravelActionProvider).IsAssignableFrom(x)),Is.False);
+            Assert.That(typeof(IAITravelActionProvider).IsInterface,Is.True);Assert.That(typeof(FOC.Application.Geography.AITravelActionProvider).GetInterfaces(),Does.Contain(typeof(IAITravelActionProvider)));
         }
 
         [Test]
