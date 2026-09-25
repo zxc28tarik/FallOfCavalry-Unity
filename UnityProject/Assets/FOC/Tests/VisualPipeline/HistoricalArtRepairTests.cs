@@ -77,7 +77,12 @@ namespace FOC.Tests.VisualPipeline
                 var mat=AssetDatabase.LoadAssetAtPath<Material>(HistoricalArtCandidatePipeline.MaterialRoot+"/MAT_"+name+".mat");
                 Assert.That(mat,Is.Not.Null);Assert.That(AssetDatabase.GetAssetPath(mat.mainTexture),Does.EndWith("/"+name+"_D.png"));
                 Assert.That(mat.mainTextureScale,Is.EqualTo(Vector2.one));
-                if(name.StartsWith("HairCards",StringComparison.Ordinal))Assert.That(mat.IsKeywordEnabled("_ALPHATEST_ON"),Is.True);
+                if(name.StartsWith("HairCards",StringComparison.Ordinal))
+                {
+                    Assert.That(mat.IsKeywordEnabled("_ALPHATEST_ON"),Is.True);
+                    Assert.That(mat.GetTexture("_BumpMap"),Is.Null,"Assigned normal texture re-enables keyword on validation.");
+                    Assert.That(mat.IsKeywordEnabled("_NORMALMAP"),Is.False);
+                }
             }
         }
         [Test]public void ReviewBuildRestoresSettingsWithoutTruncatingMappedFile()
@@ -179,6 +184,7 @@ namespace FOC.Tests.VisualPipeline
             {
                 var mat=AssetDatabase.LoadAssetAtPath<Material>(HistoricalArtCandidatePipeline.MaterialRoot+"/MAT_"+name+".mat");
                 Assert.That(mat,Is.Not.Null);Assert.That(mat.IsKeywordEnabled("_ALPHATEST_ON"),Is.True);
+                Assert.That(mat.GetTexture("_BumpMap"),Is.Null);Assert.That(mat.IsKeywordEnabled("_NORMALMAP"),Is.False);
                 Assert.That(AssetDatabase.GetAssetPath(mat.mainTexture),Does.EndWith("/"+name+"_D.png"));
             }
         }

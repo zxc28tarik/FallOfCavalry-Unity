@@ -189,7 +189,10 @@ namespace FOC.Editor.Visuals
                     material.SetFloat("_Metallic",0);material.SetFloat("_Glossiness",.18f);
                     if(name.StartsWith("HairCards",StringComparison.Ordinal))
                     {
-                        material.SetFloat("_Mode",1);material.SetFloat("_Cutoff",.38f);material.EnableKeyword("_ALPHATEST_ON");material.SetOverrideTag("RenderType","TransparentCutout");material.renderQueue=2450;material.DisableKeyword("_NORMALMAP");
+                        material.SetFloat("_Mode",1);material.SetFloat("_Cutoff",.38f);material.EnableKeyword("_ALPHATEST_ON");material.SetOverrideTag("RenderType","TransparentCutout");material.renderQueue=2450;
+                        // Standard's material validation re-enables _NORMALMAP if
+                        // the texture remains assigned. Clear both for card art.
+                        material.SetTexture("_BumpMap",null);material.DisableKeyword("_NORMALMAP");
                     }
                 }
             }

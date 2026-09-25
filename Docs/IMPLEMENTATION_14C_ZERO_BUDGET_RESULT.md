@@ -36,6 +36,13 @@ Persistent equipment truth, SoldierInstance/VisualSoldier separation, consolidat
 
 ## Reproduction and final-SHA evidence
 
+An intermediate full run passed .NET 486 and Unity 544 tests, but correctly failed
+the clean-worktree check: Standard material validation re-enabled `_NORMALMAP`
+on four hair-card materials because an unused normal texture was still assigned.
+The importer now clears the texture as well as the keyword; regression assertions
+cover both. Final evidence must be regenerated on the follow-up commit. The
+intermediate pass is not final-SHA proof.
+
 Authoring:
 
 ```powershell
