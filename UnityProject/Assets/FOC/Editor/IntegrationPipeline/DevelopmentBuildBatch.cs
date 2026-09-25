@@ -62,10 +62,15 @@ namespace FOC.Editor.Integration
                 // Unity 6 expands the intentionally minimal project settings file whenever a
                 // PlayerSettings property is touched. Restore the exact source-controlled bytes
                 // after the temporary Development-build override so validation does not dirty it.
-                File.WriteAllBytes(projectSettingsPath, projectSettingsSnapshot);
+                RestoreSettingsSnapshot(projectSettingsPath, projectSettingsSnapshot);
             }
             EditorApplication.Exit(exitCode);
         }
+
+        // The general Development build can retain the same Windows memory map
+        // as the art-review build. Use the already-tested atomic replacement.
+        public static void RestoreSettingsSnapshot(string path, byte[] snapshot)
+            => HistoricalArtReviewBuild.RestoreSettingsSnapshot(path, snapshot);
 
         public static void ValidateIntegratedCampaign()
         {

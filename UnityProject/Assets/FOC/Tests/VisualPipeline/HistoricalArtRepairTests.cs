@@ -85,7 +85,8 @@ namespace FOC.Tests.VisualPipeline
                 }
             }
         }
-        [Test]public void ReviewBuildRestoresSettingsWithoutTruncatingMappedFile()
+        [TestCase(false)][TestCase(true)]
+        public void ReviewAndDevelopmentBuildsRestoreSettingsWithoutTruncatingMappedFile(bool development)
         {
             var path=Path.GetTempFileName();var expected=new byte[]{9,8,7,6};
             try
@@ -95,7 +96,8 @@ namespace FOC.Tests.VisualPipeline
                 using(var map=MemoryMappedFile.CreateFromFile(stream,null,0,MemoryMappedFileAccess.Read,HandleInheritability.None,true))
                 using(var view=map.CreateViewAccessor(0,0,MemoryMappedFileAccess.Read))
                 {
-                    HistoricalArtReviewBuild.RestoreSettingsSnapshot(path,expected);
+                    if(development)FOC.Editor.Integration.DevelopmentBuildBatch.RestoreSettingsSnapshot(path,expected);
+                    else HistoricalArtReviewBuild.RestoreSettingsSnapshot(path,expected);
                     Assert.That(File.ReadAllBytes(path),Is.EqualTo(expected));
                     Assert.That(view.ReadByte(0),Is.EqualTo(1),"Old mapping survives replacement.");
                 }

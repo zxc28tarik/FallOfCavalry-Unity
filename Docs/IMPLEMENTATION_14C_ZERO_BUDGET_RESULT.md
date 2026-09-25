@@ -43,6 +43,15 @@ The importer now clears the texture as well as the keyword; regression assertion
 cover both. Final evidence must be regenerated on the follow-up commit. The
 intermediate pass is not final-SHA proof.
 
+The eleven-pipeline sweep then exposed the same Windows mapped-file 1224 failure
+in the GENERAL Development build's settings restoration, after successfully
+producing the executable. Its direct truncating write now delegates to the
+existing atomic snapshot helper, and the memory-mapping regression is parameterized
+over both review and general-build entry points. The temporary Mono override was
+restored to the original IL2CPP setting. No build/gameplay semantics changed.
+The failed intermediate build is not reported as PASS; all final checks must run
+again on the follow-up SHA (Unity test count increases to 545).
+
 Authoring:
 
 ```powershell
