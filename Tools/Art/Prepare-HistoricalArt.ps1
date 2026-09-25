@@ -17,7 +17,7 @@ if (-not $Blender) {
 }
 if (-not (Test-Path -LiteralPath $Blender)) { throw 'Blender is required. Use an official verified portable distribution; no Unity template flow is involved.' }
 foreach ($script in @('build_horse_candidate.py','build_human_candidates.py','build_equipment_candidates.py')) {
-    & $Blender --background --factory-startup --disable-autoexec --python (Join-Path $PSScriptRoot $script)
+    & $Blender --background --factory-startup --disable-autoexec --python-exit-code 1 --python (Join-Path $PSScriptRoot $script)
     if ($LASTEXITCODE -ne 0) { throw "DCC generation failed: $script" }
 }
 Write-Output 'FOC_14C_DCC_DRAFTS_GENERATED — this is not production acceptance.'

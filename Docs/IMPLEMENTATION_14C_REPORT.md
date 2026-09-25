@@ -1,5 +1,8 @@
 STATUS: NOT READY
 
+> Historical checkpoint report for `9bcae4638a36d1cb6484eec3de363c18c9c9b372`.
+> The same-branch continuation is recorded in [IMPLEMENTATION_14C_CONTINUATION.md](IMPLEMENTATION_14C_CONTINUATION.md). Neither report promotes the art or opens Implementation 15.
+
 Implementation: 14C — production character / horse / equipment art, **partial draft checkpoint**, not a completed replacement package.
 
 Branch: `codex/impl-14c-production-character-art`

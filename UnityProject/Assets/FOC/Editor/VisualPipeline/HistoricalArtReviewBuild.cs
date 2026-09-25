@@ -33,8 +33,17 @@ namespace FOC.Editor.Visuals
                 Debug.Log("FOC_ART_REVIEW_PLAYER_BUILD_PASS "+output);
             }
             catch(Exception e){Debug.LogException(e);code=1;}
-            finally{PlayerSettings.SetScriptingBackend(target,previous);File.WriteAllBytes(settings,snapshot);}
+            finally{PlayerSettings.SetScriptingBackend(target,previous);RestoreSettingsSnapshot(settings,snapshot);}
             EditorApplication.Exit(code);
+        }
+        public static void RestoreSettingsSnapshot(string path,byte[] snapshot)
+        {
+            if(File.ReadAllBytes(path).SequenceEqual(snapshot))return;
+            // Windows can keep ProjectSettings memory-mapped immediately after a
+            // build. Truncating that file throws ERROR_USER_MAPPED_FILE (1224).
+            var temporary=path+".14c-restore-"+Guid.NewGuid().ToString("N");
+            try{File.WriteAllBytes(temporary,snapshot);File.Replace(temporary,path,null);}
+            finally{if(File.Exists(temporary))File.Delete(temporary);}
         }
     }
 }

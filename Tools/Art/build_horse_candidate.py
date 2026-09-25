@@ -48,7 +48,7 @@ for b in arm.data.bones:
 parents['MountNeck'] = 'MountSpine'
 parents['FrontLeg_L'] = parents['FrontLeg_R'] = 'MountSpine'
 # Seat location is expressed in mount coordinates, not a hard-coded world offset.
-positions['Socket_Rider'] = Vector((0,1.54,-.12))
+positions['Socket_Rider'] = Vector((0,1.81,-.42))
 parents['Socket_Rider'] = 'MountSpine'
 bone_names = ['MountRoot','MountPelvis','MountSpine'] + [n for n in positions if n not in {'MountRoot','MountPelvis','MountSpine'}]
 bone_indices = {n:i for i,n in enumerate(bone_names)}

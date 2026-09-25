@@ -17,14 +17,30 @@ namespace FOC.Presentation.Visuals
             var source=candidates.SingleOrDefault(p=>p!=null&&p.name==id);
             if(source==null){Debug.LogError("FOC_ART_REVIEW_MISSING "+id);Application.Quit(1);yield break;}
             var instance=Instantiate(source);var lod=instance.GetComponent<LODGroup>();if(lod!=null)lod.ForceLOD(0);
+            GameObject? mount=null;
+            var pose=Arg("-focArtPose");
+            if(pose=="standing")HistoricalArtPoseReview.Standing(instance);
+            if(pose=="mounted")
+            {
+                mount=Instantiate(candidates.Single(p=>p.name=="MNT_Horse_Anatolian_01"));mount.GetComponent<LODGroup>().ForceLOD(0);
+                var harness=Instantiate(candidates.Single(p=>p.name=="HAR_SipahiHarness_01"),mount.transform);harness.GetComponent<LODGroup>().ForceLOD(0);
+                HistoricalArtPoseReview.Mounted(instance,HistoricalArtPoseReview.Bone(mount,"Socket_Rider"));
+                Debug.Log("FOC_ART_DIAGNOSTIC_MOUNTED_POSE_ONLY: not shared-animation, loadout or production runtime acceptance");
+            }
+            var headgear=Arg("-focArtHeadgear");
+            if(headgear!=null){var hat=Instantiate(candidates.Single(p=>p.name==headgear),HistoricalArtPoseReview.Bone(instance,"Socket_Head"));hat.GetComponent<LODGroup>().ForceLOD(0);}
             var gait=Arg("-focArtAnimation");if(gait!=null){var animator=instance.GetComponent<Animator>();if(animator!=null)animator.Play(gait,0,0);}
             var bounds=instance.GetComponentsInChildren<Renderer>().First().bounds;
             foreach(var r in instance.GetComponentsInChildren<Renderer>())bounds.Encapsulate(r.bounds);
+            if(mount!=null)foreach(var r in mount.GetComponentsInChildren<Renderer>())bounds.Encapsulate(r.bounds);
             var camera=new GameObject("Art review camera").AddComponent<Camera>();camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color(.045f,.055f,.07f);camera.fieldOfView=30;
             var side=Arg("-focArtAngle")=="side";var scale=Mathf.Max(bounds.size.x,Mathf.Max(bounds.size.y,bounds.size.z));
-            camera.transform.position=bounds.center+(side?new Vector3(2.2f,.3f,.08f):new Vector3(1.25f,.2f,2.5f))*scale;camera.transform.LookAt(bounds.center);
+            var angle=Arg("-focArtAngle");var view=angle=="back"?new Vector3(0,.15f,-2.8f):angle=="straight"?new Vector3(0,.15f,2.8f):side?new Vector3(2.8f,.15f,.02f):new Vector3(1.25f,.2f,2.5f);
+            camera.transform.position=bounds.center+view*scale;camera.transform.LookAt(bounds.center);
             RenderSettings.ambientLight=new Color(.36f,.37f,.39f);
             foreach(var setup in new[]{(new Vector3(35,-25,0),1.35f,new Color(1,.9f,.78f)),(new Vector3(20,135,0),.65f,new Color(.67f,.78f,1))}){var light=new GameObject("Review light").AddComponent<Light>();light.type=LightType.Directional;light.transform.rotation=Quaternion.Euler(setup.Item1);light.intensity=setup.Item2;light.color=setup.Item3;}
+            QualitySettings.shadows=ShadowQuality.All;QualitySettings.shadowDistance=25;
+            foreach(var light in FindObjectsByType<Light>(FindObjectsSortMode.None)){light.shadows=LightShadows.Soft;light.shadowBias=.01f;light.shadowNormalBias=.02f;light.shadowStrength=.8f;}
             var ground=GameObject.CreatePrimitive(PrimitiveType.Plane);ground.transform.localScale=Vector3.one*10;ground.transform.position=new Vector3(0,bounds.min.y-.01f,0);ground.GetComponent<Renderer>().material=new Material(Shader.Find("Standard")){color=new Color(.085f,.09f,.095f)};
             yield return new WaitForSecondsRealtime(2);yield return new WaitForEndOfFrame();
             var output=Arg("-focScreenshotPath");

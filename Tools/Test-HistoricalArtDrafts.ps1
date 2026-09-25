@@ -36,12 +36,12 @@ try{
         if((Invoke-UnityCheck $item[0] @('-executeMethod',$item[1])) -ne 0){throw "$($item[0]) failed"}
     }
     & (Join-Path $PSScriptRoot 'Art\Capture-HistoricalArtDrafts.ps1') -OutputDirectory (Join-Path $results '14c-final-captures')
-    $checks.Add([pscustomobject]@{name='six-draft-player-captures';command='Tools/Art/Capture-HistoricalArtDrafts.ps1 -OutputDirectory TestResults/14c-final-captures';exitCode=0;log='TestResults/14c-*-player.log'})
+    $checks.Add([pscustomobject]@{name='nine-draft-player-captures';command='Tools/Art/Capture-HistoricalArtDrafts.ps1 -OutputDirectory TestResults/14c-final-captures';exitCode=0;log='TestResults/14c-*-player.log'})
     $gate=Invoke-UnityCheck 'production-art-gate' @('-executeMethod','FOC.Editor.Visuals.ProductionVisualCatalogGate.Run')
     $after=git status --porcelain
     if($after){throw ('Validation dirtied the worktree: '+($after -join '; '))}
     $suite=[xml](Get-Content -LiteralPath $xml -Raw)
-    $summary=[pscustomobject]@{status='NOT READY';implementation='14C draft checkpoint';branch=$branch;commitSha=$sha;endSha=(git rev-parse HEAD);unityVersion=(Get-Item -LiteralPath $UnityEditor).VersionInfo.FileVersion;editModePassed=$suite.'test-run'.passed;editModeFailed=$suite.'test-run'.failed;editModeSkipped=$suite.'test-run'.skipped;productionArtGateExitCode=$gate;worktree='clean';checks=$checks;note='Six draft review captures are not the ten mandatory assembled production acceptance captures. Not authorized for Implementation 15.'}
+    $summary=[pscustomobject]@{status='NOT READY';implementation='14C draft repair checkpoint';branch=$branch;commitSha=$sha;endSha=(git rev-parse HEAD);unityVersion=(Get-Item -LiteralPath $UnityEditor).VersionInfo.FileVersion;editModePassed=$suite.'test-run'.passed;editModeFailed=$suite.'test-run'.failed;editModeSkipped=$suite.'test-run'.skipped;productionArtGateExitCode=$gate;worktree='clean';checks=$checks;note='Nine draft/diagnostic captures are not the ten mandatory assembled production acceptance captures. Diagnostic IK is not shared-animation acceptance. Not authorized for Implementation 15.'}
     $summary | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $results '14c-final-validation.json') -Encoding utf8
     $summary | ConvertTo-Json -Depth 6 | Out-Host
     if($gate -ne 0){exit 1}

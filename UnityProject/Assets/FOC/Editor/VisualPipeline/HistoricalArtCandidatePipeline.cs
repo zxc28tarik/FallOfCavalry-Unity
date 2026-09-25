@@ -19,6 +19,7 @@ namespace FOC.Editor.Visuals
         public const string CharacterRoot="Assets/FOC/Presentation/Characters/Ottoman1648";
         public const string EquipmentRoot="Assets/FOC/Presentation/Equipment/Ottoman1648";
         public const string MaterialRoot="Assets/FOC/Presentation/Materials/Ottoman1648";
+        private static readonly Dictionary<string,Material> ImportedMaterials=new Dictionary<string,Material>(StringComparer.Ordinal);
         [Serializable]public sealed class SourceAsset{public int formatVersion;public string assetId="";public string category="";public string status="";public string generator="";public string source="";public string sourceSha256="";public string license="";public string date="";public string revision="";public SourceBone[] bones=Array.Empty<SourceBone>();public SourceLod[] lods=Array.Empty<SourceLod>();}
         [Serializable]public sealed class SourceBone{public string name="";public string parent="";public float[] position=Array.Empty<float>();}
         [Serializable]public sealed class SourceLod{public SourcePart[] parts=Array.Empty<SourcePart>();}
@@ -32,6 +33,7 @@ namespace FOC.Editor.Visuals
         [MenuItem("FOC/Visuals/Import Historical Art Drafts")]
         public static void Generate()
         {
+            ImportedMaterials.Clear();
             foreach(var path in new[]{MountRoot,CharacterRoot,EquipmentRoot,MaterialRoot})Directory.CreateDirectory(path);
             AssetDatabase.Refresh();
             foreach(var file in Directory.GetFiles(SourceRoot,"*.focmesh.json",SearchOption.AllDirectories).OrderBy(x=>x,StringComparer.Ordinal))
@@ -140,7 +142,7 @@ namespace FOC.Editor.Visuals
         {
             var path=folder+"/ANM_Horse.controller";var controller=AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
             if(controller==null)controller=AnimatorController.CreateAnimatorControllerAtPath(path);
-            var machine=controller.layers[0].stateMachine;foreach(var state in machine.states)machine.RemoveState(state.state);
+            var machine=controller.layers[0].stateMachine;
             foreach(var gait in new[]{"Idle","Walk","Trot","Gallop","Turn"})
             {
                 var duration=gait=="Idle"?3f:gait=="Walk"?1.3f:gait=="Trot"?.8f:.6f;var clip=new AnimationClip{name="ANM_Horse_"+gait,frameRate=30};
@@ -155,14 +157,15 @@ namespace FOC.Editor.Visuals
                 }
                 if(gait=="Turn")clip.SetCurve(AnimationUtility.CalculateTransformPath(bones["MountNeck"],root.transform),typeof(Transform),"localEulerAnglesRaw.y",AnimationCurve.EaseInOut(0,-12,duration,12));
                 var settings=AnimationUtility.GetAnimationClipSettings(clip);settings.loopTime=true;AnimationUtility.SetAnimationClipSettings(clip,settings);clip.EnsureQuaternionContinuity();
-                var clipPath=folder+"/"+clip.name+".anim";Store(clip,clipPath);var state=machine.AddState(gait);state.motion=AssetDatabase.LoadAssetAtPath<AnimationClip>(clipPath);if(gait=="Idle")machine.defaultState=state;
+                var clipPath=folder+"/"+clip.name+".anim";Store(clip,clipPath);var state=machine.states.Select(s=>s.state).FirstOrDefault(s=>s.name==gait)??machine.AddState(gait);state.motion=AssetDatabase.LoadAssetAtPath<AnimationClip>(clipPath);if(gait=="Idle")machine.defaultState=state;
             }
             EditorUtility.SetDirty(controller);return controller;
         }
         private static Material MaterialFor(string name)
         {
-            var path=MaterialRoot+"/MAT_"+name+".mat";var material=AssetDatabase.LoadAssetAtPath<Material>(path);if(material!=null)return material;
-            material=new Material(Shader.Find("Standard")){name="MAT_"+name};material.SetFloat("_Glossiness",.22f);
+            if(ImportedMaterials.TryGetValue(name,out var cached))return cached;
+            var path=MaterialRoot+"/MAT_"+name+".mat";var material=AssetDatabase.LoadAssetAtPath<Material>(path);var isNew=material==null;
+            if(isNew)material=new Material(Shader.Find("Standard")){name="MAT_"+name};material.SetFloat("_Glossiness",.22f);
             if(name.StartsWith("Horse",StringComparison.Ordinal))
             {
                 material.mainTexture=AssetDatabase.LoadAssetAtPath<Texture2D>(SourceRoot+"/Mounts/"+name+"_D.png");
@@ -170,14 +173,26 @@ namespace FOC.Editor.Visuals
             }
             else
             {
-                var color=name=="Skin"?new Color(.62f,.40f,.28f):name=="Linen"?new Color(.65f,.57f,.41f):name=="ClothBlue"?new Color(.13f,.22f,.25f):name=="ClothRed"?new Color(.35f,.08f,.065f):name=="Mail"?new Color(.32f,.34f,.35f):name=="Steel"?new Color(.47f,.49f,.5f):name=="Wood"?new Color(.24f,.12f,.05f):new Color(.13f,.07f,.035f);
+                var color=name=="Skin"?new Color(.69f,.48f,.36f):name=="Linen"?new Color(.65f,.57f,.41f):name=="ClothBlue"?new Color(.15f,.24f,.28f):name=="ClothRed"?new Color(.38f,.11f,.08f):name=="Mail"?new Color(.52f,.55f,.56f):name=="Steel"?new Color(.47f,.49f,.5f):name=="Wood"?new Color(.32f,.17f,.07f):new Color(.20f,.105f,.048f);
                 if(name=="EyeWhite")color=new Color(.7f,.65f,.55f);if(name=="Hair")color=new Color(.035f,.025f,.017f);
-                material.color=color;material.SetFloat("_Metallic",name=="Mail"||name=="Steel"?.85f:0);material.SetFloat("_Glossiness",name=="Steel"?.48f:name=="Skin"?.27f:.16f);
-                var tex=new Texture2D(128,128,TextureFormat.RGBA32,true){name="TEX_"+name+"_Weave"};var pixels=new Color[128*128];
-                for(var y=0;y<128;y++)for(var x=0;x<128;x++){var weave=name=="Mail"?Mathf.Abs(Mathf.Sin(x*.8f)*Mathf.Sin(y*.8f)):name=="Wood"?Mathf.Sin(y*.15f+Mathf.Sin(x*.1f)):Mathf.Sin(x*Mathf.PI*.5f)*Mathf.Sin(y*Mathf.PI*.5f);var value=.83f+weave*.12f;pixels[y*128+x]=new Color(value,value,value,1);}
-                tex.SetPixels(pixels);tex.Apply();var texturePath=MaterialRoot+"/"+tex.name+".asset";Store(tex,texturePath);material.mainTexture=AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);material.mainTextureScale=name=="Skin"?Vector2.one:new Vector2(10,10);
+                material.color=color;material.SetFloat("_Metallic",name=="Mail"?.62f:name=="Steel"?.85f:0);material.SetFloat("_Glossiness",name=="Steel"?.48f:name=="Skin"?.21f:name=="Leather"?.28f:.18f);
+                var tex=HistoricalArtSurfaceAuthoring.Albedo(name);var texturePath=MaterialRoot+"/"+tex.name+".asset";Store(tex,texturePath);material.mainTexture=AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
+                var normal=HistoricalArtSurfaceAuthoring.Normal(name);var normalPath=MaterialRoot+"/"+normal.name+".asset";Store(normal,normalPath);material.SetTexture("_BumpMap",AssetDatabase.LoadAssetAtPath<Texture2D>(normalPath));material.EnableKeyword("_NORMALMAP");material.SetFloat("_BumpScale",name=="Mail"?.65f:.18f);
+                var tiling=name=="Mail"?12:name=="Skin"?5:name=="Wood"?1:6;material.mainTextureScale=new Vector2(tiling,tiling);material.SetTextureScale("_BumpMap",new Vector2(tiling,tiling));
+                if(name=="Skin"||name=="SkinMature"||name.StartsWith("HairCards",StringComparison.Ordinal))
+                {
+                    var licensed=AssetDatabase.LoadAssetAtPath<Texture2D>(SourceRoot+"/Characters/"+name+"_D.png");
+                    if(licensed==null)throw new InvalidOperationException("Versioned CC0 surface missing: "+name);
+                    material.mainTexture=licensed;material.mainTextureScale=Vector2.one;
+                    material.color=name.StartsWith("HairCards",StringComparison.Ordinal)?new Color(.45f,.35f,.26f):new Color(.93f,.87f,.80f);
+                    material.SetFloat("_Metallic",0);material.SetFloat("_Glossiness",.18f);
+                    if(name.StartsWith("HairCards",StringComparison.Ordinal))
+                    {
+                        material.SetFloat("_Mode",1);material.SetFloat("_Cutoff",.38f);material.EnableKeyword("_ALPHATEST_ON");material.SetOverrideTag("RenderType","TransparentCutout");material.renderQueue=2450;material.DisableKeyword("_NORMALMAP");
+                    }
+                }
             }
-            AssetDatabase.CreateAsset(material,path);return material;
+            if(isNew)AssetDatabase.CreateAsset(material,path);else EditorUtility.SetDirty(material);ImportedMaterials.Add(name,material);return material;
         }
         private static Vector3 V(float[] a,int i)=>new Vector3(a[i],a[i+1],a[i+2]);
         private static void Store(UnityEngine.Object value,string path){var old=AssetDatabase.LoadAssetAtPath<UnityEngine.Object>(path);if(old==null)AssetDatabase.CreateAsset(value,path);else{EditorUtility.CopySerialized(value,old);EditorUtility.SetDirty(old);UnityEngine.Object.DestroyImmediate(value);}}
