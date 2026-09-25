@@ -52,6 +52,13 @@ restored to the original IL2CPP setting. No build/gameplay semantics changed.
 The failed intermediate build is not reported as PASS; all final checks must run
 again on the follow-up SHA (Unity test count increases to 545).
 
+The first follow-up exposed a missing test-only assembly reference to
+`FOC.Editor.Integration`; the new dual-entry-point regression could not compile.
+That reference is now explicit in `FOC.Visuals.Tests` (no runtime/domain dependency
+change). The failed runner was stopped only after confirming the Unity process
+had exited; the rescue runner now waits for the Editor process itself rather than
+its persistent helper descendants. This failed run is also superseded, not PASS.
+
 Authoring:
 
 ```powershell

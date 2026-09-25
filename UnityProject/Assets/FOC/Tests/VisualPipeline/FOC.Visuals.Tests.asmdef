@@ -1,7 +1,7 @@
 {
   "name": "FOC.Visuals.Tests",
   "rootNamespace": "FOC.Tests.VisualPipeline",
-  "references": ["FOC.Domain", "FOC.Visuals.Core", "FOC.Visuals.Unity", "FOC.Editor.Visuals"],
+  "references": ["FOC.Domain", "FOC.Visuals.Core", "FOC.Visuals.Unity", "FOC.Editor.Visuals", "FOC.Editor.Integration"],
   "includePlatforms": ["Editor"],
   "optionalUnityReferences": ["TestAssemblies"],
   "autoReferenced": false,

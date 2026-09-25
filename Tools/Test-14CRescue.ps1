@@ -7,7 +7,9 @@ Push-Location $repo
 function Invoke-RescueUnity([string]$Name,[string[]]$Extra){
     $log=Join-Path $results ('14c-rescue-final-'+$Name+'.log')
     $arguments=@('-batchmode','-nographics','-projectPath',('"'+(Join-Path $repo 'UnityProject')+'"'))+$Extra+@('-logFile',('"'+$log+'"'))
-    $p=Start-Process -FilePath $UnityEditor -ArgumentList $arguments -WindowStyle Hidden -Wait -PassThru
+    $p=Start-Process -FilePath $UnityEditor -ArgumentList $arguments -WindowStyle Hidden -PassThru
+    # Wait for the Editor itself, not persistent licensing/helper descendants.
+    $p.WaitForExit()
     $checks.Add([pscustomobject]@{name=$Name;command=('"'+$UnityEditor+'" '+($arguments -join ' '));exitCode=$p.ExitCode;log=$log})
     return $p.ExitCode
 }
