@@ -42,6 +42,9 @@ All new art retains Draft status. Previous failed visual findings are not waived
   identically named Silhouette children. Children now have unique LOD-qualified
   names. Fixture geometry remains proof geometry, not production art. Repeated
   regeneration is tested; the runtime catalog remains untouched.
+- Batch Battle Pipeline now builds its diagnostic scene in memory, without
+  rewriting the versioned BattleProof fixture. The explicit authoring menu still
+  saves it. A regression checks byte preservation; no battle semantics changed.
 - Blender invocation now uses `--python-exit-code 1`: Blender otherwise returned
   zero even when the Python authoring script raised an exception. A failed blanket
   ray fit was detected and corrected, not reported as a successful export.
@@ -84,7 +87,7 @@ human remains a generic clothing study, not an accepted Hasan/Sipahi/Cebeli/Tufe
 
 ## Verification protocol
 
-Baseline .NET: 486. Baseline Unity: 522. This continuation adds 18 Unity test cases.
+Baseline .NET: 486. Baseline Unity: 522. This continuation adds 19 Unity test cases.
 Do not infer passing counts from those numbers. Post-commit evidence is produced by:
 
 ```powershell

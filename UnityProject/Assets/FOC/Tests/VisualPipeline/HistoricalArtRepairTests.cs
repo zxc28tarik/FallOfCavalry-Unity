@@ -13,6 +13,13 @@ namespace FOC.Tests.VisualPipeline
 {
     public sealed class HistoricalArtRepairTests
     {
+        [Test]public void BatchBattleSceneValidationPreservesVersionedFixture()
+        {
+            var before=File.ReadAllBytes(BattlePipelineBatch.BattleScenePath);
+            BattlePipelineBatch.GenerateProofScene(false);
+            Assert.That(File.ReadAllBytes(BattlePipelineBatch.BattleScenePath),Is.EqualTo(before));
+            UnityEditor.SceneManagement.EditorSceneManager.NewScene(UnityEditor.SceneManagement.NewSceneSetup.EmptyScene,UnityEditor.SceneManagement.NewSceneMode.Single);
+        }
         [Test]public void RepeatedProofGenerationPreservesFixtureFileIds()
         {
             // Unity matches prefab children by name when overwriting. Reusing
