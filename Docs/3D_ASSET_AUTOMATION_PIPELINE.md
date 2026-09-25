@@ -22,6 +22,16 @@ The user is not expected to create folders, drag assets, configure importers, wi
 
 ## DCC policy
 
+14C update: an official checksum-verified portable Blender 4.5.9 LTS is now
+available under ignored Artifacts/DccTools. `Tools/Art/Prepare-HistoricalArt.ps1`
+rebuilds the versioned CC0 anatomical source adaptations and original equipment
+drafts. `HistoricalArtCandidatePipeline.Run` imports their topology into separate
+Ottoman1648 folders. These remain **Draft / NOT READY**, not production approvals.
+`Test-ProductionArt.ps1` is the separate fail-closed runtime dependency gate.
+Proof generation no longer writes the historical runtime catalog. The historical
+note below describes the earlier architecture-proof phase, not a current claim
+that a DCC is unavailable.
+
 No Blender executable was detected on the implementation machine. This is not a blocker: Unity Editor generates original low-detail proof meshes, skinned rigs, prefabs and animations procedurally. For production art, the same specification is designed to drive a headless Blender or equivalent pipeline when installed. A production DCC stage must preserve canonical hierarchy, meters/`+Z`, UV/material assignments, bindposes, maximum four influences and required sockets.
 
 ## Unity import and registration

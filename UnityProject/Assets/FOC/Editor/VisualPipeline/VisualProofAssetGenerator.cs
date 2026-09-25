@@ -59,7 +59,8 @@ namespace FOC.Editor.Visuals
             profiles.Add(new VisualCatalogAsset.ProfileEntry{visualProfileId="proof-crowd",bodyAssetId="BODY_Human_Proof",headAssetId="HEAD_A_Proof",clothingAssetId="CLTH_Light_Proof",qualityTier=VisualQualityTier.Crowd,cultureFamily="proof"});
             catalog.ReplaceContent(assets,profiles,catalog.Equipment,"CHR_Consolidated_Proof","CRWD_Far_Proof",2);
             EditorUtility.SetDirty(catalog);
-            var runtime=ScriptableObject.CreateInstance<VisualCatalogAsset>();runtime.ReplaceContent(assets,profiles,catalog.Equipment,"CHR_Consolidated_Proof","CRWD_Far_Proof",2);ReplaceAsset(runtime,RuntimeCatalogPath);
+            // Architecture fixture generation must never overwrite the independently
+            // authored historical runtime catalog (14C production art boundary).
         }
         private static void CreateViewPrefab(){var root=new GameObject("CHR_VisualSoldierView");root.AddComponent<VisualSoldier3D>();root.AddComponent<CharacterView3D>();root.AddComponent<VisualDistancePolicy>();SavePrefab(root,"CHR_VisualSoldierView");}
         private static void CreateBenchmarkScene(){if(AssetDatabase.LoadAssetAtPath<SceneAsset>(BenchmarkScenePath)!=null)return;var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);var camera=new GameObject("BenchmarkCamera").AddComponent<Camera>();camera.transform.position=new Vector3(0,12,-24);camera.transform.rotation=Quaternion.Euler(18,0,0);var light=new GameObject("BenchmarkLight").AddComponent<Light>();light.type=LightType.Directional;light.transform.rotation=Quaternion.Euler(45,-30,0);new GameObject("VisualSoldierBenchmark").AddComponent<VisualSoldierBenchmarkScene>();EditorSceneManager.SaveScene(scene,BenchmarkScenePath);}

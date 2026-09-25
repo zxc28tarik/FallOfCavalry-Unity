@@ -1,0 +1,137 @@
+{
+    "scope": "Draft prefab CPU lifecycle, not assembled actors or GPU/frame/skinning timing",
+    "rows": [
+        {
+            "asset": "CHR_Consolidated_Proof",
+            "count": 100,
+            "coldSpawnMs": 95.82520000000001,
+            "warmReactivateMs": 11.483500000000002,
+            "managedDeltaBytes": 12288,
+            "nearRenderersPerInstance": 2,
+            "materialsPerInstance": 2,
+            "nearTrianglesPerInstance": 1100,
+            "sharedMeshBytes": 114448
+        },
+        {
+            "asset": "CHR_Consolidated_Proof",
+            "count": 250,
+            "coldSpawnMs": 124.6619,
+            "warmReactivateMs": 23.2222,
+            "managedDeltaBytes": 32768,
+            "nearRenderersPerInstance": 2,
+            "materialsPerInstance": 2,
+            "nearTrianglesPerInstance": 1100,
+            "sharedMeshBytes": 114448
+        },
+        {
+            "asset": "CHR_Consolidated_Proof",
+            "count": 500,
+            "coldSpawnMs": 254.2982,
+            "warmReactivateMs": 55.096500000000009,
+            "managedDeltaBytes": 53248,
+            "nearRenderersPerInstance": 2,
+            "materialsPerInstance": 2,
+            "nearTrianglesPerInstance": 1100,
+            "sharedMeshBytes": 114448
+        },
+        {
+            "asset": "CHR_Sipahi_01",
+            "count": 100,
+            "coldSpawnMs": 26.777700000000004,
+            "warmReactivateMs": 6.909400000000001,
+            "managedDeltaBytes": 0,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 6,
+            "nearTrianglesPerInstance": 17148,
+            "sharedMeshBytes": 2016200
+        },
+        {
+            "asset": "CHR_Sipahi_01",
+            "count": 250,
+            "coldSpawnMs": 73.7288,
+            "warmReactivateMs": 19.0442,
+            "managedDeltaBytes": 8192,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 6,
+            "nearTrianglesPerInstance": 17148,
+            "sharedMeshBytes": 2016200
+        },
+        {
+            "asset": "CHR_Sipahi_01",
+            "count": 500,
+            "coldSpawnMs": 121.3002,
+            "warmReactivateMs": 34.013200000000008,
+            "managedDeltaBytes": 45056,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 6,
+            "nearTrianglesPerInstance": 17148,
+            "sharedMeshBytes": 2016200
+        },
+        {
+            "asset": "MNT_Horse_Proof",
+            "count": 100,
+            "coldSpawnMs": 16.9896,
+            "warmReactivateMs": 5.3326,
+            "managedDeltaBytes": 0,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 1,
+            "nearTrianglesPerInstance": 1180,
+            "sharedMeshBytes": 125368
+        },
+        {
+            "asset": "MNT_Horse_Proof",
+            "count": 250,
+            "coldSpawnMs": 43.6667,
+            "warmReactivateMs": 10.2001,
+            "managedDeltaBytes": 4096,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 1,
+            "nearTrianglesPerInstance": 1180,
+            "sharedMeshBytes": 125368
+        },
+        {
+            "asset": "MNT_Horse_Proof",
+            "count": 500,
+            "coldSpawnMs": 90.3604,
+            "warmReactivateMs": 19.060100000000003,
+            "managedDeltaBytes": 36864,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 1,
+            "nearTrianglesPerInstance": 1180,
+            "sharedMeshBytes": 125368
+        },
+        {
+            "asset": "MNT_Horse_Anatolian_01",
+            "count": 100,
+            "coldSpawnMs": 89.0865,
+            "warmReactivateMs": 12.6178,
+            "managedDeltaBytes": 0,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 3,
+            "nearTrianglesPerInstance": 14986,
+            "sharedMeshBytes": 1729720
+        },
+        {
+            "asset": "MNT_Horse_Anatolian_01",
+            "count": 250,
+            "coldSpawnMs": 99.8512,
+            "warmReactivateMs": 32.825700000000008,
+            "managedDeltaBytes": 4096,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 3,
+            "nearTrianglesPerInstance": 14986,
+            "sharedMeshBytes": 1729720
+        },
+        {
+            "asset": "MNT_Horse_Anatolian_01",
+            "count": 500,
+            "coldSpawnMs": 183.9189,
+            "warmReactivateMs": 62.894400000000008,
+            "managedDeltaBytes": 32768,
+            "nearRenderersPerInstance": 1,
+            "materialsPerInstance": 3,
+            "nearTrianglesPerInstance": 14986,
+            "sharedMeshBytes": 1729720
+        }
+    ]
+}
