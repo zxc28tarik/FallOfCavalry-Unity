@@ -130,9 +130,14 @@ SkinnedMeshRenderer:
   - {fileID: 2100000, guid: 04eedabff36f0ca4f842606b799e2783, type: 2}
   - {fileID: 2100000, guid: a33a27969dac400418a4b41f05aede3c, type: 2}
   - {fileID: 2100000, guid: d256a5b39bfae3e428e24afc20dfa054, type: 2}
-  - {fileID: 2100000, guid: 3d390a61706532a45a7a8b68987c82cc, type: 2}
+  - {fileID: 2100000, guid: d4b7a6be453956945af937de18d63712, type: 2}
+  - {fileID: 2100000, guid: 4a3f502689c0ee546a1bab28876f2a48, type: 2}
   - {fileID: 2100000, guid: 7848284e82b3c0b4797e233eb91f10ee, type: 2}
+  - {fileID: 2100000, guid: 3d390a61706532a45a7a8b68987c82cc, type: 2}
+  - {fileID: 2100000, guid: d5ab18316cd4d5e4e92201a07db24775, type: 2}
   - {fileID: 2100000, guid: 2b60e71e7048b984490185e7583e3410, type: 2}
+  - {fileID: 2100000, guid: ebfe3d8b22826c342b565ad8d037b6be, type: 2}
+  - {fileID: 2100000, guid: 241d2ba3e0575c645981fb8b641f44ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -182,8 +187,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 8671548106292852029}
   m_AABB:
-    m_Center: {x: 0.000012010336, y: 0.896829, z: 0.08830701}
-    m_Extent: {x: 0.572574, y: 0.878598, z: 0.29230702}
+    m_Center: {x: 0.000012010336, y: 0.895487, z: 0.058519512}
+    m_Extent: {x: 0.572574, y: 0.87994, z: 0.3220945}
   m_DirtyAABB: 0
 --- !u!1 &1231118967067868510
 GameObject:
@@ -341,9 +346,14 @@ SkinnedMeshRenderer:
   - {fileID: 2100000, guid: 04eedabff36f0ca4f842606b799e2783, type: 2}
   - {fileID: 2100000, guid: a33a27969dac400418a4b41f05aede3c, type: 2}
   - {fileID: 2100000, guid: d256a5b39bfae3e428e24afc20dfa054, type: 2}
-  - {fileID: 2100000, guid: 3d390a61706532a45a7a8b68987c82cc, type: 2}
+  - {fileID: 2100000, guid: d4b7a6be453956945af937de18d63712, type: 2}
+  - {fileID: 2100000, guid: 4a3f502689c0ee546a1bab28876f2a48, type: 2}
   - {fileID: 2100000, guid: 7848284e82b3c0b4797e233eb91f10ee, type: 2}
+  - {fileID: 2100000, guid: 3d390a61706532a45a7a8b68987c82cc, type: 2}
+  - {fileID: 2100000, guid: d5ab18316cd4d5e4e92201a07db24775, type: 2}
   - {fileID: 2100000, guid: 2b60e71e7048b984490185e7583e3410, type: 2}
+  - {fileID: 2100000, guid: ebfe3d8b22826c342b565ad8d037b6be, type: 2}
+  - {fileID: 2100000, guid: 241d2ba3e0575c645981fb8b641f44ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -393,8 +403,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 8671548106292852029}
   m_AABB:
-    m_Center: {x: 0, y: 0.8967135, z: 0.088218}
-    m_Extent: {x: 0.572431, y: 0.8787135, z: 0.292218}
+    m_Center: {x: 0, y: 0.8954875, z: 0.0584905}
+    m_Extent: {x: 0.572431, y: 0.8799395, z: 0.3219455}
   m_DirtyAABB: 0
 --- !u!1 &1685580768184359574
 GameObject:
@@ -1108,8 +1118,8 @@ LODGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8322982983542505215}
   serializedVersion: 2
-  m_LocalReferencePoint: {x: 0.000012040138, y: 0.896712, z: 0.08830702}
-  m_Size: 1.75743
+  m_LocalReferencePoint: {x: 0.000012040138, y: 0.895487, z: 0.058519512}
+  m_Size: 1.75988
   m_FadeMode: 0
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
@@ -1210,9 +1220,14 @@ SkinnedMeshRenderer:
   - {fileID: 2100000, guid: 04eedabff36f0ca4f842606b799e2783, type: 2}
   - {fileID: 2100000, guid: a33a27969dac400418a4b41f05aede3c, type: 2}
   - {fileID: 2100000, guid: d256a5b39bfae3e428e24afc20dfa054, type: 2}
-  - {fileID: 2100000, guid: 3d390a61706532a45a7a8b68987c82cc, type: 2}
+  - {fileID: 2100000, guid: d4b7a6be453956945af937de18d63712, type: 2}
+  - {fileID: 2100000, guid: 4a3f502689c0ee546a1bab28876f2a48, type: 2}
   - {fileID: 2100000, guid: 7848284e82b3c0b4797e233eb91f10ee, type: 2}
+  - {fileID: 2100000, guid: 3d390a61706532a45a7a8b68987c82cc, type: 2}
+  - {fileID: 2100000, guid: d5ab18316cd4d5e4e92201a07db24775, type: 2}
   - {fileID: 2100000, guid: 2b60e71e7048b984490185e7583e3410, type: 2}
+  - {fileID: 2100000, guid: ebfe3d8b22826c342b565ad8d037b6be, type: 2}
+  - {fileID: 2100000, guid: 241d2ba3e0575c645981fb8b641f44ea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1262,6 +1277,6 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 8671548106292852029}
   m_AABB:
-    m_Center: {x: 0.000016480684, y: 0.896712, z: 0.088295504}
-    m_Extent: {x: 0.5725405, y: 0.878715, z: 0.29229552}
+    m_Center: {x: 0.000016480684, y: 0.8954915, z: 0.05850801}
+    m_Extent: {x: 0.5725405, y: 0.8799355, z: 0.322083}
   m_DirtyAABB: 0

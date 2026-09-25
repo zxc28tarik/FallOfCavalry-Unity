@@ -147,6 +147,48 @@ namespace FOC.Tests.VisualPipeline
                 Assert.That(float.IsNaN(h)||float.IsInfinity(h),Is.False);
             }
         }
+        [Test]public void HasanRescueRetainsCanonicalRigAndDraftStatus()
+        {
+            var source=Read("CHR_HasanAga_01");var original=Read("BODY_OttomanMale_Standard");
+            Assert.That(source.status,Is.EqualTo("Draft"),"Structural tests are not visual acceptance.");
+            Assert.That(source.bones.Select(b=>b.name),Is.EqualTo(original.bones.Select(b=>b.name)));
+            for(var i=0;i<source.bones.Length;i++)
+            {
+                Assert.That(source.bones[i].parent,Is.EqualTo(original.bones[i].parent));
+                Assert.That(source.bones[i].position,Is.EqualTo(original.bones[i].position));
+            }
+            HistoricalArtCandidatePipeline.ValidateSource(source);
+            foreach(var lod in source.lods)foreach(var part in lod.parts)
+            for(var i=0;i<part.positions.Length/3;i++)
+            {
+                var p=Point(part,i);
+                Assert.That(Mathf.Abs(p.x),Is.LessThan(.80f),"Exploded shell/miter width.");
+                Assert.That(p.y,Is.InRange(0f,1.85f),"Exploded shell/miter height.");
+                Assert.That(Mathf.Abs(p.z),Is.LessThan(.60f),"Exploded shell/miter depth.");
+            }
+        }
+        [Test]public void HasanRescueUsesLicensedCardsAndConstructedLayers()
+        {
+            var source=Read("CHR_HasanAga_01");
+            foreach(var lod in source.lods)
+            {
+                foreach(var name in new[]{"HairCardsBeard","HairCardsMoustache","Mail","Linen","ClothRed","LeatherSole"})
+                    Assert.That(lod.parts.Any(p=>p.material==name),Is.True,name);
+            }
+            foreach(var name in new[]{"HairCardsBeard","HairCardsMoustache"})
+            {
+                var mat=AssetDatabase.LoadAssetAtPath<Material>(HistoricalArtCandidatePipeline.MaterialRoot+"/MAT_"+name+".mat");
+                Assert.That(mat,Is.Not.Null);Assert.That(mat.IsKeywordEnabled("_ALPHATEST_ON"),Is.True);
+                Assert.That(AssetDatabase.GetAssetPath(mat.mainTexture),Does.EndWith("/"+name+"_D.png"));
+            }
+        }
+        [Test]public void HasanRescueCollarDoesNotCutAcrossShoulders()
+        {
+            var collar=Read("CHR_HasanAga_01").lods[0].parts.Single(p=>p.material=="Linen");
+            var points=Enumerable.Range(0,collar.positions.Length/3).Select(i=>Point(collar,i)).ToArray();
+            Assert.That(points.Max(p=>Mathf.Abs(p.x)),Is.LessThan(.14f),"A neck collar must not include shoulder caps.");
+            Assert.That(points.Min(p=>p.y),Is.GreaterThan(1.50f));
+        }
         [Test]public void SurfaceStudiesHaveDifferentMaterialResponse()
         {
             var mail=Enumerable.Range(0,256).Select(x=>HistoricalArtSurfaceAuthoring.Height("Mail",x,16)).ToArray();

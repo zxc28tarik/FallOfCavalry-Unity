@@ -175,6 +175,7 @@ namespace FOC.Editor.Visuals
             {
                 var color=name=="Skin"?new Color(.69f,.48f,.36f):name=="Linen"?new Color(.65f,.57f,.41f):name=="ClothBlue"?new Color(.15f,.24f,.28f):name=="ClothRed"?new Color(.38f,.11f,.08f):name=="Mail"?new Color(.52f,.55f,.56f):name=="Steel"?new Color(.47f,.49f,.5f):name=="Wood"?new Color(.32f,.17f,.07f):new Color(.20f,.105f,.048f);
                 if(name=="EyeWhite")color=new Color(.7f,.65f,.55f);if(name=="Hair")color=new Color(.035f,.025f,.017f);
+                if(name=="LeatherSole")color=new Color(.065f,.042f,.025f);
                 material.color=color;material.SetFloat("_Metallic",name=="Mail"?.62f:name=="Steel"?.85f:0);material.SetFloat("_Glossiness",name=="Steel"?.48f:name=="Skin"?.21f:name=="Leather"?.28f:.18f);
                 var tex=HistoricalArtSurfaceAuthoring.Albedo(name);var texturePath=MaterialRoot+"/"+tex.name+".asset";Store(tex,texturePath);material.mainTexture=AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
                 var normal=HistoricalArtSurfaceAuthoring.Normal(name);var normalPath=MaterialRoot+"/"+normal.name+".asset";Store(normal,normalPath);material.SetTexture("_BumpMap",AssetDatabase.LoadAssetAtPath<Texture2D>(normalPath));material.EnableKeyword("_NORMALMAP");material.SetFloat("_BumpScale",name=="Mail"?.65f:.18f);

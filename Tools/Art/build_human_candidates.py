@@ -10,6 +10,7 @@ import math
 import hashlib
 import random
 import shutil
+import sys
 from pathlib import Path
 from collections import defaultdict
 from mathutils import Vector
@@ -19,6 +20,9 @@ INPUT=REPO/'Artifacts/ArtInputs'
 OUT=REPO/'UnityProject/Assets/FOC/ArtSource/HistoricalSlice/Characters'
 OUT.mkdir(parents=True,exist_ok=True)
 SYSTEM=REPO/'ArtSource/HistoricalSlice/Upstream/SystemAssets'
+RESCUE='--hasan-rescue' in sys.argv
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0,str(Path(__file__).resolve().parent))
 for source,dest in [
     ('skins/young_caucasian_male/young_lightskinned_male_diffuse.png','Skin_D.png'),
     ('skins/middleage_caucasian_male/middleage_lightskinned_male_diffuse.png','SkinMature_D.png'),
@@ -105,6 +109,7 @@ def make_subset(name,predicate,offset=0,material='Skin',build=1,head_variant=0):
     return obj,material
 
 def export(name,category,parts,rig=True):
+    if RESCUE and name!='CHR_HasanAga_01':return
     if not name.startswith(('BODY_','HEAD_','CLTH_','ARM_','CHR_')):raise RuntimeError('Invalid human asset ID: '+name)
     lods=[]
     for level,ratio in enumerate((1,.48,.20)):
@@ -150,9 +155,9 @@ def export(name,category,parts,rig=True):
             outparts.append(data);bpy.data.objects.remove(obj,do_unlink=True)
         lods.append({'parts':outparts})
     payload={'formatVersion':1,'assetId':name,'category':category,'status':'Draft','generator':'Blender '+bpy.app.version_string+' / Tools/Art/build_human_candidates.py',
-        'source':'MakeHuman hm08 CC0 + system-assets CC0 skin/hair + original FOC garment/fiber adaptations','sourceSha256':hashlib.sha256((INPUT/'base.obj').read_bytes()).hexdigest(),
+        'source':'MakeHuman hm08 CC0 + system-assets CC0 skin/hair + original FOC garment adaptations'+(' + bodyparts05 RehmanPolanski CC0 beard/moustache' if name=='CHR_HasanAga_01' else ''),'sourceSha256':hashlib.sha256((INPUT/'base.obj').read_bytes()).hexdigest(),
         'sourcePackSha256':'b542127a8e25547c7c29c19f2d1d2adb9a664c80396ecd694095dbc8028a0107',
-        'license':'CC0-1.0 anatomy; project-authored adaptations','date':'2026-09-25','revision':'14C-r2-continuous-garments','bones':bones if rig else [],'lods':lods}
+        'license':'CC0-1.0 anatomy; project-authored adaptations','date':'2026-09-25','revision':'14C-r3-surface-rescue' if name=='CHR_HasanAga_01' else '14C-r2-continuous-garments','bones':bones if rig else [],'lods':lods}
     (OUT/(name+'.focmesh.json')).write_text(json.dumps(payload,separators=(',',':')),encoding='utf-8')
     print('FOC_HUMAN_EXPORT',name,[sum(len(p['triangles'])//3 for p in l['parts']) for l in lods],flush=True)
 
@@ -166,13 +171,15 @@ def eye_part(name,center,radii,material):
     for p in obj.data.polygons:p.use_smooth=True
     return obj,material
 
-def fitted_hair(style,variant):
-    folder=SYSTEM/'hair'/style
+def fitted_hair(style,variant,folder=None,material=None):
+    folder=folder or SYSTEM/'hair'/style
     mappings=[];factors=[scale]*3;reading=False
+    obj_file=style+'.obj'
     for line in (folder/(style+'.mhclo')).read_text().splitlines():
         p=line.split()
         if not p or p[0].startswith('#'):continue
-        if p[0] in ['x_scale','y_scale','z_scale']:
+        if p[0]=='obj_file':obj_file=p[1]
+        elif p[0] in ['x_scale','y_scale','z_scale']:
             axis='xyz'.index(p[0][0]);factors[axis]=abs(verts[int(p[1])][axis]-verts[int(p[2])][axis])/float(p[3])
         elif p[0]=='verts':reading=True
         elif reading and len(p)==9:
@@ -181,7 +188,7 @@ def fitted_hair(style,variant):
             fac=max(0,1-abs(position.y-1.61)/.12);position.x*=1+(variant-2)*.045*fac;position.z+=(variant-2)*.008*fac
             mappings.append(position)
     tex=[];polys=[]
-    for line in (folder/(style+'.obj')).read_text().splitlines():
+    for line in (folder/obj_file).read_text().splitlines():
         p=line.split()
         if not p:continue
         if p[0]=='vt':tex.append(tuple(map(float,p[1:3])))
@@ -196,7 +203,7 @@ def fitted_hair(style,variant):
     uv=data.uv_layers.new()
     for poly,face in zip(data.polygons,polys):
         for li,(_,ti) in zip(poly.loop_indices,face):uv.data[li].uv=tex[ti]
-    return obj,'HairCards'+style[-2:]
+    return obj,material or 'HairCards'+style[-2:]
 
 def beard_strands(variant):
     rng=random.Random(1400+variant);coords=[];polys=[]
@@ -380,5 +387,8 @@ for i,label in enumerate(['Sipahi','Cebeli','Tufekci','HasanAga']):
     parts=[(part[0],'SkinMature' if i==3 else 'Skin') for part in exposed]+[trousers]+boots+heads[i]
     if label in ['Sipahi','HasanAga']:parts+=mail
     else:parts+=coat
+    if label=='HasanAga':
+        from rescue_hasan_surface import build
+        parts=build(globals())
     export('CHR_'+label+'_01','ConsolidatedCharacter',parts)
 print('FOC_HUMAN_CANDIDATES_DRAFT_ONLY',flush=True)

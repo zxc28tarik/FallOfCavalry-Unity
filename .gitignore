@@ -27,3 +27,4 @@ crashlytics-build.properties
 /Artifacts/
 !Build/*.csproj
 !FallOfCavalry.sln
+__pycache__/
