@@ -44,6 +44,12 @@ namespace FOC.Presentation.Unity
             _controller.Open(new PresentationRoute(PresentationScreenId.Map));
         }
 
+        public void Open(PresentationRoute route)
+        {
+            if(_controller==null)throw new InvalidOperationException("Presentation host is not configured.");
+            _controller.Open(route);
+        }
+
         private void OnDisable() { Release(); }
         private void OnDestroy()
         {

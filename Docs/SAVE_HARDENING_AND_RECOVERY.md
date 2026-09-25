@@ -1,6 +1,6 @@
 # Save hardening and recovery
 
-Schema authority is `CampaignSaveData.CurrentSaveVersion = 13`. `CampaignSaveDefaults` owns the exact ordered v1→v13 migration chain; no runtime or document may maintain an independent chain. The v12→v13 step initializes empty geography/travel collections and invents no journey.
+Schema authority is `CampaignSaveData.CurrentSaveVersion = 14`. `CampaignSaveDefaults` owns the exact ordered v1→v14 migration chain; no runtime or document may maintain an independent chain. The v12→v13 step initializes empty geography/travel collections and invents no journey; v13→v14 atomically replaces temporary content identities while preserving geography and journey progress.
 
 ## Commit protocol
 

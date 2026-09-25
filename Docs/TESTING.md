@@ -1,12 +1,18 @@
 # Testing
 
+## Implementation 14B historical-content gate
+
+Run `Tools/Test-HistoricalContentPipeline.ps1 -UnityEditor <Unity.exe>`. It runs the focused .NET tests, the same tests under Unity EditMode, regenerates the visual assets/catalog without manual Inspector work, then executes the Unity historical-content batch validator. Coverage includes truth/provenance separation, forbidden proof-ID absence, complete cross-domain invariants, City V2 buildings/infrastructure, executable production and trade accounting, persistent military/Soldier/equipment identity, schema v14 roundtrip, a hardcoded v13→v14 active-journey fixture, deterministic initial save, production visual profiles/mappings and measured parse/validation/save work.
+
+After the focused gate, run the full .NET and Unity suites, every existing package pipeline, `Tools/Build-Windows-Development.ps1`, player smoke and the required Map/City/Character/Trade/Army/Soldier screenshots. No critical skip is permitted.
+
 ## Implementation 14A world-map gate
 
 Run `Tools/Test-WorldMapPipeline.ps1`. It validates content/provenance, projection bounds, explicit route connectivity, stable equal-cost path tie-breaks, Character/Army/Caravan lifecycle, external Envoy/Messenger ports, AI service reuse and fairness, information isolation, v12→v13 migration, mid-journey semantic continuation, map projection and measured graph/path/marker/route-projection work. Run `Tools/Build-WorldMapAssets.ps1` to verify the committed original map art, exact SHA-256 provenance, dimensions and Unity import metadata without network access or manual Inspector work. Then run the full .NET, Unity, earlier focused pipelines and Windows Development build; zero critical skips are permitted.
 
 ## Implementation 13 integration and persistence gate
 
-Run `Tools/Test-SaveHardeningPipeline.ps1`, `Tools/Test-IntegrationPipeline.ps1`, `Tools/Test-LongRunPipeline.ps1`, `Tools/Benchmark-ProductionFoundation.ps1` and `Tools/Build-Windows-Development.ps1`. The focused gates cover atomic interruption/recovery/concurrency/path safety, exact v1→v13 migration, whole-campaign roundtrip/continuation/replay, deterministic periodic reload, real production mapping/serialization performance, a Unity batch integration proof and a real Windows x64 Development player. The complete .NET and Unity suites plus every earlier package pipeline remain mandatory regressions.
+Run `Tools/Test-SaveHardeningPipeline.ps1`, `Tools/Test-IntegrationPipeline.ps1`, `Tools/Test-LongRunPipeline.ps1`, `Tools/Benchmark-ProductionFoundation.ps1` and `Tools/Build-Windows-Development.ps1`. The focused gates cover atomic interruption/recovery/concurrency/path safety, exact v1→v14 migration, whole-campaign roundtrip/continuation/replay, deterministic periodic reload, real production mapping/serialization performance, a Unity batch integration proof and a real Windows x64 Development player. The complete .NET and Unity suites plus every earlier package pipeline remain mandatory regressions.
 
 `-focSmokeTest` is accepted only by the Development proof bootstrap. It runs the real player save/load path and quits; it is not a gameplay feature or release mode.
 

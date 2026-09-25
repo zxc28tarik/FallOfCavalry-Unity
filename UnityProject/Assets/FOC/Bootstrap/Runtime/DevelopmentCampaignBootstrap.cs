@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FOC.Application.Geography;
 using FOC.Application.Save;
 using FOC.Domain.Campaign;
@@ -13,6 +14,7 @@ using FOC.Domain.Time;
 using FOC.Infrastructure.Save;
 using FOC.Presentation.Core;
 using FOC.Presentation.Unity;
+using FOC.Presentation.Visuals;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,6 +37,7 @@ namespace FOC.Bootstrap.Unity
         private TravelCommandService? _travel;
         private Label? _feedback;
         private TextField? _slot;
+        private VisualSoldier3D? _previewView;
 
         public CampaignRuntimeState? CurrentCampaign => _campaign;
 
@@ -44,7 +47,8 @@ namespace FOC.Bootstrap.Unity
             {
                 var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice location content is missing.");
                 var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice route content is missing.");
-                _campaign = VerticalSliceCampaignFactory.Create(locations.text,routes.text);
+                var historical=Resources.Load<TextAsset>("FOC/HistoricalSlice/historical-slice-content") ?? throw new InvalidOperationException("Historical-slice content is missing.");
+                _campaign = VerticalSliceCampaignFactory.Create(locations.text,routes.text,historical.text);
                 var root = Path.Combine(UnityEngine.Application.persistentDataPath, "FOC", "VerticalSliceSaves");
                 var serializer = new CampaignSaveTextSerializer();
                 var service = new CampaignSaveService(
@@ -61,6 +65,7 @@ namespace FOC.Bootstrap.Unity
                 ConfigureTravelPresentation();
                 _host = GetComponent<PresentationRuntimeHost>() ?? gameObject.AddComponent<PresentationRuntimeHost>();
                 PresentCampaign();
+                if(HasCommandLineArgument("-focSoldierPreview"))ConfigureHistoricalSoldierPreview();
                 if (HasCommandLineArgument("-focTravelDemo"))
                 {
                     StartPlayerTravel(WorldLocationId.Create("edirne"));
@@ -83,8 +88,27 @@ namespace FOC.Bootstrap.Unity
         private void PresentCampaign()
         {
             if (_host == null || _campaign == null || _viewer == null || _map == null) return;
-            _host.Configure(new CampaignPresentationScreenSource(_campaign, _viewer, _map),dispatcher:_bindings);
+            _host.Configure(new CampaignPresentationScreenSource(_campaign, _viewer, _map),new SlicePresentationLocalizer(),_bindings);
+            OpenCommandLineScreen();
             BindSaveLoadSurface();
+        }
+
+        private void OpenCommandLineScreen()
+        {
+            if(_host==null)return;var screenText=CommandLineValue("-focScreen");if(string.IsNullOrWhiteSpace(screenText)||!Enum.TryParse(screenText,true,out PresentationScreenId screen))return;var subjectText=CommandLineValue("-focSubject");PresentationEntityRef? subject=null;
+            if(!string.IsNullOrWhiteSpace(subjectText)){var kind=screen switch{PresentationScreenId.City=>PresentationEntityKind.City,PresentationScreenId.Trade=>PresentationEntityKind.City,PresentationScreenId.Character=>PresentationEntityKind.Character,PresentationScreenId.Organization=>PresentationEntityKind.Organization,PresentationScreenId.Army=>PresentationEntityKind.Army,PresentationScreenId.Battle=>PresentationEntityKind.Battle,_=>PresentationEntityKind.None};if(kind!=PresentationEntityKind.None)subject=new PresentationEntityRef(kind,subjectText);}
+            _host.Open(new PresentationRoute(screen,subject));
+        }
+
+        private void ConfigureHistoricalSoldierPreview()
+        {
+            if(_campaign==null)throw new InvalidOperationException("Campaign is unavailable for Soldier preview.");var catalog=Resources.Load<VisualCatalogAsset>("FOC/Visuals/FOC_VisualCatalog")??throw new InvalidOperationException("Runtime visual catalog is missing.");
+            var document=GetComponent<UIDocument>();if(document!=null)document.enabled=false;
+            var soldier=_campaign.Soldiers.Soldiers.GetRequired(FOC.Domain.Common.SoldierId.Create("soldier-hasan-01"));var troop=_campaign.Soldiers.Definitions.GetRequired(soldier.TroopDefinitionId);var equipment=_campaign.Soldiers.Equipment.OrderedEquipment.ToDictionary(x=>x.Id,x=>x);
+            var visualSystem=new GameObject("Historical Visual System");var assembler=visualSystem.AddComponent<VisualSoldier3DAssembler>();assembler.Configure(catalog);var visualRoot=new GameObject("Historical Sipahi Preview");var view=visualRoot.AddComponent<VisualSoldier3D>();_previewView=view;var plan=assembler.Assemble(view,soldier,troop,equipment);visualRoot.transform.position=Vector3.zero;visualRoot.transform.rotation=Quaternion.Euler(0f,18f,0f);
+            var camera=Camera.main;if(camera==null){camera=new GameObject("Historical Preview Camera").AddComponent<Camera>();camera.tag="MainCamera";}camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color(0.055f,0.065f,0.075f);camera.transform.position=new Vector3(5.4f,3.5f,-8.4f);camera.transform.LookAt(new Vector3(0f,1.8f,0f));camera.fieldOfView=35f;
+            var light=new GameObject("Historical Preview Key Light").AddComponent<Light>();light.type=LightType.Directional;light.intensity=1.25f;light.transform.rotation=Quaternion.Euler(38f,-32f,0f);var fill=new GameObject("Historical Preview Fill Light").AddComponent<Light>();fill.type=LightType.Directional;fill.intensity=0.45f;fill.color=new Color(0.65f,0.75f,1f);fill.transform.rotation=Quaternion.Euler(25f,145f,0f);
+            var ground=GameObject.CreatePrimitive(PrimitiveType.Plane);ground.name="Historical Preview Ground";ground.transform.position=new Vector3(0f,-0.02f,0f);ground.transform.localScale=new Vector3(1.5f,1f,1.5f);var groundMaterial=new Material(Shader.Find("Standard")){color=new Color(0.12f,0.09f,0.065f)};ground.GetComponent<Renderer>().material=groundMaterial;Debug.Log("FOC_HISTORICAL_SOLDIER_PREVIEW_READY soldier="+soldier.Id.Value+" troop="+troop.Id.Value+" modules="+plan.Modules.Count);
         }
 
         private void BindSaveLoadSurface()
@@ -143,6 +167,7 @@ namespace FOC.Bootstrap.Unity
         private IEnumerator CaptureScreenshot()
         {
             yield return null;
+            yield return new WaitForSecondsRealtime(1.5f);
             yield return new WaitForEndOfFrame();
             var path = CommandLineValue("-focScreenshotPath");
             if (string.IsNullOrWhiteSpace(path))
@@ -155,6 +180,7 @@ namespace FOC.Bootstrap.Unity
             WriteBmp(path, texture.GetPixels32(), texture.width, texture.height);
             Destroy(texture);
             Debug.Log("FOC_SCREENSHOT_CAPTURE_PASS path=" + path);
+            _previewView?.ReleaseVisual();
             UnityEngine.Application.Quit(0);
         }
 
@@ -192,21 +218,20 @@ namespace FOC.Bootstrap.Unity
 
         private static PresentationViewerContext CreateViewer()
         {
-            var controlled = new PresentationEntityRef(PresentationEntityKind.Character, "slice-player-sipahi");
+            var controlled = new PresentationEntityRef(PresentationEntityKind.Character, "hasan-aga");
             var exact = new List<PresentationEntityRef>
             {
                 controlled,
-                new PresentationEntityRef(PresentationEntityKind.Character, "slice-player-sipahi"),
-                new PresentationEntityRef(PresentationEntityKind.Character, "commander-b"),
-                new PresentationEntityRef(PresentationEntityKind.City, "city-home"),
-                new PresentationEntityRef(PresentationEntityKind.City, "city-other"),
-                new PresentationEntityRef(PresentationEntityKind.Organization, "org-a"),
-                new PresentationEntityRef(PresentationEntityKind.Organization, "org-b"),
-                new PresentationEntityRef(PresentationEntityKind.Army, "army-a"),
-                new PresentationEntityRef(PresentationEntityKind.Army, "army-b"),
-                new PresentationEntityRef(PresentationEntityKind.Battle, "battle-main")
+                new PresentationEntityRef(PresentationEntityKind.Character, "hasan-aga"),
+                new PresentationEntityRef(PresentationEntityKind.Character, "ali-cavus"),
+                new PresentationEntityRef(PresentationEntityKind.Character, "mehmed-celebi-tacir"),
+                new PresentationEntityRef(PresentationEntityKind.City, "city-istanbul"),
+                new PresentationEntityRef(PresentationEntityKind.City, "city-bursa"),
+                new PresentationEntityRef(PresentationEntityKind.Organization, "org-hasan-retinue"),
+                new PresentationEntityRef(PresentationEntityKind.Organization, "org-marmara-caravan"),
+                new PresentationEntityRef(PresentationEntityKind.Army, "army-hasan-retinue")
             };
-            return new PresentationViewerContext(FactionId.Create("faction-a"), controlled, exact, developmentDebug: true);
+            return new PresentationViewerContext(FactionId.Create("faction-ottoman-state"), controlled, exact, developmentDebug: false);
         }
 
         private void ConfigureTravelPresentation()
@@ -223,7 +248,7 @@ namespace FOC.Bootstrap.Unity
         {
             try
             {
-                if(_campaign==null||_travel==null)throw new InvalidOperationException();var player=_campaign.Characters.GetRequired(CharacterId.Create("slice-player-sipahi"));if(player.Location.Kind!=CharacterLocationKind.City||!player.Location.CityId.HasValue)throw new InvalidOperationException();var origin=_campaign.Geography.World.LocationForCity(player.Location.CityId.Value).Id;_travel.Start(JourneyId.Create("journey-player-"+_campaign.Clock.Now.Ticks+"-"+destination.Value),TravelActorRef.Character(player.Id),origin,destination);return PresentationActionResult.Success("presentation.travel.started");
+                if(_campaign==null||_travel==null)throw new InvalidOperationException();var player=_campaign.Characters.GetRequired(CharacterId.Create("hasan-aga"));if(player.Location.Kind!=CharacterLocationKind.City||!player.Location.CityId.HasValue)throw new InvalidOperationException();var origin=_campaign.Geography.World.LocationForCity(player.Location.CityId.Value).Id;_travel.Start(JourneyId.Create("journey-player-"+_campaign.Clock.Now.Ticks+"-"+destination.Value),TravelActorRef.Character(player.Id),origin,destination);return PresentationActionResult.Success("presentation.travel.started");
             }
             catch(InvalidOperationException){return PresentationActionResult.Rejected("presentation.action.validation-rejected");}
         }

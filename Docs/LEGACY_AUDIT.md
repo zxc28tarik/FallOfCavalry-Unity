@@ -1,5 +1,13 @@
 # Legacy FOC Audit — Implementation 0
 
+## Implementation 14B historical-content re-audit
+
+- KEEP: current typed domain contracts, deterministic time/RNG/order, authored 14A geography/map art, Application services, save hardening and reusable procedural visual modules.
+- ADAPT: broad historically plausible City/economy/military vocabulary only after source review and explicit provenance classification.
+- REWRITE: executable vertical-slice composition, all temporary identities, roster, City V2 content, stocks/recipes/Caravan, retinue/Soldiers/equipment, localization and v14 migration as typed deterministic data.
+- REMOVE: Development bootstrap dependency on `IntegratedProofCampaignFactory`, `city-home`, `city-other`, `slice-player-sipahi`, `commander-a/b`, `army-a/b`, Proof display names and player-facing internal `presentation.*` keys.
+- REFERENCE_ONLY: legacy browser content, numeric tables, historical names, Phaser visuals and gameplay scripts. No legacy runtime, price, population, combat modifier or art was copied into 14B authority.
+
 ## Implementation 14A historical geography / travel re-audit
 
 - KEEP: current typed IDs, WorldClock, Character/Army/Caravan location contracts, report-based information boundary and save infrastructure.

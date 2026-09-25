@@ -74,7 +74,7 @@ namespace FOC.Tests
             var first = pipeline.Migrate(read.Data!, CampaignSaveData.CurrentSaveVersion);
             var second = pipeline.Migrate(read.Data!, CampaignSaveData.CurrentSaveVersion);
             Assert.That(first.Success, Is.True, first.Error);
-            Assert.That(first.Data!.SaveVersion, Is.EqualTo(13));
+            Assert.That(first.Data!.SaveVersion, Is.EqualTo(14));
             Assert.That(first.Data.CampaignId, Is.EqualTo("campaign-alpha"));
             Assert.That(first.Data.Characters.Count, Is.EqualTo(0));
             Assert.That(second.Data!.Characters.Count, Is.EqualTo(first.Data.Characters.Count));

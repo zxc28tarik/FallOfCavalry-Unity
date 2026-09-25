@@ -30,15 +30,15 @@ namespace FOC.Tests
         }
 
         [Test]
-        public void AuthoritativeMigrationChain_IsContinuousOneThroughThirteenAndInventsNoState()
+        public void AuthoritativeMigrationChain_IsContinuousOneThroughFourteenAndInventsNoState()
         {
             var migrations = CampaignSaveDefaults.OrderedMigrations;
-            Assert.That(migrations.Select(x => x.FromVersion), Is.EqualTo(Enumerable.Range(1, 12)));
-            Assert.That(migrations.Select(x => x.ToVersion), Is.EqualTo(Enumerable.Range(2, 12)));
+            Assert.That(migrations.Select(x => x.FromVersion), Is.EqualTo(Enumerable.Range(1, 13)));
+            Assert.That(migrations.Select(x => x.ToVersion), Is.EqualTo(Enumerable.Range(2, 13)));
             var source = MinimalData(1);
-            var result = CampaignSaveDefaults.CreateMigrationPipeline().Migrate(source, 13);
+            var result = CampaignSaveDefaults.CreateMigrationPipeline().Migrate(source, 14);
             Assert.That(result.Success, Is.True, result.Error);
-            Assert.That(result.Data!.SaveVersion, Is.EqualTo(13));
+            Assert.That(result.Data!.SaveVersion, Is.EqualTo(14));
             Assert.That(result.Data.Characters, Is.Empty);
             Assert.That(result.Data.Cities, Is.Empty);
             Assert.That(result.Data.Armies, Is.Empty);
@@ -110,7 +110,7 @@ namespace FOC.Tests
         [Test]
         public void FutureVersionAndOversizedCount_AreRejected()
         {
-            var future = MinimalData(14);
+            var future = MinimalData(15);
             Assert.That(new CampaignSaveValidator().Validate(future).Issues.Select(x => x.Code), Does.Contain("SAVE_VERSION_FUTURE"));
             var payload = new CampaignSaveTextSerializer().Serialize(MinimalData(2)).Replace("CharacterCount=0", "CharacterCount=1000001");
             Assert.That(new CampaignSaveTextSerializer().Deserialize(payload).Success, Is.False);
@@ -214,13 +214,13 @@ namespace FOC.Tests
         }
 
         [Test]
-        public void SaveSchemaDocumentation_CodeAndMigrationChainAgreeOnVersionThirteen()
+        public void SaveSchemaDocumentation_CodeAndMigrationChainAgreeOnVersionFourteen()
         {
             var path = FindRepositoryFile("Docs", "SAVE_SCHEMA.md");
             var text = File.ReadAllText(path);
-            Assert.That(CampaignSaveData.CurrentSaveVersion, Is.EqualTo(13));
-            Assert.That(CampaignSaveDefaults.OrderedMigrations.Last().ToVersion, Is.EqualTo(13));
-            Assert.That(text, Does.Contain("CampaignSaveData.CurrentSaveVersion = 13"));
+            Assert.That(CampaignSaveData.CurrentSaveVersion, Is.EqualTo(14));
+            Assert.That(CampaignSaveDefaults.OrderedMigrations.Last().ToVersion, Is.EqualTo(14));
+            Assert.That(text, Does.Contain("CampaignSaveData.CurrentSaveVersion = 14"));
         }
 
         private CampaignSaveService Service(CampaignSaveTextSerializer serializer) => new CampaignSaveService(serializer, new AtomicFileSaveStore(_directory), new CampaignSaveValidator(), CampaignSaveDefaults.CreateMigrationPipeline());

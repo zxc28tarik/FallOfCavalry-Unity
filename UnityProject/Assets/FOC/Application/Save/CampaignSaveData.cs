@@ -4,7 +4,7 @@ namespace FOC.Application.Save
 {
     public sealed partial class CampaignSaveData
     {
-        public const int CurrentSaveVersion = 13;
+        public const int CurrentSaveVersion = 14;
 
         public int SaveVersion { get; set; }
 

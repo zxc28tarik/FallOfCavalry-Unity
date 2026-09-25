@@ -117,7 +117,7 @@ namespace FOC.Presentation.Visuals
                 if((module.Category==VisualAssetCategory.Harness||module.Category==VisualAssetCategory.MountArmor)&&mountRoot!=null)parent=mountRoot;
                 else if(module.Category!=VisualAssetCategory.Mount&&module.Socket.HasValue&&sockets.TryGetValue(module.Socket.Value,out var socket))parent=socket;
                 else if(module.Category!=VisualAssetCategory.Mount&&!module.Socket.HasValue&&sockets.TryGetValue(VisualSocket.Rider,out var rider))parent=rider;
-                var created=Instantiate(prefab,parent,false);created.name=module.AssetId.Value;modules.Add(created);metrics.CreatedModules++;if(module.Category==VisualAssetCategory.Mount)mountRoot=created.transform;IndexSockets(created.transform,sockets);
+                var created=Instantiate(prefab,parent,false);created.name=module.AssetId.Value;if(module.Category==VisualAssetCategory.Harness||module.Category==VisualAssetCategory.MountArmor)created.transform.localPosition=new Vector3(0f,1.28f,0f);modules.Add(created);metrics.CreatedModules++;if(module.Category==VisualAssetCategory.Mount)mountRoot=created.transform;IndexSockets(created.transform,sockets);
             }
             return new AssembledVisualInstance(root,modules.ToArray(),plan.RepresentationKind);
         }

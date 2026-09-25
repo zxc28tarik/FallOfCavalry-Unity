@@ -1,5 +1,11 @@
 # Architecture
 
+## Implementation 14B historical-content boundary
+
+`FOC.Application.HistoricalContent` owns the authored-manifest loader, explicit claim/tuning truth classes and the cross-domain historical acceptance validator. `VerticalSliceCampaignFactory` is now a standalone production-candidate composition and has no `IntegratedProofCampaignFactory` dependency. Static content definitions remain separate from RuntimeState and SaveData; numeric tuning is not presented as historical evidence.
+
+The factory composes existing Character, Organization/House/Clique, Religion, City V2, Economy, Diplomacy, Military, Soldier, AI and Geography contracts without changing their authority. Presentation uses `SlicePresentationLocalizer` only at the outer UI boundary. The visual catalog maps production Troop/equipment IDs to existing procedural modules; meshes and GameObjects remain presentation-only. Schema v14 remaps exact legacy slice identities at the save boundary and does not rewrite geography/travel truth.
+
 ## Implementation 14A geography and travel boundary
 
 `FOC.Domain.Geography` owns typed `WorldLocationId`, `TravelRouteId` and `JourneyId` contracts, immutable location/route definitions, deterministic fixed-integer map coordinates and persistent journey state. `WorldLocation` is not `City`; a location may optionally reference one existing `CityId`. `RegionId` is reused rather than duplicated. Latitude/longitude is descriptive metadata. `MapPoint` millionths are the projection/UI authority.

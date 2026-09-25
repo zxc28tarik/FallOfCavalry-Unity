@@ -26,7 +26,7 @@ namespace FOC.Tests
         {
             var campaign=Campaign();var world=campaign.Geography.World;
             Assert.That(world.LocationCount,Is.EqualTo(12));Assert.That(world.RouteCount,Is.EqualTo(11));
-            var istanbul=world.Location(WorldLocationId.Create("istanbul"));Assert.That(istanbul.DisplayName,Is.EqualTo("İstanbul"));Assert.That(istanbul.CityId!.Value.Value,Is.EqualTo("city-home"));Assert.That(istanbul.SourceIds,Does.Contain("SRC_ALTUNAN_2006"));
+            var istanbul=world.Location(WorldLocationId.Create("istanbul"));Assert.That(istanbul.DisplayName,Is.EqualTo("İstanbul"));Assert.That(istanbul.CityId!.Value.Value,Is.EqualTo("city-istanbul"));Assert.That(istanbul.SourceIds,Does.Contain("SRC_ALTUNAN_2006"));
             Assert.That(world.OrderedLocations.All(x=>x.Status==GeographyContentStatus.ProductionCandidate),Is.True);Assert.That(world.OrderedRoutes.All(x=>x.Status==GeographyContentStatus.SliceTuning),Is.True);
             var sourceCatalog=Read("geography-sources.txt");foreach(var sourceId in world.OrderedLocations.SelectMany(x=>x.SourceIds).Concat(world.OrderedRoutes.SelectMany(x=>x.SourceIds)).Distinct())Assert.That(sourceCatalog,Does.Contain(sourceId+"|"),sourceId);
             Assert.That(world.OrderedLocations.Select(x=>x.MapPoint).Distinct().Count(),Is.EqualTo(world.LocationCount));Assert.That(new DeterministicRoutePathfinder().Find(world,WorldLocationId.Create("edirne"),WorldLocationId.Create("bursa")).Routes,Is.Not.Empty);
@@ -45,41 +45,41 @@ namespace FOC.Tests
         [Test]
         public void CharacterMidJourneySaveRoundTripContinuesToExactArrival()
         {
-            var campaign=Campaign();var service=new TravelCommandService(campaign);var actor=TravelActorRef.Character(CharacterId.Create("slice-player-sipahi"));
+            var campaign=Campaign();var service=new TravelCommandService(campaign);var actor=TravelActorRef.Character(CharacterId.Create("hasan-aga"));
             var journey=service.Start(JourneyId.Create("journey-save"),actor,WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa"));
             var total=service.TotalJourneyTicks(journey);var half=total/2;var departure=campaign.Clock.Now;service.Advance(new WorldDuration(half));
             Assert.That(campaign.Clock.Now.Ticks,Is.EqualTo(departure.Ticks+half));
             Assert.That(journey.Lifecycle,Is.EqualTo(TravelLifecycle.Active));Assert.That(campaign.Characters.GetRequired(CharacterId.Create(actor.Id)).Location.Kind,Is.EqualTo(CharacterLocationKind.Travelling));
-            var serializer=new CampaignSaveTextSerializer();var text=serializer.Serialize(CampaignSaveMapper.ToSaveData(campaign));var read=serializer.Deserialize(text);Assert.That(read.Success,Is.True,read.Error);
+            var serializer=new CampaignSaveTextSerializer();var text=serializer.Serialize(CampaignSaveMapper.ToSaveData(campaign));var read=serializer.Deserialize(text);Assert.That(read.Success,Is.True,read.Error);var validation=new CampaignSaveValidator().Validate(read.Data!);Assert.That(validation.IsValid,Is.True,string.Join(";",validation.Issues.Select(x=>x.Code+":"+x.Message)));
             var restored=CampaignSaveMapper.ToRuntimeState(read.Data!);var restoredJourney=restored.Geography.Travel.GetRequired(journey.Id);Assert.That(restoredJourney.SegmentIndex,Is.EqualTo(journey.SegmentIndex));Assert.That(restoredJourney.SegmentElapsedTicks,Is.EqualTo(journey.SegmentElapsedTicks));
             var remaining=total-half;service.Advance(new WorldDuration(remaining));var continuation=new TravelCommandService(restored);continuation.Advance(new WorldDuration(remaining));
-            Assert.That(restoredJourney.Lifecycle,Is.EqualTo(TravelLifecycle.Arrived));Assert.That(restored.Characters.GetRequired(CharacterId.Create(actor.Id)).Location.CityId!.Value.Value,Is.EqualTo("city-other"));
+            Assert.That(restoredJourney.Lifecycle,Is.EqualTo(TravelLifecycle.Arrived));Assert.That(restored.Characters.GetRequired(CharacterId.Create(actor.Id)).Location.CityId!.Value.Value,Is.EqualTo("city-bursa"));
             Assert.That(restored.Clock.Now,Is.EqualTo(campaign.Clock.Now));Assert.That(restoredJourney.ArrivedAt,Is.EqualTo(journey.ArrivedAt));Assert.That(restored.Characters.GetRequired(CharacterId.Create(actor.Id)).Location.Kind,Is.EqualTo(campaign.Characters.GetRequired(CharacterId.Create(actor.Id)).Location.Kind));
         }
 
         [Test]
         public void InvalidUnavailableAndDisconnectedTravelIsRejectedWithoutMutation()
         {
-            var deadCampaign=Campaign();var dead=deadCampaign.Characters.GetRequired(CharacterId.Create("slice-player-sipahi"));var decision=CharacterDeathRules.TryApply(dead,new CharacterDeathContext(CharacterDeathCause.Illness,deadCampaign.Clock.Now,dead.Location,"travel rejection proof"),new ImportanceStoryGuardDeathPolicy(),deadCampaign.Random);Assert.That(decision.Allowed,Is.True);
+            var deadCampaign=Campaign();var dead=deadCampaign.Characters.GetRequired(CharacterId.Create("hasan-aga"));var decision=CharacterDeathRules.TryApply(dead,new CharacterDeathContext(CharacterDeathCause.Illness,deadCampaign.Clock.Now,dead.Location,"travel rejection proof"),new ImportanceStoryGuardDeathPolicy(),deadCampaign.Random);Assert.That(decision.Allowed,Is.True);
             Assert.Throws<InvalidOperationException>(()=>new TravelCommandService(deadCampaign).Start(JourneyId.Create("dead"),TravelActorRef.Character(dead.Id),WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa")));Assert.That(deadCampaign.Geography.Travel.OrderedJourneys,Is.Empty);
-            var captiveCampaign=Campaign();var captive=captiveCampaign.Characters.GetRequired(CharacterId.Create("slice-player-sipahi"));captive.Capture(new CaptivityState(CharacterId.Create("commander-b"),CaptivitySite.InCity(CityId.Create("city-home"))),captiveCampaign.Clock.Now);
+            var captiveCampaign=Campaign();var captive=captiveCampaign.Characters.GetRequired(CharacterId.Create("hasan-aga"));captive.Capture(new CaptivityState(CharacterId.Create("ali-cavus"),CaptivitySite.InCity(CityId.Create("city-istanbul"))),captiveCampaign.Clock.Now);
             Assert.Throws<InvalidOperationException>(()=>new TravelCommandService(captiveCampaign).Start(JourneyId.Create("captive"),TravelActorRef.Character(captive.Id),WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa")));Assert.That(captiveCampaign.Geography.Travel.OrderedJourneys,Is.Empty);
             var campaign=Campaign();var service=new TravelCommandService(campaign);campaign.Geography.World.Add(Location("isolated"));
             Assert.Throws<KeyNotFoundException>(()=>service.Start(JourneyId.Create("missing-actor"),TravelActorRef.Character(CharacterId.Create("missing")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa")));
-            Assert.Throws<KeyNotFoundException>(()=>service.Start(JourneyId.Create("missing-destination"),TravelActorRef.Character(CharacterId.Create("slice-player-sipahi")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("missing")));
-            Assert.Throws<InvalidOperationException>(()=>service.Start(JourneyId.Create("disconnected"),TravelActorRef.Character(CharacterId.Create("slice-player-sipahi")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("isolated")));Assert.That(campaign.Geography.Travel.OrderedJourneys,Is.Empty);
+            Assert.Throws<KeyNotFoundException>(()=>service.Start(JourneyId.Create("missing-destination"),TravelActorRef.Character(CharacterId.Create("hasan-aga")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("missing")));
+            Assert.Throws<InvalidOperationException>(()=>service.Start(JourneyId.Create("disconnected"),TravelActorRef.Character(CharacterId.Create("hasan-aga")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("isolated")));Assert.That(campaign.Geography.Travel.OrderedJourneys,Is.Empty);
         }
 
         [Test]
         public void ArmyAndCaravanUseTheSameClockRoutesAndLifecycle()
         {
             var campaign=Campaign();var service=new TravelCommandService(campaign);
-            var armyState=campaign.Military.Armies.GetRequired(ArmyId.Create("army-a"));var armyUnits=armyState.OrderedUnits.Select(x=>x.Id.Value+":"+x.Headcount).ToArray();var armySupply=armyState.Supply.OrderedGoods.Select(x=>x.GoodId.Value+":"+x.Quantity.Value).ToArray();var commander=armyState.Commander?.CharacterId;var caravanState=campaign.Economy.Caravans.GetRequired(CaravanId.Create("caravan-proof"));var cargo=caravanState.Cargo.OrderedCargo.Select(x=>x.GoodId.Value+":"+x.Quantity.Value).ToArray();var cash=caravanState.CashBalance;var capacity=caravanState.WeightCapacity;
-            var army=service.Start(JourneyId.Create("journey-army"),TravelActorRef.Army(ArmyId.Create("army-a")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa"));
-            var caravan=service.Start(JourneyId.Create("journey-caravan"),TravelActorRef.Caravan(CaravanId.Create("caravan-proof")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa"));
-            Assert.That(campaign.Military.Armies.GetRequired(ArmyId.Create("army-a")).Location.Kind,Is.EqualTo(ArmyLocationKind.InTransit));Assert.That(campaign.Economy.Caravans.GetRequired(CaravanId.Create("caravan-proof")).LocationStage,Is.EqualTo(CaravanLocationStage.InTransit));
+            var armyState=campaign.Military.Armies.GetRequired(ArmyId.Create("army-hasan-retinue"));var armyUnits=armyState.OrderedUnits.Select(x=>x.Id.Value+":"+x.Headcount).ToArray();var armySupply=armyState.Supply.OrderedGoods.Select(x=>x.GoodId.Value+":"+x.Quantity.Value).ToArray();var commander=armyState.Commander?.CharacterId;var caravanState=campaign.Economy.Caravans.GetRequired(CaravanId.Create("caravan-bursa-istanbul"));var cargo=caravanState.Cargo.OrderedCargo.Select(x=>x.GoodId.Value+":"+x.Quantity.Value).ToArray();var cash=caravanState.CashBalance;var capacity=caravanState.WeightCapacity;
+            var army=service.Start(JourneyId.Create("journey-army"),TravelActorRef.Army(ArmyId.Create("army-hasan-retinue")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa"));
+            var caravan=service.Start(JourneyId.Create("journey-caravan"),TravelActorRef.Caravan(CaravanId.Create("caravan-bursa-istanbul")),WorldLocationId.Create("bursa"),WorldLocationId.Create("istanbul"));
+            Assert.That(campaign.Military.Armies.GetRequired(ArmyId.Create("army-hasan-retinue")).Location.Kind,Is.EqualTo(ArmyLocationKind.InTransit));Assert.That(campaign.Economy.Caravans.GetRequired(CaravanId.Create("caravan-bursa-istanbul")).LocationStage,Is.EqualTo(CaravanLocationStage.InTransit));
             service.Advance(new WorldDuration(Math.Max(service.TotalJourneyTicks(army),service.TotalJourneyTicks(caravan))+1));
-            Assert.That(army.Lifecycle,Is.EqualTo(TravelLifecycle.Arrived));Assert.That(caravan.Lifecycle,Is.EqualTo(TravelLifecycle.Arrived));Assert.That(campaign.Economy.Caravans.GetRequired(CaravanId.Create("caravan-proof")).LocationStage,Is.EqualTo(CaravanLocationStage.AtDestination));
+            Assert.That(army.Lifecycle,Is.EqualTo(TravelLifecycle.Arrived));Assert.That(caravan.Lifecycle,Is.EqualTo(TravelLifecycle.Arrived));Assert.That(campaign.Economy.Caravans.GetRequired(CaravanId.Create("caravan-bursa-istanbul")).LocationStage,Is.EqualTo(CaravanLocationStage.AtDestination));
             Assert.That(campaign.Military.Armies.GetRequired(armyState.Id),Is.SameAs(armyState));Assert.That(armyState.OrderedUnits.Select(x=>x.Id.Value+":"+x.Headcount),Is.EqualTo(armyUnits));Assert.That(armyState.Supply.OrderedGoods.Select(x=>x.GoodId.Value+":"+x.Quantity.Value),Is.EqualTo(armySupply));Assert.That(armyState.Commander?.CharacterId,Is.EqualTo(commander));
             Assert.That(campaign.Economy.Caravans.GetRequired(caravanState.Id),Is.SameAs(caravanState));Assert.That(caravanState.Cargo.OrderedCargo.Select(x=>x.GoodId.Value+":"+x.Quantity.Value),Is.EqualTo(cargo));Assert.That(caravanState.CashBalance,Is.EqualTo(cash));Assert.That(caravanState.WeightCapacity,Is.EqualTo(capacity));
         }
@@ -87,7 +87,7 @@ namespace FOC.Tests
         [Test]
         public void AIUsesRealTravelServiceAndDifficultyCannotChangeSpeed()
         {
-            var campaign=Campaign();var travel=new TravelCommandService(campaign);var provider=new AITravelActionProvider(campaign,travel);var owner=AIDecisionOwnerRef.Character(CharacterId.Create("slice-player-sipahi"));var target=AITargetRef.WorldLocation(WorldLocationId.Create("edirne"));
+            var campaign=Campaign();var travel=new TravelCommandService(campaign);var provider=new AITravelActionProvider(campaign,travel);var owner=AIDecisionOwnerRef.Character(CharacterId.Create("hasan-aga"));var target=AITargetRef.WorldLocation(WorldLocationId.Create("edirne"));
             Assert.That(provider.CanExecute(owner,target,campaign.Clock.Now),Is.True);var journey=provider.Execute(JourneyId.Create("journey-ai"),owner,WorldLocationId.Create("istanbul"),WorldLocationId.Create("edirne"));Assert.That(journey.Lifecycle,Is.EqualTo(TravelLifecycle.Active));
             Assert.That(typeof(SliceTravelTimePolicy).GetMethods().SelectMany(x=>x.GetParameters()).Any(x=>x.Name!=null&&x.Name.IndexOf("difficulty",StringComparison.OrdinalIgnoreCase)>=0),Is.False);
             var blocked=Campaign();blocked.Geography.World.Add(Location("isolated"));var blockedProvider=new AITravelActionProvider(blocked,new TravelCommandService(blocked));Assert.That(blockedProvider.CanExecute(owner,AITargetRef.WorldLocation(WorldLocationId.Create("isolated")),blocked.Clock.Now),Is.False);
@@ -96,16 +96,16 @@ namespace FOC.Tests
         [Test]
         public void PresentationLinksCitiesAndDisplaysExactlyTheDomainJourneyPath()
         {
-            var campaign=Campaign();var actor=TravelActorRef.Character(CharacterId.Create("slice-player-sipahi"));var journey=new TravelCommandService(campaign).Start(JourneyId.Create("journey-map"),actor,WorldLocationId.Create("istanbul"),WorldLocationId.Create("edirne"));var player=new PresentationEntityRef(PresentationEntityKind.Character,actor.Id);var viewer=new PresentationViewerContext(FactionId.Create("faction-proof"),player,new[]{player});var provider=new WorldMapPresentationDataProvider(campaign);
-            var istanbul=provider.GetKnownMarkers(viewer).Single(x=>x.Entity.Equals(new PresentationEntityRef(PresentationEntityKind.WorldLocation,"istanbul")));Assert.That(istanbul.NavigationTarget,Is.EqualTo(new PresentationEntityRef(PresentationEntityKind.City,"city-home")));
+            var campaign=Campaign();var actor=TravelActorRef.Character(CharacterId.Create("hasan-aga"));var journey=new TravelCommandService(campaign).Start(JourneyId.Create("journey-map"),actor,WorldLocationId.Create("istanbul"),WorldLocationId.Create("edirne"));var player=new PresentationEntityRef(PresentationEntityKind.Character,actor.Id);var viewer=new PresentationViewerContext(FactionId.Create("faction-ottoman-state"),player,new[]{player});var provider=new WorldMapPresentationDataProvider(campaign);
+            var istanbul=provider.GetKnownMarkers(viewer).Single(x=>x.Entity.Equals(new PresentationEntityRef(PresentationEntityKind.WorldLocation,"istanbul")));Assert.That(istanbul.NavigationTarget,Is.EqualTo(new PresentationEntityRef(PresentationEntityKind.City,"city-istanbul")));
             Assert.That(provider.GetKnownRoutes(viewer).Where(x=>x.Active).Select(x=>x.RouteId),Is.EquivalentTo(journey.Path.Select(x=>x.Value)));var shown=provider.GetKnownJourneys(viewer).Single();Assert.That(shown.SegmentCount,Is.EqualTo(journey.Path.Count));
         }
 
         [Test]
         public void GeographyKnowledgeDoesNotRevealForeignLiveJourney()
         {
-            var campaign=Campaign();new TravelCommandService(campaign).Start(JourneyId.Create("foreign-army"),TravelActorRef.Army(ArmyId.Create("army-b")),WorldLocationId.Create("bursa"),WorldLocationId.Create("istanbul"));
-            var player=new PresentationEntityRef(PresentationEntityKind.Character,"slice-player-sipahi");var viewer=new PresentationViewerContext(FactionId.Create("faction-proof"),player,new[]{player});var provider=new WorldMapPresentationDataProvider(campaign);
+            var campaign=Campaign();new TravelCommandService(campaign).Start(JourneyId.Create("foreign-army"),TravelActorRef.Army(ArmyId.Create("army-hasan-retinue")),WorldLocationId.Create("istanbul"),WorldLocationId.Create("bursa"));
+            var player=new PresentationEntityRef(PresentationEntityKind.Character,"hasan-aga");var viewer=new PresentationViewerContext(FactionId.Create("faction-ottoman-state"),player,new[]{player});var provider=new WorldMapPresentationDataProvider(campaign);
             Assert.That(provider.GetKnownMarkers(viewer).Count(x=>x.Entity.Kind==PresentationEntityKind.WorldLocation),Is.EqualTo(12));Assert.That(provider.GetKnownMarkers(viewer).Any(x=>x.Entity.Equals(player)),Is.True);Assert.That(provider.GetKnownJourneys(viewer),Is.Empty);
         }
 
@@ -121,11 +121,12 @@ namespace FOC.Tests
         {
             var watch=Stopwatch.StartNew();var campaign=Campaign();watch.Stop();TestContext.Progress.WriteLine("WORLD_MAP_PERFORMANCE graph_loads=1 elapsed_ms="+watch.ElapsedMilliseconds);Assert.That(campaign.Geography.World.LocationCount,Is.EqualTo(12));
             var finder=new DeterministicRoutePathfinder();foreach(var count in new[]{1,100,1000}){watch.Restart();for(var i=0;i<count;i++)finder.Find(campaign.Geography.World,WorldLocationId.Create("istanbul"),i%2==0?WorldLocationId.Create("edirne"):WorldLocationId.Create("bursa"));watch.Stop();TestContext.Progress.WriteLine("WORLD_MAP_PERFORMANCE path_queries="+count+" elapsed_ms="+watch.ElapsedMilliseconds);}
-            var player=new PresentationEntityRef(PresentationEntityKind.Character,"slice-player-sipahi");var viewer=new PresentationViewerContext(FactionId.Create("faction-proof"),player,new[]{player});var provider=new WorldMapPresentationDataProvider(campaign);watch.Restart();for(var i=0;i<1000;i++)provider.GetKnownMarkers(viewer);watch.Stop();TestContext.Progress.WriteLine("WORLD_MAP_PERFORMANCE marker_projections=1000 elapsed_ms="+watch.ElapsedMilliseconds);Assert.That(provider.GetKnownMarkers(viewer),Is.Not.Empty);
+            var player=new PresentationEntityRef(PresentationEntityKind.Character,"hasan-aga");var viewer=new PresentationViewerContext(FactionId.Create("faction-ottoman-state"),player,new[]{player});var provider=new WorldMapPresentationDataProvider(campaign);watch.Restart();for(var i=0;i<1000;i++)provider.GetKnownMarkers(viewer);watch.Stop();TestContext.Progress.WriteLine("WORLD_MAP_PERFORMANCE marker_projections=1000 elapsed_ms="+watch.ElapsedMilliseconds);Assert.That(provider.GetKnownMarkers(viewer),Is.Not.Empty);
             watch.Restart();for(var i=0;i<1000;i++)provider.GetKnownRoutes(viewer);watch.Stop();TestContext.Progress.WriteLine("WORLD_MAP_PERFORMANCE route_projections=1000 elapsed_ms="+watch.ElapsedMilliseconds);Assert.That(provider.GetKnownRoutes(viewer).Count,Is.EqualTo(11));
         }
 
-        private static FOC.Domain.Campaign.CampaignRuntimeState Campaign()=>VerticalSliceCampaignFactory.Create(Read("vertical-slice-locations.txt"),Read("vertical-slice-routes.txt"));
+        private static FOC.Domain.Campaign.CampaignRuntimeState Campaign()=>VerticalSliceCampaignFactory.Create(Read("vertical-slice-locations.txt"),Read("vertical-slice-routes.txt"),ReadHistorical("historical-slice-content.txt"));
+        private static string ReadHistorical(string name)=>File.ReadAllText(Path.Combine(FindRoot(),"UnityProject","Assets","FOC","Content","Resources","FOC","HistoricalSlice",name));
         private static string Read(string name){var root=FindRoot();return File.ReadAllText(Path.Combine(root,"UnityProject","Assets","FOC","Content","Resources","FOC","Geography",name));}
         private static string FindRoot(){var current=new DirectoryInfo(TestContext.CurrentContext.TestDirectory);while(current!=null){if(File.Exists(Path.Combine(current.FullName,"FallOfCavalry.sln")))return current.FullName;current=current.Parent;}throw new DirectoryNotFoundException();}
         private static WorldGeography Diamond(bool reverse)

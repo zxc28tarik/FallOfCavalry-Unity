@@ -6,6 +6,7 @@ using FOC.Application.Save;
 using FOC.Bootstrap.Unity;
 using FOC.Infrastructure.Save;
 using FOC.Domain.Validation;
+using FOC.Editor.Visuals;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.SceneManagement;
@@ -28,6 +29,7 @@ namespace FOC.Editor.Integration
             var exitCode = 0;
             try
             {
+                VisualProofAssetGenerator.GenerateAll();
                 ValidateProductionBootstrapData();
                 EnsureScene();
                 var repositoryRoot = Directory.GetParent(projectRoot)?.FullName ?? throw new InvalidOperationException("Repository root is unavailable.");
@@ -85,7 +87,8 @@ namespace FOC.Editor.Integration
             var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice locations were not imported.");
             var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice routes were not imported.");
             if(Resources.Load<Texture2D>("FOC/Geography/MarmaraStrategyMap")==null)throw new InvalidOperationException("Production-candidate map art was not imported.");
-            var campaign = VerticalSliceCampaignFactory.Create(locations.text,routes.text);
+            var historical = Resources.Load<TextAsset>("FOC/HistoricalSlice/historical-slice-content") ?? throw new InvalidOperationException("Historical content missing.");
+            var campaign = VerticalSliceCampaignFactory.Create(locations.text,routes.text,historical.text);
             var validator = new CampaignSaveValidator();
             var serializer = new CampaignSaveTextSerializer();
             var data = CampaignSaveMapper.ToSaveData(campaign);

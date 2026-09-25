@@ -1,5 +1,9 @@
 # Save Schema
 
+## v14 — Historical slice content and identity replacement
+
+Schema v14 is the production-candidate 1648 content identity boundary. Migration v13→v14 recursively remaps the exact temporary/proof Character, City, Army, Organization, UnitGroup, recruitment, Caravan, House, Clique, religion, faction, report, Encounter/Contract and display-name identities defined by 14A/proof fixtures. It does not alter WorldLocation/route IDs or active journey path, segment index, elapsed ticks, lifecycle or timestamps. Content version becomes `VERTICAL_SLICE_HISTORICAL-1648-09-01-r1` only after the complete object graph is rewritten.
+
 ## v13 — Historical geography and world travel
 
 Schema v13 adds immutable world-location and explicit route-graph snapshots plus persistent travel journeys. A journey stores actor kind/ID, origin, destination, ordered route IDs, departure and last-advanced timestamps, current segment, integer elapsed segment ticks, lifecycle and optional arrival time. Character/Army/Caravan authoritative location or lifecycle remains in its existing aggregate and must agree with the journey.
@@ -14,7 +18,7 @@ Migration v11→v12 preserves all earlier state and initializes an empty AI coll
 
 ## Current version
 
-`CampaignSaveData.CurrentSaveVersion = 13`.
+`CampaignSaveData.CurrentSaveVersion = 14`.
 
 The format is a deterministic UTF-8 text envelope. Its first line is `FOC_CAMPAIGN_SAVE`; fields then appear in a fixed order as `key=value`. Text and structured Character records are base64-encoded. The format is deliberately dependency-free; it is an infrastructure detail, not a Domain contract.
 
@@ -78,7 +82,7 @@ Version 11 persists Encounter instances and Contract instances, not their immuta
 
 Each `ISaveMigration` advances exactly one integer version. `SaveMigrationPipeline` applies a continuous ascending chain. Downgrades, gaps, duplicate starting versions, and a migration returning the wrong version fail explicitly. A persistent schema change must increment the version and include its migration and old fixture in the same package.
 
-`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` initializes military state. `CampaignSaveV8ToV9Migration` initializes Soldier definitions/equipment/roster without inventing Soldiers. `CampaignSaveV9ToV10Migration` initializes Battle state without inventing battles. `CampaignSaveV10ToV11Migration` initializes Encounter/Contract state without inventing instances. `CampaignSaveV11ToV12Migration` initializes AI state without inventing controllers or plans. `CampaignSaveV12ToV13Migration` initializes geography/travel collections without inventing a world or journey. Hardcoded old-schema fixtures exercise the continuous chain.
+`CampaignSaveV1ToV2Migration` initializes empty Character collections. `CampaignSaveV2ToV3Migration` initializes empty social collections. `CampaignSaveV3ToV4Migration` initializes empty Religion/Sect collections. `CampaignSaveV4ToV5Migration` initializes Cities empty. `CampaignSaveV5ToV6Migration` initializes Economy empty. `CampaignSaveV6ToV7Migration` initializes Diplomacy/communication/information. `CampaignSaveV7ToV8Migration` initializes military state. `CampaignSaveV8ToV9Migration` initializes Soldier definitions/equipment/roster without inventing Soldiers. `CampaignSaveV9ToV10Migration` initializes Battle state without inventing battles. `CampaignSaveV10ToV11Migration` initializes Encounter/Contract state without inventing instances. `CampaignSaveV11ToV12Migration` initializes AI state without inventing controllers or plans. `CampaignSaveV12ToV13Migration` initializes geography/travel collections without inventing a world or journey. `CampaignSaveV13ToV14Migration` replaces exact temporary identities while preserving active journey progress. Hardcoded old-schema fixtures exercise the continuous chain.
 
 ## Atomic storage policy
 

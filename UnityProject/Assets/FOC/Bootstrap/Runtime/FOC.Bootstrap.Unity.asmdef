@@ -6,7 +6,9 @@
     "FOC.Application",
     "FOC.Infrastructure",
     "FOC.Presentation.Core",
-    "FOC.Presentation.Unity"
+    "FOC.Presentation.Unity",
+    "FOC.Visuals.Core",
+    "FOC.Visuals.Unity"
   ],
   "autoReferenced": true,
   "overrideReferences": false,

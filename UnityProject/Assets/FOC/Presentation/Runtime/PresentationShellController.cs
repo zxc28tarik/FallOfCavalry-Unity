@@ -34,6 +34,7 @@ namespace FOC.Presentation.Unity
             _dispatcher = dispatcher;
             _keyHandler = OnKeyDown;
             _geometryHandler = OnGeometryChanged;
+            LocalizeTemplate();
             BindNavigation();
             _viewModel.Changed += Render;
             _root.RegisterCallback(_keyHandler);
@@ -78,10 +79,24 @@ namespace FOC.Presentation.Unity
             _buttonHandlers.Add(Tuple.Create(button, action));
         }
 
+        private void LocalizeTemplate()
+        {
+            foreach (var label in _root.Query<Label>().ToList())
+                if (!string.IsNullOrWhiteSpace(label.text) && label.text.StartsWith("presentation.", StringComparison.Ordinal))
+                    label.text = _localizer.Get(label.text);
+            foreach (var button in _root.Query<Button>().ToList())
+            {
+                if (!string.IsNullOrWhiteSpace(button.text) && button.text.StartsWith("presentation.", StringComparison.Ordinal))
+                    button.text = _localizer.Get(button.text);
+                if (!string.IsNullOrWhiteSpace(button.tooltip) && button.tooltip.StartsWith("presentation.", StringComparison.Ordinal))
+                    button.tooltip = _localizer.Get(button.tooltip);
+            }
+        }
+
         private void Render(ScreenPresentationState state)
         {
             SetText("screen-title", state.TitleKey);
-            SetText("breadcrumb", state.Subject.HasValue ? state.Subject.Value.ToString() : "presentation.navigation.root");
+            SetText("breadcrumb", state.Subject.HasValue ? EntityLabel(state.Subject.Value) : "presentation.navigation.root");
             RenderSection(_root.Q<VisualElement>("current-content"), state.Current);
             SetText("trend-value", state.Trend.Availability == PresentationAvailability.Available ? "presentation.trend." + state.Trend.Direction.ToString().ToLowerInvariant() : state.Trend.ExplanationKey);
             RenderFactors(_root.Q<VisualElement>("why-content"), state.WhyAvailability, state.Why, state.WhyUnavailableReasonKey);
@@ -126,7 +141,7 @@ namespace FOC.Presentation.Unity
                 {
                     var field = fields[index];
                     element.Q<Label>("field-label").text = _localizer.Get(field.LabelKey);
-                    var value=element.Q<Button>("field-value"); value.text = _localizer.Get(field.DisplayValue); value.userData=field.Link.HasValue?(object)field.Link.Value:null; value.SetEnabled(field.Link.HasValue);
+                    var value=element.Q<Button>("field-value"); value.text = field.Link.HasValue ? EntityLabel(field.Link.Value) : _localizer.Get(field.DisplayValue); value.userData=field.Link.HasValue?(object)field.Link.Value:null; value.SetEnabled(field.Link.HasValue);
                     element.Q<Label>("field-quality").text = _localizer.Get("presentation.precision." + field.Knowledge.Precision.ToString().ToLowerInvariant());
                     element.tooltip = string.IsNullOrEmpty(field.TooltipKey) ? _localizer.Get(field.Knowledge.SourceKey) : _localizer.Get(field.TooltipKey);
                 }
@@ -215,6 +230,7 @@ namespace FOC.Presentation.Unity
             switch(target.Kind){case PresentationEntityKind.City:_viewModel.Open(new PresentationRoute(PresentationScreenId.City,target));break;case PresentationEntityKind.Character:_viewModel.Open(new PresentationRoute(PresentationScreenId.Character,target));break;case PresentationEntityKind.Army:_viewModel.Open(new PresentationRoute(PresentationScreenId.Army,target));break;case PresentationEntityKind.WorldLocation:_viewModel.Open(new PresentationRoute(PresentationScreenId.Map,target));break;}
         }
         private void SetText(string name, string key) { var label = _root.Q<Label>(name); if (label != null) label.text = _localizer.Get(key); }
+        private string EntityLabel(PresentationEntityRef entity) => _localizer.Get("presentation.entity." + entity.Id);
         private void OnKeyDown(KeyDownEvent evt) { if (evt.keyCode == KeyCode.Escape && _viewModel.Back()) evt.StopPropagation(); }
         private void OnGeometryChanged(GeometryChangedEvent evt)
         {

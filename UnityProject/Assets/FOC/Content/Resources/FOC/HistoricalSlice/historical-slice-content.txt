@@ -1,0 +1,57 @@
+# Record formats are documented in Docs/VERTICAL_SLICE_CONTENT_PROVENANCE.md.
+META|VERTICAL_SLICE_HISTORICAL-1648-09-01-r1|1648-09-01
+SOURCE|SRC_TDV_MEHMED_IV|TDV İslâm Ansiklopedisi, Mehmed IV
+SOURCE|SRC_TDV_KOSEM|TDV İslâm Ansiklopedisi, Kösem Sultan
+SOURCE|SRC_TDV_ISTANBUL|TDV İslâm Ansiklopedisi, İstanbul
+SOURCE|SRC_TDV_BURSA_SILK|TDV İslâm Ansiklopedisi, İpek and Kumaş
+SOURCE|SRC_ALTUNAN_2006|Sema Altunan, İstanbul-Edirne menzil study
+SOURCE|SRC_KARAKAYA_2012|Enis Karakaya, Üsküdar-İzmit historical road
+SOURCE|SRC_TDV_YENICERI|TDV İslâm Ansiklopedisi, Yeniçeri
+SOURCE|SRC_MET_OTTOMAN_ARMS|Metropolitan Museum Ottoman arms and armor catalogue
+SOURCE|SRC_RECONSTRUCTION|Period-compatible historical reconstruction; see provenance documentation
+SOURCE|SRC_SLICE_FICTION|Explicit fictional vertical-slice actor
+SOURCE|SRC_SLICE_TUNING|Explicit gameplay tuning; not a historical measurement
+CHAR|hasan-aga|Hasan Ağa|SliceFiction|player-sipahi|C|city-istanbul|SRC_SLICE_FICTION|High|SliceTuning|50,55,48,52,58,42,45,62,40
+CHAR|sultan-mehmed-iv|IV. Mehmed|HistoricalAttested|sultan|A|city-istanbul|SRC_TDV_MEHMED_IV|High|SliceTuning|45,45,45,40,35,30,35,40,20
+CHAR|kosem-sultan|Kösem Sultan|HistoricalAttested|valide-sultan|A|city-istanbul|SRC_TDV_KOSEM|High|SliceTuning|75,70,78,72,55,60,75,62,82
+CHAR|sofu-mehmed-pasa|Sofu Mehmed Paşa|HistoricalAttested|grand-vizier|A|city-istanbul|SRC_TDV_MEHMED_IV|High|SliceTuning|68,62,66,70,70,52,72,58,76
+CHAR|ahmed-efendi-kethuda|Ahmed Efendi|SliceFiction|istanbul-kethuda|C|city-istanbul|SRC_SLICE_FICTION|High|SliceTuning|58,60,65,55,42,55,72,48,64
+CHAR|mehmed-celebi-tacir|Mehmed Çelebi|SliceFiction|caravan-merchant|C|city-bursa|SRC_SLICE_FICTION|High|SliceTuning|52,64,68,45,35,78,62,46,66
+CHAR|ali-cavus|Ali Çavuş|SliceFiction|retinue-officer|C|city-istanbul|SRC_SLICE_FICTION|High|SliceTuning|48,58,44,62,65,30,40,68,60
+CHAR|yusuf-katip|Yusuf Kâtip|SliceFiction|report-officer|D|city-istanbul|SRC_SLICE_FICTION|High|SliceTuning|66,70,62,38,32,48,68,40,58
+CITY|city-istanbul|İstanbul|SRC_TDV_ISTANBUL|HistoricalReconstruction|InnerCastleWalls;Palace;CourtKadiOffice;Mosque;Medrese;ImperialRegistry;ChiefScribeOffice;ImperialGuardHeadquarters;Market;Inn;GuardFacilities;Tannery;Blacksmith;Carpenter;Soapworks;PaperMill;Bakery;Granary;Butcher;Fishery|Well;Fountain;Cistern;WaterChannel;MainPavedRoad|SliceTuning
+CITY|city-bursa|Bursa|SRC_TDV_BURSA_SILK|HistoricalReconstruction|InnerCastleWalls;CourtKadiOffice;Mosque;Market;Inn;TextileWorkshop;Dyehouse;Mill;Granary|Well;Fountain;MainPavedRoad|SliceTuning
+CITY|city-edirne|Edirne|SRC_ALTUNAN_2006|HistoricalReconstruction|InnerCastleWalls;CourtKadiOffice;Mosque;Market;Inn;Granary;FairGround|Well;Fountain;MainPavedRoad|SliceTuning
+CITY|city-izmit|İzmit|SRC_KARAKAYA_2012|HistoricalReconstruction|InnerCastleWalls;CourtKadiOffice;Mosque;Market;Inn;Carpenter;Granary|Well;Fountain;MainPavedRoad|SliceTuning
+GOOD|grain|Tahıl|Food|1|true|false|false|10|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|flour|Un|Food|1|true|false|false|14|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|raw-silk|Ham İpek|RawMaterial|1|false|false|false|28|SRC_TDV_BURSA_SILK|HistoricalAttested|SliceTuning|unused
+GOOD|silk-cloth|İpekli Kumaş|Luxury|1|false|false|true|46|SRC_TDV_BURSA_SILK|HistoricalAttested|SliceTuning|unused
+GOOD|hides|Ham Deri|RawMaterial|2|false|false|false|9|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|leather|İşlenmiş Deri|Processed|1|false|false|false|17|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|iron|Demir|RawMaterial|2|false|false|false|16|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|timber|Kereste|RawMaterial|3|false|false|false|8|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|soap|Sabun|Processed|1|false|false|false|12|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|paper|Kâğıt|Processed|1|false|false|false|18|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|wool|Yün|RawMaterial|1|false|false|false|11|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+GOOD|weapons|Silah|Military|2|false|true|false|32|SRC_MET_OTTOMAN_ARMS|HistoricalAttested|SliceTuning|unused
+GOOD|armor|Zırh|Military|3|false|true|false|38|SRC_MET_OTTOMAN_ARMS|HistoricalAttested|SliceTuning|unused
+GOOD|ammunition|Tüfek Mühimmatı|Military|1|false|true|false|7|SRC_TDV_YENICERI|HistoricalAttested|SliceTuning|unused
+GOOD|horses|At|RawMaterial|8|false|false|false|44|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning|unused
+RECIPE|recipe-mill-flour|Tahıldan Un|Mill|grain:2|flour:1|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning
+RECIPE|recipe-bursa-silk|İpekli Dokuma|TextileWorkshop|raw-silk:2|silk-cloth:1|SRC_TDV_BURSA_SILK|HistoricalReconstruction|SliceTuning
+RECIPE|recipe-tannery-leather|Deri Tabaklama|Tannery|hides:2|leather:1|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning
+RECIPE|recipe-smith-weapons|Silah Dövümü|Blacksmith|iron:2;timber:1|weapons:1|SRC_MET_OTTOMAN_ARMS|HistoricalReconstruction|SliceTuning
+RECIPE|recipe-paper|Kâğıt İmali|PaperMill|timber:2|paper:1|SRC_RECONSTRUCTION|HistoricalReconstruction|SliceTuning
+STOCK|city-istanbul|grain|120|30|SliceTuning
+STOCK|city-istanbul|flour|45|20|SliceTuning
+STOCK|city-istanbul|paper|18|8|SliceTuning
+STOCK|city-istanbul|weapons|12|5|SliceTuning
+STOCK|city-istanbul|ammunition|24|8|SliceTuning
+STOCK|city-bursa|raw-silk|70|10|SliceTuning
+STOCK|city-bursa|silk-cloth|36|8|SliceTuning
+STOCK|city-bursa|grain|55|18|SliceTuning
+STOCK|city-edirne|grain|90|20|SliceTuning
+STOCK|city-edirne|wool|40|10|SliceTuning
+STOCK|city-izmit|timber|65|12|SliceTuning
+STOCK|city-izmit|grain|48|15|SliceTuning

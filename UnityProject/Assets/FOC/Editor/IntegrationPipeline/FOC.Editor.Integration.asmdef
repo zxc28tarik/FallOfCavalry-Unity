@@ -7,6 +7,9 @@
     "FOC.Infrastructure",
     "FOC.Presentation.Core",
     "FOC.Presentation.Unity",
+    "FOC.Visuals.Core",
+    "FOC.Visuals.Unity",
+    "FOC.Editor.Visuals",
     "FOC.Bootstrap.Unity"
   ],
   "includePlatforms": ["Editor"],
