@@ -20,17 +20,24 @@ namespace FOC.Editor.Visuals
         {
             Build(true);
         }
-        private static void Build(bool donors)
+        public static void RunHasan()
+        {
+            Build(false,true);
+        }
+        private static void Build(bool donors,bool hasan=false)
         {
             var settings="ProjectSettings/ProjectSettings.asset";var snapshot=File.ReadAllBytes(settings);var target=NamedBuildTarget.Standalone;var previous=PlayerSettings.GetScriptingBackend(target);var code=0;
             try
             {
                 var folder="Assets/FOC/ArtSource/HistoricalSlice/Review";Directory.CreateDirectory(folder);AssetDatabase.Refresh();
-                var scenePath=folder+(donors?"/ClothingDonorReview.unity":"/HistoricalArtReview.unity");
+                var scenePath=folder+(hasan?"/HasanDonorReview.unity":donors?"/ClothingDonorReview.unity":"/HistoricalArtReview.unity");
+                // Hasan uses a fixed, isolated candidate list. Reuse its versioned
+                // scene so evidence builds do not churn scene object file IDs.
                 if(donors||AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath)==null)
                 {
                     var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);var root=new GameObject("Historical art draft review");var review=root.AddComponent<HistoricalArtReviewPlayer>();
                     review.candidates=new[]{HistoricalArtCandidatePipeline.MountRoot,HistoricalArtCandidatePipeline.CharacterRoot,HistoricalArtCandidatePipeline.EquipmentRoot}.SelectMany(p=>AssetDatabase.FindAssets("t:Prefab",new[]{p})).Select(g=>AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(g))).OrderBy(p=>p.name,StringComparer.Ordinal).ToArray();
+                    if(hasan)review.candidates=review.candidates.Where(p=>p.name=="CHR_HasanAga_DonorDraft"||p.name=="MNT_Horse_Anatolian_01"||p.name=="HAR_SipahiHarness_01"||p.name=="WPN_Kilic_01"||p.name=="HDG_Sipahi_01").ToArray();
                     EditorSceneManager.SaveScene(scene,scenePath);
                 }
                 else EditorSceneManager.OpenScene(scenePath,OpenSceneMode.Single);

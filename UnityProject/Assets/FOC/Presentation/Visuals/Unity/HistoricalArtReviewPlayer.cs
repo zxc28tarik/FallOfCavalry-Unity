@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
+using System.Globalization;
 using UnityEngine;
 
 namespace FOC.Presentation.Visuals
@@ -13,6 +14,7 @@ namespace FOC.Presentation.Visuals
         public GameObject[] candidates=Array.Empty<GameObject>();
         private IEnumerator Start()
         {
+            Application.targetFrameRate=60;
             var id=Arg("-focArtAsset")??"MNT_Horse_Anatolian_01";
             var source=candidates.SingleOrDefault(p=>p!=null&&p.name==id);
             if(source==null){Debug.LogError("FOC_ART_REVIEW_MISSING "+id);Application.Quit(1);yield break;}
@@ -29,20 +31,57 @@ namespace FOC.Presentation.Visuals
             }
             var headgear=Arg("-focArtHeadgear");
             if(headgear!=null){var hat=Instantiate(candidates.Single(p=>p.name==headgear),HistoricalArtPoseReview.Bone(instance,"Socket_Head"));hat.GetComponent<LODGroup>().ForceLOD(0);}
-            var gait=Arg("-focArtAnimation");if(gait!=null){var animator=instance.GetComponent<Animator>();if(animator!=null)animator.Play(gait,0,0);}
+            var weapon=Arg("-focArtWeapon");
+            if(weapon!=null){var item=Instantiate(candidates.Single(p=>p.name==weapon),HistoricalArtPoseReview.Bone(instance,"Socket_RightHand"));item.GetComponent<LODGroup>().ForceLOD(0);item.transform.localRotation=Quaternion.Euler(0,0,-90);}
+            var gait=Arg("-focArtAnimation");var motionAnimator=instance.GetComponent<Animator>();
+            if(gait!=null)
+            {
+                if(motionAnimator==null||motionAnimator.runtimeAnimatorController==null)throw new InvalidOperationException("Requested motion has no controller: "+gait);
+                // These are authored transform curves on the canonical skeleton,
+                // not humanoid muscle clips. Do not silently discard them through
+                // humanoid retargeting. The versioned prefab retains its human avatar.
+                if(id=="CHR_HasanAga_DonorDraft")
+                {
+                    motionAnimator.avatar=AvatarBuilder.BuildGenericAvatar(instance,"Root");
+                    motionAnimator.Rebind();motionAnimator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
+                }
+                motionAnimator.Play(gait,0,0);motionAnimator.Update(0);
+                if(!motionAnimator.GetCurrentAnimatorStateInfo(0).IsName(gait))throw new InvalidOperationException("Requested motion was not entered: "+gait);
+                if(mount!=null)mount.GetComponent<Animator>().enabled=false;
+            }
             var bounds=instance.GetComponentsInChildren<Renderer>().First().bounds;
             foreach(var r in instance.GetComponentsInChildren<Renderer>())bounds.Encapsulate(r.bounds);
             if(mount!=null)foreach(var r in mount.GetComponentsInChildren<Renderer>())bounds.Encapsulate(r.bounds);
+            // Skinned renderer bounds may still reflect the previous culling
+            // update immediately after Play(). Use a stable full-actor frame for
+            // comparable human motion evidence; never crop a failed deformation.
+            if(id=="CHR_HasanAga_DonorDraft"&&mount==null)bounds=new Bounds(new Vector3(0,1,0),new Vector3(1.5f,2.05f,1));
             var camera=new GameObject("Art review camera").AddComponent<Camera>();camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color(.045f,.055f,.07f);camera.fieldOfView=30;
             var side=Arg("-focArtAngle")=="side";var scale=Mathf.Max(bounds.size.x,Mathf.Max(bounds.size.y,bounds.size.z));
             var angle=Arg("-focArtAngle");var view=angle=="back"?new Vector3(0,.15f,-2.8f):angle=="straight"?new Vector3(0,.15f,2.8f):side?new Vector3(2.8f,.15f,.02f):new Vector3(1.25f,.2f,2.5f);
             camera.transform.position=bounds.center+view*scale;camera.transform.LookAt(bounds.center);
             RenderSettings.ambientLight=new Color(.36f,.37f,.39f);
-            foreach(var setup in new[]{(new Vector3(35,-25,0),1.35f,new Color(1,.9f,.78f)),(new Vector3(20,135,0),.65f,new Color(.67f,.78f,1))}){var light=new GameObject("Review light").AddComponent<Light>();light.type=LightType.Directional;light.transform.rotation=Quaternion.Euler(setup.Item1);light.intensity=setup.Item2;light.color=setup.Item3;}
+            foreach(var setup in new[]{(new Vector3(35,-25,0),1.0f,Color.white),(new Vector3(20,135,0),.55f,Color.white)}){var light=new GameObject("Review light").AddComponent<Light>();light.type=LightType.Directional;light.transform.rotation=Quaternion.Euler(setup.Item1);light.intensity=setup.Item2;light.color=setup.Item3;}
             QualitySettings.shadows=ShadowQuality.All;QualitySettings.shadowDistance=25;
             foreach(var light in FindObjectsByType<Light>(FindObjectsSortMode.None)){light.shadows=LightShadows.Soft;light.shadowBias=.01f;light.shadowNormalBias=.02f;light.shadowStrength=.8f;}
             var ground=GameObject.CreatePrimitive(PrimitiveType.Plane);ground.transform.localScale=Vector3.one*10;ground.transform.position=new Vector3(0,bounds.min.y-.01f,0);ground.GetComponent<Renderer>().material=new Material(Shader.Find("Standard")){color=new Color(.085f,.09f,.095f)};
-            yield return new WaitForSecondsRealtime(2);yield return new WaitForEndOfFrame();
+            ground.GetComponent<Renderer>().material.SetFloat("_Glossiness",0);
+            if(id=="CHR_HasanAga_DonorDraft"&&mount==null)ground.transform.position=Vector3.zero;
+            var tracked=instance.GetComponentsInChildren<Transform>().Where(t=>t.name=="Hand_L"||t.name=="Hand_R"||t.name=="Foot_L"||t.name=="Foot_R"||t.name=="Head").ToArray();
+            var first=tracked.Select(t=>t.position).ToArray();var maxMotion=0f;var frames=0;var until=Time.realtimeSinceStartup+2;
+            while(Time.realtimeSinceStartup<until)
+            {
+                yield return null;frames++;
+                for(var i=0;i<tracked.Length;i++)maxMotion=Mathf.Max(maxMotion,Vector3.Distance(first[i],tracked[i].position));
+            }
+            if(gait!=null)
+            {
+                if(frames<2||maxMotion<.001f)throw new InvalidOperationException("Requested motion did not move joints: "+gait+" displacement="+maxMotion);
+                var phase=float.Parse(Arg("-focArtPhase")??"0.25",CultureInfo.InvariantCulture);
+                motionAnimator!.Play(gait,0,phase);motionAnimator.Update(0);motionAnimator.enabled=false;
+                Debug.Log("FOC_HASAN_REAL_MOTION motion="+gait+" elapsedFrames="+frames+" maxJointTravel="+maxMotion.ToString("R",CultureInfo.InvariantCulture)+" capturePhase="+phase.ToString("R",CultureInfo.InvariantCulture)+" diagnosticClipNotBattleAcceptance=true");
+            }
+            yield return new WaitForEndOfFrame();
             var output=Arg("-focScreenshotPath");
             if(!string.IsNullOrWhiteSpace(output))
             {

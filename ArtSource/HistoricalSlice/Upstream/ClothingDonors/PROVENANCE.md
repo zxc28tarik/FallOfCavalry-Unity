@@ -67,3 +67,26 @@ Original trial mappings included Ranger/Peasant parts. They are superseded by
 `Docs/IMPLEMENTATION_14C_MAKEHUMAN_DECISION.md`: use only the four pinned MakeHuman
 garments for production adaptation; Quaternius is comparison/reference only.
 No production catalog activation until visual and technical acceptance.
+# Hasan-only derived draft ledger — 2026-09-26
+
+The production-closure experiment uses **only** the pinned MakeHuman versions
+recorded in this ledger. Quaternius remains REJECT / comparison-only. No original source
+file or archive is modified. None of these derivatives is visually accepted or
+activated in the production catalog.
+
+| Derived asset ID | Exact donor folder / geometry | Authoring / status |
+| --- | --- | --- |
+| CLTH_Donor_HasanCoatDonor | rehmanpolanski_viking_tunic / tunicviking.obj | Belt/buckle removal, extended/flared split front/back, crossover edge, lower-skirt corrective weights; Draft r4 |
+| CLTH_Donor_HasanInnerDonor | rehmanpolanski_viking_tunic / tunicviking.obj | Cropped inner layer, sleeve removal, neckline reshape; Draft r4 |
+| CLTH_Donor_HasanTrousersDonor | toigo_harem_pants / pants_harem.obj | Boot tuck and occluded lower-leg removal; Draft r4 |
+| CLTH_Donor_HasanBootsDonor | culturalibre_male_boots / male_boots.obj | Existing boot form and UVs, topology reduction, sole alignment; Draft r4 |
+| CHR_HasanAga_DonorDraft | Above garments plus existing licensed mature Hasan head/hands/hair | Consolidated, canonical skeleton unchanged, three LODs; Draft r4 |
+
+Tool: Blender 4.5.9 LTS, `Tools/Art/adapt_hasan_donors.py`. No image/3D AI
+generation service or external input image. Source license: CC0-1.0 (original
+individual headers verified in the trial). FOC edits and eight diagnostic clips
+are original project authoring, not downloaded game animation. Source archive
+hashes and exact upstream URLs above remain the intake authority.
+
+Historical references, transformation assumptions and motion-review limits:
+`Docs/IMPLEMENTATION_14C_HASAN_DONOR_TRANSFORMATION.md`.

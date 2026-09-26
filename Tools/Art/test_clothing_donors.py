@@ -224,54 +224,59 @@ def export(obj, source_path):
     (OUT/(payload['assetId']+'.focmesh.json')).write_text(json.dumps(payload,separators=(',',':')),encoding='utf-8')
     return [len(l['parts'][0]['triangles'])//3 for l in lods]
 
-bpy.ops.wm.read_factory_settings(use_empty=True)
-reports=[]
-paths=sorted((SOURCE/'Quaternius').glob('*.fbx'))+sorted((SOURCE/'clothes').glob('*/*.mhclo'))
-assert len(paths)==11, 'Must test the exact eleven selected donors'
-for path in paths:
-    obj=quaternius(path) if path.suffix=='.fbx' else makehuman(path)
-    assert all(math.isfinite(x) for v in obj.data.vertices for x in v.co)
-    assert all(any(g.weight>0 for g in v.groups) for v in obj.data.vertices)
-    assert all(-.2<v.co.y<1.9 and abs(v.co.x)<1.1 and abs(v.co.z)<.8 for v in obj.data.vertices), path.name
-    lods=export(obj,path)
-    adjacency=[set() for _ in obj.data.vertices]
-    for edge in obj.data.edges:
-        a,b=edge.vertices;adjacency[a].add(b);adjacency[b].add(a)
-    pending=set(range(len(adjacency)));components=[]
-    while pending:
-        seed=min(pending);pending.remove(seed);component=[seed];queue=[seed]
-        while queue:
-            vi=queue.pop()
-            for other in adjacency[vi]:
-                if other in pending: pending.remove(other);component.append(other);queue.append(other)
-        vv=[obj.data.vertices[i].co for i in component]
-        components.append({'vertices':len(vv),'min':[min(v[i] for v in vv) for i in range(3)],'max':[max(v[i] for v in vv) for i in range(3)]})
-    reports.append({'donor':path.stem,'status':'FIT_NUMERIC_PASS_NOT_VISUAL_ACCEPTANCE',
-                    'vertices':len(obj.data.vertices),'lodTriangles':lods,
-                    'uvPreserved':True,'canonicalBones':len(bones),'components':sorted(components,key=lambda c:-c['vertices']),
-                    'weights':'source remapped' if path.suffix=='.fbx' else 'transferred from fitted hm08 body; no upstream rig weights supplied',
-                    'unityRuntime':'NOT_RUN','mountedAnimation':'NOT_RUN','historicalStyling':'NOT_ADAPTED'})
-    print('DONOR_FIT_NUMERIC_PASS',path.stem,lods,flush=True)
-(REPORT/'donor-fit-results.json').write_text(json.dumps(reports,indent=2),encoding='utf-8')
-print('ALL_11_DONORS_FITTED_DRAFT_ONLY',flush=True)
+def main():
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    reports=[]
+    paths=sorted((SOURCE/'Quaternius').glob('*.fbx'))+sorted((SOURCE/'clothes').glob('*/*.mhclo'))
+    assert len(paths)==11, 'Must test the exact eleven selected donors'
+    for path in paths:
+        obj=quaternius(path) if path.suffix=='.fbx' else makehuman(path)
+        assert all(math.isfinite(x) for v in obj.data.vertices for x in v.co)
+        assert all(any(g.weight>0 for g in v.groups) for v in obj.data.vertices)
+        assert all(-.2<v.co.y<1.9 and abs(v.co.x)<1.1 and abs(v.co.z)<.8 for v in obj.data.vertices), path.name
+        lods=export(obj,path)
+        adjacency=[set() for _ in obj.data.vertices]
+        for edge in obj.data.edges:
+            a,b=edge.vertices;adjacency[a].add(b);adjacency[b].add(a)
+        pending=set(range(len(adjacency)));components=[]
+        while pending:
+            seed=min(pending);pending.remove(seed);component=[seed];queue=[seed]
+            while queue:
+                vi=queue.pop()
+                for other in adjacency[vi]:
+                    if other in pending: pending.remove(other);component.append(other);queue.append(other)
+            vv=[obj.data.vertices[i].co for i in component]
+            components.append({'vertices':len(vv),'min':[min(v[i] for v in vv) for i in range(3)],'max':[max(v[i] for v in vv) for i in range(3)]})
+        reports.append({'donor':path.stem,'status':'FIT_NUMERIC_PASS_NOT_VISUAL_ACCEPTANCE',
+                        'vertices':len(obj.data.vertices),'lodTriangles':lods,
+                        'uvPreserved':True,'canonicalBones':len(bones),'components':sorted(components,key=lambda c:-c['vertices']),
+                        'weights':'source remapped' if path.suffix=='.fbx' else 'transferred from fitted hm08 body; no upstream rig weights supplied',
+                        'unityRuntime':'NOT_RUN','mountedAnimation':'NOT_RUN','historicalStyling':'NOT_ADAPTED'})
+        print('DONOR_FIT_NUMERIC_PASS',path.stem,lods,flush=True)
+    (REPORT/'donor-fit-results.json').write_text(json.dumps(reports,indent=2),encoding='utf-8')
+    print('ALL_11_DONORS_FITTED_DRAFT_ONLY',flush=True)
 
-# Raw-donor comparison assemblies, only AFTER every selected garment was tested.
-# Use the existing anatomical body/head, not the old procedural garment rescue.
-# Visible body intersections are intentionally not masked in this fit diagnostic.
-assemblies={
-    'HasanRobe':['donitz_monk_robe','toigo_harem_pants','Male_Ranger_Feet_Boots'],
-    'TunicAlternative':['rehmanpolanski_viking_tunic','toigo_harem_pants','culturalibre_male_boots'],
-    'SipahiRanger':['Male_Ranger_Body','Male_Ranger_Arms','toigo_harem_pants','Male_Ranger_Feet_Boots'],
-    'CebeliPeasant':['Male_Peasant_Body','Male_Peasant_Arms','toigo_harem_pants','Male_Ranger_Feet_Boots'],
-    'PeasantLegs':['Male_Peasant_Body','Male_Peasant_Arms','Male_Peasant_Legs','culturalibre_male_boots'],
-    'RangerLegs':['Male_Ranger_Body','Male_Ranger_Arms','Male_Ranger_Legs','Male_Ranger_Feet_Boots']}
-head=json.loads((ROOT/'UnityProject/Assets/FOC/ArtSource/HistoricalSlice/Characters/HEAD_OttomanMale_01.focmesh.json').read_text())
-for label,donors in assemblies.items():
-    sources=[json.loads((OUT/('CLTH_Donor_'+name+'.focmesh.json')).read_text()) for name in donors]
-    payload=dict(sources[0]);payload['assetId']='CHR_Donor_'+label
-    payload['category']='ConsolidatedCharacter';payload['source']='RAW donor comparison: '+', '.join(donors)
-    payload['sourceSha256']=hashlib.sha256(''.join(s['sourceSha256'] for s in sources).encode()).hexdigest()
-    payload['lods']=[{'parts':canonical['lods'][i]['parts']+head['lods'][i]['parts']+
-                     [p for s in sources for p in s['lods'][i]['parts']]} for i in range(3)]
-    (OUT/(payload['assetId']+'.focmesh.json')).write_text(json.dumps(payload,separators=(',',':')),encoding='utf-8')
-print('RAW_DONOR_COMPARISONS_NOT_HISTORICAL_ADAPTATIONS',flush=True)
+    # Raw-donor comparison assemblies, only AFTER every selected garment was tested.
+    # Use the existing anatomical body/head, not the old procedural garment rescue.
+    # Visible body intersections are intentionally not masked in this fit diagnostic.
+    assemblies={
+        'HasanRobe':['donitz_monk_robe','toigo_harem_pants','Male_Ranger_Feet_Boots'],
+        'TunicAlternative':['rehmanpolanski_viking_tunic','toigo_harem_pants','culturalibre_male_boots'],
+        'SipahiRanger':['Male_Ranger_Body','Male_Ranger_Arms','toigo_harem_pants','Male_Ranger_Feet_Boots'],
+        'CebeliPeasant':['Male_Peasant_Body','Male_Peasant_Arms','toigo_harem_pants','Male_Ranger_Feet_Boots'],
+        'PeasantLegs':['Male_Peasant_Body','Male_Peasant_Arms','Male_Peasant_Legs','culturalibre_male_boots'],
+        'RangerLegs':['Male_Ranger_Body','Male_Ranger_Arms','Male_Ranger_Legs','Male_Ranger_Feet_Boots']}
+    head=json.loads((ROOT/'UnityProject/Assets/FOC/ArtSource/HistoricalSlice/Characters/HEAD_OttomanMale_01.focmesh.json').read_text())
+    for label,donors in assemblies.items():
+        sources=[json.loads((OUT/('CLTH_Donor_'+name+'.focmesh.json')).read_text()) for name in donors]
+        payload=dict(sources[0]);payload['assetId']='CHR_Donor_'+label
+        payload['category']='ConsolidatedCharacter';payload['source']='RAW donor comparison: '+', '.join(donors)
+        payload['sourceSha256']=hashlib.sha256(''.join(s['sourceSha256'] for s in sources).encode()).hexdigest()
+        payload['lods']=[{'parts':canonical['lods'][i]['parts']+head['lods'][i]['parts']+
+                         [p for s in sources for p in s['lods'][i]['parts']]} for i in range(3)]
+        (OUT/(payload['assetId']+'.focmesh.json')).write_text(json.dumps(payload,separators=(',',':')),encoding='utf-8')
+    print('RAW_DONOR_COMPARISONS_NOT_HISTORICAL_ADAPTATIONS',flush=True)
+
+
+if __name__ == '__main__':
+    main()

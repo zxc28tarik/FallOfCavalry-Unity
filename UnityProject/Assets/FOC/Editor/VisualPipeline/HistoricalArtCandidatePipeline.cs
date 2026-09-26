@@ -33,10 +33,14 @@ namespace FOC.Editor.Visuals
         [MenuItem("FOC/Visuals/Import Historical Art Drafts")]
         public static void Generate()
         {
+            GenerateFromDirectory(SourceRoot);
+        }
+        public static void GenerateFromDirectory(string sourceDirectory)
+        {
             ImportedMaterials.Clear();
             foreach(var path in new[]{MountRoot,CharacterRoot,EquipmentRoot,MaterialRoot})Directory.CreateDirectory(path);
             AssetDatabase.Refresh();
-            foreach(var file in Directory.GetFiles(SourceRoot,"*.focmesh.json",SearchOption.AllDirectories).OrderBy(x=>x,StringComparer.Ordinal))
+            foreach(var file in Directory.GetFiles(sourceDirectory,"*.focmesh.json",SearchOption.AllDirectories).OrderBy(x=>x,StringComparer.Ordinal))
                 Import(JsonUtility.FromJson<SourceAsset>(File.ReadAllText(file)));
             AssetDatabase.SaveAssets();AssetDatabase.Refresh();
         }
@@ -121,6 +125,8 @@ namespace FOC.Editor.Visuals
                 {
                     var avatar=HumanAvatar(root);avatar.name=source.assetId+"_Avatar";var avatarPath=folder+"/"+avatar.name+".asset";Store(avatar,avatarPath);
                     var animator=root.AddComponent<Animator>();animator.avatar=AssetDatabase.LoadAssetAtPath<Avatar>(avatarPath);animator.cullingMode=AnimatorCullingMode.CullUpdateTransforms;
+                    var existing=AssetDatabase.LoadAssetAtPath<GameObject>(folder+"/"+source.assetId+".prefab");
+                    if(existing!=null&&existing.TryGetComponent<Animator>(out var previousAnimator))animator.runtimeAnimatorController=previousAnimator.runtimeAnimatorController;
                 }
                 PrefabUtility.SaveAsPrefabAsset(root,folder+"/"+source.assetId+".prefab");
                 Debug.Log("FOC_14C_DRAFT_IMPORTED "+source.assetId+" vertices="+source.lods[0].parts.Sum(p=>p.positions.Length/3));

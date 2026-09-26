@@ -1,0 +1,17 @@
+{
+  "assetId": "CHR_HasanAga_DonorDraft",
+  "status": "DRAFT_NOT_VISUALLY_ACCEPTED",
+  "revision": "hasan-donor-r4-historical-reshape-NOT-ACCEPTED",
+  "donors": [
+    "rehmanpolanski_viking_tunic",
+    "toigo_harem_pants",
+    "culturalibre_male_boots"
+  ],
+  "unchangedCanonicalBones": true,
+  "lodTriangles": [
+    62993,
+    25797,
+    11020
+  ],
+  "scope": "Hasan only; catalog unchanged; Quaternius not imported"
+}
