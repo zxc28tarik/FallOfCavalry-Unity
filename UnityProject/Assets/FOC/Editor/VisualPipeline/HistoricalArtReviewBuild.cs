@@ -14,12 +14,20 @@ namespace FOC.Editor.Visuals
     {
         public static void Run()
         {
+            Build(false);
+        }
+        public static void RunDonors()
+        {
+            Build(true);
+        }
+        private static void Build(bool donors)
+        {
             var settings="ProjectSettings/ProjectSettings.asset";var snapshot=File.ReadAllBytes(settings);var target=NamedBuildTarget.Standalone;var previous=PlayerSettings.GetScriptingBackend(target);var code=0;
             try
             {
                 var folder="Assets/FOC/ArtSource/HistoricalSlice/Review";Directory.CreateDirectory(folder);AssetDatabase.Refresh();
-                var scenePath=folder+"/HistoricalArtReview.unity";
-                if(AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath)==null)
+                var scenePath=folder+(donors?"/ClothingDonorReview.unity":"/HistoricalArtReview.unity");
+                if(donors||AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath)==null)
                 {
                     var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);var root=new GameObject("Historical art draft review");var review=root.AddComponent<HistoricalArtReviewPlayer>();
                     review.candidates=new[]{HistoricalArtCandidatePipeline.MountRoot,HistoricalArtCandidatePipeline.CharacterRoot,HistoricalArtCandidatePipeline.EquipmentRoot}.SelectMany(p=>AssetDatabase.FindAssets("t:Prefab",new[]{p})).Select(g=>AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(g))).OrderBy(p=>p.name,StringComparer.Ordinal).ToArray();

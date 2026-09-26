@@ -1,0 +1,84 @@
+{
+    "unity": "6000.3.16f1",
+    "status": "DIAGNOSTICS_ONLY_NOT_PRODUCTION_ACCEPTANCE",
+    "limitation": "Shared proof clips are pelvis-motion fixtures, not full locomotion. Mounted pose is static diagnostic IK. Visual clipping and production animation acceptance remain pending.",
+    "donors": [
+        {
+            "asset": "CLTH_Donor_Male_Peasant_Arms",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_Male_Peasant_Body",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_Male_Peasant_Legs",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_Male_Ranger_Arms",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_Male_Ranger_Body",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_Male_Ranger_Feet_Boots",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_Male_Ranger_Legs",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_culturalibre_male_boots",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_donitz_monk_robe",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_rehmanpolanski_viking_tunic",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        },
+        {
+            "asset": "CLTH_Donor_toigo_harem_pants",
+            "lods": 3,
+            "bakedPoses": 3,
+            "sharedClipSamples": 60,
+            "result": "NUMERIC_PASS_VISUAL_QA_REQUIRED"
+        }
+    ]
+}

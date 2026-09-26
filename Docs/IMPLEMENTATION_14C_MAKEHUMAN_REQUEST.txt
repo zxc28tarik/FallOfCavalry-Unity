@@ -1,0 +1,757 @@
+# Implementation 14C — MakeHuman Donor Production Closure
+
+Continue Implementation 14C from the CURRENT LOCAL WORKTREE.
+
+IMPORTANT:
+The latest clothing donor trial exists locally and has NOT yet been committed/pushed.
+
+Do NOT discard it.
+Do NOT reset it.
+Do NOT start from remote HEAD until the local donor-trial changes are inspected.
+
+Repository:
+zxc28tarik/FallOfCavalry-Unity
+
+Current remote/base reference:
+de12391009194c215dd02a994b75fa7c64ae6009
+
+Current local state contains the completed clothing donor trial.
+
+The donor trial result is authoritative:
+
+- 11 selected donor pieces downloaded
+- licenses recorded
+- archive hashes recorded
+- filenames recorded
+- .NET 486/486 PASS
+- Unity EditMode 560/560 PASS
+- 12 real Windows-player comparison captures exist
+- no alternative sources searched
+- no paid assets used
+- no new procedural tunic generated
+
+Result:
+
+QUATERNIUS:
+REJECT as primary clothing donor path for current body.
+Reason:
+serious intersections / fit incompatibilities.
+
+MAKEHUMAN DONORS:
+SELECT as primary clothing donor path.
+Reason:
+materially better fit to current human body.
+
+14C remains NOT READY.
+
+DO NOT START IMPLEMENTATION 15.
+
+==================================================
+PHASE 0 — CHECKPOINT CURRENT DONOR TRIAL
+==================================================
+
+First inspect:
+
+git status
+git diff
+git diff --cached
+git stash list
+
+Verify the local donor-trial work.
+
+Run the current local validation again if necessary.
+
+Then create a dedicated checkpoint commit containing the valid donor-trial work.
+
+Suggested commit intent:
+
+"14C: evaluate CC0 clothing donors and select MakeHuman path"
+
+Push to the existing 14C branch unless branch policy requires otherwise.
+
+Verify:
+
+local SHA
+=
+remote SHA
+
+Worktree clean before beginning the production-closure phase.
+
+Do not commit prohibited source files if license/redistribution rules disallow them.
+
+==================================================
+PHASE 1 — FREEZE PIPELINE DECISION
+==================================================
+
+The search/selection phase is over.
+
+Primary clothing pipeline:
+
+CURRENT HUMAN BASE
++
+MAKEHUMAN / MPFB CLOTHING DONORS
++
+BLENDER RESHAPING / FIT / WEIGHT TRANSFER
++
+FOC RUNTIME
+
+Do NOT continue Quaternius adaptation work unless needed only for documentation/comparison.
+
+Do NOT search Unity Asset Store.
+
+Do NOT search for additional clothing packs.
+
+Do NOT return to procedural tunic generation.
+
+Do NOT change human base in this run.
+
+==================================================
+PHASE 2 — AUTHORITATIVE DONORS
+==================================================
+
+Use the already-downloaded and licensed MakeHuman donor assets selected in the trial.
+
+Primary donor families include:
+
+- toigo_harem_pants
+- culturalibre_male_boots
+- donitz_monk_robe
+- rehmanpolanski_viking_tunic
+
+Use the exact locally recorded versions/hashes from the donor-trial provenance file.
+
+These are:
+
+TOPOLOGY / GARMENT DONORS
+
+not historical claims.
+
+Do not preserve:
+
+- monk styling
+- Viking styling
+- incompatible decoration
+- modern/fantasy identity
+
+Preserve only useful:
+
+- garment topology
+- shoulder construction
+- sleeve construction
+- waist fit
+- trouser fit
+- boot fit
+- deformation behavior
+- skin-weight structure
+
+==================================================
+PHASE 3 — HASAN FIRST
+==================================================
+
+Do NOT build all four characters simultaneously.
+
+First finish:
+
+HASAN AĞA
+
+Hasan is the visual quality gate.
+
+Start from the best-performing MakeHuman donor combination.
+
+Expected concept:
+
+robe/tunic donor
++
+harem-pants donor
++
+boot donor
++
+existing head/body
++
+existing hair/beard candidate
++
+existing equipment system
+
+==================================================
+PHASE 4 — HISTORICAL TRANSFORMATION
+==================================================
+
+The donor mesh must be transformed into a plausible 1648 Ottoman garment.
+
+Research and document the transformation.
+
+Required visible changes may include:
+
+- collar/opening
+- front overlap/opening
+- sleeve shape
+- cuff
+- waist
+- skirt length
+- skirt volume
+- side/front vents
+- garment layering
+- trouser volume
+- boot shape
+- material treatment
+
+Do NOT merely recolor the donor garment.
+
+The final silhouette must not visibly read as:
+
+monk
+Viking
+fantasy ranger
+generic medieval peasant
+
+It must read as an Ottoman-period character.
+
+==================================================
+PHASE 5 — FIT PRESERVATION
+==================================================
+
+The reason MakeHuman donors won is fit.
+
+Do not destroy that advantage.
+
+While reshaping:
+
+preserve good shoulder topology
+preserve armhole quality
+preserve elbow deformation
+preserve waist compatibility
+preserve hip deformation
+preserve skinning relationships
+
+Do not rebuild these areas from scratch unless absolutely necessary.
+
+==================================================
+PHASE 6 — WEIGHT / DEFORMATION PIPELINE
+==================================================
+
+Use the existing body/rig relationship.
+
+Prefer:
+
+- transferred existing donor weights
+- Data Transfer
+- controlled corrective weights
+- corrective shape work if needed
+
+Avoid fully regenerating skin weights when good donor weights already exist.
+
+Validate:
+
+shoulders
+elbows
+wrists
+spine
+hips
+knees
+ankles
+
+==================================================
+PHASE 7 — REAL MOTION GATE
+==================================================
+
+Static screenshots are no longer enough.
+
+For Hasan run actual animation tests:
+
+1. idle
+2. walk
+3. run
+4. turn
+5. one-handed attack
+6. arm raise
+7. bend/crouch
+8. mounted seated pose
+
+Capture representative real Windows-player frames.
+
+Inspect:
+
+- shoulder collapse
+- sleeve collapse
+- waist clipping
+- skirt/trouser intersection
+- boots
+- hands
+- neck
+- hair/beard
+- equipment clipping
+
+==================================================
+PHASE 8 — MOUNTED HASAN TEST
+==================================================
+
+Before moving to Sipahi, put Hasan on the existing horse.
+
+Use existing saddle/tack draft.
+
+Validate:
+
+- pelvis/saddle
+- thigh angle
+- knees
+- trouser/skirt behavior
+- boots
+- stirrup relationship
+- reins/hands
+- coat/skirt around horse
+- severe clipping
+
+If garment works on foot but fails catastrophically mounted:
+
+it is NOT accepted.
+
+==================================================
+PHASE 9 — HASAN VISUAL ACCEPTANCE
+==================================================
+
+Create temporary review captures:
+
+- front
+- side
+- three-quarter
+- walk
+- attack
+- mounted side
+- mounted three-quarter
+
+Use neutral lighting.
+
+Hasan passes only if:
+
+- clothing no longer looks prototype-grade
+- shoulders are believable
+- waist is clean
+- skirt/trousers do not visibly interpenetrate in normal poses
+- boots are credible
+- hair/beard acceptable
+- materials distinct
+- Ottoman silhouette readable
+
+If Hasan fails:
+
+repair the donor adaptation.
+
+Do NOT move to the other profiles.
+
+==================================================
+PHASE 10 — MATERIALS
+==================================================
+
+Improve only after geometry/fit is good.
+
+Required readable materials:
+
+- skin
+- hair
+- beard
+- cloth
+- leather
+- mail
+- metal
+- wood
+
+Avoid flat single-color presentation.
+
+Use existing renderer.
+
+Do NOT migrate render pipeline.
+
+==================================================
+PHASE 11 — HASAN HEAD / HAIR / BEARD
+==================================================
+
+Current head is usable but presentation is weak.
+
+Improve:
+
+- skin shading
+- beard attachment
+- moustache placement
+- hairline
+- silhouette
+- clipping
+
+Use only already-licensed/open sources recorded in the project.
+
+No new asset search unless a hard blocker is formally documented.
+
+==================================================
+PHASE 12 — AFTER HASAN PASSES
+==================================================
+
+Only after Hasan visual acceptance:
+
+create the remaining three profiles using the SAME donor-based pipeline.
+
+Order:
+
+1. Sipahi
+2. Cebeli
+3. Tüfekçi
+
+==================================================
+PHASE 13 — SIPAHI
+==================================================
+
+Use MakeHuman donor clothing as the deformation base.
+
+Transform to a plausible mounted military silhouette.
+
+Add:
+
+- headgear
+- armor
+- kilic
+- mizrak
+- shield if loadout requires
+- boots
+- horse
+- saddle/tack
+
+Sipahi must visually read as cavalry.
+
+Not Hasan with another color.
+
+==================================================
+PHASE 14 — CEBELI
+==================================================
+
+Create visibly distinct:
+
+- garment
+- armor level
+- headgear
+- equipment
+- silhouette
+
+Use donor topology where appropriate.
+
+No recolor-only variation.
+
+==================================================
+PHASE 15 — TUFEKCI
+==================================================
+
+Create:
+
+- appropriate clothing
+- headgear
+- boots
+- fitilli tüfek
+- ammunition equipment
+
+Validate firearm hand placement.
+
+==================================================
+PHASE 16 — EQUIPMENT
+==================================================
+
+Do not spend this run searching for new external equipment.
+
+Refine existing production candidates:
+
+- kilic
+- mizrak
+- fitilli-tufek
+- kalkan
+- zirh-gomlek
+
+Only rebuild if current candidate clearly fails visual acceptance.
+
+==================================================
+PHASE 17 — HORSE
+==================================================
+
+Horse base is already good.
+
+Do NOT rebuild it.
+
+Finish only:
+
+- coat/material
+- mane/tail
+- tack
+- rider fit
+- gait QA
+
+Three coat variants can be completed after human acceptance.
+
+==================================================
+PHASE 18 — PRODUCTION CATALOG
+==================================================
+
+Do NOT activate production catalog until:
+
+Hasan
+Sipahi
+Cebeli
+Tüfekçi
+
+all pass visual review.
+
+Then replace production VisualProof references.
+
+Required production profiles:
+
+- hasan-aga
+- sipahi
+- cebeli
+- tufekci
+
+Required equipment:
+
+- kilic
+- mizrak
+- fitilli-tufek
+- zirh-gomlek
+- kalkan
+- sipahi-ati
+- tufek-muhimmat
+
+==================================================
+PHASE 19 — PRODUCTION ART GATE
+==================================================
+
+Current:
+
+130 issues
+
+Final required:
+
+0 issues
+exit code 0
+
+Do not modify gate rules to force success.
+
+Eliminate actual proof dependencies.
+
+==================================================
+PHASE 20 — ACCEPTED SCREENSHOTS
+==================================================
+
+Only after production catalog activation create:
+
+Docs/Evidence/Implementation14C/Accepted/
+
+Required 12:
+
+01-hasan-full.png
+02-sipahi-front.png
+03-sipahi-side.png
+04-sipahi-mounted.png
+05-horse-side.png
+06-horse-three-quarter.png
+07-cebeli.png
+08-tufekci.png
+09-equipment-closeup.png
+10-soldier-group-12plus.png
+11-sipahi-mounted-side-fit.png
+12-sipahi-mounted-three-quarter-fit.png
+
+The 12 donor-comparison images do NOT count as Accepted.
+
+==================================================
+PHASE 21 — REAL PERFORMANCE
+==================================================
+
+After production activation run:
+
+100 actors
+250 actors
+500 actors
+
+through the REAL path:
+
+SoldierInstance
+→ persistent loadout
+→ VisualProfile
+→ VisualSoldier3DAssembler
+→ production catalog
+→ cache/pool
+
+Also run mixed scenario:
+
+- Cebeli
+- Tüfekçi
+- mounted Sipahi
+
+==================================================
+PHASE 22 — TEST BASELINE
+==================================================
+
+Preserve at minimum:
+
+.NET:
+486/486
+
+Unity:
+560/560
+
+No failures.
+No skips.
+
+Save stays:
+
+v14
+
+==================================================
+PHASE 23 — DO NOT CHANGE GAMEPLAY
+==================================================
+
+Do not modify:
+
+- combat
+- army
+- Soldier stats
+- equipment gameplay values
+- AI
+- economy
+- travel
+- recruitment
+- save contracts
+
+==================================================
+FAILURE RULE
+==================================================
+
+If MakeHuman donor geometry STILL cannot pass visual/motion acceptance after proper historical reshaping:
+
+STATUS: NOT READY.
+
+State exactly whether the remaining blocker is:
+
+- donor garment topology
+- weight transfer
+- historical transformation
+- material quality
+- rig/deformation
+- human base
+- mounted fit
+
+Do NOT return to Quaternius.
+
+Do NOT return to procedural tunics.
+
+Do NOT search random assets.
+
+If this donor strategy fails, the next strategy will be decided separately.
+
+==================================================
+READY RULE
+==================================================
+
+14C READY only if:
+
+- Hasan accepted
+- Sipahi accepted
+- Cebeli accepted
+- Tüfekçi accepted
+- real movement accepted
+- mounted fit accepted
+- horse/tack accepted
+- production catalog active
+- ProductionArt = 0 issues
+- no production VisualProof dependency
+- persistent loadout works
+- 12 Accepted images committed
+- real tactical/battle screenshot exists
+- 100/250/500 runtime test complete
+- mixed cavalry benchmark complete
+- .NET green
+- Unity green
+- all previous pipelines green
+- Windows build green
+- CI green
+- clean worktree
+
+Otherwise NOT READY.
+
+DO NOT START IMPLEMENTATION 15.
+
+==================================================
+FINAL REPORT
+==================================================
+
+STATUS: READY / NOT READY
+
+## Implementation
+Implementation 14C — MakeHuman Donor Production Closure
+
+## Donor Trial Checkpoint SHA
+
+## Final SHA
+
+## Selected Donor Pipeline
+
+## Quaternius Rejection Summary
+
+## MakeHuman Donor Findings
+
+## Historical Garment Transformation
+
+## Hasan Ağa
+
+## Hasan Motion QA
+
+## Hasan Mounted QA
+
+## Sipahi
+
+## Cebeli
+
+## Tüfekçi
+
+## Hair / Beard / Heads
+
+## Clothing / Boots
+
+## Armor
+
+## Equipment
+
+## Horse
+
+## Tack / Rider Fit
+
+## Animations
+
+## Production Catalog
+
+## ProductionArt Gate
+
+## Persistent Loadout
+
+## Accepted Screenshots
+
+## Runtime Performance
+100 / 250 / 500
+
+## Mixed Cavalry Performance
+
+## Save
+v14 unchanged
+
+## Tests
+
+## Existing Pipelines
+
+## Windows Build
+
+## CI
+
+## Remaining Limitations
+
+## READY / NOT READY Reason
+
+## Next Step
+
+If READY:
+Implementation 15 — Story / Publisher Vertical Slice Flow
+
+If NOT READY:
+continue Implementation 14C

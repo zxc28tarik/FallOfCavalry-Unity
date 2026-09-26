@@ -1,5 +1,14 @@
 # Implementation 14C continuation — NOT READY
 
+> Latest operational update (2026-09-26): the operator selected eleven zero-cost
+> Quaternius Standard / MakeHuman clothing donors. See
+> [Clothing donor trial](IMPLEMENTATION_14C_CLOTHING_DONOR_TRIAL.md) and
+> `ArtSource/HistoricalSlice/Upstream/ClothingDonors/PROVENANCE.md` before further
+> clothing work. All eleven received initial technical / real-player comparison
+> tests, but historical adaptation and visual acceptance remain incomplete.
+> No alternative shopping or procedural-tunic shortcut. The older checkpoint
+> below is retained as history, not the latest garment-authoring instruction.
+
 ## Authority and starting state
 
 Same repository `zxc28tarik/FallOfCavalry-Unity`, same branch

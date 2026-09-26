@@ -1,0 +1,86 @@
+[
+  {
+    "asset": "HasanRobe",
+    "exitCode": 0,
+    "pose": "standing",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "HasanRobe-standing.png"
+  },
+  {
+    "asset": "HasanRobe",
+    "exitCode": 0,
+    "pose": "mounted",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "HasanRobe-mounted.png"
+  },
+  {
+    "asset": "TunicAlternative",
+    "exitCode": 0,
+    "pose": "standing",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "TunicAlternative-standing.png"
+  },
+  {
+    "asset": "TunicAlternative",
+    "exitCode": 0,
+    "pose": "mounted",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "TunicAlternative-mounted.png"
+  },
+  {
+    "asset": "SipahiRanger",
+    "exitCode": 0,
+    "pose": "standing",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "SipahiRanger-standing.png"
+  },
+  {
+    "asset": "SipahiRanger",
+    "exitCode": 0,
+    "pose": "mounted",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "SipahiRanger-mounted.png"
+  },
+  {
+    "asset": "CebeliPeasant",
+    "exitCode": 0,
+    "pose": "standing",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "CebeliPeasant-standing.png"
+  },
+  {
+    "asset": "CebeliPeasant",
+    "exitCode": 0,
+    "pose": "mounted",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "CebeliPeasant-mounted.png"
+  },
+  {
+    "asset": "PeasantLegs",
+    "exitCode": 0,
+    "pose": "standing",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "PeasantLegs-standing.png"
+  },
+  {
+    "asset": "PeasantLegs",
+    "exitCode": 0,
+    "pose": "mounted",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "PeasantLegs-mounted.png"
+  },
+  {
+    "asset": "RangerLegs",
+    "exitCode": 0,
+    "pose": "standing",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "RangerLegs-standing.png"
+  },
+  {
+    "asset": "RangerLegs",
+    "exitCode": 0,
+    "pose": "mounted",
+    "status": "CAPTURED_NOT_VISUALLY_ACCEPTED",
+    "image": "RangerLegs-mounted.png"
+  }
+]
