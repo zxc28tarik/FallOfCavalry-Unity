@@ -22,6 +22,7 @@ namespace FOC.Editor.Visuals
             {
                 HistoricalArtCandidatePipeline.GenerateFromDirectory(HistoricalArtCandidatePipeline.SourceRoot+"/HasanDonor");
                 AuthorMotion();
+                HasanDonorPoseAuthoring.Export();
                 Debug.Log("FOC_HASAN_DONOR_IMPORT_AND_MOTION_PASS: technical only, NOT visual acceptance");
                 EditorApplication.Exit(0);
             }
@@ -64,6 +65,20 @@ namespace FOC.Editor.Visuals
                         if(curve.keys.All(k=>k.value==curve.keys[0].value))curve=AnimationCurve.Constant(0,duration,curve.keys[0].value);
                         AnimationUtility.SetEditorCurve(clip,EditorCurveBinding.FloatCurve(pair.Key,typeof(Transform),props[i]),curve);
                     }
+                    // Finger poses come from the original MakeHuman hand rig,
+                    // baked as local corrective shapes. The canonical skeleton
+                    // and shared gameplay animation library remain unchanged.
+                    foreach(var renderer in human.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    foreach(var side in new[]{"L","R"})
+                    {
+                        // The source's fully open bind hand is a deformation
+                        // extreme, not a natural resting/running finger pose.
+                        // Reuse the same authored grip corrective at partial
+                        // weight; no finger rig or shared animation is changed.
+                        var value=motion=="MountedSeated"?85f:motion=="OneHandedAttack"&&side=="R"?100f:motion=="Run"?40f:25f;
+                        var rendererPath=AnimationUtility.CalculateTransformPath(renderer.transform,human.transform);
+                        AnimationUtility.SetEditorCurve(clip,EditorCurveBinding.FloatCurve(rendererPath,typeof(SkinnedMeshRenderer),"blendShape.Grip_"+side),AnimationCurve.Constant(0,duration,value));
+                    }
                     clip.EnsureQuaternionContinuity();var settings=AnimationUtility.GetAnimationClipSettings(clip);settings.loopTime=true;AnimationUtility.SetAnimationClipSettings(clip,settings);
                     var clipPath=Folder+"/"+clip.name+".anim";var existing=AssetDatabase.LoadAssetAtPath<AnimationClip>(clipPath);
                     if(existing==null)AssetDatabase.CreateAsset(clip,clipPath);else{EditorUtility.CopySerialized(clip,existing);EditorUtility.SetDirty(existing);UnityEngine.Object.DestroyImmediate(clip);}
@@ -81,29 +96,83 @@ namespace FOC.Editor.Visuals
             Transform B(string n)=>HistoricalArtPoseReview.Bone(human,n);
             var wave=Mathf.Sin(phase*Mathf.PI*2);var pulse=(1-Mathf.Cos(phase*Mathf.PI*2))*.5f;
             var pelvis=B("Pelvis");var mounted=motion=="MountedSeated";var crouch=motion=="Crouch";
+            var bindPelvis=pelvis.position;
             if(crouch)pelvis.localPosition+=new Vector3(0,-.25f*pulse,-.07f*pulse);
+            // Keep the stirrup target at its measured tack position, but settle
+            // the pelvis into the saddle instead of stretching a standing pose
+            // toward it. This is only the candidate's review pose.
+            if(mounted)pelvis.localPosition+=new Vector3(0,-.025f,-.025f);
             // Lower the gait center enough to keep the stance leg reachable;
             // otherwise clamped two-link IK lifts both soles above the floor.
             if(motion=="Walk"||motion=="Run")pelvis.localPosition+=new Vector3(0,(motion=="Run"?-.11f:-.055f)+.015f*Mathf.Cos(phase*Mathf.PI*4),0);
             if(motion=="Idle"||mounted)B("Chest").localRotation=Quaternion.Euler(1.2f*wave,0,0);
             if(crouch)B("Spine").localRotation=Quaternion.Euler(16*pulse,0,0);
+            if(motion=="Walk"||motion=="Run")
+            {
+                // A small counter-rotation belongs to the gait, not a changed
+                // rig or root-motion contract. Avoid rigid shoulders over hips.
+                B("Spine").localRotation=Quaternion.Euler(motion=="Run"?5f:1.5f,3f*wave,0);
+                B("Chest").localRotation=Quaternion.Euler(0,-5f*wave,0);
+            }
             foreach(var side in new[]{"L","R"})
             {
                 var sign=side=="L"?1f:-1f;var step=wave*sign;
-                var foot=new Vector3(sign*.1977f,.073f,.019f);var hand=new Vector3(sign*.27f,1.02f,.12f);
+                var foot=new Vector3(sign*.1977f,.073f,.019f);var hand=new Vector3(sign*.27f,.965f,.08f);
+                var elbowHint=new Vector3(sign*.25f,1.12f,-.08f);
                 if(motion=="Walk"||motion=="Run")
                 {
                     var running=motion=="Run";
-                    foot.z+=(running?.38f:.27f)*step;foot.y+=(running?.18f:.10f)*Mathf.Max(0,step);
-                    hand=new Vector3(sign*.28f,running?1.17f:1.02f,.16f-(running?.19f:.13f)*step);
+                    var cycle=Mathf.Repeat(phase+(side=="R"?.5f:0),1);
+                    var stride=running?.66f:.45f;
+                    if(cycle<.5f)
+                    {
+                        var swing=cycle*2;
+                        // The foot moves rear-to-front while lifted, then has
+                        // a full planted stance half-cycle. A sinusoid plus
+                        // max(0,sine) was moving the foot through the ground.
+                        foot.z+=Mathf.Lerp(-stride*.5f,stride*.5f,Mathf.SmoothStep(0,1,swing));
+                        foot.y+=(running?.21f:.105f)*Mathf.Sin(swing*Mathf.PI);
+                    }
+                    else foot.z+=Mathf.Lerp(stride*.5f,-stride*.5f,(cycle-.5f)*2);
+                    // A running elbow swings behind the trunk while the bent
+                    // forearm still carries the wrist forward. Driving the
+                    // wrist itself behind the shoulder folded the elbow across
+                    // the torso and inverted the sleeve in the r5 player shot.
+                    hand=running
+                        ?new Vector3(sign*.265f,1.11f-.055f*step,.24f-.14f*step)
+                        :new Vector3(sign*.265f,.96f,.14f-.15f*step);
+                    // An explicit anatomical elbow target keeps the upper arm
+                    // alongside the torso. The old lateral pole pushed elbows
+                    // out into a shrug/chicken-wing silhouette.
+                    elbowHint=new Vector3(sign*.27f,running?1.075f:1.12f,-.075f-(running?.055f:.025f)*step);
                 }
-                if(motion=="ArmRaise")hand=Vector3.Lerp(hand,new Vector3(sign*.40f,1.87f,.10f),pulse);
-                if(motion=="OneHandedAttack"&&side=="R")hand=Vector3.Lerp(new Vector3(-.40f,1.65f,.14f),new Vector3(.20f,1.05f,.54f),pulse);
+                if(motion=="ArmRaise")
+                {
+                    hand=Vector3.Lerp(hand,new Vector3(sign*.40f,1.87f,.10f),pulse);
+                    elbowHint=Vector3.Lerp(elbowHint,new Vector3(sign*.52f,1.58f,-.08f),pulse);
+                }
+                if(motion=="OneHandedAttack"&&side=="R")
+                {
+                    // The previous end target was .74m from a .52m arm and
+                    // necessarily hit the IK clamp. Keep the intended slash
+                    // within anatomical reach instead of silently stretching.
+                    hand=Vector3.Lerp(new Vector3(-.36f,1.63f,.13f),new Vector3(.015f,1.18f,.39f),pulse);
+                    elbowHint=Vector3.Lerp(new Vector3(-.44f,1.40f,-.09f),new Vector3(-.30f,1.16f,.15f),pulse);
+                }
                 if(crouch)hand+=new Vector3(0,-.10f*pulse,.22f*pulse);
-                if(mounted){foot=pelvis.position+new Vector3(sign*.46f,-.72f,.16f);hand=pelvis.position+new Vector3(sign*.16f,.21f+.008f*wave,.33f);}
-                HistoricalArtPoseReview.Limb(B("UpperLeg_"+side),B("LowerLeg_"+side),B("Foot_"+side),foot,new Vector3(sign*(mounted?.75f:.05f),0,1));
+                if(crouch)elbowHint+=new Vector3(0,-.16f*pulse,.10f*pulse);
+                if(mounted)
+                {
+                    // Measured tack: seat (0,1.81,-.42), stirrup sole y=1.01,
+                    // x=+/-.46; ankle is .08m above the iron and .16m forward.
+                    foot=bindPelvis+new Vector3(sign*.46f,-.72f,.16f);
+                    hand=bindPelvis+new Vector3(sign*.12f,.21f+.008f*wave,.30f);
+                    elbowHint=bindPelvis+new Vector3(sign*.265f,.22f,-.015f);
+                }
+                HistoricalArtPoseReview.Limb(B("UpperLeg_"+side),B("LowerLeg_"+side),B("Foot_"+side),foot,new Vector3(sign*(mounted?.5f:.05f),0,1));
                 B("Foot_"+side).rotation=Quaternion.identity;
-                HistoricalArtPoseReview.Limb(B("UpperArm_"+side),B("LowerArm_"+side),B("Hand_"+side),hand,new Vector3(sign*.4f,0,-1));
+                var upperArm=B("UpperArm_"+side);
+                HistoricalArtPoseReview.Limb(upperArm,B("LowerArm_"+side),B("Hand_"+side),hand,elbowHint-upperArm.position);
             }
             if(motion=="Turn")B("Root").localRotation=Quaternion.Euler(0,45*wave,0);
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FOC.Visuals.Core;
+using FOC.Presentation.Visuals;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -20,10 +21,12 @@ namespace FOC.Editor.Visuals
         public const string EquipmentRoot="Assets/FOC/Presentation/Equipment/Ottoman1648";
         public const string MaterialRoot="Assets/FOC/Presentation/Materials/Ottoman1648";
         private static readonly Dictionary<string,Material> ImportedMaterials=new Dictionary<string,Material>(StringComparer.Ordinal);
-        [Serializable]public sealed class SourceAsset{public int formatVersion;public string assetId="";public string category="";public string status="";public string generator="";public string source="";public string sourceSha256="";public string license="";public string date="";public string revision="";public SourceBone[] bones=Array.Empty<SourceBone>();public SourceLod[] lods=Array.Empty<SourceLod>();}
+        [Serializable]public sealed class SourceAsset{public int formatVersion;public string assetId="";public string category="";public string status="";public string generator="";public string source="";public string sourceSha256="";public string license="";public string date="";public string revision="";public SourceBone[] bones=Array.Empty<SourceBone>();public SourceLod[] lods=Array.Empty<SourceLod>();public SourceGrip? gripAttachment;public HasanGarmentPoseCorrectives.Sample[] poseCorrectives=Array.Empty<HasanGarmentPoseCorrectives.Sample>();}
+        [Serializable]public sealed class SourceGrip{public float[] localPosition=Array.Empty<float>();public float[] localRotation=Array.Empty<float>();}
         [Serializable]public sealed class SourceBone{public string name="";public string parent="";public float[] position=Array.Empty<float>();}
         [Serializable]public sealed class SourceLod{public SourcePart[] parts=Array.Empty<SourcePart>();}
-        [Serializable]public sealed class SourcePart{public string material="";public float[] positions=Array.Empty<float>();public float[] normals=Array.Empty<float>();public float[] uv=Array.Empty<float>();public int[] triangles=Array.Empty<int>();public int[] boneIndices=Array.Empty<int>();public float[] boneWeights=Array.Empty<float>();}
+        [Serializable]public sealed class SourcePart{public string material="";public float[] positions=Array.Empty<float>();public float[] normals=Array.Empty<float>();public float[] uv=Array.Empty<float>();public int[] triangles=Array.Empty<int>();public int[] boneIndices=Array.Empty<int>();public float[] boneWeights=Array.Empty<float>();public SourceShape[] blendShapes=Array.Empty<SourceShape>();}
+        [Serializable]public sealed class SourceShape{public string name="";public float[] deltaPositions=Array.Empty<float>();public float[] deltaNormals=Array.Empty<float>();}
 
         public static void Run()
         {
@@ -55,6 +58,13 @@ namespace FOC.Editor.Visuals
                 var count=p.positions.Length/3;
                 if(count<3||p.positions.Length%3!=0||p.normals.Length!=count*3||p.uv.Length!=count*2||p.triangles.Length%3!=0||p.triangles.Any(i=>i<0||i>=count))throw new InvalidOperationException("Invalid topology: "+source.assetId);
                 if(p.positions.Any(float.IsNaN)||p.positions.Any(float.IsInfinity))throw new InvalidOperationException("Nonfinite vertex.");
+                var shapeNames=new HashSet<string>(StringComparer.Ordinal);
+                foreach(var shape in p.blendShapes)
+                {
+                    if(string.IsNullOrWhiteSpace(shape.name)||!shapeNames.Add(shape.name)||shape.deltaPositions.Length!=count*3||shape.deltaNormals.Length!=count*3||
+                        shape.deltaPositions.Any(x=>float.IsNaN(x)||float.IsInfinity(x))||shape.deltaNormals.Any(x=>float.IsNaN(x)||float.IsInfinity(x)))
+                        throw new InvalidOperationException("Invalid source corrective: "+source.assetId+"/"+shape.name);
+                }
                 var opposed=0;var measured=0;
                 for(var ti=0;ti<p.triangles.Length;ti+=3)
                 {
@@ -86,6 +96,12 @@ namespace FOC.Editor.Visuals
                 foreach(var b in source.bones){var t=new GameObject(b.name).transform;t.SetParent(root.transform,false);t.position=V(b.position,0);transforms.Add(b.name,t);}
                 foreach(var b in source.bones)if(b.parent.Length>0)transforms[b.name].SetParent(transforms[b.parent],true);
                 if(human)AddHumanSockets(transforms);
+                if(source.gripAttachment!=null&&source.gripAttachment.localPosition.Length==3&&source.gripAttachment.localRotation.Length==4)
+                {
+                    var a=source.gripAttachment;
+                    var grip=new GameObject("Socket_ReviewKilic").transform;grip.SetParent(transforms["Hand_R"],false);
+                    grip.localPosition=V(a.localPosition,0);grip.localRotation=new Quaternion(a.localRotation[0],a.localRotation[1],a.localRotation[2],a.localRotation[3]);
+                }
                 var bones=source.bones.Select(b=>transforms[b.name]).ToArray();
                 var lods=new List<LOD>();
                 for(var li=0;li<3;li++)
@@ -105,6 +121,17 @@ namespace FOC.Editor.Visuals
                     }
                     mesh.SetVertices(vertices);mesh.SetNormals(normals);mesh.SetUVs(0,uv);mesh.subMeshCount=triangles.Count;var si=0;
                     foreach(var sub in triangles.Values)mesh.SetTriangles(sub,si++);
+                    foreach(var name in source.lods[li].parts.SelectMany(p=>p.blendShapes).Select(s=>s.name).Distinct(StringComparer.Ordinal).OrderBy(n=>n,StringComparer.Ordinal))
+                    {
+                        var deltaVertices=new Vector3[vertices.Count];var deltaNormals=new Vector3[vertices.Count];var offset=0;
+                        foreach(var part in source.lods[li].parts)
+                        {
+                            var shape=part.blendShapes.FirstOrDefault(s=>s.name==name);
+                            if(shape!=null)for(var i=0;i<part.positions.Length/3;i++){deltaVertices[offset+i]=V(shape.deltaPositions,i*3);deltaNormals[offset+i]=V(shape.deltaNormals,i*3);}
+                            offset+=part.positions.Length/3;
+                        }
+                        mesh.AddBlendShapeFrame(name,100,deltaVertices,deltaNormals,null);
+                    }
                     if(bones.Length>0){mesh.boneWeights=weights.ToArray();mesh.bindposes=bones.Select(b=>b.worldToLocalMatrix*root.transform.localToWorldMatrix).ToArray();}
                     mesh.RecalculateBounds();mesh.RecalculateTangents();
                     var meshPath=folder+"/"+mesh.name+".asset";Store(mesh,meshPath);var stored=AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
@@ -115,6 +142,11 @@ namespace FOC.Editor.Visuals
                     lods.Add(new LOD(li==0?.45f:li==1?.18f:.035f,new[]{renderer}));
                 }
                 var group=root.AddComponent<LODGroup>();group.SetLODs(lods.ToArray());group.RecalculateBounds();
+                if(source.poseCorrectives.Length>0)
+                {
+                    var correctives=root.AddComponent<HasanGarmentPoseCorrectives>();correctives.samples=source.poseCorrectives;
+                    correctives.Initialize();
+                }
                 if(mount)
                 {
                     var animator=root.AddComponent<Animator>();animator.cullingMode=AnimatorCullingMode.CullUpdateTransforms;
@@ -182,6 +214,11 @@ namespace FOC.Editor.Visuals
                 var color=name=="Skin"?new Color(.69f,.48f,.36f):name=="Linen"?new Color(.65f,.57f,.41f):name=="ClothBlue"?new Color(.15f,.24f,.28f):name=="ClothRed"?new Color(.38f,.11f,.08f):name=="Mail"?new Color(.52f,.55f,.56f):name=="Steel"?new Color(.47f,.49f,.5f):name=="Wood"?new Color(.32f,.17f,.07f):new Color(.20f,.105f,.048f);
                 if(name=="EyeWhite")color=new Color(.7f,.65f,.55f);if(name=="Hair")color=new Color(.035f,.025f,.017f);
                 if(name=="LeatherSole")color=new Color(.065f,.042f,.025f);
+                // Isolated donor-study surfaces; shared production palettes stay
+                // unchanged. A light woven sash and dark cloth facing distinguish
+                // tailoring from metal ornament or a recolored proof garment.
+                if(name=="HasanSash")color=new Color(.49f,.40f,.24f);
+                if(name=="HasanBinding")color=new Color(.16f,.085f,.055f);
                 material.color=color;material.SetFloat("_Metallic",name=="Mail"?.62f:name=="Steel"?.85f:0);material.SetFloat("_Glossiness",name=="Steel"?.48f:name=="Skin"?.21f:name=="Leather"?.28f:.18f);
                 var tex=HistoricalArtSurfaceAuthoring.Albedo(name);var texturePath=MaterialRoot+"/"+tex.name+".asset";Store(tex,texturePath);material.mainTexture=AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath);
                 var normal=HistoricalArtSurfaceAuthoring.Normal(name);var normalPath=MaterialRoot+"/"+normal.name+".asset";Store(normal,normalPath);material.SetTexture("_BumpMap",AssetDatabase.LoadAssetAtPath<Texture2D>(normalPath));material.EnableKeyword("_NORMALMAP");material.SetFloat("_BumpScale",name=="Mail"?.65f:.18f);

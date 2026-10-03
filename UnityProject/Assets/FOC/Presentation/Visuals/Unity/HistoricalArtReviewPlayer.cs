@@ -32,7 +32,13 @@ namespace FOC.Presentation.Visuals
             var headgear=Arg("-focArtHeadgear");
             if(headgear!=null){var hat=Instantiate(candidates.Single(p=>p.name==headgear),HistoricalArtPoseReview.Bone(instance,"Socket_Head"));hat.GetComponent<LODGroup>().ForceLOD(0);}
             var weapon=Arg("-focArtWeapon");
-            if(weapon!=null){var item=Instantiate(candidates.Single(p=>p.name==weapon),HistoricalArtPoseReview.Bone(instance,"Socket_RightHand"));item.GetComponent<LODGroup>().ForceLOD(0);item.transform.localRotation=Quaternion.Euler(0,0,-90);}
+            if(weapon!=null)
+            {
+                var authored=instance.GetComponentsInChildren<Transform>().SingleOrDefault(t=>t.name=="Socket_ReviewKilic");
+                var item=Instantiate(candidates.Single(p=>p.name==weapon),authored??HistoricalArtPoseReview.Bone(instance,"Socket_RightHand"));
+                item.GetComponent<LODGroup>().ForceLOD(0);item.transform.localPosition=Vector3.zero;
+                item.transform.localRotation=authored!=null?Quaternion.identity:Quaternion.Euler(0,0,-90);
+            }
             var gait=Arg("-focArtAnimation");var motionAnimator=instance.GetComponent<Animator>();
             if(gait!=null)
             {
@@ -80,6 +86,18 @@ namespace FOC.Presentation.Visuals
                 var phase=float.Parse(Arg("-focArtPhase")??"0.25",CultureInfo.InvariantCulture);
                 motionAnimator!.Play(gait,0,phase);motionAnimator.Update(0);motionAnimator.enabled=false;
                 Debug.Log("FOC_HASAN_REAL_MOTION motion="+gait+" elapsedFrames="+frames+" maxJointTravel="+maxMotion.ToString("R",CultureInfo.InvariantCulture)+" capturePhase="+phase.ToString("R",CultureInfo.InvariantCulture)+" diagnosticClipNotBattleAcceptance=true");
+            }
+            // Additional contact closeups supplement, never replace, the full
+            // body captures. Camera only; no image retouching or pose override.
+            var detail=Arg("-focArtDetail");
+            if(detail=="grip"||detail=="grip-palmar"||detail=="hands")
+            {
+                var right=HistoricalArtPoseReview.Bone(instance,"Hand_R");
+                var focus=right.TransformPoint(new Vector3(-.02146f,-.06883f,.07092f));
+                if(detail=="hands")focus=(focus+HistoricalArtPoseReview.Bone(instance,"Hand_L").position)*.5f;
+                camera.nearClipPlane=.01f;
+                camera.transform.position=focus+(detail=="grip-palmar"?right.TransformDirection(new Vector3(.7747643f,-.6321043f,-.0135839f))*.48f+right.TransformDirection(new Vector3(.3810581f,.4496994f,.807815f))*.10f:detail=="grip"?new Vector3(-.30f,.10f,.40f):new Vector3(.45f,.20f,.55f));
+                camera.transform.LookAt(focus);
             }
             yield return new WaitForEndOfFrame();
             var output=Arg("-focScreenshotPath");

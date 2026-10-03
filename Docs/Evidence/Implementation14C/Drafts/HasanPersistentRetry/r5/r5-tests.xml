@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="30" result="Failed(Child)" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:22Z" duration="2,6979438">
+  <test-suite type="TestSuite" id="1000" name="Fall of Cavalry" fullname="Fall of Cavalry" runstate="Runnable" testcasecount="590" result="Failed" site="Child" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:22Z" duration="2.697944" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1667" name="FOC.Visuals.Tests.dll" fullname="C:/Users/zxc28/Documents/ChatGPT/FOC/UnityProject/Library/ScriptAssemblies/FOC.Visuals.Tests.dll" runstate="Runnable" testcasecount="95" result="Failed" site="Child" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:22Z" duration="2.629419" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="16308" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="1668" name="FOC" fullname="FOC" runstate="Runnable" testcasecount="95" result="Failed" site="Child" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:22Z" duration="2.625973" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="1669" name="Tests" fullname="FOC.Tests" runstate="Runnable" testcasecount="95" result="Failed" site="Child" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:22Z" duration="2.622621" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="1670" name="VisualPipeline" fullname="FOC.Tests.VisualPipeline" runstate="Runnable" testcasecount="95" result="Failed" site="Child" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:22Z" duration="2.619999" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1572" name="HasanDonorMotionRepairTests" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" testcasecount="14" result="Failed" site="Child" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:20Z" duration="1.020492" total="14" passed="13" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1580" name="AttackHandReachesAuthoredEndTargetWithoutAnatomicalIkClamp" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.AttackHandReachesAuthoredEndTargetWithoutAnatomicalIkClamp" methodname="AttackHandReachesAuthoredEndTargetWithoutAnatomicalIkClamp" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="202210439" result="Passed" start-time="2026-10-03 16:59:19Z" end-time="2026-10-03 16:59:20Z" duration="0.825624" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1578" name="GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.052651" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="1576" name="GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders(&quot;Walk&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders(&quot;Walk&quot;)" methodname="GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="766432851" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.008448" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1577" name="GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders(&quot;Run&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders(&quot;Run&quot;)" methodname="GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="1741083118" result="Failed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.026624" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Run lateral chicken-wing pole at 0,25
+  Expected: less than 0.180000007f
+  But was:  0.187955886f
+]]></message>
+                    <stack-trace><![CDATA[at FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests+<>c__DisplayClass1_0.<GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders>b__0 (UnityEngine.GameObject instance, UnityEngine.Animator animator) [0x000bd] in C:\Users\zxc28\Documents\ChatGPT\FOC\UnityProject\Assets\FOC\Tests\VisualPipeline\HasanDonorMotionRepairTests.cs:45
+at FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.WithReview (System.Action`2[T1,T2] action) [0x00044] in C:\Users\zxc28\Documents\ChatGPT\FOC\UnityProject\Assets\FOC\Tests\VisualPipeline\HasanDonorMotionRepairTests.cs:116
+at FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.GaitElbowsStayBesideTorsoRatherThanShruggingAboveShoulders (System.String motion) [0x0000c] in C:\Users\zxc28\Documents\ChatGPT\FOC\UnityProject\Assets\FOC\Tests\VisualPipeline\HasanDonorMotionRepairTests.cs:35
+]]></stack-trace>
+                  </failure>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1575" name="GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.026137" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1573" name="GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet(&quot;Walk&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet(&quot;Walk&quot;)" methodname="GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="339813940" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.019428" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1574" name="GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet(&quot;Run&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet(&quot;Run&quot;)" methodname="GaitHasPlantedHalfCycleInsteadOfIkClampedFloatingFeet" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="750314095" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.004458" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1589" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.051154" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1581" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Idle&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Idle&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="2135890091" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.034529" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1582" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Walk&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Walk&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="1020253095" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.002037" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1583" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Run&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Run&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="1883937408" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.001363" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1584" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Turn&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Turn&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="767703211" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.001359" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1585" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;OneHandedAttack&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;OneHandedAttack&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="775145647" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.001513" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1586" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;ArmRaise&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;ArmRaise&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="1804534597" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.001998" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1587" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Crouch&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;Crouch&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="679179962" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.001343" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1588" name="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;MountedSeated&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates(&quot;MountedSeated&quot;)" methodname="HandCorrectivesCloseOnlyTheRequiredHandsAndResetOtherStates" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="1455271347" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.001324" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1579" name="MountedPoseBendsKneesWhileRetainingMeasuredStirrupAnkleTargets" fullname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests.MountedPoseBendsKneesWhileRetainingMeasuredStirrupAnkleTargets" methodname="MountedPoseBendsKneesWhileRetainingMeasuredStirrupAnkleTargets" classname="FOC.Tests.VisualPipeline.HasanDonorMotionRepairTests" runstate="Runnable" seed="298445323" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.006594" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1590" name="HasanDonorTests" fullname="FOC.Tests.VisualPipeline.HasanDonorTests" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:22Z" duration="1.583740" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1593" name="AdaptedGarmentsReferencePinnedMakeHumanSourcesNotProceduralOrQuaternius" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.AdaptedGarmentsReferencePinnedMakeHumanSourcesNotProceduralOrQuaternius" methodname="AdaptedGarmentsReferencePinnedMakeHumanSourcesNotProceduralOrQuaternius" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="269570321" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.356318" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1608" name="GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.014047" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1606" name="GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp(&quot;Walk&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp(&quot;Walk&quot;)" methodname="GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="675715522" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.005564" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1607" name="GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp(&quot;Run&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp(&quot;Run&quot;)" methodname="GaitStanceFootIsReachableInsteadOfFloatingFromIkClamp" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="337147055" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:20Z" duration="0.002086" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1591" name="HasanDraftUsesUnchangedCanonicalRigAndThreeValidLods" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.HasanDraftUsesUnchangedCanonicalRigAndThreeValidLods" methodname="HasanDraftUsesUnchangedCanonicalRigAndThreeValidLods" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1650312875" result="Passed" start-time="2026-10-03 16:59:20Z" end-time="2026-10-03 16:59:21Z" duration="0.755445" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1596" name="HasanPrefabHasOneRendererPerLodAndARealDiagnosticController" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.HasanPrefabHasOneRendererPerLodAndARealDiagnosticController" methodname="HasanPrefabHasOneRendererPerLodAndARealDiagnosticController" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="537730515" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:21Z" duration="0.008984" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1605" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:22Z" duration="0.344721" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1597" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Idle&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Idle&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1947661956" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:21Z" duration="0.074345" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1598" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Walk&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Walk&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1809005136" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:21Z" duration="0.044131" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1599" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Run&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Run&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1964499096" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:21Z" duration="0.036963" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1600" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Turn&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Turn&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1917052693" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:21Z" duration="0.038884" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1601" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;OneHandedAttack&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;OneHandedAttack&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="956367555" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:21Z" duration="0.035338" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1602" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;ArmRaise&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;ArmRaise&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="712912017" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:21Z" duration="0.037674" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1603" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Crouch&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;Crouch&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1046049" result="Passed" start-time="2026-10-03 16:59:21Z" end-time="2026-10-03 16:59:22Z" duration="0.036584" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1604" name="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;MountedSeated&quot;)" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin(&quot;MountedSeated&quot;)" methodname="MotionClipAnimatesNonPelvisJointsAndProducesFiniteSkin" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="774356673" result="Passed" start-time="2026-10-03 16:59:22Z" end-time="2026-10-03 16:59:22Z" duration="0.030681" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1594" name="NecklineDoesNotFollowArmsAndCoatHemDoesNotFollowShins" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.NecklineDoesNotFollowArmsAndCoatHemDoesNotFollowShins" methodname="NecklineDoesNotFollowArmsAndCoatHemDoesNotFollowShins" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="489138454" result="Passed" start-time="2026-10-03 16:59:22Z" end-time="2026-10-03 16:59:22Z" duration="0.036311" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1592" name="OnlyHasanExistsInNewDraftFolderAndCatalogRemainsUnpromoted" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.OnlyHasanExistsInNewDraftFolderAndCatalogRemainsUnpromoted" methodname="OnlyHasanExistsInNewDraftFolderAndCatalogRemainsUnpromoted" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1826348234" result="Passed" start-time="2026-10-03 16:59:22Z" end-time="2026-10-03 16:59:22Z" duration="0.017153" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1595" name="SourceValidatorRejectsMalformedCorrectives" fullname="FOC.Tests.VisualPipeline.HasanDonorTests.SourceValidatorRejectsMalformedCorrectives" methodname="SourceValidatorRejectsMalformedCorrectives" classname="FOC.Tests.VisualPipeline.HasanDonorTests" runstate="Runnable" seed="1262487704" result="Passed" start-time="2026-10-03 16:59:22Z" end-time="2026-10-03 16:59:22Z" duration="0.044521" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/zxc28/Documents/ChatGPT/FOC/TestResults/HasanDonor/r5-tests.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

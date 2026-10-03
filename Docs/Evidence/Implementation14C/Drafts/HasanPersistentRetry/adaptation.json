@@ -1,0 +1,227 @@
+{
+  "assetId": "CHR_HasanAga_DonorDraft",
+  "status": "DRAFT_NOT_VISUALLY_ACCEPTED",
+  "revision": "hasan-donor-r8-final-draft-NOT-ACCEPTED",
+  "donors": [
+    "rehmanpolanski_viking_tunic",
+    "toigo_harem_pants",
+    "culturalibre_male_boots"
+  ],
+  "unchangedCanonicalBones": true,
+  "lodTriangles": [
+    66073,
+    27309,
+    11710
+  ],
+  "scope": "Hasan only; catalog unchanged; Quaternius not imported",
+  "gripCorrectives": [
+    {
+      "side": "L",
+      "maximumDeltaMeters": 0.122773,
+      "source": "original CC0 default.mhskel finger joints + default_weights.mhw",
+      "thumbPoseAudit": {
+        "method": "continuous three-segment source-bone arc; no target clamp",
+        "hingeDegrees": [
+          55.3296,
+          55.32967
+        ],
+        "sourceSegmentLengthsMeters": [
+          0.0346479,
+          0.0408237,
+          0.030809
+        ],
+        "requestedReachMeters": 0.078123,
+        "achievedReachMeters": 0.078123,
+        "maximumSegmentLengthErrorMeters": 2.9e-08,
+        "targetErrorMeters": 3e-08
+      },
+      "runtimeRigChanged": false
+    },
+    {
+      "side": "R",
+      "maximumDeltaMeters": 0.122773,
+      "source": "original CC0 default.mhskel finger joints + default_weights.mhw",
+      "thumbPoseAudit": {
+        "method": "continuous three-segment source-bone arc; no target clamp",
+        "hingeDegrees": [
+          55.3296,
+          55.32967
+        ],
+        "sourceSegmentLengthsMeters": [
+          0.0346479,
+          0.0408237,
+          0.030809
+        ],
+        "requestedReachMeters": 0.078123,
+        "achievedReachMeters": 0.078123,
+        "maximumSegmentLengthErrorMeters": 2.9e-08,
+        "targetErrorMeters": 3e-08
+      },
+      "runtimeRigChanged": false
+    },
+    {
+      "side": "L",
+      "maximumDeltaMeters": 0.122773,
+      "source": "original CC0 default.mhskel finger joints + default_weights.mhw",
+      "thumbPoseAudit": {
+        "method": "continuous three-segment source-bone arc; no target clamp",
+        "hingeDegrees": [
+          55.3296,
+          55.32967
+        ],
+        "sourceSegmentLengthsMeters": [
+          0.0346479,
+          0.0408237,
+          0.030809
+        ],
+        "requestedReachMeters": 0.078123,
+        "achievedReachMeters": 0.078123,
+        "maximumSegmentLengthErrorMeters": 2.9e-08,
+        "targetErrorMeters": 3e-08
+      },
+      "runtimeRigChanged": false
+    },
+    {
+      "side": "R",
+      "maximumDeltaMeters": 0.122773,
+      "source": "original CC0 default.mhskel finger joints + default_weights.mhw",
+      "thumbPoseAudit": {
+        "method": "continuous three-segment source-bone arc; no target clamp",
+        "hingeDegrees": [
+          55.3296,
+          55.32967
+        ],
+        "sourceSegmentLengthsMeters": [
+          0.0346479,
+          0.0408237,
+          0.030809
+        ],
+        "requestedReachMeters": 0.078123,
+        "achievedReachMeters": 0.078123,
+        "maximumSegmentLengthErrorMeters": 2.9e-08,
+        "targetErrorMeters": 3e-08
+      },
+      "runtimeRigChanged": false
+    },
+    {
+      "side": "L",
+      "maximumDeltaMeters": 0.122954,
+      "source": "original CC0 default.mhskel finger joints + default_weights.mhw",
+      "thumbPoseAudit": {
+        "method": "continuous three-segment source-bone arc; no target clamp",
+        "hingeDegrees": [
+          55.3296,
+          55.32967
+        ],
+        "sourceSegmentLengthsMeters": [
+          0.0346479,
+          0.0408237,
+          0.030809
+        ],
+        "requestedReachMeters": 0.078123,
+        "achievedReachMeters": 0.078123,
+        "maximumSegmentLengthErrorMeters": 2.9e-08,
+        "targetErrorMeters": 3e-08
+      },
+      "runtimeRigChanged": false
+    },
+    {
+      "side": "R",
+      "maximumDeltaMeters": 0.122998,
+      "source": "original CC0 default.mhskel finger joints + default_weights.mhw",
+      "thumbPoseAudit": {
+        "method": "continuous three-segment source-bone arc; no target clamp",
+        "hingeDegrees": [
+          55.3296,
+          55.32967
+        ],
+        "sourceSegmentLengthsMeters": [
+          0.0346479,
+          0.0408237,
+          0.030809
+        ],
+        "requestedReachMeters": 0.078123,
+        "achievedReachMeters": 0.078123,
+        "maximumSegmentLengthErrorMeters": 2.9e-08,
+        "targetErrorMeters": 3e-08
+      },
+      "runtimeRigChanged": false
+    }
+  ],
+  "gripAttachment": {
+    "side": "R",
+    "localPosition": [
+      0.0120502,
+      -0.0290642,
+      0.1320069
+    ],
+    "localRotation": [
+      0.516817,
+      0.4895837,
+      0.0897246,
+      0.6965326
+    ],
+    "gripCenterLocal": [
+      -0.0214615,
+      -0.0688264,
+      0.0709174
+    ],
+    "gripAxisLocal": [
+      0.3810581,
+      0.4496994,
+      0.807815
+    ],
+    "palmNormalLocal": [
+      0.7747643,
+      -0.6321043,
+      -0.0135839
+    ],
+    "weaponGripCenter": [
+      -0.006,
+      -0.08,
+      0
+    ],
+    "status": "DRAFT_REQUIRES_RENDERED_QA"
+  },
+  "waistFit": {
+    "region": "original donor waist and thigh skirt",
+    "changedVertices": 577,
+    "maxOffsetMeters": 0.036930272745193685,
+    "targetClearanceMeters": 0.012,
+    "topologyUvWeightsUnchanged": true
+  },
+  "frontWaistEase": {
+    "vertices": 211,
+    "maximumMeters": 0.028,
+    "reason": "Run250 measured front waist penetration above pinned corrective region"
+  },
+  "sashWinding": {
+    "radialAreaScoreBefore": 0.01753225602763905,
+    "reversed": false,
+    "doubleSidedShader": false
+  },
+  "tailoring": [
+    {
+      "method": "original donor triangle iso-distance extraction",
+      "selectedBoundaryEdges": {
+        "front": 179,
+        "collar": 67,
+        "hem": 44,
+        "cuff_L": 20,
+        "cuff_R": 20
+      },
+      "bandWidthMetres": {
+        "front": 0.018,
+        "collar": 0.016,
+        "hem": 0.012,
+        "cuff_L": 0.012,
+        "cuff_R": 0.012
+      },
+      "surfaceOffsetMetres": 0.0018,
+      "thicknessMetres": 0.001,
+      "sourceTriangles": 550,
+      "weights": "original values or original-triangle interpolation only",
+      "historicalClaim": "practical facing interpretation; no new historical attribution"
+    }
+  ]
+}

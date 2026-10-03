@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$UnityEditor)
+param([Parameter(Mandatory=$true)][string]$UnityEditor,[string]$Blender)
 $ErrorActionPreference='Stop'
 $repo=Split-Path -Parent $PSScriptRoot
 $output=Join-Path $repo 'TestResults/HasanDonor/Final'
@@ -27,13 +27,25 @@ try{
     if((Invoke-UnityCheck 'editmode' @('-runTests','-testPlatform','EditMode','-testResults',('"'+$xml+'"'))) -ne 0){throw 'EditMode failed'}
     $suite=[xml](Get-Content -LiteralPath $xml -Raw)
     if([int]$suite.'test-run'.failed -ne 0 -or [int]$suite.'test-run'.skipped -ne 0 -or [int]$suite.'test-run'.passed -lt 560){throw 'Test baseline/failure/skip gate failed'}
+    if((Invoke-UnityCheck 'pose-samples' @('-quit','-executeMethod','FOC.Editor.Visuals.HasanDonorPoseAuthoring.Export')) -ne 0){throw 'Read-only pose export failed'}
+    if([string]::IsNullOrWhiteSpace($Blender)){$Blender=Join-Path $repo 'Artifacts/DccTools/blender-4.5.9-windows-x64/blender.exe'}
+    if(-not (Test-Path -LiteralPath $Blender)){throw 'Provide an installed Blender executable for corrective verification.'}
+    foreach($check in @('selfcheck','verify-runtime')){
+        $arguments=@('--background','--factory-startup','--disable-autoexec','--python-exit-code','1','--python','Tools/Art/solve_hasan_correctives.py','--',('--'+$check))
+        $log=Join-Path $output ('corrective-'+$check+'.log')
+        & $Blender @arguments 2>&1 | Tee-Object -FilePath $log | Out-Host
+        $code=$LASTEXITCODE;$checks.Add([pscustomobject]@{name=('corrective-'+$check);command=('"'+$Blender+'" '+($arguments -join ' '));exitCode=$code;log=$log})
+        if($code -ne 0){throw "Corrective $check failed"}
+    }
+    # Exit 0 means the diagnostic executed, NOT collision or artwork acceptance.
+    $collision=Get-Content -LiteralPath (Join-Path $repo 'TestResults/HasanDonor/Correctives/runtime-collision-audit.json') -Raw | ConvertFrom-Json
     if((Invoke-UnityCheck 'windows-review-build' @('-executeMethod','FOC.Editor.Visuals.HistoricalArtReviewBuild.RunHasan')) -ne 0){throw 'Review build failed'}
     & (Join-Path $PSScriptRoot 'Art/Capture-HasanDonor.ps1') -OutputDirectory (Join-Path $output 'Captures')
     $checks.Add([pscustomobject]@{name='real-windows-motion-captures';command='Tools/Art/Capture-HasanDonor.ps1 -OutputDirectory TestResults/HasanDonor/Final/Captures';exitCode=0})
     $gate=Invoke-UnityCheck 'production-art' @('-executeMethod','FOC.Editor.Visuals.ProductionVisualCatalogGate.Run')
     if(git status --porcelain){throw 'Validation modified versioned worktree'}
     if((git rev-parse HEAD) -ne $sha){throw 'HEAD changed during validation'}
-    [pscustomobject]@{status='NOT READY';commitSha=$sha;endSha=(git rev-parse HEAD);unityVersion='6000.3.16f1';editModePassed=$suite.'test-run'.passed;editModeFailed=$suite.'test-run'.failed;editModeSkipped=$suite.'test-run'.skipped;productionArtExitCode=$gate;worktree='clean';acceptedScreenshots=0;checks=$checks} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $output 'validation.json') -Encoding utf8
+    [pscustomobject]@{status='NOT READY';commitSha=$sha;endSha=(git rev-parse HEAD);unityVersion='6000.3.16f1';editModePassed=$suite.'test-run'.passed;editModeFailed=$suite.'test-run'.failed;editModeSkipped=$suite.'test-run'.skipped;productionArtExitCode=$gate;runtimeCorrectiveInsideVertices=$collision.unresolvedInsideVertices;runtimeCorrectiveClearanceViolations=$collision.unresolvedClearanceViolations;worktree='clean';acceptedScreenshots=0;checks=$checks} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $output 'validation.json') -Encoding utf8
     # A technical runner cannot accept artwork or activate the catalog.
     if($gate -ne 0){exit 1}
 }

@@ -1,0 +1,169 @@
+{
+  "sha": "6a07de1032f5f11dc9a61b5b92a45d88aa1e9409",
+  "worktree": [
+    " M Tools/Art/adapt_hasan_donors.py",
+    " M Tools/Art/test_clothing_donors.py",
+    " M UnityProject/Assets/FOC/ArtSource/HistoricalSlice/HasanDonor/CHR_HasanAga_DonorDraft.focmesh.json",
+    " M UnityProject/Assets/FOC/ArtSource/HistoricalSlice/HasanDonor/CLTH_Donor_HasanBootsDonor.focmesh.json",
+    " M UnityProject/Assets/FOC/ArtSource/HistoricalSlice/HasanDonor/CLTH_Donor_HasanCoatDonor.focmesh.json",
+    " M UnityProject/Assets/FOC/ArtSource/HistoricalSlice/HasanDonor/CLTH_Donor_HasanInnerDonor.focmesh.json",
+    " M UnityProject/Assets/FOC/ArtSource/HistoricalSlice/HasanDonor/CLTH_Donor_HasanTrousersDonor.focmesh.json",
+    " M UnityProject/Assets/FOC/Editor/VisualPipeline/HasanDonorPipeline.cs",
+    " M UnityProject/Assets/FOC/Editor/VisualPipeline/HistoricalArtCandidatePipeline.cs",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft.prefab",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_Avatar.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD0.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD1.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD2.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanCoatDonor.prefab",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanCoatDonor_LOD0.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanCoatDonor_LOD1.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanCoatDonor_LOD2.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanInnerDonor_LOD0.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanInnerDonor_LOD1.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanInnerDonor_LOD2.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanTrousersDonor_LOD0.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanTrousersDonor_LOD1.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/CLTH_Donor_HasanTrousersDonor_LOD2.asset",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_ArmRaise.anim",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Crouch.anim",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Idle.anim",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_MountedSeated.anim",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_OneHandedAttack.anim",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Run.anim",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Turn.anim",
+    " M UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Walk.anim",
+    " M UnityProject/Assets/FOC/Presentation/Visuals/Unity/HistoricalArtReviewPlayer.cs",
+    " M UnityProject/Assets/FOC/Tests/VisualPipeline/HasanDonorTests.cs",
+    "?? Tools/Art/hasan_grip.py",
+    "?? UnityProject/Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HasanSash.mat",
+    "?? UnityProject/Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HasanSash.mat.meta",
+    "?? UnityProject/Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_SurfaceN.asset",
+    "?? UnityProject/Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_SurfaceN.asset.meta",
+    "?? UnityProject/Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_Weave.asset",
+    "?? UnityProject/Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_Weave.asset.meta",
+    "?? UnityProject/Assets/FOC/Tests/VisualPipeline/HasanDonorMotionRepairTests.cs",
+    "?? UnityProject/Assets/FOC/Tests/VisualPipeline/HasanDonorMotionRepairTests.cs.meta",
+    "?? UnityProject/Assets/FOC/Tests/VisualPipeline/HasanGripTests.cs"
+  ],
+  "captures": [
+    {
+      "image": "01-front.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Idle elapsedFrames=4149 maxJointTravel=0.009447388 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Idle",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle straight -focArtAnimation Idle -focArtPose standing -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\01-front.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\01-front.log\""
+    },
+    {
+      "image": "02-side.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Idle elapsedFrames=2087 maxJointTravel=0.009447388 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Idle",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle side -focArtAnimation Idle -focArtPose standing -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\02-side.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\02-side.log\""
+    },
+    {
+      "image": "03-three-quarter.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Idle elapsedFrames=2968 maxJointTravel=0.009447388 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Idle",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation Idle -focArtPose standing -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\03-three-quarter.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\03-three-quarter.log\""
+    },
+    {
+      "image": "04-walk-a.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Walk elapsedFrames=3816 maxJointTravel=0.450989157 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Walk",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation Walk -focArtPose standing -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\04-walk-a.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\04-walk-a.log\""
+    },
+    {
+      "image": "05-walk-b.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Walk elapsedFrames=4570 maxJointTravel=0.4509899 capturePhase=0.75 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Walk",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.75",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation Walk -focArtPose standing -focArtPhase 0.75 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\05-walk-b.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\05-walk-b.log\""
+    },
+    {
+      "image": "06-run.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Run elapsedFrames=4158 maxJointTravel=0.661501169 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Run",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation Run -focArtPose standing -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\06-run.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\06-run.log\""
+    },
+    {
+      "image": "07-turn.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Turn elapsedFrames=4129 maxJointTravel=0.2155293 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Turn",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation Turn -focArtPose standing -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\07-turn.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\07-turn.log\""
+    },
+    {
+      "image": "08-attack-a.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=OneHandedAttack elapsedFrames=3603 maxJointTravel=0.640878439 capturePhase=0.1 diagnosticClipNotBattleAcceptance=true",
+      "motion": "OneHandedAttack",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.10",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation OneHandedAttack -focArtPose standing -focArtPhase 0.10 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\08-attack-a.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\08-attack-a.log\" -focArtWeapon WPN_Kilic_01"
+    },
+    {
+      "image": "09-attack-b.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=OneHandedAttack elapsedFrames=4160 maxJointTravel=0.640878439 capturePhase=0.5 diagnosticClipNotBattleAcceptance=true",
+      "motion": "OneHandedAttack",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.50",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation OneHandedAttack -focArtPose standing -focArtPhase 0.50 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\09-attack-b.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\09-attack-b.log\" -focArtWeapon WPN_Kilic_01"
+    },
+    {
+      "image": "10-arm-raise.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=ArmRaise elapsedFrames=4467 maxJointTravel=0.9145081 capturePhase=0.5 diagnosticClipNotBattleAcceptance=true",
+      "motion": "ArmRaise",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.50",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle straight -focArtAnimation ArmRaise -focArtPose standing -focArtPhase 0.50 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\10-arm-raise.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\10-arm-raise.log\""
+    },
+    {
+      "image": "11-crouch.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=Crouch elapsedFrames=3357 maxJointTravel=0.305002958 capturePhase=0.5 diagnosticClipNotBattleAcceptance=true",
+      "motion": "Crouch",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.50",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle side -focArtAnimation Crouch -focArtPose standing -focArtPhase 0.50 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\11-crouch.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\11-crouch.log\""
+    },
+    {
+      "image": "12-mounted-side.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=MountedSeated elapsedFrames=1346 maxJointTravel=0.009447383 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "MountedSeated",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle side -focArtAnimation MountedSeated -focArtPose mounted -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\12-mounted-side.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\12-mounted-side.log\""
+    },
+    {
+      "image": "13-mounted-three-quarter.png",
+      "runtimeEvidence": "FOC_HASAN_REAL_MOTION motion=MountedSeated elapsedFrames=1989 maxJointTravel=0.009447383 capturePhase=0.25 diagnosticClipNotBattleAcceptance=true",
+      "motion": "MountedSeated",
+      "status": "DRAFT_REQUIRES_VISUAL_REVIEW",
+      "exitCode": 0,
+      "phase": "0.25",
+      "command": "\"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\ArtReviewPlayer\\FallOfCavalry-ArtReview.exe\" -screen-fullscreen 0 -screen-width 1280 -screen-height 900 -focArtAsset CHR_HasanAga_DonorDraft -focArtAngle front -focArtAnimation MountedSeated -focArtPose mounted -focArtPhase 0.25 -focScreenshotPath \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\13-mounted-three-quarter.bmp\" -logFile \"C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\r5-captures\\13-mounted-three-quarter.log\""
+    }
+  ],
+  "diagnosticNotBattleAnimation": true
+}

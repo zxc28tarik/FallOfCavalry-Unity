@@ -1,5 +1,10 @@
 # Implementation 14C — Hasan MakeHuman donor review
 
+Historical r1–r4 record. The extended 2026-10-03 r5–r8 retry and additional
+evidence are documented in `IMPLEMENTATION_14C_HASAN_PERSISTENT_RETRY.md`.
+Both checkpoints remain visually NOT READY; do not reuse this record's test
+counts as evidence for the newer commit.
+
 **STATUS: NOT READY. Hasan not accepted. Do not advance to Sipahi or Implementation 15.**
 
 2026-09-26. Donor trial checkpoint: `3889797a4af1b2a01dcf17da1c6a3e1792b239fc`.

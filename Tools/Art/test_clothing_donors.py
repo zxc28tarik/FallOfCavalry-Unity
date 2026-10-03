@@ -86,8 +86,8 @@ def mesh_object(name, coords, faces, uvs, weights):
         for bi,w in ws: obj.vertex_groups[bi].add([vi],w,'REPLACE')
     return obj
 
-def makehuman(path):
-    factors = [scale]*3; mappings = []; reading = False; obj_file = None
+def makehuman(path, barycentric_weights=False):
+    factors = [scale]*3; mappings = []; bindings = []; reading = False; obj_file = None
     for line in path.read_text().splitlines():
         p = line.split()
         if not p or p[0].startswith('#'): continue
@@ -100,7 +100,9 @@ def makehuman(path):
                 value = sum((points[int(p[i])]*float(p[i+3]) for i in range(3)),Vector())
                 value += Vector(tuple(float(p[i+6])*factors[i] for i in range(3)))
                 mappings.append(value)
-            elif len(p) == 1 and p[0].isdigit(): mappings.append(points[int(p[0])].copy())
+                bindings.append([(int(p[i]), max(0., float(p[i+3]))) for i in range(3)])
+            elif len(p) == 1 and p[0].isdigit():
+                mappings.append(points[int(p[0])].copy()); bindings.append([(int(p[0]),1.)])
             else: reading = False
     uv, faces, count = [], [], 0
     for line in (path.parent/obj_file).read_text().splitlines():
@@ -110,7 +112,19 @@ def makehuman(path):
         elif p[0] == 'vt': uv.append(tuple(map(float,p[1:3])))
         elif p[0] == 'f': faces.append([(int(v.split('/')[0])-1,int(v.split('/')[1])-1) for v in p[1:]])
     assert count == len(mappings), (path.name,count,len(mappings))
-    return mesh_object(path.stem,mappings,faces,uv,[transfer_weights(v) for v in mappings])
+    if barycentric_weights:
+        # The garment's original body bindings are more reliable at collars and
+        # armholes than picking spatially nearby vertices on an adjacent limb.
+        # Negative extrapolation coefficients are valid for position fitting but
+        # not for skin weights; clamp and renormalize the remaining contributors.
+        weights=[]
+        for position,binding in zip(mappings,bindings):
+            ws=defaultdict(float)
+            for vi,coefficient in binding:
+                for bi,w in body_weights[vi].items(): ws[bi]+=w*coefficient
+            weights.append(normalize(ws) if sum(ws.values())>1e-7 else transfer_weights(position))
+    else: weights=[transfer_weights(v) for v in mappings]
+    return mesh_object(path.stem,mappings,faces,uv,weights)
 
 def convert(v):
     # Quaternius FBX imported by Blender: Z-up, +Y forward, left negative X.

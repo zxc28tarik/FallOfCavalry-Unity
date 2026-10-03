@@ -1,0 +1,2286 @@
+{
+  "status": "READ_ONLY_NUMERIC_DIAGNOSTIC_NOT_VISUAL_ACCEPTANCE",
+  "sampleFile": "C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\HasanDonor\\pose-validation-samples.json",
+  "samplesSha256": "4e70e5662efc11e5a59264d3687b5b4a6c20812b3b24ec3acb80cdde41a7226f",
+  "sourceFilesUnchanged": true,
+  "sourceSha256": {
+    "UnityProject\\Assets\\FOC\\ArtSource\\HistoricalSlice\\HasanDonor\\CLTH_Donor_HasanCoatDonor.focmesh.json": "4cdb1fc052fe8bfb7399030fb2b4b3cc3dae93798d29e7ab1b29d2664a986991",
+    "UnityProject\\Assets\\FOC\\ArtSource\\HistoricalSlice\\HasanDonor\\CHR_HasanAga_DonorDraft.focmesh.json": "40d183b6f542e3d4eabd1d7fea869c72e4c1395667d0d9f059585f2a890bbed3",
+    "UnityProject\\Assets\\FOC\\ArtSource\\HistoricalSlice\\Characters\\BODY_OttomanMale_Standard.focmesh.json": "2e009eaa3bb7ced317debb9c50c579d7c57c0ee36b8a39cb3b6231652139bb0a",
+    "UnityProject\\Assets\\FOC\\ArtSource\\HistoricalSlice\\HasanDonor\\CLTH_Donor_HasanTrousersDonor.focmesh.json": "8cd9a25c5dd01803e8fe915de8f3d55276058fbd645f76e5c00dd7396d6a8062"
+  },
+  "interpolation": "nearest3 1/distanceSquared; exact<=1e-10; bind blend then skin; float-percent rounding",
+  "shapeAndBasisChecks": [
+    {
+      "lod": 0,
+      "basisSha256": "fbb3c8a1cc9fc7dde24ee0aec7a3c9207313521425492fc47e9b2e4d42568479",
+      "matchedConsolidatedBasisAndShapes": true,
+      "neutralExactlyZero": true,
+      "finiteBoundedDeltas": true,
+      "upperGarmentPinned": true,
+      "maxAuthoredBindOffsetMeters": 0.0888466
+    },
+    {
+      "lod": 0,
+      "partIndex": 2,
+      "material": "HasanBinding",
+      "basisSha256": "c14aa0559bea9aa2bb69c733479df8d995079f0e7f93f7154403b355f46cd2b3",
+      "matchedConsolidatedBasisAndShapes": true,
+      "neutralExactlyZero": true,
+      "finiteBoundedDeltas": true,
+      "upperGarmentPinned": true,
+      "maxAuthoredBindOffsetMeters": 0.0320472,
+      "collisionMeasurement": "NOT_RUN_FOR_DERIVED_FACING"
+    },
+    {
+      "lod": 1,
+      "basisSha256": "ddd5fe566b83ae49e22d36c2aca116d771361b42cbbbff027191c162794d5e0d",
+      "matchedConsolidatedBasisAndShapes": true,
+      "neutralExactlyZero": true,
+      "finiteBoundedDeltas": true,
+      "upperGarmentPinned": true,
+      "maxAuthoredBindOffsetMeters": 0.1065533
+    },
+    {
+      "lod": 1,
+      "partIndex": 2,
+      "material": "HasanBinding",
+      "basisSha256": "bef2418a4f02c9acfab58a739210b41d7621b1e83dfdb9e9ec27bb15551f049d",
+      "matchedConsolidatedBasisAndShapes": true,
+      "neutralExactlyZero": true,
+      "finiteBoundedDeltas": true,
+      "upperGarmentPinned": true,
+      "maxAuthoredBindOffsetMeters": 0.0322208,
+      "collisionMeasurement": "NOT_RUN_FOR_DERIVED_FACING"
+    },
+    {
+      "lod": 2,
+      "basisSha256": "62703dd3a325d7730d4c5c4f1c6ff106e1e01a96b9eb1c3b9b41575d99d61949",
+      "matchedConsolidatedBasisAndShapes": true,
+      "neutralExactlyZero": true,
+      "finiteBoundedDeltas": true,
+      "upperGarmentPinned": true,
+      "maxAuthoredBindOffsetMeters": 0.1161023
+    },
+    {
+      "lod": 2,
+      "partIndex": 2,
+      "material": "HasanBinding",
+      "basisSha256": "8ce7cd69e6fbd3793d9364576549998cda921fae1b4367171e20933e52c9321b",
+      "matchedConsolidatedBasisAndShapes": true,
+      "neutralExactlyZero": true,
+      "finiteBoundedDeltas": true,
+      "upperGarmentPinned": true,
+      "maxAuthoredBindOffsetMeters": 0.0313748,
+      "collisionMeasurement": "NOT_RUN_FOR_DERIVED_FACING"
+    }
+  ],
+  "audits": [
+    {
+      "lod": 0,
+      "pose": "Neutral",
+      "classification": "exact-authored-pose",
+      "weights": [
+        {
+          "name": "Neutral",
+          "weight": 1.0,
+          "distanceSquared": 0.0
+        }
+      ],
+      "before": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "after": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "affectedVertices": 0,
+      "maxBlendedBindOffsetMeters": 0.0,
+      "maxPosedMovementMeters": 0.0
+    },
+    {
+      "lod": 0,
+      "pose": "Walk625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk125",
+          "weight": 0.480350227355957,
+          "distanceSquared": 0.06828200320635869
+        },
+        {
+          "name": "Walk0",
+          "weight": 0.2993633842468262,
+          "distanceSquared": 0.10956341280383515
+        },
+        {
+          "name": "Run0",
+          "weight": 0.2202863883972168,
+          "distanceSquared": 0.14889378734626313
+        }
+      ],
+      "before": {
+        "clearanceViolations": 9,
+        "insideVertices": 4,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0368613
+      },
+      "after": {
+        "clearanceViolations": 3,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0296005
+      },
+      "affectedVertices": 614,
+      "maxBlendedBindOffsetMeters": 0.0430022,
+      "maxPosedMovementMeters": 0.042435
+    },
+    {
+      "lod": 0,
+      "pose": "Walk1875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk250",
+          "weight": 0.47710060119628905,
+          "distanceSquared": 0.03966305420096257
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.38740478515625,
+          "distanceSquared": 0.04884624147591052
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.1354946231842041,
+          "distanceSquared": 0.1396606524852476
+        }
+      ],
+      "before": {
+        "clearanceViolations": 29,
+        "insideVertices": 7,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0155816
+      },
+      "after": {
+        "clearanceViolations": 9,
+        "insideVertices": 5,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0247651
+      },
+      "affectedVertices": 608,
+      "maxBlendedBindOffsetMeters": 0.0374978,
+      "maxPosedMovementMeters": 0.0369544
+    },
+    {
+      "lod": 0,
+      "pose": "Walk3125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk250",
+          "weight": 0.4673275375366211,
+          "distanceSquared": 0.03924060706573165
+        },
+        {
+          "name": "Walk375",
+          "weight": 0.37693641662597654,
+          "distanceSquared": 0.04865069274047787
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.15573604583740233,
+          "distanceSquared": 0.11775191271540564
+        }
+      ],
+      "before": {
+        "clearanceViolations": 54,
+        "insideVertices": 26,
+        "ambiguousViolationsNotProjected": 5,
+        "worstRequiredMeters": 0.0297185
+      },
+      "after": {
+        "clearanceViolations": 42,
+        "insideVertices": 4,
+        "ambiguousViolationsNotProjected": 5,
+        "worstRequiredMeters": 0.0223796
+      },
+      "affectedVertices": 607,
+      "maxBlendedBindOffsetMeters": 0.0257794,
+      "maxPosedMovementMeters": 0.0256264
+    },
+    {
+      "lod": 0,
+      "pose": "Walk4375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk375",
+          "weight": 0.5086762619018554,
+          "distanceSquared": 0.0702049714763743
+        },
+        {
+          "name": "Walk500",
+          "weight": 0.26348072052001953,
+          "distanceSquared": 0.13553781652967112
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.22784303665161132,
+          "distanceSquared": 0.15673773165792954
+        }
+      ],
+      "before": {
+        "clearanceViolations": 32,
+        "insideVertices": 11,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0273528
+      },
+      "after": {
+        "clearanceViolations": 13,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0204328
+      },
+      "affectedVertices": 545,
+      "maxBlendedBindOffsetMeters": 0.0232376,
+      "maxPosedMovementMeters": 0.0232289
+    },
+    {
+      "lod": 0,
+      "pose": "Walk5625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk625",
+          "weight": 0.4803502655029297,
+          "distanceSquared": 0.06828206679206918
+        },
+        {
+          "name": "Walk500",
+          "weight": 0.29936325073242187,
+          "distanceSquared": 0.10956358182551006
+        },
+        {
+          "name": "Run500",
+          "weight": 0.22028646469116211,
+          "distanceSquared": 0.14889389281274762
+        }
+      ],
+      "before": {
+        "clearanceViolations": 13,
+        "insideVertices": 7,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.028588
+      },
+      "after": {
+        "clearanceViolations": 5,
+        "insideVertices": 5,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0286055
+      },
+      "affectedVertices": 562,
+      "maxBlendedBindOffsetMeters": 0.0146083,
+      "maxPosedMovementMeters": 0.0145929
+    },
+    {
+      "lod": 0,
+      "pose": "Walk6875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk750",
+          "weight": 0.4771002197265625,
+          "distanceSquared": 0.0396630405280953
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.38740531921386717,
+          "distanceSquared": 0.04884611586438735
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.13549445152282716,
+          "distanceSquared": 0.1396606632799973
+        }
+      ],
+      "before": {
+        "clearanceViolations": 31,
+        "insideVertices": 9,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0674602
+      },
+      "after": {
+        "clearanceViolations": 5,
+        "insideVertices": 3,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0661548
+      },
+      "affectedVertices": 606,
+      "maxBlendedBindOffsetMeters": 0.0230052,
+      "maxPosedMovementMeters": 0.0224581
+    },
+    {
+      "lod": 0,
+      "pose": "Walk8125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk750",
+          "weight": 0.46732742309570313,
+          "distanceSquared": 0.03924057050247434
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.37693679809570313,
+          "distanceSquared": 0.048650585930421514
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.1557357883453369,
+          "distanceSquared": 0.11775196928374534
+        }
+      ],
+      "before": {
+        "clearanceViolations": 58,
+        "insideVertices": 34,
+        "ambiguousViolationsNotProjected": 10,
+        "worstRequiredMeters": 0.0264978
+      },
+      "after": {
+        "clearanceViolations": 38,
+        "insideVertices": 14,
+        "ambiguousViolationsNotProjected": 8,
+        "worstRequiredMeters": 0.0330353
+      },
+      "affectedVertices": 627,
+      "maxBlendedBindOffsetMeters": 0.0333762,
+      "maxPosedMovementMeters": 0.0331143
+    },
+    {
+      "lod": 0,
+      "pose": "Walk9375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk875",
+          "weight": 0.5086737442016601,
+          "distanceSquared": 0.07020551186822982
+        },
+        {
+          "name": "Walk0",
+          "weight": 0.2634825134277344,
+          "distanceSquared": 0.1355372671952276
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.22784374237060548,
+          "distanceSquared": 0.1567376883419082
+        }
+      ],
+      "before": {
+        "clearanceViolations": 42,
+        "insideVertices": 25,
+        "ambiguousViolationsNotProjected": 7,
+        "worstRequiredMeters": 0.0459256
+      },
+      "after": {
+        "clearanceViolations": 29,
+        "insideVertices": 21,
+        "ambiguousViolationsNotProjected": 7,
+        "worstRequiredMeters": 0.0368187
+      },
+      "affectedVertices": 631,
+      "maxBlendedBindOffsetMeters": 0.0374622,
+      "maxPosedMovementMeters": 0.036649
+    },
+    {
+      "lod": 0,
+      "pose": "Run625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run125",
+          "weight": 0.41469181060791016,
+          "distanceSquared": 0.11775133708754797
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.31490522384643554,
+          "distanceSquared": 0.15506416142328042
+        },
+        {
+          "name": "Run0",
+          "weight": 0.2704029655456543,
+          "distanceSquared": 0.18058425175144444
+        }
+      ],
+      "before": {
+        "clearanceViolations": 35,
+        "insideVertices": 18,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0626259
+      },
+      "after": {
+        "clearanceViolations": 29,
+        "insideVertices": 9,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0626405
+      },
+      "affectedVertices": 633,
+      "maxBlendedBindOffsetMeters": 0.0287663,
+      "maxPosedMovementMeters": 0.027804
+    },
+    {
+      "lod": 0,
+      "pose": "Run1875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run125",
+          "weight": 0.4316460418701172,
+          "distanceSquared": 0.10565928427134792
+        },
+        {
+          "name": "Run250",
+          "weight": 0.37239410400390627,
+          "distanceSquared": 0.12247081363289249
+        },
+        {
+          "name": "Walk250",
+          "weight": 0.19595983505249023,
+          "distanceSquared": 0.23273855710623947
+        }
+      ],
+      "before": {
+        "clearanceViolations": 86,
+        "insideVertices": 49,
+        "ambiguousViolationsNotProjected": 5,
+        "worstRequiredMeters": 0.0578123
+      },
+      "after": {
+        "clearanceViolations": 55,
+        "insideVertices": 24,
+        "ambiguousViolationsNotProjected": 4,
+        "worstRequiredMeters": 0.0564668
+      },
+      "affectedVertices": 622,
+      "maxBlendedBindOffsetMeters": 0.0265354,
+      "maxPosedMovementMeters": 0.0260692
+    },
+    {
+      "lod": 0,
+      "pose": "Run3125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run375",
+          "weight": 0.43815753936767576,
+          "distanceSquared": 0.10116165122838214
+        },
+        {
+          "name": "Run250",
+          "weight": 0.3778183746337891,
+          "distanceSquared": 0.11731759166493493
+        },
+        {
+          "name": "Walk250",
+          "weight": 0.18402408599853515,
+          "distanceSquared": 0.2408638068353196
+        }
+      ],
+      "before": {
+        "clearanceViolations": 85,
+        "insideVertices": 59,
+        "ambiguousViolationsNotProjected": 6,
+        "worstRequiredMeters": 0.0420733
+      },
+      "after": {
+        "clearanceViolations": 61,
+        "insideVertices": 19,
+        "ambiguousViolationsNotProjected": 6,
+        "worstRequiredMeters": 0.0504711
+      },
+      "affectedVertices": 608,
+      "maxBlendedBindOffsetMeters": 0.0378682,
+      "maxPosedMovementMeters": 0.0355216
+    },
+    {
+      "lod": 0,
+      "pose": "Run4375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run375",
+          "weight": 0.4234474563598633,
+          "distanceSquared": 0.12100608454803072
+        },
+        {
+          "name": "Walk375",
+          "weight": 0.32885848999023437,
+          "distanceSquared": 0.15581082951732048
+        },
+        {
+          "name": "Run500",
+          "weight": 0.24769405364990235,
+          "distanceSquared": 0.20686695891165463
+        }
+      ],
+      "before": {
+        "clearanceViolations": 63,
+        "insideVertices": 44,
+        "ambiguousViolationsNotProjected": 7,
+        "worstRequiredMeters": 0.0348974
+      },
+      "after": {
+        "clearanceViolations": 44,
+        "insideVertices": 10,
+        "ambiguousViolationsNotProjected": 6,
+        "worstRequiredMeters": 0.0361218
+      },
+      "affectedVertices": 590,
+      "maxBlendedBindOffsetMeters": 0.0322992,
+      "maxPosedMovementMeters": 0.0308816
+    },
+    {
+      "lod": 0,
+      "pose": "Run5625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run625",
+          "weight": 0.41469215393066405,
+          "distanceSquared": 0.11775129560725137
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.31490497589111327,
+          "distanceSquared": 0.15506436707664253
+        },
+        {
+          "name": "Run500",
+          "weight": 0.2704028701782227,
+          "distanceSquared": 0.18058440219879207
+        }
+      ],
+      "before": {
+        "clearanceViolations": 43,
+        "insideVertices": 16,
+        "ambiguousViolationsNotProjected": 5,
+        "worstRequiredMeters": 0.0289586
+      },
+      "after": {
+        "clearanceViolations": 32,
+        "insideVertices": 6,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0182476
+      },
+      "affectedVertices": 603,
+      "maxBlendedBindOffsetMeters": 0.0292422,
+      "maxPosedMovementMeters": 0.0282718
+    },
+    {
+      "lod": 0,
+      "pose": "Run6875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run625",
+          "weight": 0.43164485931396485,
+          "distanceSquared": 0.10565964165221946
+        },
+        {
+          "name": "Run750",
+          "weight": 0.372394905090332,
+          "distanceSquared": 0.1224706421539499
+        },
+        {
+          "name": "Walk750",
+          "weight": 0.19596025466918945,
+          "distanceSquared": 0.23273823233201796
+        }
+      ],
+      "before": {
+        "clearanceViolations": 80,
+        "insideVertices": 40,
+        "ambiguousViolationsNotProjected": 4,
+        "worstRequiredMeters": 0.0466006
+      },
+      "after": {
+        "clearanceViolations": 44,
+        "insideVertices": 14,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.030751
+      },
+      "affectedVertices": 655,
+      "maxBlendedBindOffsetMeters": 0.0260131,
+      "maxPosedMovementMeters": 0.0255295
+    },
+    {
+      "lod": 0,
+      "pose": "Run8125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run875",
+          "weight": 0.4381570816040039,
+          "distanceSquared": 0.10116160437932312
+        },
+        {
+          "name": "Run750",
+          "weight": 0.3778192138671875,
+          "distanceSquared": 0.11731714400171582
+        },
+        {
+          "name": "Walk750",
+          "weight": 0.1840237045288086,
+          "distanceSquared": 0.2408639210497071
+        }
+      ],
+      "before": {
+        "clearanceViolations": 94,
+        "insideVertices": 67,
+        "ambiguousViolationsNotProjected": 6,
+        "worstRequiredMeters": 0.0429591
+      },
+      "after": {
+        "clearanceViolations": 67,
+        "insideVertices": 22,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0215896
+      },
+      "affectedVertices": 647,
+      "maxBlendedBindOffsetMeters": 0.0474292,
+      "maxPosedMovementMeters": 0.0431851
+    },
+    {
+      "lod": 0,
+      "pose": "Run9375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run875",
+          "weight": 0.42344642639160157,
+          "distanceSquared": 0.12100656421732324
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.328858642578125,
+          "distanceSquared": 0.1558110187736134
+        },
+        {
+          "name": "Run0",
+          "weight": 0.24769493103027343,
+          "distanceSquared": 0.20686656254677882
+        }
+      ],
+      "before": {
+        "clearanceViolations": 66,
+        "insideVertices": 52,
+        "ambiguousViolationsNotProjected": 9,
+        "worstRequiredMeters": 0.0356815
+      },
+      "after": {
+        "clearanceViolations": 57,
+        "insideVertices": 21,
+        "ambiguousViolationsNotProjected": 6,
+        "worstRequiredMeters": 0.0256395
+      },
+      "affectedVertices": 648,
+      "maxBlendedBindOffsetMeters": 0.037142,
+      "maxPosedMovementMeters": 0.0347752
+    },
+    {
+      "lod": 0,
+      "pose": "CrouchQuarter",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk375",
+          "weight": 0.3391971206665039,
+          "distanceSquared": 0.2156392642179412
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.33919708251953123,
+          "distanceSquared": 0.2156392923635863
+        },
+        {
+          "name": "Neutral",
+          "weight": 0.32160579681396484,
+          "distanceSquared": 0.2274343798065253
+        }
+      ],
+      "before": {
+        "clearanceViolations": 8,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0065747
+      },
+      "after": {
+        "clearanceViolations": 7,
+        "insideVertices": 6,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0154523
+      },
+      "affectedVertices": 619,
+      "maxBlendedBindOffsetMeters": 0.0247855,
+      "maxPosedMovementMeters": 0.0246735
+    },
+    {
+      "lod": 0,
+      "pose": "CrouchThreeQuarter",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "CrouchFull",
+          "weight": 0.8100040435791016,
+          "distanceSquared": 0.019784208587207197
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.11367585182189942,
+          "distanceSquared": 0.1409735518458991
+        },
+        {
+          "name": "Run750",
+          "weight": 0.07632013320922852,
+          "distanceSquared": 0.20997458237185235
+        }
+      ],
+      "before": {
+        "clearanceViolations": 102,
+        "insideVertices": 69,
+        "ambiguousViolationsNotProjected": 5,
+        "worstRequiredMeters": 0.0338024
+      },
+      "after": {
+        "clearanceViolations": 19,
+        "insideVertices": 13,
+        "ambiguousViolationsNotProjected": 3,
+        "worstRequiredMeters": 0.030469
+      },
+      "affectedVertices": 673,
+      "maxBlendedBindOffsetMeters": 0.0590302,
+      "maxPosedMovementMeters": 0.0567744
+    },
+    {
+      "lod": 0,
+      "pose": "Mounted",
+      "classification": "exact-authored-pose",
+      "weights": [
+        {
+          "name": "Mounted",
+          "weight": 1.0,
+          "distanceSquared": 0.0
+        }
+      ],
+      "before": {
+        "clearanceViolations": 121,
+        "insideVertices": 77,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0304982
+      },
+      "after": {
+        "clearanceViolations": 2,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0234593
+      },
+      "affectedVertices": 524,
+      "maxBlendedBindOffsetMeters": 0.0315367,
+      "maxPosedMovementMeters": 0.0305539
+    },
+    {
+      "lod": 1,
+      "pose": "Neutral",
+      "classification": "exact-authored-pose",
+      "weights": [
+        {
+          "name": "Neutral",
+          "weight": 1.0,
+          "distanceSquared": 0.0
+        }
+      ],
+      "before": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "after": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "affectedVertices": 0,
+      "maxBlendedBindOffsetMeters": 0.0,
+      "maxPosedMovementMeters": 0.0
+    },
+    {
+      "lod": 1,
+      "pose": "Walk625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk125",
+          "weight": 0.480350227355957,
+          "distanceSquared": 0.06828200320635869
+        },
+        {
+          "name": "Walk0",
+          "weight": 0.2993633842468262,
+          "distanceSquared": 0.10956341280383515
+        },
+        {
+          "name": "Run0",
+          "weight": 0.2202863883972168,
+          "distanceSquared": 0.14889378734626313
+        }
+      ],
+      "before": {
+        "clearanceViolations": 5,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0118327
+      },
+      "after": {
+        "clearanceViolations": 1,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0023144
+      },
+      "affectedVertices": 348,
+      "maxBlendedBindOffsetMeters": 0.0136467,
+      "maxPosedMovementMeters": 0.0135214
+    },
+    {
+      "lod": 1,
+      "pose": "Walk1875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk250",
+          "weight": 0.47710060119628905,
+          "distanceSquared": 0.03966305420096257
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.38740478515625,
+          "distanceSquared": 0.04884624147591052
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.1354946231842041,
+          "distanceSquared": 0.1396606524852476
+        }
+      ],
+      "before": {
+        "clearanceViolations": 21,
+        "insideVertices": 8,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0310423
+      },
+      "after": {
+        "clearanceViolations": 6,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0310423
+      },
+      "affectedVertices": 308,
+      "maxBlendedBindOffsetMeters": 0.0162235,
+      "maxPosedMovementMeters": 0.0160116
+    },
+    {
+      "lod": 1,
+      "pose": "Walk3125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk250",
+          "weight": 0.4673275375366211,
+          "distanceSquared": 0.03924060706573165
+        },
+        {
+          "name": "Walk375",
+          "weight": 0.37693641662597654,
+          "distanceSquared": 0.04865069274047787
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.15573604583740233,
+          "distanceSquared": 0.11775191271540564
+        }
+      ],
+      "before": {
+        "clearanceViolations": 30,
+        "insideVertices": 12,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0260841
+      },
+      "after": {
+        "clearanceViolations": 18,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0091673
+      },
+      "affectedVertices": 309,
+      "maxBlendedBindOffsetMeters": 0.023638,
+      "maxPosedMovementMeters": 0.0229817
+    },
+    {
+      "lod": 1,
+      "pose": "Walk4375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk375",
+          "weight": 0.5086762619018554,
+          "distanceSquared": 0.0702049714763743
+        },
+        {
+          "name": "Walk500",
+          "weight": 0.26348072052001953,
+          "distanceSquared": 0.13553781652967112
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.22784303665161132,
+          "distanceSquared": 0.15673773165792954
+        }
+      ],
+      "before": {
+        "clearanceViolations": 16,
+        "insideVertices": 6,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0199645
+      },
+      "after": {
+        "clearanceViolations": 7,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0074941
+      },
+      "affectedVertices": 329,
+      "maxBlendedBindOffsetMeters": 0.0183605,
+      "maxPosedMovementMeters": 0.0180195
+    },
+    {
+      "lod": 1,
+      "pose": "Walk5625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk625",
+          "weight": 0.4803502655029297,
+          "distanceSquared": 0.06828206679206918
+        },
+        {
+          "name": "Walk500",
+          "weight": 0.29936325073242187,
+          "distanceSquared": 0.10956358182551006
+        },
+        {
+          "name": "Run500",
+          "weight": 0.22028646469116211,
+          "distanceSquared": 0.14889389281274762
+        }
+      ],
+      "before": {
+        "clearanceViolations": 7,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0114636
+      },
+      "after": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "affectedVertices": 341,
+      "maxBlendedBindOffsetMeters": 0.0258044,
+      "maxPosedMovementMeters": 0.0257772
+    },
+    {
+      "lod": 1,
+      "pose": "Walk6875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk750",
+          "weight": 0.4771002197265625,
+          "distanceSquared": 0.0396630405280953
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.38740531921386717,
+          "distanceSquared": 0.04884611586438735
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.13549445152282716,
+          "distanceSquared": 0.1396606632799973
+        }
+      ],
+      "before": {
+        "clearanceViolations": 21,
+        "insideVertices": 4,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0157733
+      },
+      "after": {
+        "clearanceViolations": 2,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0035292
+      },
+      "affectedVertices": 312,
+      "maxBlendedBindOffsetMeters": 0.0265038,
+      "maxPosedMovementMeters": 0.0258157
+    },
+    {
+      "lod": 1,
+      "pose": "Walk8125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk750",
+          "weight": 0.46732742309570313,
+          "distanceSquared": 0.03924057050247434
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.37693679809570313,
+          "distanceSquared": 0.048650585930421514
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.1557357883453369,
+          "distanceSquared": 0.11775196928374534
+        }
+      ],
+      "before": {
+        "clearanceViolations": 29,
+        "insideVertices": 12,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0314429
+      },
+      "after": {
+        "clearanceViolations": 17,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0252454
+      },
+      "affectedVertices": 349,
+      "maxBlendedBindOffsetMeters": 0.0300016,
+      "maxPosedMovementMeters": 0.0287996
+    },
+    {
+      "lod": 1,
+      "pose": "Walk9375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk875",
+          "weight": 0.5086737442016601,
+          "distanceSquared": 0.07020551186822982
+        },
+        {
+          "name": "Walk0",
+          "weight": 0.2634825134277344,
+          "distanceSquared": 0.1355372671952276
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.22784374237060548,
+          "distanceSquared": 0.1567376883419082
+        }
+      ],
+      "before": {
+        "clearanceViolations": 14,
+        "insideVertices": 4,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0204572
+      },
+      "after": {
+        "clearanceViolations": 5,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0084878
+      },
+      "affectedVertices": 343,
+      "maxBlendedBindOffsetMeters": 0.0404869,
+      "maxPosedMovementMeters": 0.0393813
+    },
+    {
+      "lod": 1,
+      "pose": "Run625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run125",
+          "weight": 0.41469181060791016,
+          "distanceSquared": 0.11775133708754797
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.31490522384643554,
+          "distanceSquared": 0.15506416142328042
+        },
+        {
+          "name": "Run0",
+          "weight": 0.2704029655456543,
+          "distanceSquared": 0.18058425175144444
+        }
+      ],
+      "before": {
+        "clearanceViolations": 22,
+        "insideVertices": 7,
+        "ambiguousViolationsNotProjected": 5,
+        "worstRequiredMeters": 0.0281018
+      },
+      "after": {
+        "clearanceViolations": 19,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 5,
+        "worstRequiredMeters": 0.0279042
+      },
+      "affectedVertices": 354,
+      "maxBlendedBindOffsetMeters": 0.0199161,
+      "maxPosedMovementMeters": 0.0194522
+    },
+    {
+      "lod": 1,
+      "pose": "Run1875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run125",
+          "weight": 0.4316460418701172,
+          "distanceSquared": 0.10565928427134792
+        },
+        {
+          "name": "Run250",
+          "weight": 0.37239410400390627,
+          "distanceSquared": 0.12247081363289249
+        },
+        {
+          "name": "Walk250",
+          "weight": 0.19595983505249023,
+          "distanceSquared": 0.23273855710623947
+        }
+      ],
+      "before": {
+        "clearanceViolations": 48,
+        "insideVertices": 27,
+        "ambiguousViolationsNotProjected": 3,
+        "worstRequiredMeters": 0.0466475
+      },
+      "after": {
+        "clearanceViolations": 26,
+        "insideVertices": 11,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0458972
+      },
+      "affectedVertices": 315,
+      "maxBlendedBindOffsetMeters": 0.0267539,
+      "maxPosedMovementMeters": 0.026262
+    },
+    {
+      "lod": 1,
+      "pose": "Run3125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run375",
+          "weight": 0.43815753936767576,
+          "distanceSquared": 0.10116165122838214
+        },
+        {
+          "name": "Run250",
+          "weight": 0.3778183746337891,
+          "distanceSquared": 0.11731759166493493
+        },
+        {
+          "name": "Walk250",
+          "weight": 0.18402408599853515,
+          "distanceSquared": 0.2408638068353196
+        }
+      ],
+      "before": {
+        "clearanceViolations": 52,
+        "insideVertices": 37,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0583807
+      },
+      "after": {
+        "clearanceViolations": 36,
+        "insideVertices": 9,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0583807
+      },
+      "affectedVertices": 310,
+      "maxBlendedBindOffsetMeters": 0.0376894,
+      "maxPosedMovementMeters": 0.0353394
+    },
+    {
+      "lod": 1,
+      "pose": "Run4375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run375",
+          "weight": 0.4234474563598633,
+          "distanceSquared": 0.12100608454803072
+        },
+        {
+          "name": "Walk375",
+          "weight": 0.32885848999023437,
+          "distanceSquared": 0.15581082951732048
+        },
+        {
+          "name": "Run500",
+          "weight": 0.24769405364990235,
+          "distanceSquared": 0.20686695891165463
+        }
+      ],
+      "before": {
+        "clearanceViolations": 33,
+        "insideVertices": 20,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0345292
+      },
+      "after": {
+        "clearanceViolations": 22,
+        "insideVertices": 6,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0393392
+      },
+      "affectedVertices": 328,
+      "maxBlendedBindOffsetMeters": 0.0322851,
+      "maxPosedMovementMeters": 0.0308569
+    },
+    {
+      "lod": 1,
+      "pose": "Run5625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run625",
+          "weight": 0.41469215393066405,
+          "distanceSquared": 0.11775129560725137
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.31490497589111327,
+          "distanceSquared": 0.15506436707664253
+        },
+        {
+          "name": "Run500",
+          "weight": 0.2704028701782227,
+          "distanceSquared": 0.18058440219879207
+        }
+      ],
+      "before": {
+        "clearanceViolations": 22,
+        "insideVertices": 9,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0227931
+      },
+      "after": {
+        "clearanceViolations": 15,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0070694
+      },
+      "affectedVertices": 352,
+      "maxBlendedBindOffsetMeters": 0.0363005,
+      "maxPosedMovementMeters": 0.0362429
+    },
+    {
+      "lod": 1,
+      "pose": "Run6875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run625",
+          "weight": 0.43164485931396485,
+          "distanceSquared": 0.10565964165221946
+        },
+        {
+          "name": "Run750",
+          "weight": 0.372394905090332,
+          "distanceSquared": 0.1224706421539499
+        },
+        {
+          "name": "Walk750",
+          "weight": 0.19596025466918945,
+          "distanceSquared": 0.23273823233201796
+        }
+      ],
+      "before": {
+        "clearanceViolations": 50,
+        "insideVertices": 27,
+        "ambiguousViolationsNotProjected": 4,
+        "worstRequiredMeters": 0.0466006
+      },
+      "after": {
+        "clearanceViolations": 26,
+        "insideVertices": 8,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.021165
+      },
+      "affectedVertices": 352,
+      "maxBlendedBindOffsetMeters": 0.0261469,
+      "maxPosedMovementMeters": 0.025624
+    },
+    {
+      "lod": 1,
+      "pose": "Run8125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run875",
+          "weight": 0.4381570816040039,
+          "distanceSquared": 0.10116160437932312
+        },
+        {
+          "name": "Run750",
+          "weight": 0.3778192138671875,
+          "distanceSquared": 0.11731714400171582
+        },
+        {
+          "name": "Walk750",
+          "weight": 0.1840237045288086,
+          "distanceSquared": 0.2408639210497071
+        }
+      ],
+      "before": {
+        "clearanceViolations": 50,
+        "insideVertices": 30,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0430774
+      },
+      "after": {
+        "clearanceViolations": 34,
+        "insideVertices": 8,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.014696
+      },
+      "affectedVertices": 341,
+      "maxBlendedBindOffsetMeters": 0.0390459,
+      "maxPosedMovementMeters": 0.0365567
+    },
+    {
+      "lod": 1,
+      "pose": "Run9375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run875",
+          "weight": 0.42344642639160157,
+          "distanceSquared": 0.12100656421732324
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.328858642578125,
+          "distanceSquared": 0.1558110187736134
+        },
+        {
+          "name": "Run0",
+          "weight": 0.24769493103027343,
+          "distanceSquared": 0.20686656254677882
+        }
+      ],
+      "before": {
+        "clearanceViolations": 32,
+        "insideVertices": 24,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0357638
+      },
+      "after": {
+        "clearanceViolations": 25,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0290353
+      },
+      "affectedVertices": 350,
+      "maxBlendedBindOffsetMeters": 0.0334489,
+      "maxPosedMovementMeters": 0.0319294
+    },
+    {
+      "lod": 1,
+      "pose": "CrouchQuarter",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk375",
+          "weight": 0.3391971206665039,
+          "distanceSquared": 0.2156392642179412
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.33919708251953123,
+          "distanceSquared": 0.2156392923635863
+        },
+        {
+          "name": "Neutral",
+          "weight": 0.32160579681396484,
+          "distanceSquared": 0.2274343798065253
+        }
+      ],
+      "before": {
+        "clearanceViolations": 8,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0065667
+      },
+      "after": {
+        "clearanceViolations": 1,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0011808
+      },
+      "affectedVertices": 307,
+      "maxBlendedBindOffsetMeters": 0.0269977,
+      "maxPosedMovementMeters": 0.026842
+    },
+    {
+      "lod": 1,
+      "pose": "CrouchThreeQuarter",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "CrouchFull",
+          "weight": 0.8100040435791016,
+          "distanceSquared": 0.019784208587207197
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.11367585182189942,
+          "distanceSquared": 0.1409735518458991
+        },
+        {
+          "name": "Run750",
+          "weight": 0.07632013320922852,
+          "distanceSquared": 0.20997458237185235
+        }
+      ],
+      "before": {
+        "clearanceViolations": 60,
+        "insideVertices": 36,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0306742
+      },
+      "after": {
+        "clearanceViolations": 10,
+        "insideVertices": 3,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0181151
+      },
+      "affectedVertices": 354,
+      "maxBlendedBindOffsetMeters": 0.0863147,
+      "maxPosedMovementMeters": 0.0820998
+    },
+    {
+      "lod": 1,
+      "pose": "Mounted",
+      "classification": "exact-authored-pose",
+      "weights": [
+        {
+          "name": "Mounted",
+          "weight": 1.0,
+          "distanceSquared": 0.0
+        }
+      ],
+      "before": {
+        "clearanceViolations": 71,
+        "insideVertices": 50,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.030426
+      },
+      "after": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "affectedVertices": 311,
+      "maxBlendedBindOffsetMeters": 0.0314754,
+      "maxPosedMovementMeters": 0.0304961
+    },
+    {
+      "lod": 2,
+      "pose": "Neutral",
+      "classification": "exact-authored-pose",
+      "weights": [
+        {
+          "name": "Neutral",
+          "weight": 1.0,
+          "distanceSquared": 0.0
+        }
+      ],
+      "before": {
+        "clearanceViolations": 4,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0226381
+      },
+      "after": {
+        "clearanceViolations": 4,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.0226381
+      },
+      "affectedVertices": 0,
+      "maxBlendedBindOffsetMeters": 0.0,
+      "maxPosedMovementMeters": 0.0
+    },
+    {
+      "lod": 2,
+      "pose": "Walk625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk125",
+          "weight": 0.480350227355957,
+          "distanceSquared": 0.06828200320635869
+        },
+        {
+          "name": "Walk0",
+          "weight": 0.2993633842468262,
+          "distanceSquared": 0.10956341280383515
+        },
+        {
+          "name": "Run0",
+          "weight": 0.2202863883972168,
+          "distanceSquared": 0.14889378734626313
+        }
+      ],
+      "before": {
+        "clearanceViolations": 6,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0183099
+      },
+      "after": {
+        "clearanceViolations": 1,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0183099
+      },
+      "affectedVertices": 153,
+      "maxBlendedBindOffsetMeters": 0.0121676,
+      "maxPosedMovementMeters": 0.0121041
+    },
+    {
+      "lod": 2,
+      "pose": "Walk1875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk250",
+          "weight": 0.47710060119628905,
+          "distanceSquared": 0.03966305420096257
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.38740478515625,
+          "distanceSquared": 0.04884624147591052
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.1354946231842041,
+          "distanceSquared": 0.1396606524852476
+        }
+      ],
+      "before": {
+        "clearanceViolations": 15,
+        "insideVertices": 5,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0241545
+      },
+      "after": {
+        "clearanceViolations": 2,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0165872
+      },
+      "affectedVertices": 161,
+      "maxBlendedBindOffsetMeters": 0.0162797,
+      "maxPosedMovementMeters": 0.0160708
+    },
+    {
+      "lod": 2,
+      "pose": "Walk3125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk250",
+          "weight": 0.4673275375366211,
+          "distanceSquared": 0.03924060706573165
+        },
+        {
+          "name": "Walk375",
+          "weight": 0.37693641662597654,
+          "distanceSquared": 0.04865069274047787
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.15573604583740233,
+          "distanceSquared": 0.11775191271540564
+        }
+      ],
+      "before": {
+        "clearanceViolations": 16,
+        "insideVertices": 6,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0299344
+      },
+      "after": {
+        "clearanceViolations": 11,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.016415
+      },
+      "affectedVertices": 167,
+      "maxBlendedBindOffsetMeters": 0.0235817,
+      "maxPosedMovementMeters": 0.0229409
+    },
+    {
+      "lod": 2,
+      "pose": "Walk4375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk375",
+          "weight": 0.5086762619018554,
+          "distanceSquared": 0.0702049714763743
+        },
+        {
+          "name": "Walk500",
+          "weight": 0.26348072052001953,
+          "distanceSquared": 0.13553781652967112
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.22784303665161132,
+          "distanceSquared": 0.15673773165792954
+        }
+      ],
+      "before": {
+        "clearanceViolations": 8,
+        "insideVertices": 4,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0199034
+      },
+      "after": {
+        "clearanceViolations": 5,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0056666
+      },
+      "affectedVertices": 169,
+      "maxBlendedBindOffsetMeters": 0.0183538,
+      "maxPosedMovementMeters": 0.0180211
+    },
+    {
+      "lod": 2,
+      "pose": "Walk5625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk625",
+          "weight": 0.4803502655029297,
+          "distanceSquared": 0.06828206679206918
+        },
+        {
+          "name": "Walk500",
+          "weight": 0.29936325073242187,
+          "distanceSquared": 0.10956358182551006
+        },
+        {
+          "name": "Run500",
+          "weight": 0.22028646469116211,
+          "distanceSquared": 0.14889389281274762
+        }
+      ],
+      "before": {
+        "clearanceViolations": 6,
+        "insideVertices": 3,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0260172
+      },
+      "after": {
+        "clearanceViolations": 2,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.017689
+      },
+      "affectedVertices": 166,
+      "maxBlendedBindOffsetMeters": 0.01325,
+      "maxPosedMovementMeters": 0.0131352
+    },
+    {
+      "lod": 2,
+      "pose": "Walk6875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk750",
+          "weight": 0.4771002197265625,
+          "distanceSquared": 0.0396630405280953
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.38740531921386717,
+          "distanceSquared": 0.04884611586438735
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.13549445152282716,
+          "distanceSquared": 0.1396606632799973
+        }
+      ],
+      "before": {
+        "clearanceViolations": 16,
+        "insideVertices": 3,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.014881
+      },
+      "after": {
+        "clearanceViolations": 5,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0074654
+      },
+      "affectedVertices": 163,
+      "maxBlendedBindOffsetMeters": 0.0147224,
+      "maxPosedMovementMeters": 0.014577
+    },
+    {
+      "lod": 2,
+      "pose": "Walk8125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk750",
+          "weight": 0.46732742309570313,
+          "distanceSquared": 0.03924057050247434
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.37693679809570313,
+          "distanceSquared": 0.048650585930421514
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.1557357883453369,
+          "distanceSquared": 0.11775196928374534
+        }
+      ],
+      "before": {
+        "clearanceViolations": 15,
+        "insideVertices": 5,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0209439
+      },
+      "after": {
+        "clearanceViolations": 7,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0058086
+      },
+      "affectedVertices": 164,
+      "maxBlendedBindOffsetMeters": 0.0197075,
+      "maxPosedMovementMeters": 0.0195555
+    },
+    {
+      "lod": 2,
+      "pose": "Walk9375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk875",
+          "weight": 0.5086737442016601,
+          "distanceSquared": 0.07020551186822982
+        },
+        {
+          "name": "Walk0",
+          "weight": 0.2634825134277344,
+          "distanceSquared": 0.1355372671952276
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.22784374237060548,
+          "distanceSquared": 0.1567376883419082
+        }
+      ],
+      "before": {
+        "clearanceViolations": 10,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0175036
+      },
+      "after": {
+        "clearanceViolations": 5,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.004696
+      },
+      "affectedVertices": 153,
+      "maxBlendedBindOffsetMeters": 0.0151823,
+      "maxPosedMovementMeters": 0.0150711
+    },
+    {
+      "lod": 2,
+      "pose": "Run625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run125",
+          "weight": 0.41469181060791016,
+          "distanceSquared": 0.11775133708754797
+        },
+        {
+          "name": "Walk125",
+          "weight": 0.31490522384643554,
+          "distanceSquared": 0.15506416142328042
+        },
+        {
+          "name": "Run0",
+          "weight": 0.2704029655456543,
+          "distanceSquared": 0.18058425175144444
+        }
+      ],
+      "before": {
+        "clearanceViolations": 12,
+        "insideVertices": 6,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0188884
+      },
+      "after": {
+        "clearanceViolations": 9,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0112857
+      },
+      "affectedVertices": 164,
+      "maxBlendedBindOffsetMeters": 0.0163213,
+      "maxPosedMovementMeters": 0.0161861
+    },
+    {
+      "lod": 2,
+      "pose": "Run1875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run125",
+          "weight": 0.4316460418701172,
+          "distanceSquared": 0.10565928427134792
+        },
+        {
+          "name": "Run250",
+          "weight": 0.37239410400390627,
+          "distanceSquared": 0.12247081363289249
+        },
+        {
+          "name": "Walk250",
+          "weight": 0.19595983505249023,
+          "distanceSquared": 0.23273855710623947
+        }
+      ],
+      "before": {
+        "clearanceViolations": 31,
+        "insideVertices": 11,
+        "ambiguousViolationsNotProjected": 2,
+        "worstRequiredMeters": 0.1014195
+      },
+      "after": {
+        "clearanceViolations": 18,
+        "insideVertices": 4,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0642685
+      },
+      "affectedVertices": 167,
+      "maxBlendedBindOffsetMeters": 0.0432358,
+      "maxPosedMovementMeters": 0.0420564
+    },
+    {
+      "lod": 2,
+      "pose": "Run3125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run375",
+          "weight": 0.43815753936767576,
+          "distanceSquared": 0.10116165122838214
+        },
+        {
+          "name": "Run250",
+          "weight": 0.3778183746337891,
+          "distanceSquared": 0.11731759166493493
+        },
+        {
+          "name": "Walk250",
+          "weight": 0.18402408599853515,
+          "distanceSquared": 0.2408638068353196
+        }
+      ],
+      "before": {
+        "clearanceViolations": 28,
+        "insideVertices": 16,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.041901
+      },
+      "after": {
+        "clearanceViolations": 19,
+        "insideVertices": 4,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0143485
+      },
+      "affectedVertices": 168,
+      "maxBlendedBindOffsetMeters": 0.0438656,
+      "maxPosedMovementMeters": 0.0433265
+    },
+    {
+      "lod": 2,
+      "pose": "Run4375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run375",
+          "weight": 0.4234474563598633,
+          "distanceSquared": 0.12100608454803072
+        },
+        {
+          "name": "Walk375",
+          "weight": 0.32885848999023437,
+          "distanceSquared": 0.15581082951732048
+        },
+        {
+          "name": "Run500",
+          "weight": 0.24769405364990235,
+          "distanceSquared": 0.20686695891165463
+        }
+      ],
+      "before": {
+        "clearanceViolations": 16,
+        "insideVertices": 12,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0345103
+      },
+      "after": {
+        "clearanceViolations": 12,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0274369
+      },
+      "affectedVertices": 169,
+      "maxBlendedBindOffsetMeters": 0.0322364,
+      "maxPosedMovementMeters": 0.0308544
+    },
+    {
+      "lod": 2,
+      "pose": "Run5625",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run625",
+          "weight": 0.41469215393066405,
+          "distanceSquared": 0.11775129560725137
+        },
+        {
+          "name": "Walk625",
+          "weight": 0.31490497589111327,
+          "distanceSquared": 0.15506436707664253
+        },
+        {
+          "name": "Run500",
+          "weight": 0.2704028701782227,
+          "distanceSquared": 0.18058440219879207
+        }
+      ],
+      "before": {
+        "clearanceViolations": 14,
+        "insideVertices": 5,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0296385
+      },
+      "after": {
+        "clearanceViolations": 9,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.016444
+      },
+      "affectedVertices": 169,
+      "maxBlendedBindOffsetMeters": 0.0193548,
+      "maxPosedMovementMeters": 0.018929
+    },
+    {
+      "lod": 2,
+      "pose": "Run6875",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run625",
+          "weight": 0.43164485931396485,
+          "distanceSquared": 0.10565964165221946
+        },
+        {
+          "name": "Run750",
+          "weight": 0.372394905090332,
+          "distanceSquared": 0.1224706421539499
+        },
+        {
+          "name": "Walk750",
+          "weight": 0.19596025466918945,
+          "distanceSquared": 0.23273823233201796
+        }
+      ],
+      "before": {
+        "clearanceViolations": 26,
+        "insideVertices": 10,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0397991
+      },
+      "after": {
+        "clearanceViolations": 15,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0210639
+      },
+      "affectedVertices": 164,
+      "maxBlendedBindOffsetMeters": 0.0193423,
+      "maxPosedMovementMeters": 0.0190732
+    },
+    {
+      "lod": 2,
+      "pose": "Run8125",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run875",
+          "weight": 0.4381570816040039,
+          "distanceSquared": 0.10116160437932312
+        },
+        {
+          "name": "Run750",
+          "weight": 0.3778192138671875,
+          "distanceSquared": 0.11731714400171582
+        },
+        {
+          "name": "Walk750",
+          "weight": 0.1840237045288086,
+          "distanceSquared": 0.2408639210497071
+        }
+      ],
+      "before": {
+        "clearanceViolations": 29,
+        "insideVertices": 16,
+        "ambiguousViolationsNotProjected": 1,
+        "worstRequiredMeters": 0.0408352
+      },
+      "after": {
+        "clearanceViolations": 20,
+        "insideVertices": 1,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0105566
+      },
+      "affectedVertices": 166,
+      "maxBlendedBindOffsetMeters": 0.0349153,
+      "maxPosedMovementMeters": 0.030949
+    },
+    {
+      "lod": 2,
+      "pose": "Run9375",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Run875",
+          "weight": 0.42344642639160157,
+          "distanceSquared": 0.12100656421732324
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.328858642578125,
+          "distanceSquared": 0.1558110187736134
+        },
+        {
+          "name": "Run0",
+          "weight": 0.24769493103027343,
+          "distanceSquared": 0.20686656254677882
+        }
+      ],
+      "before": {
+        "clearanceViolations": 15,
+        "insideVertices": 9,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0293965
+      },
+      "after": {
+        "clearanceViolations": 13,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0054646
+      },
+      "affectedVertices": 155,
+      "maxBlendedBindOffsetMeters": 0.0276838,
+      "maxPosedMovementMeters": 0.0254627
+    },
+    {
+      "lod": 2,
+      "pose": "CrouchQuarter",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "Walk375",
+          "weight": 0.3391971206665039,
+          "distanceSquared": 0.2156392642179412
+        },
+        {
+          "name": "Walk875",
+          "weight": 0.33919708251953123,
+          "distanceSquared": 0.2156392923635863
+        },
+        {
+          "name": "Neutral",
+          "weight": 0.32160579681396484,
+          "distanceSquared": 0.2274343798065253
+        }
+      ],
+      "before": {
+        "clearanceViolations": 5,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0068217
+      },
+      "after": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "affectedVertices": 166,
+      "maxBlendedBindOffsetMeters": 0.0091607,
+      "maxPosedMovementMeters": 0.0091246
+    },
+    {
+      "lod": 2,
+      "pose": "CrouchThreeQuarter",
+      "classification": "held-out-interpolation",
+      "weights": [
+        {
+          "name": "CrouchFull",
+          "weight": 0.8100040435791016,
+          "distanceSquared": 0.019784208587207197
+        },
+        {
+          "name": "CrouchHalf",
+          "weight": 0.11367585182189942,
+          "distanceSquared": 0.1409735518458991
+        },
+        {
+          "name": "Run750",
+          "weight": 0.07632013320922852,
+          "distanceSquared": 0.20997458237185235
+        }
+      ],
+      "before": {
+        "clearanceViolations": 30,
+        "insideVertices": 17,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0895943
+      },
+      "after": {
+        "clearanceViolations": 3,
+        "insideVertices": 2,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0889767
+      },
+      "affectedVertices": 167,
+      "maxBlendedBindOffsetMeters": 0.0855038,
+      "maxPosedMovementMeters": 0.0814646
+    },
+    {
+      "lod": 2,
+      "pose": "Mounted",
+      "classification": "exact-authored-pose",
+      "weights": [
+        {
+          "name": "Mounted",
+          "weight": 1.0,
+          "distanceSquared": 0.0
+        }
+      ],
+      "before": {
+        "clearanceViolations": 34,
+        "insideVertices": 26,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0310985
+      },
+      "after": {
+        "clearanceViolations": 0,
+        "insideVertices": 0,
+        "ambiguousViolationsNotProjected": 0,
+        "worstRequiredMeters": 0.0
+      },
+      "affectedVertices": 160,
+      "maxBlendedBindOffsetMeters": 0.032252,
+      "maxPosedMovementMeters": 0.0312601
+    }
+  ],
+  "unresolvedInsideVertices": 277,
+  "unresolvedClearanceViolations": 991,
+  "maxAffectedVertices": 673,
+  "maxBlendedBindOffsetMeters": 0.0863147,
+  "worstPoseByClearance": {
+    "lod": 2,
+    "pose": "CrouchThreeQuarter",
+    "classification": "held-out-interpolation",
+    "weights": [
+      {
+        "name": "CrouchFull",
+        "weight": 0.8100040435791016,
+        "distanceSquared": 0.019784208587207197
+      },
+      {
+        "name": "CrouchHalf",
+        "weight": 0.11367585182189942,
+        "distanceSquared": 0.1409735518458991
+      },
+      {
+        "name": "Run750",
+        "weight": 0.07632013320922852,
+        "distanceSquared": 0.20997458237185235
+      }
+    ],
+    "before": {
+      "clearanceViolations": 30,
+      "insideVertices": 17,
+      "ambiguousViolationsNotProjected": 0,
+      "worstRequiredMeters": 0.0895943
+    },
+    "after": {
+      "clearanceViolations": 3,
+      "insideVertices": 2,
+      "ambiguousViolationsNotProjected": 0,
+      "worstRequiredMeters": 0.0889767
+    },
+    "affectedVertices": 167,
+    "maxBlendedBindOffsetMeters": 0.0855038,
+    "maxPosedMovementMeters": 0.0814646
+  },
+  "limits": [
+    "Checks vertices, not complete triangle-to-triangle cloth collision.",
+    "Only existing lower coat correction region; upper garment is pinned.",
+    "Ambiguous closest-surface observations remain counted, not hidden."
+  ]
+}

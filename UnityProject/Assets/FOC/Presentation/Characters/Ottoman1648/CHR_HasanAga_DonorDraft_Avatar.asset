@@ -7,7 +7,7 @@ Avatar:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: CHR_HasanAga_DonorDraft_Avatar
-  m_AvatarSize: 7104
+  m_AvatarSize: 7220
   m_Avatar:
     serializedVersion: 3
     m_AvatarSkeleton:
@@ -45,6 +45,8 @@ Avatar:
           m_AxesId: -1
         - m_ParentId: 14
           m_AxesId: -1
+        - m_ParentId: 14
+          m_AxesId: -1
         - m_ParentId: 4
           m_AxesId: -1
         - m_ParentId: 4
@@ -52,28 +54,28 @@ Avatar:
         - m_ParentId: 4
           m_AxesId: -1
         - m_ParentId: 2
-          m_AxesId: -1
-        - m_ParentId: 19
           m_AxesId: -1
         - m_ParentId: 20
           m_AxesId: -1
-        - m_ParentId: 2
+        - m_ParentId: 21
           m_AxesId: -1
-        - m_ParentId: 22
+        - m_ParentId: 2
           m_AxesId: -1
         - m_ParentId: 23
           m_AxesId: -1
-        - m_ParentId: 2
+        - m_ParentId: 24
           m_AxesId: -1
         - m_ParentId: 2
           m_AxesId: -1
-        - m_ParentId: 0
+        - m_ParentId: 2
           m_AxesId: -1
         - m_ParentId: 0
           m_AxesId: -1
         - m_ParentId: 0
           m_AxesId: -1
-        m_ID: 000000006556c6b6654e6ff86a9d7cb5ac911ad91f45b4d5bc0654d36b1070e9017918b1d87e3b2021e869ea1f5b8db66244174b597d1d3fc7db68fe7e279dcc8e49dd86d79d559c7aafad102375c7723d48a9e3bdab4c874048c888bc4b8ffc5b984d935bd08c8935ffe90bc9488c395f788b4ee52982d7
+        - m_ParentId: 0
+          m_AxesId: -1
+        m_ID: 000000006556c6b6654e6ff86a9d7cb5ac911ad91f45b4d5bc0654d36b1070e9017918b1d87e3b2021e869ea1f5b8db66244174b597d1d3fc7db68fe7e279dccf915f6748e49dd86d79d559c7aafad102375c7723d48a9e3bdab4c874048c888bc4b8ffc5b984d935bd08c8935ffe90bc9488c395f788b4ee52982d7
         m_AxesArray: []
     m_AvatarSkeletonPose:
       data:
@@ -125,6 +127,9 @@ Avatar:
           s: {x: 1, y: 1, z: 1}
         - t: {x: 0, y: 0, z: 0}
           q: {x: 0, y: 0, z: 0, w: 1}
+          s: {x: 1, y: 1, z: 1}
+        - t: {x: 0.0120502, y: -0.0290642, z: 0.1320069}
+          q: {x: 0.5168169, y: 0.4895837, z: 0.08972459, w: 0.6965326}
           s: {x: 1, y: 1, z: 1}
         - t: {x: 0, y: 0.08, z: -0.15}
           q: {x: 0, y: 0, z: 0, w: 1}
@@ -219,6 +224,9 @@ Avatar:
         - t: {x: 0, y: 0, z: 0}
           q: {x: 0, y: 0, z: 0, w: 1}
           s: {x: 1, y: 1, z: 1}
+        - t: {x: 0.0120502, y: -0.0290642, z: 0.1320069}
+          q: {x: 0.5168169, y: 0.4895837, z: 0.08972459, w: 0.6965326}
+          s: {x: 1, y: 1, z: 1}
         - t: {x: 0, y: 0.08, z: -0.15}
           q: {x: 0, y: 0, z: 0, w: 1}
           s: {x: 1, y: 1, z: 1}
@@ -261,7 +269,7 @@ Avatar:
         - t: {x: 0, y: 0, z: 0}
           q: {x: 0, y: 0, z: 0, w: 1}
           s: {x: 1, y: 1, z: 1}
-    m_SkeletonNameIDArray: 000000006556c6b658fd21b0cbc10e53b39c853a6d792380a259c10789a6a3970ab5c3d9919bc47bb3d8f520df751ad86988cc23f2a6cb81d0e5fada80c0ff274770b101b4fe68d9ebb437744b9b0ae1d0b50d43b7c3550128a6051bb38802b9d4fe5afbe09930c378291057c9488c395f788b4ee52982d7
+    m_SkeletonNameIDArray: 000000006556c6b658fd21b0cbc10e53b39c853a6d792380a259c10789a6a3970ab5c3d9919bc47bb3d8f520df751ad86988cc23f2a6cb81d0e5fada80c0ff277345a7c04770b101b4fe68d9ebb437744b9b0ae1d0b50d43b7c3550128a6051bb38802b9d4fe5afbe09930c378291057c9488c395f788b4ee52982d7
     m_Human:
       data:
         serializedVersion: 2
@@ -547,8 +555,8 @@ Avatar:
         m_HasLeftHand: 0
         m_HasRightHand: 0
         m_HasTDoF: 0
-    m_HumanSkeletonIndexArray: 01000000020000000300000004000000050000000600000008000000090000000a0000000c0000000d0000000e000000130000001400000015000000160000001700000018000000
-    m_HumanSkeletonReverseIndexArray: ffffffff000000000100000002000000030000000400000005000000ffffffff060000000700000008000000ffffffff090000000a0000000b000000ffffffffffffffffffffffffffffffff0c0000000d0000000e0000000f0000001000000011000000ffffffffffffffffffffffffffffffffffffffff
+    m_HumanSkeletonIndexArray: 01000000020000000300000004000000050000000600000008000000090000000a0000000c0000000d0000000e000000140000001500000016000000170000001800000019000000
+    m_HumanSkeletonReverseIndexArray: ffffffff000000000100000002000000030000000400000005000000ffffffff060000000700000008000000ffffffff090000000a0000000b000000ffffffffffffffffffffffffffffffffffffffff0c0000000d0000000e0000000f0000001000000011000000ffffffffffffffffffffffffffffffffffffffff
     m_RootMotionBoneIndex: -1
     m_RootMotionBoneX:
       t: {x: 0, y: 0, z: 0}
@@ -576,6 +584,7 @@ Avatar:
     2262649230: Root/Pelvis/Spine/Chest/Socket_BackPrimary
     3066451557: Root
     3932809249: Root/Pelvis/Spine/Chest/UpperArm_L/LowerArm_L/Hand_L
+    1962284537: Root/Pelvis/Spine/Chest/UpperArm_R/LowerArm_R/Hand_R/Socket_ReviewKilic
     1925674275: Root/Pelvis/UpperLeg_L
     0: 
     2307706971: Root/Pelvis/Socket_HipLeft
@@ -813,6 +822,11 @@ Avatar:
       m_ParentName: 
       m_Position: {x: 0, y: 0, z: 0}
       m_Rotation: {x: 0, y: 0, z: 0, w: 1}
+      m_Scale: {x: 1, y: 1, z: 1}
+    - m_Name: Socket_ReviewKilic
+      m_ParentName: 
+      m_Position: {x: 0.0120502, y: -0.0290642, z: 0.1320069}
+      m_Rotation: {x: 0.5168169, y: 0.4895837, z: 0.08972459, w: 0.6965326}
       m_Scale: {x: 1, y: 1, z: 1}
     - m_Name: Socket_BackPrimary
       m_ParentName: 

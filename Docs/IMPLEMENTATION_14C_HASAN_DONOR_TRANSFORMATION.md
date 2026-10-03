@@ -3,6 +3,10 @@
 Date: 2026-09-26. Status: DRAFT, NOT ACCEPTED. Scope remains Hasan-first.
 Checkpoint: `3889797a4af1b2a01dcf17da1c6a3e1792b239fc`.
 
+Follow-up r5–r8 repairs (2026-10-03) are recorded separately in
+`IMPLEMENTATION_14C_HASAN_PERSISTENT_RETRY.md`. This file preserves the original
+source-selection/research record; its r1–r4 observations are not final retry QA.
+
 ## Sources and decision
 
 The exact CC0 archives, SHA-256 hashes, authors and original filenames are in

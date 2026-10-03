@@ -18,16 +18,28 @@ $shots=@(
     @('10-arm-raise','straight','ArmRaise','standing','0.50'),
     @('11-crouch','side','Crouch','standing','0.50'),
     @('12-mounted-side','side','MountedSeated','mounted','0.25'),
-    @('13-mounted-three-quarter','front','MountedSeated','mounted','0.25')
+    @('13-mounted-three-quarter','front','MountedSeated','mounted','0.25'),
+    @('14-grip-closeup','front','OneHandedAttack','standing','0.50','grip'),
+    @('15-mounted-hands','front','MountedSeated','mounted','0.25','hands'),
+    @('16-back','back','Idle','standing','0.25'),
+    @('17-grip-palmar','front','OneHandedAttack','standing','0.50','grip-palmar'),
+    @('18-walk-between','front','Walk','standing','0.1875'),
+    @('19-run-between','front','Run','standing','0.3125'),
+    @('20-crouch-between','side','Crouch','standing','0.375')
 )
 $results=@()
 foreach($shot in $shots){
     $bmp=Join-Path $OutputDirectory ($shot[0]+'.bmp');$log=Join-Path $OutputDirectory ($shot[0]+'.log')
     $arguments=@('-screen-fullscreen','0','-screen-width','1280','-screen-height','900','-focArtAsset','CHR_HasanAga_DonorDraft','-focArtAngle',$shot[1],'-focArtAnimation',$shot[2],'-focArtPose',$shot[3],'-focArtPhase',$shot[4],'-focScreenshotPath',('"'+$bmp+'"'),'-logFile',('"'+$log+'"'))
     if($shot[2] -eq 'OneHandedAttack'){$arguments+=@('-focArtWeapon','WPN_Kilic_01')}
+    if($shot.Count -gt 5){$arguments+=@('-focArtDetail',$shot[5])}
     $p=Start-Process -FilePath $player -ArgumentList $arguments -WindowStyle Hidden -PassThru
     if(-not $p.WaitForExit(60000)){$p.Kill();throw "Capture timed out PID=$($p.Id): $($shot[0])"}
     if($p.ExitCode -ne 0 -or -not (Select-String -LiteralPath $log -Pattern 'FOC_ART_DRAFT_PLAYER_CAPTURE' -Quiet)){throw "Capture failed: $($shot[0]), exit=$($p.ExitCode)"}
+    # A component can throw in Awake/LateUpdate while Unity still renders and
+    # exits 0. Success markers are not sufficient runtime-error evidence.
+    $runtimeError=Select-String -LiteralPath $log -Pattern '(^|\s)((?:[A-Za-z_][A-Za-z0-9_.+]*)?Exception:|Error:)|FOC_[A-Z_]*(FAIL|MISSING)' | Select-Object -First 1
+    if($runtimeError){throw "Runtime error in $($shot[0]): $($runtimeError.Line)"}
     $motion=Select-String -LiteralPath $log -Pattern 'FOC_HASAN_REAL_MOTION' | Select-Object -First 1
     if(-not $motion){throw "No real motion evidence for $($shot[0])"}
     $image=[Drawing.Image]::FromFile($bmp)
