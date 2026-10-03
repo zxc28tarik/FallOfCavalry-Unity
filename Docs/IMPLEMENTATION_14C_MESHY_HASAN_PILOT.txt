@@ -20,7 +20,9 @@ independently verified. No historical authenticity certification is claimed.
 
 Adaptation
 - Whole clothed humanoid: 9,586 source triangles, one skin, 23 source bones.
-- Preserve source geometry, bone hierarchy, bind transforms and skin weights.
+- Preserve the original source geometry, hierarchy, bind transforms and weight
+  data byte-for-byte; no authored reweighting. Unity's importer limitations are
+  recorded below rather than claiming bit-identical runtime weights.
 - Add semantic FOC sockets as child markers, not replacement deformation bones.
 - Explicit Unity Humanoid mapping: source Chest -> Human Spine, source
   UpperChest -> Human Chest; retain all source transforms.
@@ -40,6 +42,18 @@ Adaptation
   alpha = 1 - roughness. No invented normal map or flat replacement colors.
 - Walking and Running are the only source clips. They must be tested as real
   Unity Humanoid animation, not renamed proof animation.
+- For the in-place FOC view, source vertical root movement is baked into pose
+  while gameplay remains responsible for world travel. Discarding the Y root
+  curve together with XZ causes artificial hovering; the real Windows capture
+  measures mesh minimum Y against the same original-source phase for this reason.
+- Ground contact is NOT production accepted. An independent Blender 4.5.9 audit
+  of the original FBX at 12 Walking phases i/12 found minimum mesh heights from
+  -0.036917649 to +0.009071807 m (rest minimum approximately zero). The lowest
+  vertex at phase 1/3 belongs to LeftToes/LeftFoot. Source toe penetration is
+  therefore inherited, not fully explained by Unity import. The capture suite
+  compares each Walking sample to its source value with a 0.005 m import-drift
+  tolerance; passing this comparison does not approve foot contact. No floor
+  lowering, per-phase grounding offset or source animation rewrite is applied.
 
 Integration boundary
 The Meshy skeleton is NOT the FOC canonical 18-bone modular skeleton.
@@ -58,6 +72,7 @@ Source limitations / pending production work
 - Only one actual supplied LOD. LOD1/LOD2 are pending; no fake duplicate LODs.
 - No finger bones. Hand sockets do not establish a correct weapon grip.
 - No Idle, Attack, Crouch, mounted locomotion or seated animation was supplied.
+- Walking toe penetration needs motion/foot-contact cleanup before production.
 - The existing proof shared library is not a production Humanoid muscle library;
   playing its transform clips is not evidence of successful retargeting.
 - Mounted integration is deliberately rejected until pelvis/saddle alignment

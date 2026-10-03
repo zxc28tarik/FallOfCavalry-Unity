@@ -29,6 +29,16 @@ namespace FOC.Presentation.Visuals
         private string? output;
         private int actorSequence;
         private const int Width = 1600, Height = 1100;
+        // Original, unmodified FBX in Blender 4.5.9, 12 Walking phases i/12.
+        // This preserves a source comparison, NOT production foot-contact approval:
+        // the source itself penetrates the review floor near phase 1/3.
+        private static readonly float[] SourceWalkingMinimumY =
+        {
+            -.012499091f, -.010663292f, .002565302f, .000891134f,
+            -.036917649f, -.030216595f, -.016084986f, -.001743907f,
+            .009071807f, -.017752664f, -.032713987f, -.022960877f
+        };
+        private const float SourceGroundComparisonTolerance = .005f;
 
         private sealed class Actor
         {
@@ -62,6 +72,9 @@ namespace FOC.Presentation.Visuals
             public double sampledClipSeconds;
             public bool runtimeControllerDetached;
             public bool renderBoundaryPoseStable;
+            public float minimumMeshWorldY, groundWorldY, minimumMeshGroundClearance;
+            public bool sourceGroundComparisonAvailable;
+            public float sourceMinimumMeshY, sourceGroundDifferenceMeters;
             public JointEvidence[] joints = Array.Empty<JointEvidence>();
         }
 
@@ -82,6 +95,7 @@ namespace FOC.Presentation.Visuals
             public string status = "TECHNICAL_CAPTURE_ONLY_NOT_PRODUCTION_ACCEPTANCE";
             public string sourceSha = "", unityVersion = "", graphicsDevice = "", graphicsApi = "", platform = "";
             public string note = "Empty-loadout isolated Hasan clones through FOC assembler/cache/view pool; not gameplay, mounted, grip or historical acceptance.";
+            public string groundContactStatus = "NOT_PRODUCTION_ACCEPTED: supplied Walking has toe penetration; comparison only checks import drift within 5mm at 12 sampled phases.";
             public int width, height, captures, poolViewsCreated, poolViewsReused, cachedVariants, pooledRepresentations, activeLeases;
             public CaptureEvidence[] results = Array.Empty<CaptureEvidence>();
         }
@@ -377,6 +391,45 @@ namespace FOC.Presentation.Visuals
 
         private void Capture(string filename, string view, float phase)
         {
+            var poseEvidence = actors.Select(actor =>
+            {
+                var minimumY = MinimumVisibleMeshWorldY(actor);
+                // Compare the imported motion against the actual source at the
+                // same phase. Do not silently raise feet or lower the review floor.
+                // Running legitimately has flight and is not covered by this audit.
+                var compareSource = actor.clip != null && actor.clip.name.IndexOf("Walking", StringComparison.OrdinalIgnoreCase) >= 0;
+                var sourceMinimumY = 0f;
+                if (compareSource)
+                {
+                    var sourcePhaseIndex = Mathf.RoundToInt(actor.normalizedPhase * 12);
+                    if (sourcePhaseIndex < 0 || sourcePhaseIndex >= SourceWalkingMinimumY.Length
+                        || Mathf.Abs(actor.normalizedPhase - sourcePhaseIndex / 12f) > .00001f)
+                        throw new InvalidOperationException("Walking source comparison needs an audited i/12 phase.");
+                    sourceMinimumY = SourceWalkingMinimumY[sourcePhaseIndex];
+                }
+                if (compareSource && Mathf.Abs(minimumY - sourceMinimumY) > SourceGroundComparisonTolerance)
+                    throw new InvalidOperationException("Walking source-ground comparison failed for " + filename
+                        + ": phase=" + actor.normalizedPhase.ToString("0.000", CultureInfo.InvariantCulture)
+                        + " minimumMeshWorldY=" + minimumY.ToString("0.000000", CultureInfo.InvariantCulture)
+                        + " sourceMinimumY=" + sourceMinimumY.ToString("0.000000", CultureInfo.InvariantCulture)
+                        + " tolerance=0.005m; this is NOT production ground-contact acceptance.");
+                return new PoseEvidence
+                {
+                    actor = actor.view.name, clip = actor.clip == null ? "SOURCE_REST" : actor.clip.name,
+                    normalizedPhase = actor.normalizedPhase,
+                    sampledClipSeconds = actor.clip == null ? 0 : actor.playable.GetTime(),
+                    runtimeControllerDetached = actor.animator.runtimeAnimatorController == null,
+                    renderBoundaryPoseStable = actor.renderBoundaryPoseStable,
+                    minimumMeshWorldY = minimumY, groundWorldY = -.015f, minimumMeshGroundClearance = minimumY + .015f,
+                    sourceGroundComparisonAvailable = compareSource, sourceMinimumMeshY = sourceMinimumY,
+                    sourceGroundDifferenceMeters = compareSource ? minimumY - sourceMinimumY : 0,
+                    joints = actor.tracked.Select(joint => new JointEvidence
+                    {
+                        name = joint.name, worldPosition = joint.position,
+                        actorLocalPosition = actor.view.transform.InverseTransformPoint(joint.position)
+                    }).ToArray()
+                };
+            }).ToArray();
             var target = new RenderTexture(Width, Height, 24, RenderTextureFormat.ARGB32);
             var texture = new Texture2D(Width, Height, TextureFormat.RGB24, false);
             var previous = RenderTexture.active;
@@ -402,21 +455,29 @@ namespace FOC.Presentation.Visuals
                 maximumJointTravelMeters = actors.Max(actor => actor.maximumTravel), animationEvaluationSteps = actors.Sum(actor => actor.evaluatedSteps),
                 signature = actors[0].view.ActiveRepresentationRoot!.GetComponent<VisualRuntimeVariant>().Signature,
                 sourceRestBindPoseRestored = actors.All(actor => actor.clip == null && actor.restoredBindTransforms > 0),
-                poses = actors.Select(actor => new PoseEvidence
-                {
-                    actor = actor.view.name, clip = actor.clip == null ? "SOURCE_REST" : actor.clip.name,
-                    normalizedPhase = actor.normalizedPhase,
-                    sampledClipSeconds = actor.clip == null ? 0 : actor.playable.GetTime(),
-                    runtimeControllerDetached = actor.animator.runtimeAnimatorController == null,
-                    renderBoundaryPoseStable = actor.renderBoundaryPoseStable,
-                    joints = actor.tracked.Select(joint => new JointEvidence
-                    {
-                        name = joint.name, worldPosition = joint.position,
-                        actorLocalPosition = actor.view.transform.InverseTransformPoint(joint.position)
-                    }).ToArray()
-                }).ToArray()
+                poses = poseEvidence
             });
             Debug.Log("FOC_MESHY_PLAYER_CAPTURE " + filename + " actors=" + actors.Count + " clip=" + captures.Last().clip);
+        }
+
+        private float MinimumVisibleMeshWorldY(Actor actor)
+        {
+            var minimumY = float.PositiveInfinity;
+            foreach (var skin in actor.view.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                if (!skin.enabled) continue;
+                var baked = new Mesh();
+                try
+                {
+                    skin.BakeMesh(baked);
+                    foreach (var vertex in baked.vertices)
+                        minimumY = Mathf.Min(minimumY, skin.transform.TransformPoint(vertex).y);
+                }
+                finally { Destroy(baked); }
+            }
+            if (float.IsNaN(minimumY) || float.IsInfinity(minimumY))
+                throw new InvalidOperationException("No finite visible pilot skin vertices for ground-contact measurement.");
+            return minimumY;
         }
 
         private void OnDestroy()

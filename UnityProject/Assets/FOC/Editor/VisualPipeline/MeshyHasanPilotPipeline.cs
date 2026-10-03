@@ -34,6 +34,7 @@ namespace FOC.Editor.Visuals
         [Serializable] public sealed class ClipAudit
         {
             public string name="";public float duration;public float frameRate;public bool humanMotion;
+            public bool rootHeightBakedIntoPose;public bool keepOriginalHeight;public bool heightFromFeet;public bool rootXZBakedIntoPose;
         }
         [Serializable] public sealed class MeshAudit
         {
@@ -184,6 +185,11 @@ namespace FOC.Editor.Visuals
                 var name=clip.name.Split('|').Last();
                 Require(name=="Walking"||name=="Running","Unexpected supplied animation take: "+clip.name);
                 clip.name=name;clip.loopTime=true;clip.loopPose=false;
+                // This pilot disables root-motion application. Retain the
+                // supplied vertical locomotion in the pose instead of dropping
+                // its root Y curve and leaving the feet hovering above ground.
+                // Horizontal root motion stays separate; no mesh/art offsets.
+                clip.lockRootHeightY=true;clip.keepOriginalPositionY=true;clip.heightFromFeet=false;
             }
             importer.clipAnimations=clips;importer.SaveAndReimport();
         }
@@ -321,7 +327,14 @@ namespace FOC.Editor.Visuals
             Require(report.avatarHuman&&report.avatarValid,"Unity could not validate the supplied rig as Humanoid.");
             Require(animator.avatar==LoadAvatar()&&animator.runtimeAnimatorController==AssetDatabase.LoadAssetAtPath<AnimatorController>(ControllerPath),"Pilot does not reference the supplied source Avatar/controller.");
             Require(!animator.applyRootMotion,"Pilot unexpectedly applies locomotion root motion.");
-            var clips=LoadClips();report.clips=clips.Select(c=>new ClipAudit{name=c.name,duration=c.length,frameRate=c.frameRate,humanMotion=c.humanMotion}).ToArray();
+            var clips=LoadClips();var importedClips=importer.clipAnimations;
+            Require(importedClips.Length==2&&importedClips.All(c=>c.lockRootHeightY&&c.keepOriginalPositionY&&!c.heightFromFeet&&!c.lockRootPositionXZ),"Pilot must bake original root Y into both motion poses while retaining separate XZ root motion.");
+            report.clips=clips.Select(c=>
+            {
+                var settings=importedClips.Single(s=>s.name==c.name);
+                return new ClipAudit{name=c.name,duration=c.length,frameRate=c.frameRate,humanMotion=c.humanMotion,
+                    rootHeightBakedIntoPose=settings.lockRootHeightY,keepOriginalHeight=settings.keepOriginalPositionY,heightFromFeet=settings.heightFromFeet,rootXZBakedIntoPose=settings.lockRootPositionXZ};
+            }).ToArray();
             Require(clips.Length==2&&clips.Any(c=>c.name=="Walking")&&clips.Any(c=>c.name=="Running"),"Expected supplied Walking and Running clips are missing.");
             Require(clips.All(c=>c.humanMotion&&c.length>0f&&!float.IsInfinity(c.length)),"A supplied animation is empty or did not import as Humanoid motion.");
             var skinned=prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true);Require(skinned.Length==1,"Intake expected one authored skinned mesh.");
