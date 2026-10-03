@@ -32,7 +32,29 @@ namespace FOC.Tests.VisualPipeline
                 VisualProofAssetGenerator.GenerateAll();AssetDatabase.SaveAssets();
                 foreach(var path in paths)Assert.That(File.ReadAllBytes(path),Is.EqualTo(first[path]),path);
             }
-            finally{foreach(var item in snapshot)File.WriteAllBytes(item.Key,item.Value);AssetDatabase.Refresh();}
+            finally{RestoreProofFixtureSnapshot(snapshot);}
+        }
+        [TestCase(false)][TestCase(true)]
+        public void ProofFixtureCleanupPreservesMappedSceneWhileRestoringExactBytes(bool changed)
+        {
+            var path=Path.GetTempFileName();var mappedBytes=new byte[]{1,2,3,4};
+            var expected=changed?new byte[]{9,8,7,6,5,4}:mappedBytes;
+            try
+            {
+                File.WriteAllBytes(path,mappedBytes);
+                using(var stream=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))
+                using(var map=MemoryMappedFile.CreateFromFile(stream,null,0,MemoryMappedFileAccess.Read,HandleInheritability.None,true))
+                using(var view=map.CreateViewAccessor(0,0,MemoryMappedFileAccess.Read))
+                {
+                    // Exercise the identical cleanup path used by the actual
+                    // generation test, including the asset database refresh.
+                    RestoreProofFixtureSnapshot(new Dictionary<string,byte[]>{{path,expected}});
+                    Assert.That(File.ReadAllBytes(path),Is.EqualTo(expected));
+                    Assert.That(view.ReadByte(0),Is.EqualTo(mappedBytes[0]),"Restoring a fixture must not invalidate Unity's old scene mapping.");
+                    Assert.That(Directory.GetFiles(Path.GetDirectoryName(path),Path.GetFileName(path)+".14c-restore-*"),Is.Empty,"Atomic cleanup must not leave staging files.");
+                }
+            }
+            finally{File.Delete(path);}
         }
         [Test]public void HandAndMetacarpalSkinCannotFollowHeadBone()
         {
@@ -202,6 +224,14 @@ namespace FOC.Tests.VisualPipeline
             var mail=Enumerable.Range(0,256).Select(x=>HistoricalArtSurfaceAuthoring.Height("Mail",x,16)).ToArray();
             var wood=Enumerable.Range(0,256).Select(x=>HistoricalArtSurfaceAuthoring.Height("Wood",x,16)).ToArray();
             Assert.That(mail,Is.Not.EqualTo(wood));Assert.That(mail.Max()-mail.Min(),Is.GreaterThan(.5f));
+        }
+        private static void RestoreProofFixtureSnapshot(IDictionary<string,byte[]> snapshot)
+        {
+            // Loaded Unity scenes can remain memory-mapped after GenerateAll.
+            // Reuse the verified byte-identical no-op / atomic replacement
+            // path; truncating an existing mapped file fails on Windows 1224.
+            foreach(var item in snapshot)HistoricalArtReviewBuild.RestoreSettingsSnapshot(item.Key,item.Value);
+            AssetDatabase.Refresh();
         }
         private static HistoricalArtCandidatePipeline.SourceAsset Read(string id)=>JsonUtility.FromJson<HistoricalArtCandidatePipeline.SourceAsset>(File.ReadAllText(Directory.GetFiles(HistoricalArtCandidatePipeline.SourceRoot,id+".focmesh.json",SearchOption.AllDirectories).Single()));
         private static Vector3 Point(HistoricalArtCandidatePipeline.SourcePart p,int i)=>new Vector3(p.positions[i*3],p.positions[i*3+1],p.positions[i*3+2]);

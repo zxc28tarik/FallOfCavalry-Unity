@@ -137,6 +137,27 @@ results are `TestResults/14c-existing-pipelines.json`. Final SHA/CI evidence
 belongs to that run, not to this precommit authoring record. Foundation CI
 covers .NET, not licensed Unity Editor or visual review.
 
+The first clean-commit full suite on
+`27b638dac20b71479f887a9a047fb07c848facc2` passed .NET 486/486 but
+Unity passed 627/628: the proof-generation test's cleanup tried to truncate a
+memory-mapped `BattleProof.unity`, producing Windows error 1224. This was a
+fixture restoration failure, not evidence that its prefab determinism assertion
+failed. The cleanup now uses the existing byte-identical no-op / atomic
+replacement helper. Two regressions exercise that same cleanup with a live
+mapping and verify exact restored bytes, surviving old mapping and no temporary
+file residue. No original assertion or artwork gate is removed or relaxed.
+The failed run's fresh XML and logs are preserved locally under
+`TestResults/HasanDonor/Attempts/27b638dac20b71479f887a9a047fb07c848facc2/`.
+The final validation must be repeated on the subsequent fix commit; the earlier
+commit's CI or test results must not be reused for that new SHA.
+
+The final runners also replace any previous summary at run start with a new
+run ID / start SHA and RUNNING state. Abort paths persist FAILED with only
+observed checks, explicit unexecuted checks and current worktree / end SHA;
+the closure runner rejects stale EditMode XML. Both runners require the same
+clean commit at start and finish. This prevents an interrupted validation from
+leaving an earlier commit's test counts as its apparent current summary.
+
 No new character derivative, production catalog activation, Accepted folder or
 100/250/500-actor and mixed-cavalry claim is permitted until Hasan passes.
 
