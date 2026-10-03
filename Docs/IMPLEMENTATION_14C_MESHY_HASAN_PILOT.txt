@@ -1,0 +1,90 @@
+IMPLEMENTATION 14C — MESHY HASAN ADAPTATION PILOT
+
+Authority / scope
+The user supplied Meshy_AI_hasan_agha_rigged_biped.zip, confirmed that it was
+generated in their own Meshy Pro account, and explicitly requested adaptation
+and use. This supersedes further procedural garment retries for this pilot.
+No Implementation 15. No production profile activation in this package.
+
+Source preservation
+The imported FBX is a byte-identical copy of the user's source, SHA256:
+0ee0076119289b4748fa0eeb11fa631d9a03e55b9b1208db6afe19beba410b27
+Original archive SHA256:
+58acdcc19240ebde805dc1aa1fa877dee844eceaab8319f500de68054b141cde
+The original ZIP, FBX, and 8K/4K textures remain in local intake storage.
+Provenance and exact source filenames are recorded in:
+UnityProject/Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/provenance.json
+This is user-supplied Meshy Pro output, not a CC0 attribution. The source page,
+generation-date license terms and original reference-image provenance were not
+independently verified. No historical authenticity certification is claimed.
+
+Adaptation
+- Whole clothed humanoid: 9,586 source triangles, one skin, 23 source bones.
+- Preserve source geometry, bone hierarchy, bind transforms and skin weights.
+- Add semantic FOC sockets as child markers, not replacement deformation bones.
+- Explicit Unity Humanoid mapping: source Chest -> Human Spine, source
+  UpperChest -> Human Chest; retain all source transforms.
+- The supplied FBX's saved object pose is Running, not its original bind pose.
+  Derive the reference/prefab pose from existing skin bind matrices. Do not
+  create a new rig or bake that Running pose into the Avatar reference.
+  The pilot prefab stores the actual bind pose with Animator initially disabled;
+  the review explicitly enables animation only when a real clip is requested.
+- Imported weights are checked finite, normalized, and at most four influences.
+  This is not a claim of bit-identical Unity floating-point weight values.
+  A source audit found 946 tiny influences below 0.001 across 889/13520 source
+  vertices. Unity clamps its minimum importer threshold to 0.001, so pruning
+  and normalization are possible. Simulated maximum removed mass per affected
+  vertex is 0.00167625 (0.167625%). Original source weights are not rewritten.
+- Base color reduced from 8192 to 2048 for the pilot. Metallic and roughness
+  reduced from 4096 to 2048 and packed for Unity Standard: RGB metallic,
+  alpha = 1 - roughness. No invented normal map or flat replacement colors.
+- Walking and Running are the only source clips. They must be tested as real
+  Unity Humanoid animation, not renamed proof animation.
+
+Integration boundary
+The Meshy skeleton is NOT the FOC canonical 18-bone modular skeleton.
+CanonicalRig/RigValidator remain unchanged and reject this foreign descriptor.
+A valid Unity Human Avatar does not overturn that result.
+
+The pilot uses its own transient Standard-only VisualCatalog and the existing
+VisualSoldier3DAssembler/cache/pool. Body/head/clothing semantic slots alias one
+indivisible consolidated character. Only ONE character mesh is instantiated;
+Narrative and Crowd are explicitly unsupported to prevent duplicate geometry.
+This is not yet interchangeable body/head/clothing production modularity.
+Gameplay SoldierInstance, persistent loadout, deterministic signatures, domain,
+save schema v14, and production historical catalog are unchanged.
+
+Source limitations / pending production work
+- Only one actual supplied LOD. LOD1/LOD2 are pending; no fake duplicate LODs.
+- No finger bones. Hand sockets do not establish a correct weapon grip.
+- No Idle, Attack, Crouch, mounted locomotion or seated animation was supplied.
+- The existing proof shared library is not a production Humanoid muscle library;
+  playing its transform clips is not evidence of successful retargeting.
+- Mounted integration is deliberately rejected until pelvis/saddle alignment
+  and actual mounted deformation are demonstrated.
+- Sipahi, Cebeli and Tufekci replacements are not supplied by this pilot.
+- Historical and final visual review are separate from technical import tests.
+- 100/250/500-actor benchmarks and proof-versus-production comparison are not
+  executed by the 12-actor pilot capture suite; no frame-rate claim is made.
+
+Reproduction
+Prepare source: Tools/Art/Prepare-MeshyPilot.ps1
+Generate import/prefab: Unity -batchmode -nographics -projectPath UnityProject
+  -executeMethod FOC.Editor.Visuals.MeshyHasanPilotPipeline.Run -logFile <log>
+Final clean-SHA local evidence: Tools/Test-MeshyPilot.ps1 -UnityEditor <path>
+That runner restores/builds/tests .NET, verifies imported pilot assets, runs all
+Unity EditMode tests, builds the Windows pilot, captures real rendered images,
+and records exact commands, exit codes, initial/final SHA and worktree state.
+Evidence is run-specific under TestResults/MeshyPilot/Runs/<sha>/<run-id>.
+AllowDirtyDiagnostic is exploratory evidence, never final-SHA acceptance.
+
+Standalone preview
+Artifacts/MeshyPilotPlayer/FallOfCavalry-MeshyPilot.exe
+No capture argument: interactive-window walking preview, close window to exit.
+--meshy-output <folder>: deterministic real Windows capture suite then exit.
+No screenshot is an inspector capture, generated mockup, or retouched render.
+
+Status
+This file specifies scope, not a test PASS. Read the fresh run.json and player
+evidence for actual execution results. Even a successful pilot does NOT close
+the complete Implementation 14C production art gate.

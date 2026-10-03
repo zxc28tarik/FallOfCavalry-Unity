@@ -1,0 +1,27 @@
+{
+  "assetId": "CHR_HasanAga_MeshyPilot",
+  "category": "WholeClothedHumanoidPilot",
+  "status": "USER_SUPPLIED_DRAFT_NOT_PRODUCTION_ACCEPTED",
+  "sourceUrl": "https://www.meshy.ai/tr/agent/T93y9f6f-pnFlcy0V9qei?chat=JElYNRmR9stRXm_gaQKrD",
+  "generator": "Meshy; version and original prompt not supplied",
+  "generationDate": null,
+  "intakeDate": "2026-10-03",
+  "revision": "meshy-hasan-pilot-r1",
+  "userAuthorization": "User confirmed generation in their Meshy Pro account, then explicitly requested adaptation and use in FOC.",
+  "licenseState": "User-supplied Meshy Pro output. Not CC0. No license file in archive. Account, applicable generation-date terms and reference-image provenance not independently verified.",
+  "historicalReferences": [],
+  "referenceImages": null,
+  "historicalStatus": "User-supplied Hasan Agha visual concept; not independent historical certification.",
+  "archiveName": "Meshy_AI_hasan_agha_rigged_biped.zip",
+  "archiveSha256": "58acdcc19240ebde805dc1aa1fa877dee844eceaab8319f500de68054b141cde",
+  "sourceFiles": [
+    { "name": "Meshy_AI_hasan_agha_rigged_biped_Animation_all_frame_rate_60.fbx", "sha256": "0ee0076119289b4748fa0eeb11fa631d9a03e55b9b1208db6afe19beba410b27", "runtimeCopy": "Source/Hasan_Meshy.fbx", "changes": "None; byte-identical copy, original 23 bones and source weights retained" },
+    { "name": "Meshy_AI_hasan_agha_rigged_biped_texture_0.png", "sha256": "9f9db1fdf8a3119b140cba87df8477f62a9725ab8a83ddace8f1a2c2a54ba563", "runtimeCopy": "Source/BaseColor.png", "changes": "8192 to 2048 pixel bicubic downsample only" },
+    { "name": "Meshy_AI_hasan_agha_rigged_biped_texture_0_metallic.png", "sha256": "70a7df9313df05901a4734241889054a7fc267855e1b8bf61a122b3b4a177490", "changes": "Downsampled and packed into MetallicSmoothness RGB" },
+    { "name": "Meshy_AI_hasan_agha_rigged_biped_texture_0_roughness.png", "sha256": "bfe86bdcf518eaefbb55439f7e95969e65b6085dde88210f6a861922f8d341b7", "changes": "Downsampled; alpha = 1 - roughness in MetallicSmoothness" }
+  ],
+  "authoringTools": ["Tools/Art/Prepare-MeshyPilot.ps1", "Unity 6000.3.16f1 isolated pilot import"],
+  "sourceAnimations": ["Walking", "Running"],
+  "notSupplied": ["Idle", "Attack", "Crouch", "Mounted", "finger bones", "normal map", "unrigged high-detail master", "LOD meshes"],
+  "scope": "Isolated Standard consolidated pilot only; no production profile activation; no replacement of canonical 18-bone contract; no gameplay or save schema changes"
+}
