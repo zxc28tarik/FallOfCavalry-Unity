@@ -60,6 +60,10 @@ namespace FOC.Editor.Visuals
                 if (review == null) review = new GameObject("Isolated Meshy Hasan player review").AddComponent<MeshyHasanPilotPlayer>();
                 if (review.characterPrefab != prefab) { review.characterPrefab = prefab; changed = true; }
                 if (!review.clips.SequenceEqual(required)) { review.clips = required; changed = true; }
+                var retargets=MeshyHasanPilotMotionAdaptation.LoadClips();
+                if(!review.retargetClips.SequenceEqual(retargets)){review.retargetClips=retargets;changed=true;}
+                var variants=new[]{4096,2048,1024}.Select(size=>AssetDatabase.LoadAssetAtPath<Material>(MeshyHasanPilotPipeline.OutputRoot+"/MAT_HasanAga_MeshyPilot"+(size==2048?"":"_"+size)+".mat")??throw new InvalidOperationException("Missing texture comparison variant "+size)).ToArray();
+                if(!review.textureVariants.SequenceEqual(variants)){review.textureVariants=variants;changed=true;}
                 // No SHA/time fields are serialized: final-SHA evidence is passed
                 // via --meshy-sha. Rebuilding an unchanged scene does not churn it.
                 if (changed) { EditorUtility.SetDirty(review); EditorSceneManager.SaveScene(scene, ScenePath); }

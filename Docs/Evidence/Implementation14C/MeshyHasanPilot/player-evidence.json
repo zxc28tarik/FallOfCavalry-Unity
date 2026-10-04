@@ -1,0 +1,4071 @@
+{
+    "status": "TECHNICAL_CAPTURE_ONLY_NOT_PRODUCTION_ACCEPTANCE",
+    "sourceSha": "5d3ea5b9f32992a64df056a03a28549774ac9772",
+    "unityVersion": "6000.3.16f1",
+    "graphicsDevice": "NVIDIA GeForce MX130",
+    "graphicsApi": "Direct3D11",
+    "platform": "WindowsPlayer",
+    "note": "Empty-loadout isolated Hasan clones through FOC assembler/cache/view pool; not gameplay, mounted, grip or historical acceptance.",
+    "groundContactStatus": "NOT_PRODUCTION_ACCEPTED: supplied Walking has toe penetration; comparison only checks import drift within 5mm at 12 sampled phases.",
+    "width": 1600,
+    "height": 1100,
+    "captures": 37,
+    "poolViewsCreated": 12,
+    "poolViewsReused": 13,
+    "cachedVariants": 1,
+    "pooledRepresentations": 12,
+    "activeLeases": 0,
+    "results": [
+        {
+            "file": "01-rest-front.png",
+            "view": "front",
+            "clip": "SOURCE_REST",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": true,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "SOURCE_REST",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": false,
+                    "minimumMeshWorldY": 1.5759393789949173e-8,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.015000015497207642,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            },
+                            "worldPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            },
+                            "worldPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            },
+                            "worldPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            },
+                            "worldPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "02-rest-side.png",
+            "view": "side",
+            "clip": "SOURCE_REST",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": true,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "SOURCE_REST",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": false,
+                    "minimumMeshWorldY": 1.5759393789949173e-8,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.015000015497207642,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            },
+                            "worldPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            },
+                            "worldPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            },
+                            "worldPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            },
+                            "worldPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "03-rest-back.png",
+            "view": "back",
+            "clip": "SOURCE_REST",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": true,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "SOURCE_REST",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": false,
+                    "minimumMeshWorldY": 1.5759393789949173e-8,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.015000015497207642,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            },
+                            "worldPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            },
+                            "worldPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            },
+                            "worldPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            },
+                            "worldPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "04-walking-0.00.png",
+            "view": "quarter",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.46460235118865969,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.015179715119302273,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.00017971545457839966,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.01249909121543169,
+                    "sourceGroundDifferenceMeters": -0.0026806239038705827,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3535744547843933,
+                                "y": 0.9300382137298584,
+                                "z": -0.03171283006668091
+                            },
+                            "worldPosition": {
+                                "x": -0.3535744547843933,
+                                "y": 0.9300382137298584,
+                                "z": -0.03171283006668091
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3560433089733124,
+                                "y": 0.929046630859375,
+                                "z": 0.0412634015083313
+                            },
+                            "worldPosition": {
+                                "x": 0.3560433089733124,
+                                "y": 0.929046630859375,
+                                "z": 0.0412634015083313
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.17521032691001893,
+                                "y": 0.2125980406999588,
+                                "z": -0.11711835861206055
+                            },
+                            "worldPosition": {
+                                "x": -0.17521032691001893,
+                                "y": 0.2125980406999588,
+                                "z": -0.11711835861206055
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.1796424835920334,
+                                "y": 0.13726580142974854,
+                                "z": -0.05541279911994934
+                            },
+                            "worldPosition": {
+                                "x": 0.1796424835920334,
+                                "y": 0.13726580142974854,
+                                "z": -0.05541279911994934
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "05-walking-0.25.png",
+            "view": "quarter",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.46460235118865969,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.001332436571829021,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.016332436352968217,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": 0.0008911340264603496,
+                    "sourceGroundDifferenceMeters": 0.0004413025453686714,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "06-walking-0.50.png",
+            "view": "quarter",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.5,
+            "maximumJointTravelMeters": 0.46460235118865969,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 0.21666668355464936,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.01909589394927025,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.004095894284546375,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.016084985807538034,
+                    "sourceGroundDifferenceMeters": -0.003010908141732216,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3433206081390381,
+                                "y": 0.9045017957687378,
+                                "z": 0.0629812479019165
+                            },
+                            "worldPosition": {
+                                "x": -0.3433206081390381,
+                                "y": 0.9045017957687378,
+                                "z": 0.0629812479019165
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37781256437301638,
+                                "y": 0.9311723709106445,
+                                "z": -0.05733710527420044
+                            },
+                            "worldPosition": {
+                                "x": 0.37781256437301638,
+                                "y": 0.9311723709106445,
+                                "z": -0.05733710527420044
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1664670705795288,
+                                "y": 0.1340886354446411,
+                                "z": -0.0511040985584259
+                            },
+                            "worldPosition": {
+                                "x": -0.1664670705795288,
+                                "y": 0.1340886354446411,
+                                "z": -0.0511040985584259
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.20170184969902039,
+                                "y": 0.2558075785636902,
+                                "z": -0.1226569414138794
+                            },
+                            "worldPosition": {
+                                "x": 0.20170184969902039,
+                                "y": 0.2558075785636902,
+                                "z": -0.1226569414138794
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "07-walking-0.75.png",
+            "view": "quarter",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.75,
+            "maximumJointTravelMeters": 0.46460235118865969,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 0.32500002533197405,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.01657583937048912,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.0015758397057652474,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.017752664163708688,
+                    "sourceGroundDifferenceMeters": 0.0011768247932195664,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.2734031677246094,
+                                "y": 0.9441125392913818,
+                                "z": 0.2828962206840515
+                            },
+                            "worldPosition": {
+                                "x": -0.2734031677246094,
+                                "y": 0.9441125392913818,
+                                "z": 0.2828962206840515
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.33477649092674258,
+                                "y": 0.8872681856155396,
+                                "z": -0.20010244846343995
+                            },
+                            "worldPosition": {
+                                "x": 0.33477649092674258,
+                                "y": 0.8872681856155396,
+                                "z": -0.20010244846343995
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.12076107412576676,
+                                "y": 0.19652733206748963,
+                                "z": -0.44906044006347659
+                            },
+                            "worldPosition": {
+                                "x": -0.12076107412576676,
+                                "y": 0.19652733206748963,
+                                "z": -0.44906044006347659
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.13488982617855073,
+                                "y": 0.12251466512680054,
+                                "z": 0.3164096474647522
+                            },
+                            "worldPosition": {
+                                "x": 0.13488982617855073,
+                                "y": 0.12251466512680054,
+                                "z": 0.3164096474647522
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "08-running-0.00.png",
+            "view": "quarter",
+            "clip": "Running",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.7165307402610779,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Running",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.024752434343099595,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.009752434678375721,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.34957826137542727,
+                                "y": 1.088181734085083,
+                                "z": -0.2665508985519409
+                            },
+                            "worldPosition": {
+                                "x": -0.34957826137542727,
+                                "y": 1.088181734085083,
+                                "z": -0.2665508985519409
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.2396135926246643,
+                                "y": 1.0008375644683838,
+                                "z": 0.231675386428833
+                            },
+                            "worldPosition": {
+                                "x": 0.2396135926246643,
+                                "y": 1.0008375644683838,
+                                "z": 0.231675386428833
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1942894458770752,
+                                "y": 0.4781520366668701,
+                                "z": -0.1454569697380066
+                            },
+                            "worldPosition": {
+                                "x": -0.1942894458770752,
+                                "y": 0.4781520366668701,
+                                "z": -0.1454569697380066
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.1254245489835739,
+                                "y": 0.16337601840496064,
+                                "z": -0.3745662569999695
+                            },
+                            "worldPosition": {
+                                "x": 0.1254245489835739,
+                                "y": 0.16337601840496064,
+                                "z": -0.3745662569999695
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "09-running-0.25.png",
+            "view": "quarter",
+            "clip": "Running",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.7165307402610779,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Running",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.17500001192092896,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.006471698172390461,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.021471697837114335,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.2967233955860138,
+                                "y": 1.0398476123809815,
+                                "z": -0.20634007453918458
+                            },
+                            "worldPosition": {
+                                "x": -0.2967233955860138,
+                                "y": 1.0398476123809815,
+                                "z": -0.20634007453918458
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.18592941761016847,
+                                "y": 1.0475181341171265,
+                                "z": 0.11658132076263428
+                            },
+                            "worldPosition": {
+                                "x": 0.18592941761016847,
+                                "y": 1.0475181341171265,
+                                "z": 0.11658132076263428
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.13433018326759339,
+                                "y": 0.1471986174583435,
+                                "z": 0.2635837197303772
+                            },
+                            "worldPosition": {
+                                "x": -0.13433018326759339,
+                                "y": 0.1471986174583435,
+                                "z": 0.2635837197303772
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.09350630640983582,
+                                "y": 0.5470336675643921,
+                                "z": -0.5818248987197876
+                            },
+                            "worldPosition": {
+                                "x": 0.09350630640983582,
+                                "y": 0.5470336675643921,
+                                "z": -0.5818248987197876
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "10-running-0.50.png",
+            "view": "quarter",
+            "clip": "Running",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.5,
+            "maximumJointTravelMeters": 0.7165307402610779,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Running",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 0.3500000238418579,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.025872614234685899,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.010872614569962025,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.20779287815093995,
+                                "y": 1.1028393507003785,
+                                "z": 0.2964041233062744
+                            },
+                            "worldPosition": {
+                                "x": -0.20779287815093995,
+                                "y": 1.1028393507003785,
+                                "z": 0.2964041233062744
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.2960517108440399,
+                                "y": 1.0640747547149659,
+                                "z": -0.2224254608154297
+                            },
+                            "worldPosition": {
+                                "x": 0.2960517108440399,
+                                "y": 1.0640747547149659,
+                                "z": -0.2224254608154297
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.11093948036432266,
+                                "y": 0.19243869185447694,
+                                "z": -0.4622598886489868
+                            },
+                            "worldPosition": {
+                                "x": -0.11093948036432266,
+                                "y": 0.19243869185447694,
+                                "z": -0.4622598886489868
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.20131593942642213,
+                                "y": 0.44303643703460696,
+                                "z": -0.07992690801620484
+                            },
+                            "worldPosition": {
+                                "x": 0.20131593942642213,
+                                "y": 0.44303643703460696,
+                                "z": -0.07992690801620484
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "11-running-0.75.png",
+            "view": "quarter",
+            "clip": "Running",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.75,
+            "maximumJointTravelMeters": 0.7165307402610779,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 90,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Running",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 0.5250000357627869,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.02187385782599449,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.0068738581612706188,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.22493332624435426,
+                                "y": 1.0127837657928467,
+                                "z": 0.08067679405212403
+                            },
+                            "worldPosition": {
+                                "x": -0.22493332624435426,
+                                "y": 1.0127837657928467,
+                                "z": 0.08067679405212403
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.2590635418891907,
+                                "y": 1.0105129480361939,
+                                "z": -0.13373851776123048
+                            },
+                            "worldPosition": {
+                                "x": 0.2590635418891907,
+                                "y": 1.0105129480361939,
+                                "z": -0.13373851776123048
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.12055924534797669,
+                                "y": 0.7000268697738648,
+                                "z": -0.5241683721542358
+                            },
+                            "worldPosition": {
+                                "x": -0.12055924534797669,
+                                "y": 0.7000268697738648,
+                                "z": -0.5241683721542358
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.1383776068687439,
+                                "y": 0.13875067234039308,
+                                "z": 0.2872191071510315
+                            },
+                            "worldPosition": {
+                                "x": 0.1383776068687439,
+                                "y": 0.13875067234039308,
+                                "z": 0.2872191071510315
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "12-group12.png",
+            "view": "group12",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 12,
+            "rendererCount": 12,
+            "materialSlots": 12,
+            "boneCount": 276,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 115032,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.015179715119302273,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.00017971545457839966,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.01249909121543169,
+                    "sourceGroundDifferenceMeters": -0.0026806239038705827,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3535745143890381,
+                                "y": 0.9300382137298584,
+                                "z": -0.03171283006668091
+                            },
+                            "worldPosition": {
+                                "x": -1.9285744428634644,
+                                "y": 0.9300382137298584,
+                                "z": -0.03171283006668091
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3560432195663452,
+                                "y": 0.929046630859375,
+                                "z": 0.0412634015083313
+                            },
+                            "worldPosition": {
+                                "x": -1.218956708908081,
+                                "y": 0.929046630859375,
+                                "z": 0.0412634015083313
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1752103567123413,
+                                "y": 0.2125980406999588,
+                                "z": -0.11711835861206055
+                            },
+                            "worldPosition": {
+                                "x": -1.7502102851867676,
+                                "y": 0.2125980406999588,
+                                "z": -0.11711835861206055
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.1796424388885498,
+                                "y": 0.13726580142974854,
+                                "z": -0.05541279911994934
+                            },
+                            "worldPosition": {
+                                "x": -1.3953574895858765,
+                                "y": 0.13726580142974854,
+                                "z": -0.05541279911994934
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.0833333358168602,
+                    "sampledClipSeconds": 0.03611111500196995,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.012255440466105938,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.002744559198617935,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.010663292370736599,
+                    "sourceGroundDifferenceMeters": -0.001592148095369339,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.34883075952529909,
+                                "y": 0.940141499042511,
+                                "z": -0.10484200716018677
+                            },
+                            "worldPosition": {
+                                "x": -0.8738307356834412,
+                                "y": 0.940141499042511,
+                                "z": -0.10484200716018677
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3604707717895508,
+                                "y": 0.9554941654205322,
+                                "z": 0.10600817203521729
+                            },
+                            "worldPosition": {
+                                "x": -0.1645292043685913,
+                                "y": 0.9554941654205322,
+                                "z": 0.10600817203521729
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1821649670600891,
+                                "y": 0.15884807705879212,
+                                "z": 0.0607299730181694
+                            },
+                            "worldPosition": {
+                                "x": -0.7071649432182312,
+                                "y": 0.15884807705879212,
+                                "z": 0.0607299730181694
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.18208780884742738,
+                                "y": 0.1470203995704651,
+                                "z": -0.14335599541664124
+                            },
+                            "worldPosition": {
+                                "x": -0.3429121673107147,
+                                "y": 0.1470203995704651,
+                                "z": -0.14335599541664124
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.1666666716337204,
+                    "sampledClipSeconds": 0.0722222300039399,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.0027263136580586435,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.017726313322782518,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": 0.0025653019547462465,
+                    "sourceGroundDifferenceMeters": 0.000161011703312397,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32828980684280398,
+                                "y": 0.9280126690864563,
+                                "z": -0.20784485340118409
+                            },
+                            "worldPosition": {
+                                "x": 0.19671016931533814,
+                                "y": 0.9280126690864563,
+                                "z": -0.20784485340118409
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.36378979682922366,
+                                "y": 0.9796248078346252,
+                                "z": 0.20066213607788087
+                            },
+                            "worldPosition": {
+                                "x": 0.8887897729873657,
+                                "y": 0.9796248078346252,
+                                "z": 0.20066213607788087
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1924343705177307,
+                                "y": 0.17559170722961427,
+                                "z": 0.3082488775253296
+                            },
+                            "worldPosition": {
+                                "x": 0.3325656056404114,
+                                "y": 0.17559170722961427,
+                                "z": 0.3082488775253296
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.18690115213394166,
+                                "y": 0.15891586244106294,
+                                "z": -0.2835766077041626
+                            },
+                            "worldPosition": {
+                                "x": 0.7119011282920837,
+                                "y": 0.15891586244106294,
+                                "z": -0.2835766077041626
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.001332436571829021,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.016332436352968217,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": 0.0008911340264603496,
+                    "sourceGroundDifferenceMeters": 0.0004413025453686714,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044172286987307,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": 1.2545582056045533,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919068336486819,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 1.9541906118392945,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": 1.4088048934936524,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 1.7544630765914918,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.3333333432674408,
+                    "sampledClipSeconds": 0.1444444600078798,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.04045557603240013,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.025455575436353685,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.03691764920949936,
+                    "sourceGroundDifferenceMeters": -0.003537926822900772,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.34497153759002688,
+                                "y": 0.8657618761062622,
+                                "z": -0.1590205430984497
+                            },
+                            "worldPosition": {
+                                "x": -1.9199714660644532,
+                                "y": 0.8657618761062622,
+                                "z": -1.4090205430984498
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3917731046676636,
+                                "y": 0.9307434558868408,
+                                "z": 0.1636488437652588
+                            },
+                            "worldPosition": {
+                                "x": -1.1832268238067628,
+                                "y": 0.9307434558868408,
+                                "z": -1.0863511562347413
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15569519996643067,
+                                "y": 0.11254197359085083,
+                                "z": 0.24599385261535645
+                            },
+                            "worldPosition": {
+                                "x": -1.730695128440857,
+                                "y": 0.11254197359085083,
+                                "z": -1.0040061473846436
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.19541418552398683,
+                                "y": 0.23395773768424989,
+                                "z": -0.4518287181854248
+                            },
+                            "worldPosition": {
+                                "x": -1.3795857429504395,
+                                "y": 0.23395773768424989,
+                                "z": -1.7018287181854249
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.4166666567325592,
+                    "sampledClipSeconds": 0.18055556532409423,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.033113982528448108,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.018113981932401658,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.03021659515798092,
+                    "sourceGroundDifferenceMeters": -0.002897387370467186,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3625250458717346,
+                                "y": 0.8680909872055054,
+                                "z": -0.0575566291809082
+                            },
+                            "worldPosition": {
+                                "x": -0.8875250220298767,
+                                "y": 0.8680909872055054,
+                                "z": -1.3075566291809083
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.38457486033439639,
+                                "y": 0.9148714542388916,
+                                "z": 0.05671191215515137
+                            },
+                            "worldPosition": {
+                                "x": -0.14042511582374574,
+                                "y": 0.9148714542388916,
+                                "z": -1.1932880878448487
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15918684005737306,
+                                "y": 0.11970368027687073,
+                                "z": 0.09656190872192383
+                            },
+                            "worldPosition": {
+                                "x": -0.6841868162155151,
+                                "y": 0.11970368027687073,
+                                "z": -1.1534380912780762
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.20804843306541444,
+                                "y": 0.29533809423446658,
+                                "z": -0.33954739570617678
+                            },
+                            "worldPosition": {
+                                "x": -0.31695154309272768,
+                                "y": 0.29533809423446658,
+                                "z": -1.5895473957061768
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 0.21666668355464936,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.01909589394927025,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.004095894284546375,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.016084985807538034,
+                    "sourceGroundDifferenceMeters": -0.003010908141732216,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3433206081390381,
+                                "y": 0.9045017957687378,
+                                "z": 0.06298112869262696
+                            },
+                            "worldPosition": {
+                                "x": 0.181679368019104,
+                                "y": 0.9045017957687378,
+                                "z": -1.187018871307373
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37781256437301638,
+                                "y": 0.9311723709106445,
+                                "z": -0.057337164878845218
+                            },
+                            "worldPosition": {
+                                "x": 0.9028125405311585,
+                                "y": 0.9311723709106445,
+                                "z": -1.3073371648788453
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1664670705795288,
+                                "y": 0.1340886354446411,
+                                "z": -0.051104187965393069
+                            },
+                            "worldPosition": {
+                                "x": 0.3585329055786133,
+                                "y": 0.1340886354446411,
+                                "z": -1.301104187965393
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.20170187950134278,
+                                "y": 0.2558075785636902,
+                                "z": -0.12265706062316895
+                            },
+                            "worldPosition": {
+                                "x": 0.7267018556594849,
+                                "y": 0.2558075785636902,
+                                "z": -1.372657060623169
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.5833333134651184,
+                    "sampledClipSeconds": 0.2527777888708638,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.003942723385989666,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.011057276278734208,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.0017439069924876094,
+                    "sourceGroundDifferenceMeters": -0.0021988162770867349,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3037809133529663,
+                                "y": 0.9418140649795532,
+                                "z": 0.17976903915405274
+                            },
+                            "worldPosition": {
+                                "x": 1.27121901512146,
+                                "y": 0.9418140649795532,
+                                "z": -1.0702309608459473
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.36096179485321047,
+                                "y": 0.9389493465423584,
+                                "z": -0.15238654613494874
+                            },
+                            "worldPosition": {
+                                "x": 1.9359617233276368,
+                                "y": 0.9389493465423584,
+                                "z": -1.4023865461349488
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15803146362304688,
+                                "y": 0.14978669583797456,
+                                "z": -0.20165705680847169
+                            },
+                            "worldPosition": {
+                                "x": 1.4169684648513795,
+                                "y": 0.14978669583797456,
+                                "z": -1.4516570568084717
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17993664741516114,
+                                "y": 0.20148968696594239,
+                                "z": 0.14425837993621827
+                            },
+                            "worldPosition": {
+                                "x": 1.7549365758895875,
+                                "y": 0.20148968696594239,
+                                "z": -1.1057416200637818
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.6666666865348816,
+                    "sampledClipSeconds": 0.2888889200157596,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.009357337839901448,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.02435733750462532,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": 0.009071807377040387,
+                    "sourceGroundDifferenceMeters": 0.0002855304628610611,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.26043784618377688,
+                                "y": 0.9611911773681641,
+                                "z": 0.2666177749633789
+                            },
+                            "worldPosition": {
+                                "x": -1.8354377746582032,
+                                "y": 0.9611911773681641,
+                                "z": -2.233382225036621
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3418346643447876,
+                                "y": 0.9205979108810425,
+                                "z": -0.20476937294006349
+                            },
+                            "worldPosition": {
+                                "x": -1.2331652641296387,
+                                "y": 0.9205979108810425,
+                                "z": -2.7047693729400636
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.14245235919952393,
+                                "y": 0.16720186173915864,
+                                "z": -0.34192824363708498
+                            },
+                            "worldPosition": {
+                                "x": -1.7174522876739503,
+                                "y": 0.16720186173915864,
+                                "z": -2.841928243637085
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.15050530433654786,
+                                "y": 0.16021525859832765,
+                                "z": 0.3347337245941162
+                            },
+                            "worldPosition": {
+                                "x": -1.4244946241378785,
+                                "y": 0.16021525859832765,
+                                "z": -2.165266275405884
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 0.32500002533197405,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.01657583937048912,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.0015758397057652474,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.017752664163708688,
+                    "sourceGroundDifferenceMeters": 0.0011768247932195664,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.2734031677246094,
+                                "y": 0.9441124796867371,
+                                "z": 0.2828962802886963
+                            },
+                            "worldPosition": {
+                                "x": -0.7984031438827515,
+                                "y": 0.9441124796867371,
+                                "z": -2.2171037197113039
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.33477652072906496,
+                                "y": 0.8872681856155396,
+                                "z": -0.2001023292541504
+                            },
+                            "worldPosition": {
+                                "x": -0.19022345542907716,
+                                "y": 0.8872681856155396,
+                                "z": -2.7001023292541506
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.12076103687286377,
+                                "y": 0.19652733206748963,
+                                "z": -0.44906044006347659
+                            },
+                            "worldPosition": {
+                                "x": -0.6457610130310059,
+                                "y": 0.19652733206748963,
+                                "z": -2.9490604400634767
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.13488984107971192,
+                                "y": 0.12251466512680054,
+                                "z": 0.3164095878601074
+                            },
+                            "worldPosition": {
+                                "x": -0.3901101350784302,
+                                "y": 0.12251466512680054,
+                                "z": -2.1835904121398927
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.8333333134651184,
+                    "sampledClipSeconds": 0.36111113064818847,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.03657310828566551,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.021573107689619066,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.032713986933231357,
+                    "sourceGroundDifferenceMeters": -0.0038591213524341585,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.31426382064819338,
+                                "y": 0.8965160250663757,
+                                "z": 0.20347094535827638
+                            },
+                            "worldPosition": {
+                                "x": 0.21073615550994874,
+                                "y": 0.8965160250663757,
+                                "z": -2.2965290546417238
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3581578731536865,
+                                "y": 0.8663562536239624,
+                                "z": -0.12338733673095703
+                            },
+                            "worldPosition": {
+                                "x": 0.8831578493118286,
+                                "y": 0.8663562536239624,
+                                "z": -2.623387336730957
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1270296573638916,
+                                "y": 0.25875696539878847,
+                                "z": -0.4560427665710449
+                            },
+                            "worldPosition": {
+                                "x": 0.3979703187942505,
+                                "y": 0.25875696539878847,
+                                "z": -2.956042766571045
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.1353309154510498,
+                                "y": 0.11434251070022583,
+                                "z": 0.1943366527557373
+                            },
+                            "worldPosition": {
+                                "x": 0.6603308916091919,
+                                "y": 0.11434251070022583,
+                                "z": -2.3056633472442629
+                            }
+                        }
+                    ]
+                },
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.9166666865348816,
+                    "sampledClipSeconds": 0.3972222617930843,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.026015352457761766,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.011015352793037892,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": -0.022960877045989038,
+                    "sourceGroundDifferenceMeters": -0.003054475411772728,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.34288859367370608,
+                                "y": 0.9057793617248535,
+                                "z": 0.08139586448669434
+                            },
+                            "worldPosition": {
+                                "x": 1.2321113348007203,
+                                "y": 0.9057793617248535,
+                                "z": -2.4186041355133058
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.36596643924713137,
+                                "y": 0.8961779475212097,
+                                "z": -0.03457307815551758
+                            },
+                            "worldPosition": {
+                                "x": 1.9409663677215577,
+                                "y": 0.8961779475212097,
+                                "z": -2.5345730781555177
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1619257926940918,
+                                "y": 0.28040891885757449,
+                                "z": -0.30618977546691897
+                            },
+                            "worldPosition": {
+                                "x": 1.4130741357803345,
+                                "y": 0.28040891885757449,
+                                "z": -2.806189775466919
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.16122138500213624,
+                                "y": 0.1255548894405365,
+                                "z": 0.050507307052612308
+                            },
+                            "worldPosition": {
+                                "x": 1.7362213134765626,
+                                "y": 0.1255548894405365,
+                                "z": -2.4494926929473879
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "03-three-quarter.png",
+            "view": "quarter",
+            "clip": "SOURCE_REST",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": true,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "SOURCE_REST",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": false,
+                    "minimumMeshWorldY": 1.5759393789949173e-8,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.015000015497207642,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            },
+                            "worldPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            },
+                            "worldPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            },
+                            "worldPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            },
+                            "worldPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "08-foc-idle-retarget-0.25.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Idle",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.007093505468219519,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Idle",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.027334026992321016,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.012334027327597142,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5818163752555847,
+                                "y": 1.2312206029891968,
+                                "z": -0.023954153060913087
+                            },
+                            "worldPosition": {
+                                "x": -0.5818163752555847,
+                                "y": 1.2312206029891968,
+                                "z": -0.023954153060913087
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.5694203972816467,
+                                "y": 1.2230724096298218,
+                                "z": -0.03191816806793213
+                            },
+                            "worldPosition": {
+                                "x": 0.5694203972816467,
+                                "y": 1.2230724096298218,
+                                "z": -0.03191816806793213
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15026350319385529,
+                                "y": 0.11191518604755402,
+                                "z": -0.018768563866615297
+                            },
+                            "worldPosition": {
+                                "x": -0.15026350319385529,
+                                "y": 0.11191518604755402,
+                                "z": -0.018768563866615297
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.14550112187862397,
+                                "y": 0.11145128309726715,
+                                "z": -0.018287137150764467
+                            },
+                            "worldPosition": {
+                                "x": 0.14550112187862397,
+                                "y": 0.11145128309726715,
+                                "z": -0.018287137150764467
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "08-foc-idle-retarget.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Idle",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.5,
+            "maximumJointTravelMeters": 0.007093505468219519,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Idle",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 1.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.027272406965494157,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.012272407300770283,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5821529030799866,
+                                "y": 1.2284523248672486,
+                                "z": -0.026416659355163575
+                            },
+                            "worldPosition": {
+                                "x": -0.5821529030799866,
+                                "y": 1.2284523248672486,
+                                "z": -0.026416659355163575
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.569728434085846,
+                                "y": 1.2201273441314698,
+                                "z": -0.034409403800964358
+                            },
+                            "worldPosition": {
+                                "x": 0.569728434085846,
+                                "y": 1.2201273441314698,
+                                "z": -0.034409403800964358
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15026085078716279,
+                                "y": 0.1121649295091629,
+                                "z": -0.011696115136146546
+                            },
+                            "worldPosition": {
+                                "x": -0.15026085078716279,
+                                "y": 0.1121649295091629,
+                                "z": -0.011696115136146546
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.14550372958183289,
+                                "y": 0.11170519888401032,
+                                "z": -0.011198177933692932
+                            },
+                            "worldPosition": {
+                                "x": 0.14550372958183289,
+                                "y": 0.11170519888401032,
+                                "z": -0.011198177933692932
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "08-foc-idle-retarget-0.75.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Idle",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.75,
+            "maximumJointTravelMeters": 0.007093505468219519,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Idle",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 1.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.027141541242599489,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.012141541577875615,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5824536681175232,
+                                "y": 1.2257306575775147,
+                                "z": -0.02881157398223877
+                            },
+                            "worldPosition": {
+                                "x": -0.5824536681175232,
+                                "y": 1.2257306575775147,
+                                "z": -0.02881157398223877
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.5700020790100098,
+                                "y": 1.2172247171401978,
+                                "z": -0.03682708740234375
+                            },
+                            "worldPosition": {
+                                "x": 0.5700020790100098,
+                                "y": 1.2172247171401978,
+                                "z": -0.03682708740234375
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1502581685781479,
+                                "y": 0.11247076094150543,
+                                "z": -0.0046214014291763309
+                            },
+                            "worldPosition": {
+                                "x": -0.1502581685781479,
+                                "y": 0.11247076094150543,
+                                "z": -0.0046214014291763309
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.14550639688968659,
+                                "y": 0.112015500664711,
+                                "z": -0.004107251763343811
+                            },
+                            "worldPosition": {
+                                "x": 0.14550639688968659,
+                                "y": 0.112015500664711,
+                                "z": -0.004107251763343811
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "foc-turn-retarget-0.25.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Turn",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.4460192322731018,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Turn",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.02727225050330162,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.012272250838577748,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.4303237199783325,
+                                "y": 1.228452205657959,
+                                "z": 0.39296507835388186
+                            },
+                            "worldPosition": {
+                                "x": -0.4303237199783325,
+                                "y": 1.228452205657959,
+                                "z": 0.39296507835388186
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.378527969121933,
+                                "y": 1.2201271057128907,
+                                "z": -0.42719006538391116
+                            },
+                            "worldPosition": {
+                                "x": 0.378527969121933,
+                                "y": 1.2201271057128907,
+                                "z": -0.42719006538391116
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1145208403468132,
+                                "y": 0.11216482520103455,
+                                "z": 0.0979800820350647
+                            },
+                            "worldPosition": {
+                                "x": -0.1145208403468132,
+                                "y": 0.11216482520103455,
+                                "z": 0.0979800820350647
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.09496824443340302,
+                                "y": 0.11170512437820435,
+                                "z": -0.11080524325370789
+                            },
+                            "worldPosition": {
+                                "x": 0.09496824443340302,
+                                "y": 0.11170512437820435,
+                                "z": -0.11080524325370789
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "foc-turn-retarget.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Turn",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.5,
+            "maximumJointTravelMeters": 0.4460192322731018,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Turn",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 1.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.027272332459688188,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.012272332794964314,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5821531414985657,
+                                "y": 1.2284523248672486,
+                                "z": -0.026416540145874025
+                            },
+                            "worldPosition": {
+                                "x": -0.5821531414985657,
+                                "y": 1.2284523248672486,
+                                "z": -0.026416540145874025
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.5697284936904907,
+                                "y": 1.2201272249221802,
+                                "z": -0.034409165382385257
+                            },
+                            "worldPosition": {
+                                "x": 0.5697284936904907,
+                                "y": 1.2201272249221802,
+                                "z": -0.034409165382385257
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15026049315929414,
+                                "y": 0.11216463148593903,
+                                "z": -0.011696293950080872
+                            },
+                            "worldPosition": {
+                                "x": -0.15026049315929414,
+                                "y": 0.11216463148593903,
+                                "z": -0.011696293950080872
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.14550378918647767,
+                                "y": 0.11170502007007599,
+                                "z": -0.011198177933692932
+                            },
+                            "worldPosition": {
+                                "x": 0.14550378918647767,
+                                "y": 0.11170502007007599,
+                                "z": -0.011198177933692932
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "foc-turn-retarget-0.75.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Turn",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.75,
+            "maximumJointTravelMeters": 0.4460192322731018,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Turn",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 1.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.027272533625364305,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.01227253396064043,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.39296483993530276,
+                                "y": 1.228452205657959,
+                                "z": -0.43032383918762209
+                            },
+                            "worldPosition": {
+                                "x": -0.39296483993530276,
+                                "y": 1.228452205657959,
+                                "z": -0.43032383918762209
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.4271899461746216,
+                                "y": 1.2201272249221802,
+                                "z": 0.3785279393196106
+                            },
+                            "worldPosition": {
+                                "x": 0.4271899461746216,
+                                "y": 1.2201272249221802,
+                                "z": 0.3785279393196106
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.09797953069210053,
+                                "y": 0.11216449737548828,
+                                "z": -0.11452081799507141
+                            },
+                            "worldPosition": {
+                                "x": -0.09797953069210053,
+                                "y": 0.11216449737548828,
+                                "z": -0.11452081799507141
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.11080533266067505,
+                                "y": 0.11170497536659241,
+                                "z": 0.09496825933456421
+                            },
+                            "worldPosition": {
+                                "x": 0.11080533266067505,
+                                "y": 0.11170497536659241,
+                                "z": 0.09496825933456421
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "09-foc-attack-retarget-0.25.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_OneHandedAttack",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.4859819710254669,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_OneHandedAttack",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.019177496433258058,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.0041774967685341839,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5772784948348999,
+                                "y": 1.2365471124649048,
+                                "z": -0.02516460418701172
+                            },
+                            "worldPosition": {
+                                "x": -0.5772784948348999,
+                                "y": 1.2365471124649048,
+                                "z": -0.02516460418701172
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.39741554856300356,
+                                "y": 1.225658655166626,
+                                "z": 0.09265899658203125
+                            },
+                            "worldPosition": {
+                                "x": 0.39741554856300356,
+                                "y": 1.225658655166626,
+                                "z": 0.09265899658203125
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.14538642764091493,
+                                "y": 0.12025977671146393,
+                                "z": -0.010444000363349915
+                            },
+                            "worldPosition": {
+                                "x": -0.14538642764091493,
+                                "y": 0.12025977671146393,
+                                "z": -0.010444000363349915
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.15037815272808076,
+                                "y": 0.11980004608631134,
+                                "z": -0.009946063160896302
+                            },
+                            "worldPosition": {
+                                "x": 0.15037815272808076,
+                                "y": 0.11980004608631134,
+                                "z": -0.009946063160896302
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "09-foc-attack-retarget.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_OneHandedAttack",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.5,
+            "maximumJointTravelMeters": 0.4859819710254669,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_OneHandedAttack",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 1.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.02951020374894142,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.014510204084217549,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5757524967193604,
+                                "y": 1.2262145280838013,
+                                "z": -0.023436665534973146
+                            },
+                            "worldPosition": {
+                                "x": -0.5757524967193604,
+                                "y": 1.2262145280838013,
+                                "z": -0.023436665534973146
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.5641734004020691,
+                                "y": 1.3909670114517213,
+                                "z": 0.16895556449890138
+                            },
+                            "worldPosition": {
+                                "x": 0.5641734004020691,
+                                "y": 1.3909670114517213,
+                                "z": 0.16895556449890138
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.14386044442653657,
+                                "y": 0.10992707312107086,
+                                "z": -0.00871606171131134
+                            },
+                            "worldPosition": {
+                                "x": -0.14386044442653657,
+                                "y": 0.10992707312107086,
+                                "z": -0.00871606171131134
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.1519041359424591,
+                                "y": 0.10946734249591828,
+                                "z": -0.008218124508857727
+                            },
+                            "worldPosition": {
+                                "x": 0.1519041359424591,
+                                "y": 0.10946734249591828,
+                                "z": -0.008218124508857727
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "09-foc-attack-retarget-0.75.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_OneHandedAttack",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.75,
+            "maximumJointTravelMeters": 0.4859819710254669,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_OneHandedAttack",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 1.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.019177496433258058,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.0041774967685341839,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5772784948348999,
+                                "y": 1.2365471124649048,
+                                "z": -0.02516460418701172
+                            },
+                            "worldPosition": {
+                                "x": -0.5772784948348999,
+                                "y": 1.2365471124649048,
+                                "z": -0.02516460418701172
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.39741554856300356,
+                                "y": 1.225658655166626,
+                                "z": 0.09265899658203125
+                            },
+                            "worldPosition": {
+                                "x": 0.39741554856300356,
+                                "y": 1.225658655166626,
+                                "z": 0.09265899658203125
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.14538642764091493,
+                                "y": 0.12025977671146393,
+                                "z": -0.010444000363349915
+                            },
+                            "worldPosition": {
+                                "x": -0.14538642764091493,
+                                "y": 0.12025977671146393,
+                                "z": -0.010444000363349915
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.15037815272808076,
+                                "y": 0.11980004608631134,
+                                "z": -0.009946063160896302
+                            },
+                            "worldPosition": {
+                                "x": 0.15037815272808076,
+                                "y": 0.11980004608631134,
+                                "z": -0.009946063160896302
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "foc-armraise-retarget-0.25.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_ArmRaise",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.8383152484893799,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_ArmRaise",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.006462394259870052,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.00853760540485382,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.2788878083229065,
+                                "y": 1.2352310419082642,
+                                "z": 0.08334076404571533
+                            },
+                            "worldPosition": {
+                                "x": -0.2788878083229065,
+                                "y": 1.2352310419082642,
+                                "z": 0.08334076404571533
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.28399062156677248,
+                                "y": 1.2239338159561158,
+                                "z": 0.07457435131072998
+                            },
+                            "worldPosition": {
+                                "x": 0.28399062156677248,
+                                "y": 1.2239338159561158,
+                                "z": 0.07457435131072998
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15004834532737733,
+                                "y": 0.13297487795352937,
+                                "z": -0.014769390225410462
+                            },
+                            "worldPosition": {
+                                "x": -0.15004834532737733,
+                                "y": 0.13297487795352937,
+                                "z": -0.014769390225410462
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.14571623504161836,
+                                "y": 0.13251514732837678,
+                                "z": -0.014271453022956849
+                            },
+                            "worldPosition": {
+                                "x": 0.14571623504161836,
+                                "y": 0.13251514732837678,
+                                "z": -0.014271453022956849
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "foc-armraise-retarget.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_ArmRaise",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.5,
+            "maximumJointTravelMeters": 0.8383152484893799,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_ArmRaise",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 1.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.004388243891298771,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.019388243556022645,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": 0.22118429839611054,
+                                "y": 1.4113390445709229,
+                                "z": 0.1284191608428955
+                            },
+                            "worldPosition": {
+                                "x": 0.22118429839611054,
+                                "y": 1.4113390445709229,
+                                "z": 0.1284191608428955
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": -0.2029281109571457,
+                                "y": 1.4098376035690308,
+                                "z": 0.1295309066772461
+                            },
+                            "worldPosition": {
+                                "x": -0.2029281109571457,
+                                "y": 1.4098376035690308,
+                                "z": 0.1295309066772461
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.1480741649866104,
+                                "y": 0.14382554590702058,
+                                "z": -0.01222236454486847
+                            },
+                            "worldPosition": {
+                                "x": -0.1480741649866104,
+                                "y": 0.14382554590702058,
+                                "z": -0.01222236454486847
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.14769041538238526,
+                                "y": 0.14336581528186799,
+                                "z": -0.011724427342414856
+                            },
+                            "worldPosition": {
+                                "x": 0.14769041538238526,
+                                "y": 0.14336581528186799,
+                                "z": -0.011724427342414856
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "foc-armraise-retarget-0.75.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_ArmRaise",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.75,
+            "maximumJointTravelMeters": 0.8383152484893799,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_ArmRaise",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 1.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.006462394259870052,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.00853760540485382,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.2788878083229065,
+                                "y": 1.2352310419082642,
+                                "z": 0.08334076404571533
+                            },
+                            "worldPosition": {
+                                "x": -0.2788878083229065,
+                                "y": 1.2352310419082642,
+                                "z": 0.08334076404571533
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.28399062156677248,
+                                "y": 1.2239338159561158,
+                                "z": 0.07457435131072998
+                            },
+                            "worldPosition": {
+                                "x": 0.28399062156677248,
+                                "y": 1.2239338159561158,
+                                "z": 0.07457435131072998
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.15004834532737733,
+                                "y": 0.13297487795352937,
+                                "z": -0.014769390225410462
+                            },
+                            "worldPosition": {
+                                "x": -0.15004834532737733,
+                                "y": 0.13297487795352937,
+                                "z": -0.014769390225410462
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.14571623504161836,
+                                "y": 0.13251514732837678,
+                                "z": -0.014271453022956849
+                            },
+                            "worldPosition": {
+                                "x": 0.14571623504161836,
+                                "y": 0.13251514732837678,
+                                "z": -0.014271453022956849
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "10-foc-crouch-retarget-0.25.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Crouch",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.25342631340026858,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Crouch",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.05269249156117439,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.037692490965127948,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5580621957778931,
+                                "y": 1.1671569347381592,
+                                "z": 0.021645069122314454
+                            },
+                            "worldPosition": {
+                                "x": -0.5580621957778931,
+                                "y": 1.1671569347381592,
+                                "z": 0.021645069122314454
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.5460309982299805,
+                                "y": 1.1566888093948365,
+                                "z": 0.011543989181518555
+                            },
+                            "worldPosition": {
+                                "x": 0.5460309982299805,
+                                "y": 1.1566888093948365,
+                                "z": 0.011543989181518555
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.2134092003107071,
+                                "y": 0.09587324410676956,
+                                "z": -0.052216559648513797
+                            },
+                            "worldPosition": {
+                                "x": -0.2134092003107071,
+                                "y": 0.09587324410676956,
+                                "z": -0.052216559648513797
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21167321503162385,
+                                "y": 0.09922654181718826,
+                                "z": -0.0605638325214386
+                            },
+                            "worldPosition": {
+                                "x": 0.21167321503162385,
+                                "y": 0.09922654181718826,
+                                "z": -0.0605638325214386
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "10-foc-crouch-retarget.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Crouch",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.5,
+            "maximumJointTravelMeters": 0.25342631340026858,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Crouch",
+                    "normalizedPhase": 0.5,
+                    "sampledClipSeconds": 1.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.0717446431517601,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.056744642555713657,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5233158469200134,
+                                "y": 1.0408508777618409,
+                                "z": 0.1334857940673828
+                            },
+                            "worldPosition": {
+                                "x": -0.5233158469200134,
+                                "y": 1.0408508777618409,
+                                "z": 0.1334857940673828
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.5143246054649353,
+                                "y": 1.028629183769226,
+                                "z": 0.11760467290878296
+                            },
+                            "worldPosition": {
+                                "x": 0.5143246054649353,
+                                "y": 1.028629183769226,
+                                "z": 0.11760467290878296
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.23872019350528718,
+                                "y": 0.08354496955871582,
+                                "z": -0.06567229330539704
+                            },
+                            "worldPosition": {
+                                "x": -0.23872019350528718,
+                                "y": 0.08354496955871582,
+                                "z": -0.06567229330539704
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.23825225234031678,
+                                "y": 0.08854109048843384,
+                                "z": -0.07582320272922516
+                            },
+                            "worldPosition": {
+                                "x": 0.23825225234031678,
+                                "y": 0.08854109048843384,
+                                "z": -0.07582320272922516
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "10-foc-crouch-retarget-0.75.png",
+            "view": "quarter",
+            "clip": "ANM_FOCDiagnostic_Crouch",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.75,
+            "maximumJointTravelMeters": 0.25342631340026858,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 60,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "ANM_FOCDiagnostic_Crouch",
+                    "normalizedPhase": 0.75,
+                    "sampledClipSeconds": 1.5,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": -0.05269249156117439,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": -0.037692490965127948,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.5580621957778931,
+                                "y": 1.1671569347381592,
+                                "z": 0.021645069122314454
+                            },
+                            "worldPosition": {
+                                "x": -0.5580621957778931,
+                                "y": 1.1671569347381592,
+                                "z": 0.021645069122314454
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.5460309982299805,
+                                "y": 1.1566888093948365,
+                                "z": 0.011543989181518555
+                            },
+                            "worldPosition": {
+                                "x": 0.5460309982299805,
+                                "y": 1.1566888093948365,
+                                "z": 0.011543989181518555
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.2134092003107071,
+                                "y": 0.09587324410676956,
+                                "z": -0.052216559648513797
+                            },
+                            "worldPosition": {
+                                "x": -0.2134092003107071,
+                                "y": 0.09587324410676956,
+                                "z": -0.052216559648513797
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21167321503162385,
+                                "y": 0.09922654181718826,
+                                "z": -0.0605638325214386
+                            },
+                            "worldPosition": {
+                                "x": 0.21167321503162385,
+                                "y": 0.09922654181718826,
+                                "z": -0.0605638325214386
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "texture-4096.png",
+            "view": "quarter",
+            "clip": "SOURCE_REST",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot_4096",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": true,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "SOURCE_REST",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": false,
+                    "minimumMeshWorldY": 1.5759393789949173e-8,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.015000015497207642,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            },
+                            "worldPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            },
+                            "worldPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            },
+                            "worldPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            },
+                            "worldPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "texture-2048.png",
+            "view": "quarter",
+            "clip": "SOURCE_REST",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": true,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "SOURCE_REST",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": false,
+                    "minimumMeshWorldY": 1.5759393789949173e-8,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.015000015497207642,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            },
+                            "worldPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            },
+                            "worldPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            },
+                            "worldPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            },
+                            "worldPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "texture-1024.png",
+            "view": "quarter",
+            "clip": "SOURCE_REST",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.0,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot_1024",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": true,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "SOURCE_REST",
+                    "normalizedPhase": 0.0,
+                    "sampledClipSeconds": 0.0,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": false,
+                    "minimumMeshWorldY": 1.5759393789949173e-8,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.015000015497207642,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            },
+                            "worldPosition": {
+                                "x": -0.3916841149330139,
+                                "y": 0.9476361870765686,
+                                "z": 0.06002098321914673
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            },
+                            "worldPosition": {
+                                "x": 0.3802066147327423,
+                                "y": 0.9514459371566773,
+                                "z": 0.0568501353263855
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            },
+                            "worldPosition": {
+                                "x": -0.22268742322921754,
+                                "y": 0.1335100680589676,
+                                "z": -0.015620633959770203
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            },
+                            "worldPosition": {
+                                "x": 0.21506747603416444,
+                                "y": 0.133525088429451,
+                                "z": -0.017983004450798036
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "lod-0-walking.png",
+            "view": "quarter",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.001332436571829021,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.016332436352968217,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": 0.0008911340264603496,
+                    "sourceGroundDifferenceMeters": 0.0004413025453686714,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "lod-1-walking.png",
+            "view": "quarter",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 1,
+            "triangles": 5752,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.0011402592062950135,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.01614025980234146,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "lod-2-walking.png",
+            "view": "quarter",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 2,
+            "triangles": 2396,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.0027017518877983095,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.017701752483844758,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "lod-0-tactical.png",
+            "view": "tactical",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 0,
+            "triangles": 9586,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.001332436571829021,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.016332436352968217,
+                    "sourceGroundComparisonAvailable": true,
+                    "sourceMinimumMeshY": 0.0008911340264603496,
+                    "sourceGroundDifferenceMeters": 0.0004413025453686714,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "lod-1-tactical.png",
+            "view": "tactical",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 1,
+            "triangles": 5752,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.0011402592062950135,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.01614025980234146,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "lod-2-tactical.png",
+            "view": "tactical",
+            "clip": "Walking",
+            "signature": "b46a646ad6cd8928",
+            "normalizedPhase": 0.25,
+            "maximumJointTravelMeters": 0.0,
+            "actors": 1,
+            "rendererCount": 1,
+            "materialSlots": 1,
+            "boneCount": 23,
+            "animationEvaluationSteps": 0,
+            "forcedLod": 2,
+            "triangles": 2396,
+            "material": "MAT_HasanAga_MeshyPilot",
+            "humanoidAvatarValid": true,
+            "realWindowsPlayer": true,
+            "sourceRestBindPoseRestored": false,
+            "poses": [
+                {
+                    "actor": "Isolated Meshy view template(Clone)",
+                    "clip": "Walking",
+                    "normalizedPhase": 0.25,
+                    "sampledClipSeconds": 0.10833334177732468,
+                    "runtimeControllerDetached": true,
+                    "renderBoundaryPoseStable": true,
+                    "minimumMeshWorldY": 0.0027017518877983095,
+                    "groundWorldY": -0.014999999664723874,
+                    "minimumMeshGroundClearance": 0.017701752483844758,
+                    "sourceGroundComparisonAvailable": false,
+                    "sourceMinimumMeshY": 0.0,
+                    "sourceGroundDifferenceMeters": 0.0,
+                    "joints": [
+                        {
+                            "name": "LeftHand",
+                            "actorLocalPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            },
+                            "worldPosition": {
+                                "x": -0.32044169306755068,
+                                "y": 0.8963404893875122,
+                                "z": -0.2241755723953247
+                            }
+                        },
+                        {
+                            "name": "RightHand",
+                            "actorLocalPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            },
+                            "worldPosition": {
+                                "x": 0.37919071316719057,
+                                "y": 0.971104621887207,
+                                "z": 0.23350268602371217
+                            }
+                        },
+                        {
+                            "name": "LeftFoot",
+                            "actorLocalPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            },
+                            "worldPosition": {
+                                "x": -0.16619503498077393,
+                                "y": 0.1441746950149536,
+                                "z": 0.33521223068237307
+                            }
+                        },
+                        {
+                            "name": "RightFoot",
+                            "actorLocalPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            },
+                            "worldPosition": {
+                                "x": 0.17946314811706544,
+                                "y": 0.17871738970279694,
+                                "z": -0.4014403223991394
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "performance": {
+        "status": "TECHNICAL_BENCHMARK_NOT_PRODUCTION_ACCEPTANCE",
+        "unityVersion": "",
+        "graphicsDevice": "",
+        "graphicsApi": "",
+        "platform": "",
+        "clip": "",
+        "scope": "Empty-loadout single Hasan variant through real VisualSoldier3DAssembler/cache/VisualSoldierPool. Cold means fresh FOC caches, not cold disk/GPU assets. No gameplay, save, horse or production catalog mutation.",
+        "cases": []
+    }
+}

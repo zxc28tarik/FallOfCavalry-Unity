@@ -28,7 +28,8 @@ namespace FOC.Tests.VisualPipeline
             Assert.That(animator.avatar, Is.Not.Null);
             Assert.That(animator.avatar.isValid && animator.avatar.isHuman, Is.True);
             var skins = prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-            Assert.That(skins.Length, Is.EqualTo(1), "The supplied pilot is one whole-clothed LOD0, not duplicated body/head/clothing actors.");
+            AssertWholeCharacterLods(prefab);
+            Assert.That(skins.Length, Is.EqualTo(3), "Original LOD0 plus two genuinely reduced meshes sharing one rig.");
             Assert.That(skins[0].sharedMesh, Is.Not.Null);
             Assert.That(skins[0].bones.Length, Is.EqualTo(23));
             Assert.That(skins[0].sharedMesh.bindposes.Length, Is.EqualTo(23));
@@ -169,7 +170,7 @@ namespace FOC.Tests.VisualPipeline
                 Assert.That(catalog.Assets.Count, Is.EqualTo(1));
                 Assert.That(catalog.Assets[0].category, Is.EqualTo(VisualAssetCategory.ConsolidatedCharacter));
                 Assert.That(catalog.Assets[0].prefab, Is.SameAs(Prefab()));
-                Assert.That(catalog.Assets[0].lodCount, Is.EqualTo(1), "Only the supplied LOD0 exists; three LODs remain a later gate.");
+                Assert.That(catalog.Assets[0].lodCount, Is.EqualTo(3));
                 Assert.That(catalog.Assets[0].rendererCount, Is.EqualTo(1));
                 Assert.That(catalog.Profiles.Count, Is.EqualTo(1));
                 var profile = catalog.Profiles[0];
@@ -211,7 +212,7 @@ namespace FOC.Tests.VisualPipeline
                 Assert.That(first.RepresentationKind, Is.EqualTo(VisualRepresentationKind.Consolidated));
                 Assert.That(view.SpawnedModules.Count, Is.EqualTo(1));
                 Assert.That(view.SpawnedModules[0].name, Is.EqualTo(MeshyHasanPilotCatalog.CharacterId));
-                Assert.That(root.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length, Is.EqualTo(1));
+                AssertWholeCharacterLods(root);
                 Assert.That(root.GetComponentsInChildren<Animator>(true).Single().avatar, Is.SameAs(Prefab().GetComponent<Animator>().avatar));
                 view.ReleaseVisual();
                 Assert.That(view.Binding.IsBound, Is.False);
@@ -241,7 +242,7 @@ namespace FOC.Tests.VisualPipeline
                 Assert.That(trial.Assembler.ActiveLeaseCount, Is.EqualTo(12));
                 Assert.That(views.Select(v => v.ActiveRepresentationRoot.GetInstanceID()).Distinct().Count(), Is.EqualTo(12));
                 Assert.That(views.All(v => v.SpawnedModules.Count == 1), Is.True);
-                Assert.That(views.All(v => v.ActiveRepresentationRoot.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length == 1), Is.True);
+                foreach(var view in views)AssertWholeCharacterLods(view.ActiveRepresentationRoot);
                 Assert.That(trial.Assembler.CachedVariantCount, Is.EqualTo(1));
                 foreach (var view in views) view.ReleaseVisual();
                 Assert.That(trial.Assembler.PooledInstanceCount, Is.EqualTo(12));
@@ -271,7 +272,7 @@ namespace FOC.Tests.VisualPipeline
                 trial.Assemble(second, Soldier(1));
                 Assert.That(second, Is.SameAs(first));
                 Assert.That(second.ActiveRepresentationRoot, Is.SameAs(root));
-                Assert.That(second.ActiveRepresentationRoot.GetComponentsInChildren<SkinnedMeshRenderer>(true).Length, Is.EqualTo(1));
+                AssertWholeCharacterLods(second.ActiveRepresentationRoot);
                 Assert.That(pool.CreatedViewCount, Is.EqualTo(1));
                 Assert.That(pool.ReusedViewCount, Is.EqualTo(1));
                 pool.Return(second);
@@ -361,6 +362,47 @@ namespace FOC.Tests.VisualPipeline
             }
             CollectionAssert.AreEqual(bytes, File.ReadAllBytes(ProductionCatalog));
             Assert.That(EditorJsonUtility.ToJson(production), Is.EqualTo(json));
+        }
+
+        [Test]
+        public void MaterialIsOpaqueNonEmissiveAndDoesNotInventNormalMap()
+        {
+            foreach(var size in new[]{4096,2048,1024})
+            {
+                var material=AssetDatabase.LoadAssetAtPath<Material>(MeshyHasanPilotPipeline.OutputRoot+"/MAT_HasanAga_MeshyPilot"+(size==2048?"":"_"+size)+".mat");
+                Assert.That(material,Is.Not.Null);Assert.That(material.GetFloat("_Mode"),Is.Zero);
+                Assert.That(material.GetFloat("_ZWrite"),Is.EqualTo(1));Assert.That(material.IsKeywordEnabled("_EMISSION"),Is.False);
+                Assert.That(material.GetTexture("_EmissionMap"),Is.Null);Assert.That(material.GetColor("_EmissionColor"),Is.EqualTo(Color.black));
+                Assert.That(material.GetTexture("_BumpMap"),Is.Null);Assert.That(material.IsKeywordEnabled("_NORMALMAP"),Is.False);
+                foreach(var keyword in new[]{"_ALPHATEST_ON","_ALPHABLEND_ON","_ALPHAPREMULTIPLY_ON"})Assert.That(material.IsKeywordEnabled(keyword),Is.False);
+                foreach(var property in new[]{"_MainTex","_MetallicGlossMap"})
+                {
+                    var texture=material.GetTexture(property);Assert.That(texture,Is.Not.Null);Assert.That(texture.width,Is.EqualTo(size));
+                    var importer=(TextureImporter)AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(texture));
+                    Assert.That(importer.sRGBTexture,Is.EqualTo(property=="_MainTex"));Assert.That(importer.mipmapEnabled,Is.True);
+                    Assert.That(importer.textureCompression,Is.Not.EqualTo(TextureImporterCompression.Uncompressed));
+                }
+            }
+        }
+
+        [Test]
+        public void MediaCleanedRuntimeSourceDoesNotAcceptUnverifiedOrOriginalEmbeddedSource()
+        {
+            Assert.DoesNotThrow(()=>MeshyHasanPilotLodImport.ValidateRuntimeSource(MeshyHasanPilotLodImport.RuntimeHash));
+            Assert.Throws<InvalidOperationException>(()=>MeshyHasanPilotLodImport.ValidateRuntimeSource(MeshyHasanPilotPipeline.ExpectedSourceHash));
+        }
+
+        private static void AssertWholeCharacterLods(GameObject root)
+        {
+            var group=root.GetComponentsInChildren<LODGroup>(true).Single();var lods=group.GetLODs();
+            Assert.That(lods.Length,Is.EqualTo(3));Assert.That(lods.All(l=>l.renderers.Length==1),Is.True);
+            var skins=lods.Select(l=>l.renderers.Single() as SkinnedMeshRenderer).ToArray();
+            Assert.That(skins.All(s=>s!=null&&s.bones.Length==23&&s.sharedMesh.bindposes.Length==23),Is.True);
+            Assert.That(skins.Select(s=>s.sharedMesh).Distinct().Count(),Is.EqualTo(3));
+            Assert.That(skins.SelectMany(s=>s.bones).Distinct().Count(),Is.EqualTo(23),"LOD must share the retained rig, not duplicate skeletons.");
+            Assert.That(skins[0].sharedMesh.triangles.Length/3,Is.EqualTo(9586));
+            Assert.That(skins[1].sharedMesh.triangles.Length,Is.LessThan(skins[0].sharedMesh.triangles.Length));
+            Assert.That(skins[2].sharedMesh.triangles.Length,Is.LessThan(skins[1].sharedMesh.triangles.Length));
         }
 
         private static GameObject Prefab()

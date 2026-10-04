@@ -1,0 +1,140 @@
+{
+    "version": 1,
+    "samplesPerSecond": 60,
+    "method": "Sample unchanged FOC diagnostic Transform clips on a source-prefab clone with temporary Generic sampling Avatar (same unchanged bones); existing saved Human Avatar HumanPoseHandler.GetHumanPose -> new Animator muscle / RootT / RootQ curves. Temporary sampling Avatar is never saved.",
+    "bodySpace": "Unity6000.3 GetHumanPose returns world center of mass divided by source Avatar humanScale. Sampling root is identity at world origin; write this already-normalized value once to RootT, without a second scale factor.",
+    "origin": "Original FOC procedural diagnostic motion, not Meshy-supplied motion, mocap, or an existing shared Humanoid animation library.",
+    "limitations": "Converting format does not improve choreography, contact, grip or garment deformation. No finger/grip blendshapes transferred. MountedSeated is only a pose donor, not mounted integration acceptance.",
+    "inputs": [
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft.prefab",
+            "sha256": "2ab566d3c638b3d4b2cb4394d001afa4ecbcfbbbdd97b1d998083e468fc64396"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_Avatar.asset",
+            "sha256": "adad6db8d684770436c196b85b0a814200d5004e9a82124d6307f14261e68ec3"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Idle.anim",
+            "sha256": "fdefcebce6cd63ce7fd472f7d8c4551e40d8706dd47406c54765e6c7a1c762d2"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Turn.anim",
+            "sha256": "e2274ef18cd3d0561d441eb42876477cc9547313b895cd6bb6d600a1eeb2354d"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_OneHandedAttack.anim",
+            "sha256": "9d2db3f1c041b81e67773fc774d167d73c726a839fe87986204f4d98d8f6d319"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_ArmRaise.anim",
+            "sha256": "e3ba1698ef6d379ae15d53a020defbf8b4886d62ed9d105c2b626971377d417a"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Crouch.anim",
+            "sha256": "ad19736b4469fffce3b1ddbc24b05a09b6405b970c54e7d3d33cc7a6ba57643f"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_MountedSeated.anim",
+            "sha256": "989949e47ff3f0c51d6c33879ba5fcd09f588360ba5cc1917b3b2d23321863c1"
+        }
+    ],
+    "motions": [
+        {
+            "motion": "Idle",
+            "sourcePath": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Idle.anim",
+            "sourceSha256": "fdefcebce6cd63ce7fd472f7d8c4551e40d8706dd47406c54765e6c7a1c762d2",
+            "outputPath": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Idle.anim",
+            "sourceWasHumanoid": false,
+            "status": "EXISTING_FOC_DIAGNOSTIC_CONVERTED_NOT_PRODUCTION_ACCEPTED",
+            "transformBindings": 189,
+            "ignoredBlendShapeBindings": 6,
+            "sampleCount": 121,
+            "duration": 2.0,
+            "maximumAbsoluteMuscle": 1.0022149085998536,
+            "curveSignature": "0cb959c8df40b276c4e15fed9caba3bc74647483c257a0fac17dd8bb721fa072",
+            "maximumSourceJointTravel": 0.010689913295209408,
+            "maximumSourceJointRotation": 1.2000616788864136
+        },
+        {
+            "motion": "Turn",
+            "sourcePath": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Turn.anim",
+            "sourceSha256": "e2274ef18cd3d0561d441eb42876477cc9547313b895cd6bb6d600a1eeb2354d",
+            "outputPath": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Turn.anim",
+            "sourceWasHumanoid": false,
+            "status": "EXISTING_FOC_DIAGNOSTIC_CONVERTED_NOT_PRODUCTION_ACCEPTED",
+            "transformBindings": 189,
+            "ignoredBlendShapeBindings": 6,
+            "sampleCount": 121,
+            "duration": 2.0,
+            "maximumAbsoluteMuscle": 1.0022151470184327,
+            "curveSignature": "aa793b37e15322b5f58c8063c96bf52e5f98aa3eed4b57f729c4c9b1c1d4df5b",
+            "maximumSourceJointTravel": 0.24405743181705476,
+            "maximumSourceJointRotation": 45.00000762939453
+        },
+        {
+            "motion": "OneHandedAttack",
+            "sourcePath": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_OneHandedAttack.anim",
+            "sourceSha256": "9d2db3f1c041b81e67773fc774d167d73c726a839fe87986204f4d98d8f6d319",
+            "outputPath": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_OneHandedAttack.anim",
+            "sourceWasHumanoid": false,
+            "status": "EXISTING_FOC_DIAGNOSTIC_CONVERTED_NOT_PRODUCTION_ACCEPTED",
+            "transformBindings": 189,
+            "ignoredBlendShapeBindings": 6,
+            "sampleCount": 121,
+            "duration": 2.0,
+            "maximumAbsoluteMuscle": 1.840322494506836,
+            "curveSignature": "dd2bdaf61a51f38d42820460a110679367f3af8a6fc247491ef2d2f326fceb79",
+            "maximumSourceJointTravel": 0.6408784985542297,
+            "maximumSourceJointRotation": 149.20730590820313
+        },
+        {
+            "motion": "ArmRaise",
+            "sourcePath": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_ArmRaise.anim",
+            "sourceSha256": "e3ba1698ef6d379ae15d53a020defbf8b4886d62ed9d105c2b626971377d417a",
+            "outputPath": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_ArmRaise.anim",
+            "sourceWasHumanoid": false,
+            "status": "EXISTING_FOC_DIAGNOSTIC_CONVERTED_NOT_PRODUCTION_ACCEPTED",
+            "transformBindings": 189,
+            "ignoredBlendShapeBindings": 6,
+            "sampleCount": 121,
+            "duration": 2.0,
+            "maximumAbsoluteMuscle": 2.042626142501831,
+            "curveSignature": "5ba082590fb9c0553dc8dff3fcdb1f770fe458302ca39daef4e9002f51ba1887",
+            "maximumSourceJointTravel": 1.0332977771759034,
+            "maximumSourceJointRotation": 161.4386749267578
+        },
+        {
+            "motion": "Crouch",
+            "sourcePath": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Crouch.anim",
+            "sourceSha256": "ad19736b4469fffce3b1ddbc24b05a09b6405b970c54e7d3d33cc7a6ba57643f",
+            "outputPath": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Crouch.anim",
+            "sourceWasHumanoid": false,
+            "status": "EXISTING_FOC_DIAGNOSTIC_CONVERTED_NOT_PRODUCTION_ACCEPTED",
+            "transformBindings": 189,
+            "ignoredBlendShapeBindings": 6,
+            "sampleCount": 121,
+            "duration": 2.0,
+            "maximumAbsoluteMuscle": 1.3214118480682374,
+            "curveSignature": "ae88b8141bef4ad591f73fc449aab5f024abefbf817be657f482d2e24dac2aea",
+            "maximumSourceJointTravel": 0.31229454278945925,
+            "maximumSourceJointRotation": 51.41886520385742
+        },
+        {
+            "motion": "MountedSeated",
+            "sourcePath": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_MountedSeated.anim",
+            "sourceSha256": "989949e47ff3f0c51d6c33879ba5fcd09f588360ba5cc1917b3b2d23321863c1",
+            "outputPath": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_MountedSeated.anim",
+            "sourceWasHumanoid": false,
+            "status": "EXISTING_FOC_DIAGNOSTIC_CONVERTED_NOT_PRODUCTION_ACCEPTED",
+            "transformBindings": 189,
+            "ignoredBlendShapeBindings": 6,
+            "sampleCount": 121,
+            "duration": 2.0,
+            "maximumAbsoluteMuscle": 1.4707850217819214,
+            "curveSignature": "c1fcc12cf994f57507a511a5d8205404e994c352175ec1daca21a6ace877141f",
+            "maximumSourceJointTravel": 0.011463022790849209,
+            "maximumSourceJointRotation": 2.001075506210327
+        }
+    ]
+}

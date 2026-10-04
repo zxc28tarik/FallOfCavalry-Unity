@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory=$true)][string]$UnityEditor,
-    [switch]$AllowDirtyDiagnostic
+    [switch]$AllowDirtyDiagnostic,
+    [switch]$RunBenchmark
 )
 $ErrorActionPreference='Stop'
 $repo=Split-Path -Parent $PSScriptRoot
@@ -46,28 +47,39 @@ try {
     if($dotnetCounts.passed -lt 1 -or $dotnetCounts.passed -ne $dotnetCounts.total){throw '.NET tests contain failures, skips, or no tests.'}
     Invoke-UnityCheck 'unity-verify' @('-executeMethod','FOC.Editor.Visuals.MeshyHasanPilotPipeline.RunVerify')
     Copy-Item -LiteralPath (Join-Path $repo 'TestResults/MeshyPilot/unity-import.json') -Destination (Join-Path $output 'unity-import.json')
+    Invoke-UnityCheck 'unity-motion-verify' @('-executeMethod','FOC.Editor.Visuals.MeshyHasanPilotMotionAdaptation.RunVerify')
+    Copy-Item -LiteralPath (Join-Path $repo 'TestResults/MeshyPilot/motion-adaptation.json') -Destination (Join-Path $output 'motion-adaptation.json')
+    Invoke-UnityCheck 'unity-motion-roundtrip' @('-executeMethod','FOC.Editor.Visuals.MeshyHasanPilotRoundtripAudit.Run')
+    Copy-Item -LiteralPath (Join-Path $repo 'TestResults/MeshyPilot/motion-roundtrip.json') -Destination (Join-Path $output 'motion-roundtrip.json')
     $xmlPath=Join-Path $output 'unity-editmode.xml'
     Invoke-UnityCheck 'unity-editmode' @('-runTests','-testPlatform','EditMode','-testResults',('"'+$xmlPath+'"'))
     [xml]$xml=Get-Content -LiteralPath $xmlPath -Raw
     $tests=$xml.'test-run'
     $unityCounts=@{passed=[int]$tests.passed;failed=[int]$tests.failed;skipped=[int]$tests.skipped;total=[int]$tests.total}
-    if([int]$tests.failed -ne 0 -or [int]$tests.skipped -ne 0 -or [int]$tests.passed -lt 1){throw 'EditMode failure, skip, or no test results.'}
+    if($tests.result -ne 'Passed' -or [int]$tests.failed -ne 0 -or [int]$tests.skipped -ne 0 -or [int]$tests.passed -lt 1 -or [int]$tests.passed -ne [int]$tests.total){throw 'EditMode failure, skip, inconclusive, or no test results.'}
     $pilotCases=@(Select-Xml -Xml $xml -XPath '//test-case[starts-with(@fullname,"FOC.Tests.VisualPipeline.MeshyHasanPilotTests.")]')
-    if($pilotCases.Count -ne 15 -or @($pilotCases | Where-Object {$_.Node.result -ne 'Passed'}).Count -ne 0){throw 'All 15 new Meshy pilot cases must actually be discovered and pass.'}
+    if($pilotCases.Count -ne 17 -or @($pilotCases | Where-Object {$_.Node.result -ne 'Passed'}).Count -ne 0){throw 'All 17 Meshy pilot cases must actually be discovered and pass.'}
     $unityCounts.meshyPilotPassed=$pilotCases.Count
+    foreach($suite in @(@{name='MeshyHasanPilotMotionAdaptationTests';count=9},@{name='MeshyHasanPilotBenchmarkTests';count=3})){
+        $suiteCases=@(Select-Xml -Xml $xml -XPath ('//test-case[starts-with(@fullname,"FOC.Tests.VisualPipeline.'+$suite.name+'.")]'))
+        if($suiteCases.Count -ne $suite.count -or @($suiteCases | Where-Object {$_.Node.result -ne 'Passed'}).Count -ne 0){throw ('All '+$suite.count+' '+$suite.name+' cases must actually be discovered and pass.')}
+        $unityCounts[$suite.name]=$suiteCases.Count
+    }
     Invoke-UnityCheck 'unity-player-build' @('-executeMethod','FOC.Editor.Visuals.MeshyHasanPilotBuild.Run')
     $player=Join-Path $repo 'Artifacts/MeshyPilotPlayer/FallOfCavalry-MeshyPilot.exe'
     $capture=Join-Path $output 'Captures'
     $playerLog=Join-Path $output 'windows-player.log'
     $playerArguments=@('-screen-fullscreen','0','-screen-width','1280','-screen-height','1000','--meshy-output',('"'+$capture+'"'),'--meshy-sha',$sha,'-logFile',('"'+$playerLog+'"'))
+    if($RunBenchmark){$playerArguments+=@('--meshy-run-benchmark','true')}
     $process=Start-Process -FilePath $player -ArgumentList $playerArguments -WindowStyle Hidden -PassThru
     if(-not $process.WaitForExit(240000)){$process.Kill();throw 'Windows pilot capture timed out.'}
     $checks.Add([pscustomobject]@{name='windows-player';command=('"'+$player+'" '+($playerArguments -join ' '));exitCode=$process.ExitCode;log=$playerLog})
     if($process.ExitCode -ne 0){throw 'Windows pilot capture returned nonzero.'}
     if(Select-String -LiteralPath $playerLog -Pattern '(^|\s)((?:[A-Za-z_][A-Za-z0-9_.+]*)?Exception:|Error:)' -Quiet){throw 'Windows player runtime exception/error.'}
-    if(@(Get-ChildItem -LiteralPath $capture -Filter '*.png').Count -lt 12){throw 'Missing real Windows captures.'}
+    if(@(Get-ChildItem -LiteralPath $capture -Filter '*.png').Count -ne 37){throw 'Missing real Windows captures.'}
     $playerEvidence=Get-Content -LiteralPath (Join-Path $capture 'player-evidence.json') -Raw | ConvertFrom-Json
-    if($playerEvidence.sourceSha -ne $sha -or $playerEvidence.platform -ne 'WindowsPlayer' -or $playerEvidence.captures -ne 12 -or $playerEvidence.activeLeases -ne 0){throw 'Player evidence SHA/platform/capture/lease mismatch.'}
+    if($playerEvidence.sourceSha -ne $sha -or $playerEvidence.platform -ne 'WindowsPlayer' -or $playerEvidence.captures -ne 37 -or $playerEvidence.activeLeases -ne 0){throw 'Player evidence SHA/platform/capture/lease mismatch.'}
+    if($RunBenchmark -and @($playerEvidence.performance.cases).Count -ne 3){throw 'Missing requested 1/12/100 runtime measurements.'}
     $result='PASS'
 } catch { $errorMessage=$_.Exception.Message; Write-Warning $errorMessage }
 finally {
@@ -75,8 +87,8 @@ finally {
     $endDirty=@(git -C $repo status --porcelain)
     if($endSha -ne $sha){$result='FAILED';$errorMessage='HEAD changed during run.'}
     if($endDirty.Count -and -not $AllowDirtyDiagnostic){$result='FAILED';$errorMessage='Worktree changed during final evidence run.'}
-    [ordered]@{result=$result;scope='Meshy Hasan isolated pilot, NOT complete 14C acceptance';runId=$runId;startUtc=$start.ToString('o');endUtc=[DateTime]::UtcNow.ToString('o');startSha=$sha;endSha=$endSha;diagnosticDirtyRun=[bool]$AllowDirtyDiagnostic;initialDirty=$dirty;finalDirty=$endDirty;dotnet=$dotnetCounts;unity=$unityCounts;checks=$checks.ToArray();error=$errorMessage;productionActivated=$false} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $output 'run.json') -Encoding utf8
+    [ordered]@{result=$result;scope='Technical execution only, NOT visual pilot or complete 14C acceptance';visualAcceptance='NOT_DECIDED_BY_AUTOMATION';runId=$runId;startUtc=$start.ToString('o');endUtc=[DateTime]::UtcNow.ToString('o');startSha=$sha;endSha=$endSha;diagnosticDirtyRun=[bool]$AllowDirtyDiagnostic;initialDirty=$dirty;finalDirty=$endDirty;dotnet=$dotnetCounts;unity=$unityCounts;checks=$checks.ToArray();error=$errorMessage;productionActivated=$false} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $output 'run.json') -Encoding utf8
     Pop-Location
 }
-Write-Output "MESHY_PILOT_RESULT $result evidence=$output"
+Write-Output "MESHY_PILOT_TECHNICAL_RESULT $result evidence=$output"
 if($result -ne 'PASS'){exit 1}

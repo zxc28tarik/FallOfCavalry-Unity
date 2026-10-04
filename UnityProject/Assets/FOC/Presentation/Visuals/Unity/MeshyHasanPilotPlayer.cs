@@ -19,6 +19,8 @@ namespace FOC.Presentation.Visuals
     {
         public GameObject characterPrefab = null!;
         public AnimationClip[] clips = Array.Empty<AnimationClip>();
+        public AnimationClip[] retargetClips = Array.Empty<AnimationClip>();
+        public Material[] textureVariants = Array.Empty<Material>();
         private readonly List<Actor> actors = new List<Actor>();
         private readonly List<CaptureEvidence> captures = new List<CaptureEvidence>();
         private VisualSoldier3DAssembler assembler = null!;
@@ -55,6 +57,7 @@ namespace FOC.Presentation.Visuals
             public int restoredBindTransforms;
             public float normalizedPhase;
             public bool renderBoundaryPoseStable;
+            public int forcedLod;
         }
 
         [Serializable]
@@ -84,6 +87,8 @@ namespace FOC.Presentation.Visuals
             public string file = "", view = "", clip = "", signature = "";
             public float normalizedPhase, maximumJointTravelMeters;
             public int actors, rendererCount, materialSlots, boneCount, animationEvaluationSteps;
+            public int forcedLod, triangles;
+            public string material = "";
             public bool humanoidAvatarValid, realWindowsPlayer = true;
             public bool sourceRestBindPoseRestored;
             public PoseEvidence[] poses = Array.Empty<PoseEvidence>();
@@ -98,6 +103,7 @@ namespace FOC.Presentation.Visuals
             public string groundContactStatus = "NOT_PRODUCTION_ACCEPTED: supplied Walking has toe penetration; comparison only checks import drift within 5mm at 12 sampled phases.";
             public int width, height, captures, poolViewsCreated, poolViewsReused, cachedVariants, pooledRepresentations, activeLeases;
             public CaptureEvidence[] results = Array.Empty<CaptureEvidence>();
+            public MeshyHasanPilotBenchmark.Report? performance;
         }
 
         private IEnumerator Start()
@@ -202,7 +208,62 @@ namespace FOC.Presentation.Visuals
             Frame("group12");
             Capture("12-group12.png", "group12", 0);
             ClearActors();
-            if (captures.Count != 12 || assembler.ActiveLeaseCount != 0 || pool.LeasedCount != 0)
+            CreateActor(null,Vector3.zero);
+            yield return new WaitForEndOfFrame();Frame("quarter");Capture("03-three-quarter.png","quarter",0);
+            foreach(var name in new[]{"Idle","Turn","OneHandedAttack","ArmRaise","Crouch"})
+            {
+                ClearActors();
+                var matches=retargetClips.Where(c=>c!=null&&c.name.EndsWith("_"+name,StringComparison.Ordinal)).ToArray();
+                if(matches.Length!=1)throw new InvalidOperationException("Missing real FOC diagnostic retarget: "+name);
+                var actor=CreateActor(matches[0],Vector3.zero);
+                for(var step=0;step<60;step++){Evaluate(actor,1f/60f);if(step%6==0)yield return null;}
+                foreach(var phase in new[]{.25f,.5f,.75f})
+                {
+                    yield return null;SetPhase(actor,phase);var sampled=SnapshotTrackedJoints(actor);
+                    yield return new WaitForEndOfFrame();AssertStablePoseAcrossRenderBoundary(actor,sampled);Frame("quarter");
+                    var prefix=name=="Idle"?"08-foc-idle-retarget":name=="OneHandedAttack"?"09-foc-attack-retarget":name=="Crouch"?"10-foc-crouch-retarget":"foc-"+name.ToLowerInvariant()+"-retarget";
+                    Capture(prefix+(phase==.5f?"":"-"+phase.ToString("0.00",CultureInfo.InvariantCulture))+".png","quarter",phase);
+                }
+            }
+            // Compare texture resolutions on the same consolidated FOC actor;
+            // this does not enable unsupported modular Narrative/Crowd tiers.
+            ClearActors();var textureActor=CreateActor(null,Vector3.zero);
+            foreach(var material in textureVariants)
+            {
+                if(material==null)throw new InvalidOperationException("Missing comparison material.");
+                foreach(var skin in textureActor.view.GetComponentsInChildren<SkinnedMeshRenderer>())skin.sharedMaterial=material;
+                yield return new WaitForEndOfFrame();Frame("quarter");Capture("texture-"+material.GetTexture("_MainTex").width+".png","quarter",0);
+            }
+            // Explicitly restore shared materials before returning pooled views.
+            foreach(var skin in textureActor.view.GetComponentsInChildren<SkinnedMeshRenderer>())skin.sharedMaterial=characterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial;
+            ClearActors();var lodActor=CreateActor(FindClip("Walking"),Vector3.zero);
+            for(var index=0;index<3;index++)
+            {
+                lodActor.forcedLod=index;
+                foreach(var lod in lodActor.view.GetComponentsInChildren<LODGroup>())lod.ForceLOD(index);
+                yield return null;SetPhase(lodActor,.25f);var sampled=SnapshotTrackedJoints(lodActor);
+                yield return new WaitForEndOfFrame();AssertStablePoseAcrossRenderBoundary(lodActor,sampled);
+                if(index==0)Frame("quarter");
+                Capture("lod-"+index+"-walking.png","quarter",.25f);
+            }
+            Frame("quarter");var tacticalCenter=ActorBounds().center;
+            cameraView.transform.position=tacticalCenter+(cameraView.transform.position-tacticalCenter)*3f;
+            for(var index=0;index<3;index++)
+            {
+                lodActor.forcedLod=index;
+                foreach(var lod in lodActor.view.GetComponentsInChildren<LODGroup>())lod.ForceLOD(index);
+                yield return new WaitForEndOfFrame();Capture("lod-"+index+"-tactical.png","tactical",.25f);
+            }
+            ClearActors();
+            MeshyHasanPilotBenchmark.Report? benchmarkReport=null;
+            var runBenchmark=Arg("--meshy-run-benchmark")=="true";
+            if(runBenchmark)
+            {
+                var benchmark=MeshyHasanPilotBenchmark.Run(characterPrefab,FindClip("Walking"),transform,r=>benchmarkReport=r,b=>FrameBounds(b),30);
+                try{while(benchmark.MoveNext())yield return benchmark.Current;}
+                finally{(benchmark as IDisposable)?.Dispose();}
+            }
+            if (captures.Count != 37 || assembler.ActiveLeaseCount != 0 || pool.LeasedCount != 0 || (runBenchmark&&benchmarkReport==null))
                 throw new InvalidOperationException("Incomplete capture suite or leaked presentation lease.");
             var evidence = new PlayerEvidence
             {
@@ -211,10 +272,10 @@ namespace FOC.Presentation.Visuals
                 platform = Application.platform.ToString(), width = Width, height = Height, captures = captures.Count,
                 poolViewsCreated = pool.CreatedViewCount, poolViewsReused = pool.ReusedViewCount,
                 cachedVariants = assembler.CachedVariantCount, pooledRepresentations = assembler.PooledInstanceCount,
-                activeLeases = assembler.ActiveLeaseCount, results = captures.ToArray()
+                activeLeases = assembler.ActiveLeaseCount, results = captures.ToArray(), performance=benchmarkReport
             };
             File.WriteAllText(Path.Combine(output, "player-evidence.json"), JsonUtility.ToJson(evidence, true));
-            Debug.Log("FOC_MESHY_PILOT_CAPTURE_PASS captures=12 leases=0 output=" + output);
+            Debug.Log("FOC_MESHY_PILOT_CAPTURE_PASS captures="+captures.Count+" leases=0 output=" + output);
             Application.Quit(0);
         }
 
@@ -355,7 +416,7 @@ namespace FOC.Presentation.Visuals
         private Bounds ActorBounds()
         {
             var bounds = new Bounds(); var first = true;
-            foreach (var actor in actors) foreach (var renderer in actor.view.GetComponentsInChildren<Renderer>())
+            foreach (var actor in actors) foreach (var renderer in VisibleRenderers(actor))
             {
                 if (!renderer.enabled) continue;
                 if (renderer is SkinnedMeshRenderer skin)
@@ -389,6 +450,20 @@ namespace FOC.Presentation.Visuals
             cameraView.transform.LookAt(bounds.center);
         }
 
+        private void FrameBounds(Bounds bounds)
+        {
+            var distance=bounds.extents.magnitude/Mathf.Sin(cameraView.fieldOfView*Mathf.Deg2Rad*.5f)*1.09f;
+            cameraView.transform.position=bounds.center+new Vector3(.32f,.23f,1).normalized*distance;
+            cameraView.transform.LookAt(bounds.center);
+        }
+
+        private static Renderer[] VisibleRenderers(Actor actor)
+        {
+            var groups=actor.view.GetComponentsInChildren<LODGroup>();
+            if(groups.Length!=1)throw new InvalidOperationException("Expected one consolidated pilot LOD group.");
+            return groups[0].GetLODs()[actor.forcedLod].renderers;
+        }
+
         private void Capture(string filename, string view, float phase)
         {
             var poseEvidence = actors.Select(actor =>
@@ -397,7 +472,7 @@ namespace FOC.Presentation.Visuals
                 // Compare the imported motion against the actual source at the
                 // same phase. Do not silently raise feet or lower the review floor.
                 // Running legitimately has flight and is not covered by this audit.
-                var compareSource = actor.clip != null && actor.clip.name.IndexOf("Walking", StringComparison.OrdinalIgnoreCase) >= 0;
+                var compareSource = actor.forcedLod==0 && actor.clip != null && actor.clip.name.IndexOf("Walking", StringComparison.OrdinalIgnoreCase) >= 0;
                 var sourceMinimumY = 0f;
                 if (compareSource)
                 {
@@ -444,8 +519,8 @@ namespace FOC.Presentation.Visuals
                 File.WriteAllBytes(Path.Combine(output!, filename), texture.EncodeToPNG());
             }
             finally { RenderTexture.active = previous; cameraView.targetTexture = null; target.Release(); Destroy(target); Destroy(texture); }
-            var skins = actors.SelectMany(actor => actor.view.GetComponentsInChildren<SkinnedMeshRenderer>()).ToArray();
-            var renderers = actors.SelectMany(actor => actor.view.GetComponentsInChildren<Renderer>()).Where(r => r.enabled).ToArray();
+            var renderers = actors.SelectMany(VisibleRenderers).Where(r => r.enabled).ToArray();
+            var skins=renderers.OfType<SkinnedMeshRenderer>().ToArray();
             captures.Add(new CaptureEvidence
             {
                 file = filename, view = view, clip = actors[0].clip == null ? "SOURCE_REST" : actors[0].clip!.name,
@@ -454,6 +529,7 @@ namespace FOC.Presentation.Visuals
                 humanoidAvatarValid = actors.All(actor => actor.animator.avatar.isValid && actor.animator.avatar.isHuman),
                 maximumJointTravelMeters = actors.Max(actor => actor.maximumTravel), animationEvaluationSteps = actors.Sum(actor => actor.evaluatedSteps),
                 signature = actors[0].view.ActiveRepresentationRoot!.GetComponent<VisualRuntimeVariant>().Signature,
+                forcedLod=actors[0].forcedLod,triangles=skins.Sum(s=>s.sharedMesh.triangles.Length/3),material=skins[0].sharedMaterial.name,
                 sourceRestBindPoseRestored = actors.All(actor => actor.clip == null && actor.restoredBindTransforms > 0),
                 poses = poseEvidence
             });
@@ -463,7 +539,7 @@ namespace FOC.Presentation.Visuals
         private float MinimumVisibleMeshWorldY(Actor actor)
         {
             var minimumY = float.PositiveInfinity;
-            foreach (var skin in actor.view.GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (var skin in VisibleRenderers(actor).OfType<SkinnedMeshRenderer>())
             {
                 if (!skin.enabled) continue;
                 var baked = new Mesh();

@@ -152,6 +152,17 @@ MonoBehaviour:
   clips:
   - {fileID: 7051438618928365143, guid: 1cd9d272b2bd25548b6e0cc3d90bbb50, type: 3}
   - {fileID: -6575673343129379932, guid: 1cd9d272b2bd25548b6e0cc3d90bbb50, type: 3}
+  retargetClips:
+  - {fileID: 7400000, guid: 342e6bb7097d5ba42a96b53c54ac0098, type: 2}
+  - {fileID: 7400000, guid: ff4e7c999f0901d49b1d18dbda9fd2a3, type: 2}
+  - {fileID: 7400000, guid: 3b973f71ae23b364bb221ac8ec2f057c, type: 2}
+  - {fileID: 7400000, guid: 7bacd9f9c1ef10643b17ef6b5f41d235, type: 2}
+  - {fileID: 7400000, guid: e9bfce551b194d84ba3969cca59d0a1b, type: 2}
+  - {fileID: 7400000, guid: 82040193fb00b7f4fa60462029d013b4, type: 2}
+  textureVariants:
+  - {fileID: 2100000, guid: cf290c50a83deaa46b60f60eaf03a845, type: 2}
+  - {fileID: 2100000, guid: 7205cbc4391827244ac38c1e279e6c4d, type: 2}
+  - {fileID: 2100000, guid: ab354ad2885aadf49aa2409d7864717a, type: 2}
 --- !u!4 &1351042835
 Transform:
   m_ObjectHideFlags: 0

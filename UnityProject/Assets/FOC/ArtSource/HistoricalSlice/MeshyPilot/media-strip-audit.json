@@ -1,0 +1,110 @@
+{
+  "status": "SEMANTICALLY_IDENTICAL_EXCEPT_REMOVED_VIDEO_CONTENT",
+  "source": "C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\MeshyPilotIntake\\58acdcc19240\\Meshy_AI_hasan_agha_rigged_biped\\Meshy_AI_hasan_agha_rigged_biped_Animation_all_frame_rate_60.fbx",
+  "source_sha256": "0ee0076119289b4748fa0eeb11fa631d9a03e55b9b1208db6afe19beba410b27",
+  "source_bytes": 72020588,
+  "output": "C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\Artifacts\\MeshyPilotOptimized\\Hasan_Meshy_Runtime_Lod0.fbx",
+  "output_sha256": "356dd92317ec1787f48aabe4e85157d31dfec2dd029168c856c5ffd6a125fadf",
+  "output_bytes": 974700,
+  "bytes_saved": 71045888,
+  "removed_content": [
+    {
+      "video_path": [
+        [
+          "Objects",
+          8
+        ],
+        [
+          "Video",
+          79
+        ]
+      ],
+      "payload_bytes": 71045863,
+      "payload_sha256": "9f9db1fdf8a3119b140cba87df8477f62a9725ab8a83ddace8f1a2c2a54ba563"
+    }
+  ],
+  "retained_semantic_sha256": "56867a051bb418ce0b4ef66ab6e5f6b60325cdeb8c26aa010955b6bff45fc8b9",
+  "protected_before": {
+    "Geometry": {
+      "count": 1,
+      "sha256": "9df246b10908f67e93eebc8a2f4f46648311c272c247c00d6295908593577c96"
+    },
+    "Model": {
+      "count": 25,
+      "sha256": "831ae4f9be49a172b368b64470cea4fea431b7241de4c256cf1bdccaae5ca49d"
+    },
+    "Deformer": {
+      "count": 24,
+      "sha256": "dbb949c834975ed7448b610f66867908c13fff3c91aa04b058448d3084235ad7"
+    },
+    "Pose": {
+      "count": 1,
+      "sha256": "fdfce5f03070252f82709f33a7ac1f70857ab46549dbd885ad88f2ed03aaee37"
+    },
+    "AnimationStack": {
+      "count": 2,
+      "sha256": "4c8a171a76153bbf20ecc3e130f18f7d190244cdcd3b76146e401889d79cd4b3"
+    },
+    "AnimationLayer": {
+      "count": 2,
+      "sha256": "5b91e935491b77357d1c57b31e56b911ac84d4a3b9179f7475f60c0290e19414"
+    },
+    "AnimationCurveNode": {
+      "count": 144,
+      "sha256": "c49be1d33eaa11399afa4e6712d0886c5a0152f0befc073c0932760872b2ec21"
+    },
+    "AnimationCurve": {
+      "count": 432,
+      "sha256": "4065aafe1c49dc50133b39426d02490eae1b310ae6df7d943ac1cededa38aa87"
+    },
+    "Connections": {
+      "count": 1,
+      "sha256": "4dc72f36187db07bece0f5440435b9aea2e21aaf0b803bb1a567e59b5076133f"
+    }
+  },
+  "protected_after": {
+    "Geometry": {
+      "count": 1,
+      "sha256": "9df246b10908f67e93eebc8a2f4f46648311c272c247c00d6295908593577c96"
+    },
+    "Model": {
+      "count": 25,
+      "sha256": "831ae4f9be49a172b368b64470cea4fea431b7241de4c256cf1bdccaae5ca49d"
+    },
+    "Deformer": {
+      "count": 24,
+      "sha256": "dbb949c834975ed7448b610f66867908c13fff3c91aa04b058448d3084235ad7"
+    },
+    "Pose": {
+      "count": 1,
+      "sha256": "fdfce5f03070252f82709f33a7ac1f70857ab46549dbd885ad88f2ed03aaee37"
+    },
+    "AnimationStack": {
+      "count": 2,
+      "sha256": "4c8a171a76153bbf20ecc3e130f18f7d190244cdcd3b76146e401889d79cd4b3"
+    },
+    "AnimationLayer": {
+      "count": 2,
+      "sha256": "5b91e935491b77357d1c57b31e56b911ac84d4a3b9179f7475f60c0290e19414"
+    },
+    "AnimationCurveNode": {
+      "count": 144,
+      "sha256": "c49be1d33eaa11399afa4e6712d0886c5a0152f0befc073c0932760872b2ec21"
+    },
+    "AnimationCurve": {
+      "count": 432,
+      "sha256": "4065aafe1c49dc50133b39426d02490eae1b310ae6df7d943ac1cededa38aa87"
+    },
+    "Connections": {
+      "count": 1,
+      "sha256": "4dc72f36187db07bece0f5440435b9aea2e21aaf0b803bb1a567e59b5076133f"
+    }
+  },
+  "untouched_roundtrip_byte_identical": true,
+  "source_unchanged": true,
+  "geometry_rig_bindpose_weights_animation_raw_property_bytes_identical": true,
+  "footer_change": "Offset headers and alignment padding only; opaque footer bytes preserved.",
+  "material_note": "External texture filenames remain unchanged; bind intended explicit Unity PBR material. No source image used or rewritten.",
+  "unity_validation": "NOT_RUN_BY_THIS_SCRIPT",
+  "license_status": "LOCAL_CANDIDATE_PENDING_PARENT_PROVENANCE_REVIEW"
+}

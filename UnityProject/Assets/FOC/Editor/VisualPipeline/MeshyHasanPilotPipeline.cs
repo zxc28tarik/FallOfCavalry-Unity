@@ -24,6 +24,7 @@ namespace FOC.Editor.Visuals
         public const string MaterialPath=OutputRoot+"/MAT_HasanAga_MeshyPilot.mat";
         public const string ControllerPath=OutputRoot+"/ANM_HasanAga_MeshyPilot.controller";
         public const string ExpectedSourceHash="0ee0076119289b4748fa0eeb11fa631d9a03e55b9b1208db6afe19beba410b27";
+        public const string OptimizationManifest=IntakeRoot+"/optimization-manifest.json";
         public static string ReportPath=>Path.GetFullPath("../TestResults/MeshyPilot/unity-import.json");
 
         // Source names are not canonical aliases. Chest and UpperChest are the
@@ -44,12 +45,12 @@ namespace FOC.Editor.Visuals
         {
             public string status="NOT_READY";public string utc="";public string unityVersion="";public string operation="";public string source=ModelPath;public string sourceSha256="";
             public string prefab=PrefabPath;public string error="";public bool avatarHuman;public bool avatarValid;public int preservedSourceBones;
-            public float heightMeters;public int suppliedLods;public string lodStatus="LOD0 only; LOD1/LOD2 NOT RUN; no duplicate geometry presented as LOD reduction.";
+            public float heightMeters;public int suppliedLods;public string lodStatus="Original LOD0 plus derived LOD1/LOD2; actual meshes and visual QA required.";
             public string restPoseSource="Original FBX skin bind matrices, not FBX saved Running take or controller playback.";
             public float maximumBindMatrixError;
             public string skinWeightStatus="Imported weights validated finite/normalized with at most four influences; not asserted bit-identical to source float values. Unity importer minimum influence threshold may clamp to 0.001.";
             public string materialStatus="";public string visualAcceptance="NOT EVALUATED: requires actual player screenshots and deformation review.";
-            public string animationLimitations="Only supplied Walking/Running. No supplied Idle, Attack, Crouch or Mounted animation; shared FOC clips not retargeted by this pilot.";
+            public string animationLimitations="Only Walking/Running supplied. Separate pilot diagnostics convert existing FOC generic actions to Humanoid; conversion is not production choreography or cross-avatar visual acceptance.";
             public string rigStatus="Foreign 23-bone hierarchy retained; not canonical 18-bone compatible merely because Avatar is Humanoid.";
             public string provenance="User-confirmed Meshy Pro creation; not CC0; generation/reference provenance remains in intake ledger.";
             public string[] boneNames=Array.Empty<string>();public string[] sockets=Array.Empty<string>();public ClipAudit[] clips=Array.Empty<ClipAudit>();public MeshAudit[] meshes=Array.Empty<MeshAudit>();
@@ -79,6 +80,12 @@ namespace FOC.Editor.Visuals
                 ConfigureModel();
                 ConfigureTexture(SourceRoot+"/BaseColor.png",true);
                 ConfigureTexture(SourceRoot+"/MetallicSmoothness.png",false);
+                foreach(var size in new[]{4096,1024})
+                {
+                    ConfigureTexture(SourceRoot+"/BaseColor_"+size+".png",true,size);
+                    ConfigureTexture(SourceRoot+"/MetallicSmoothness_"+size+".png",false,size);
+                    CreateMaterial(size);
+                }
                 var material=CreateMaterial();
                 var clips=LoadClips();var controller=CreateController(clips);
                 var model=AssetDatabase.LoadAssetAtPath<GameObject>(ModelPath)??throw new InvalidOperationException("FBX model did not import.");
@@ -102,12 +109,8 @@ namespace FOC.Editor.Visuals
                         renderer.quality=SkinQuality.Bone4;renderer.updateWhenOffscreen=true;
                     }
                     AddSockets(instance);
-                    // One genuinely supplied resolution. Reduction is deferred,
-                    // not simulated by repeating this mesh in three LOD slots.
-                    var lod=instance.GetComponent<LODGroup>();
-                    if(lod==null)lod=instance.AddComponent<LODGroup>();
-                    lod.SetLODs(new[]{new LOD(.025f,instance.GetComponentsInChildren<Renderer>(true))});lod.RecalculateBounds();
                     RestoreSourceBindPose(instance);
+                    MeshyHasanPilotLodImport.Attach(instance,material);
                     PrefabUtility.SaveAsPrefabAsset(instance,PrefabPath);
                 }
                 finally{UnityEngine.Object.DestroyImmediate(instance);}
@@ -143,7 +146,7 @@ namespace FOC.Editor.Visuals
         {
             Require(File.Exists(ModelPath),"Supplied Meshy FBX is missing: "+ModelPath);
             using(var sha=SHA256.Create())using(var stream=File.OpenRead(ModelPath))report.sourceSha256=BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant();
-            Require(report.sourceSha256==ExpectedSourceHash,"Source FBX differs from preserved user intake.");
+            MeshyHasanPilotLodImport.ValidateRuntimeSource(report.sourceSha256);
         }
 
         private static void ConfigureModel()
@@ -194,24 +197,30 @@ namespace FOC.Editor.Visuals
             importer.clipAnimations=clips;importer.SaveAndReimport();
         }
 
-        private static void ConfigureTexture(string path,bool srgb)
+        private static void ConfigureTexture(string path,bool srgb,int size=2048)
         {
             Require(File.Exists(path),"Required prepared PBR texture missing: "+path);
             var importer=AssetImporter.GetAtPath(path) as TextureImporter??throw new InvalidOperationException("Texture importer missing: "+path);
             importer.textureType=TextureImporterType.Default;importer.sRGBTexture=srgb;importer.alphaSource=TextureImporterAlphaSource.FromInput;
-            importer.alphaIsTransparency=false;importer.mipmapEnabled=true;importer.maxTextureSize=2048;
+            importer.alphaIsTransparency=false;importer.mipmapEnabled=true;importer.maxTextureSize=size;
             importer.textureCompression=TextureImporterCompression.Compressed;importer.compressionQuality=100;importer.isReadable=false;importer.SaveAndReimport();
         }
 
-        private static Material CreateMaterial()
+        private static Material CreateMaterial(int size=2048)
         {
             var shader=Shader.Find("Standard")??throw new InvalidOperationException("Built-in Standard PBR shader is unavailable.");
-            var material=AssetDatabase.LoadAssetAtPath<Material>(MaterialPath);
-            if(material==null){material=new Material(shader){name="MAT_HasanAga_MeshyPilot"};AssetDatabase.CreateAsset(material,MaterialPath);}
+            var suffix=size==2048?"":"_"+size;var path=size==2048?MaterialPath:OutputRoot+"/MAT_HasanAga_MeshyPilot"+suffix+".mat";
+            var material=AssetDatabase.LoadAssetAtPath<Material>(path);
+            if(material==null){material=new Material(shader){name="MAT_HasanAga_MeshyPilot"+suffix};AssetDatabase.CreateAsset(material,path);}
             material.shader=shader;material.SetColor("_Color",Color.white);material.SetFloat("_Mode",0f);material.SetFloat("_Metallic",1f);
             material.SetFloat("_GlossMapScale",1f);material.SetFloat("_SmoothnessTextureChannel",0f);
-            material.SetTexture("_MainTex",AssetDatabase.LoadAssetAtPath<Texture2D>(SourceRoot+"/BaseColor.png"));
-            material.SetTexture("_MetallicGlossMap",AssetDatabase.LoadAssetAtPath<Texture2D>(SourceRoot+"/MetallicSmoothness.png"));
+            material.SetTexture("_MainTex",AssetDatabase.LoadAssetAtPath<Texture2D>(SourceRoot+"/BaseColor"+suffix+".png"));
+            material.SetTexture("_MetallicGlossMap",AssetDatabase.LoadAssetAtPath<Texture2D>(SourceRoot+"/MetallicSmoothness"+suffix+".png"));
+            material.SetTexture("_EmissionMap",null);material.SetColor("_EmissionColor",Color.black);
+            material.globalIlluminationFlags=MaterialGlobalIlluminationFlags.EmissiveIsBlack;
+            material.SetFloat("_SrcBlend",(float)UnityEngine.Rendering.BlendMode.One);material.SetFloat("_DstBlend",(float)UnityEngine.Rendering.BlendMode.Zero);
+            material.SetFloat("_ZWrite",1);material.SetOverrideTag("RenderType","Opaque");material.renderQueue=-1;
+            foreach(var keyword in new[]{"_ALPHATEST_ON","_ALPHABLEND_ON","_ALPHAPREMULTIPLY_ON"})material.DisableKeyword(keyword);
             material.SetTexture("_BumpMap",null);material.DisableKeyword("_NORMALMAP");material.EnableKeyword("_METALLICGLOSSMAP");
             material.DisableKeyword("_SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A");material.DisableKeyword("_EMISSION");EditorUtility.SetDirty(material);return material;
         }
@@ -266,8 +275,8 @@ namespace FOC.Editor.Visuals
         private static Dictionary<Transform,Matrix4x4> BindWorldMatrices(GameObject root)
         {
             var renderers=root.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-            Require(renderers.Length==1,"Bind reconstruction expects the supplied single mesh.");
-            var renderer=renderers[0];var bindposes=renderer.sharedMesh.bindposes;var bones=renderer.bones;
+            Require(renderers.Length>0,"Bind reconstruction requires the supplied LOD0 mesh.");
+            var renderer=renderers.OrderByDescending(r=>r.sharedMesh.triangles.Length).First();var bindposes=renderer.sharedMesh.bindposes;var bones=renderer.bones;
             Require(bindposes.Length==bones.Length&&bones.Length==23,"All23 supplied bind bones must be present; no inferred reconstruction.");
             var result=new Dictionary<Transform,Matrix4x4>();
             for(var i=0;i<bones.Length;i++)
@@ -337,7 +346,7 @@ namespace FOC.Editor.Visuals
             }).ToArray();
             Require(clips.Length==2&&clips.Any(c=>c.name=="Walking")&&clips.Any(c=>c.name=="Running"),"Expected supplied Walking and Running clips are missing.");
             Require(clips.All(c=>c.humanMotion&&c.length>0f&&!float.IsInfinity(c.length)),"A supplied animation is empty or did not import as Humanoid motion.");
-            var skinned=prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true);Require(skinned.Length==1,"Intake expected one authored skinned mesh.");
+            var skinned=prefab.GetComponentsInChildren<SkinnedMeshRenderer>(true).OrderByDescending(r=>r.sharedMesh.triangles.Length).ToArray();Require(skinned.Length==3,"Pilot needs one original LOD0 and two genuinely reduced skins.");
             report.meshes=skinned.Select(AuditMesh).ToArray();
             var localBounds=skinned[0].localBounds;var matrix=prefab.transform.worldToLocalMatrix*skinned[0].transform.localToWorldMatrix;
             report.heightMeters=matrix.MultiplyVector(new Vector3(0f,localBounds.size.y,0f)).magnitude;
@@ -359,7 +368,8 @@ namespace FOC.Editor.Visuals
             finally{UnityEngine.Object.DestroyImmediate(instance);}
             Require(Mathf.Abs(report.heightMeters-1.7800007f)<.002f,"Unexpected source bind height: "+report.heightMeters+"m; expected1.78m from independent DCC rest audit.");
             var lod=prefab.GetComponent<LODGroup>();Require(lod!=null,"Pilot lacks explicit LOD declaration.");report.suppliedLods=lod!.lodCount;
-            Require(report.suppliedLods==1&&lod.GetLODs()[0].renderers.Length==1,"Pilot must honestly expose one supplied LOD.");
+            Require(report.suppliedLods==3&&lod.GetLODs().All(l=>l.renderers.Length==1),"Pilot must expose exactly one renderer per real LOD.");
+            Require(report.meshes[0].triangles==9586&&report.meshes[1].triangles<report.meshes[0].triangles&&report.meshes[2].triangles<report.meshes[1].triangles,"LOD geometry is not genuinely reduced.");
             var transforms=prefab.GetComponentsInChildren<Transform>(true);report.sockets=transforms.Where(t=>t.name.StartsWith("Socket_",StringComparison.Ordinal)).Select(t=>t.name).OrderBy(x=>x,StringComparer.Ordinal).ToArray();
             foreach(var socket in FOC.Visuals.Core.CanonicalRig.HumanSockets.Values)Require(report.sockets.Count(s=>s==socket)==1,"Missing/duplicated semantic socket: "+socket);
             ValidateMaterial(skinned);report.materialStatus="Standard PBR: sRGB BaseColor, linear RGB metallic / A=1-roughness, 2048 texture cap; no supplied normal map.";
@@ -369,7 +379,7 @@ namespace FOC.Editor.Visuals
         {
             var mesh=renderer.sharedMesh??throw new InvalidOperationException("Missing skinned mesh.");
             var result=new MeshAudit{name=mesh.name,vertices=mesh.vertexCount,triangles=mesh.triangles.Length/3,skinBones=renderer.bones.Length,bindPoses=mesh.bindposes.Length};
-            Require(result.triangles==9586,"Source triangle count differs from audited user mesh.");
+            Require(result.triangles>0&&result.triangles<=9586,"Invalid original/derived triangle count.");
             Require(renderer.bones.All(t=>t!=null)&&result.skinBones==result.bindPoses&&result.skinBones>0,"Skin bones or bindposes are missing.");
             Require(mesh.vertices.All(IsFinite),"Source mesh contains nonfinite positions.");
             var weights=mesh.boneWeights;Require(weights.Length==mesh.vertexCount,"Missing four-influence skin data.");
@@ -386,6 +396,8 @@ namespace FOC.Editor.Visuals
         {
             var material=AssetDatabase.LoadAssetAtPath<Material>(MaterialPath)??throw new InvalidOperationException("Pilot PBR material missing.");
             Require(material.shader.name=="Standard"&&material.IsKeywordEnabled("_METALLICGLOSSMAP"),"Pilot PBR shader or metallic map keyword incorrect.");
+            Require(material.GetFloat("_Mode")==0&&material.GetFloat("_ZWrite")==1&&material.GetTexture("_EmissionMap")==null&&!material.IsKeywordEnabled("_EMISSION")&&material.GetColor("_EmissionColor")==Color.black,"Pilot must be opaque and non-emissive.");
+            Require(!material.IsKeywordEnabled("_ALPHATEST_ON")&&!material.IsKeywordEnabled("_ALPHABLEND_ON")&&!material.IsKeywordEnabled("_ALPHAPREMULTIPLY_ON"),"Pilot transparency or alpha clipping was enabled.");
             foreach(var pair in new[]{new[]{"BaseColor.png","_MainTex"},new[]{"MetallicSmoothness.png","_MetallicGlossMap"}})
             {
                 var path=SourceRoot+"/"+pair[0];var texture=AssetDatabase.LoadAssetAtPath<Texture2D>(path);var importer=AssetImporter.GetAtPath(path) as TextureImporter;

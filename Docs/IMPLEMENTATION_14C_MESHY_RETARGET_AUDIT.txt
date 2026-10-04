@@ -1,0 +1,136 @@
+IMPLEMENTATION 14C — MESHY RETARGET AUDIT
+
+RETARGET VISUAL GATE: NOT READY
+Diagnostic conversion completed; production animation compatibility did not.
+This is exploratory evidence on a dirty worktree based on
+5d3ea5b9f32992a64df056a03a28549774ac9772, not final-SHA acceptance.
+Unity version: 6000.3.16f1. Roundtrip report UTC: 2026-10-03T23:58:50Z.
+
+Available motion sources
+The audited shared VisualProof library is not a production Humanoid library.
+VisualProofAssetGenerator.CreateAnimations creates the named Idle, Turn,
+OneHandedAttack and other actions with only Root/Pelvis.localPosition.y.
+Action names and a valid Avatar do not make these articulated Humanoid clips.
+The supplied Meshy FBX contains Walking and Running only.
+The existing HasanMotionReview donor has actual articulated generic Transform
+curves and its own saved valid Human Avatar. The horse clips are mount-specific
+generic motion, not an alternate human action library. No external donor was
+searched for or imported, and no replacement model or skeleton was created.
+
+Bounded conversion performed
+Six EXISTING FOC diagnostic clips were converted: Idle, Turn, OneHandedAttack,
+ArmRaise, Crouch and MountedSeated. They are not newly supplied Meshy motion,
+mocap, or already-existing shared Humanoid production clips.
+
+An ephemeral clone samples each generic source clip using a temporary Generic
+Avatar over the same unchanged bones. HumanPoseHandler reads that pose using
+the original saved Human Avatar. New clips contain 95 Animator muscle curves
+plus RootT/RootQ curves, sampled at 60 Hz. The temporary Avatar is never saved.
+HumanPose.bodyPosition is already divided by the source Avatar humanScale;
+the identity-root sampler does not apply a second scale factor.
+API: https://docs.unity3d.com/6000.3/Documentation/ScriptReference/HumanPoseHandler.GetHumanPose.html
+Donor grip/garment blendshapes are not transferred. Choreography is not clamped,
+newly authored or automatically grounded. MountedSeated remains a diagnostic
+pose donor, not authorization to activate mounted catalog use.
+
+Output and provenance:
+UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/
+  ANM_FOCDiagnostic_<motion>.anim
+  FOCDiagnosticMotionProvenance.json
+The provenance records original input paths/hashes, sampling, source-format
+status, distinct curve signatures and source movement. Conversion returned 0;
+all six outputs report humanMotion=true, with zero foreign Transform curves.
+Finite skin/joint movement is a technical check, not visual acceptance.
+
+Actual visual failure
+The Windows player images below were inspected, not inferred from unit tests:
+TestResults/MeshyPilot/ClosureCaptures/09-foc-attack-retarget.png
+TestResults/MeshyPilot/ClosureCaptures/10-foc-crouch-retarget.png
+Attack opens the arms outward instead of preserving the donor's slash intent.
+Crouch buries the boots. LOD0 retarget sampling measured a minimum skin Y of
+-0.07174455 m during Crouch; a finite mesh is not a contact-quality pass.
+
+Loss-localization experiment
+MeshyHasanPilotRoundtripAudit compares 16 mapped joints at eight phases per
+action (0, 1/8, ..., 7/8), for all six actions:
+  original generic donor -> HumanPose Get/Set on the SAME donor Avatar;
+  direct HumanPose -> generated-clip playback on that same Avatar;
+  direct HumanPose -> generated-clip playback on the Meshy Avatar.
+Foot IK, playable IK, root-motion application and automatic controllers are off.
+
+Maximum position differences in meters over the sampled phases:
+Action             Generic source -> same-Avatar HumanPose
+Idle               0.00595896
+Turn               0.00595896
+OneHandedAttack     0.02220375
+ArmRaise           0.02096300
+Crouch             0.00595896
+MountedSeated      0.00031095
+
+Generated-clip versus direct HumanPose on the donor: zero except numerical
+noise of 4.44e-16 m for Crouch. On Meshy: at most 2.67e-7 m.
+Thus the large visible arm difference is already present in cross-Avatar
+HumanPose application; it is not introduced by the baked clip representation.
+These position results do not claim rotation-perfect generic reconstruction.
+
+Concrete phase-0.5 evidence, in world meters with identity actor roots:
+Attack left wrist: source (+0.270,0.965,0.080); same-Avatar error 0.62 mm;
+                   Meshy (-0.575752,1.226215,-0.023437).
+Attack right wrist: source (+0.015,1.180,0.390); same-Avatar error 6.81 mm;
+                    Meshy (+0.564173,1.390967,+0.168956).
+Crouch source feet reconstruct on the same Avatar within about 0.038 mm at
+phase 0.5, although the Meshy skin/contact result remains unacceptable.
+The rigs also differ in authored reference pose and mapped lateral directions
+(source HumanLeftUpperArm +X; Meshy HumanLeftUpperArm -X at identity body
+rotation). This is diagnostic evidence of reference/retarget incompatibility,
+not proof that a particular joint rename, sign flip or single pose edit is safe.
+
+Blocker / decision
+There is no demonstrated visually acceptable existing-FOC-to-Meshy action
+retarget for the required gate. A valid Human Avatar and mathematically valid
+muscle clips do not establish compatible reference semantics, deformation or
+contact. Do not blame the visible difference solely on source choreography:
+the same source can reconstruct closely on its own Avatar but differs markedly
+on Meshy. A separately validated reference/retarget adapter would be needed.
+No blind muscle clamp, foot offset, shared-rig rewrite or production activation
+was performed. Required retarget visual acceptance remains FAIL / NOT READY.
+
+Executed diagnostic commands
+Executable for both:
+C:/Users/zxc28/AppData/Local/Unity/Hub/Editor/6000.3.16f1/Editor/Unity.exe
+The argument vectors below were launched through PowerShell Start-Process
+-WindowStyle Hidden -PassThru -Wait. Both processes returned 0.
+
+-batchmode -nographics -projectPath "C:/Users/zxc28/Documents/ChatGPT/FOC/UnityProject" -executeMethod FOC.Editor.Visuals.MeshyHasanPilotMotionAdaptation.Run -logFile "C:/Users/zxc28/Documents/ChatGPT/FOC/TestResults/MeshyPilot/closure-motion-generic.log"
+-batchmode -nographics -projectPath "C:/Users/zxc28/Documents/ChatGPT/FOC/UnityProject" -executeMethod FOC.Editor.Visuals.MeshyHasanPilotRoundtripAudit.Run -logFile "C:/Users/zxc28/Documents/ChatGPT/FOC/TestResults/MeshyPilot/closure-motion-roundtrip.log"
+
+Reports:
+TestResults/MeshyPilot/motion-adaptation.json
+TestResults/MeshyPilot/motion-roundtrip.json
+Roundtrip status is COMPLETED_DIAGNOSTIC_NOT_VISUAL_ACCEPTANCE, not a quality
+PASS. The new nine-case conversion fixture was added; this document does not
+claim that the final complete Unity/.NET/CI suites were run by this audit.
+
+Source-immutable helper lifecycle review
+The roundtrip helper writes only its external evidence JSON. It does not call
+SaveAssets, save a prefab, modify a shared mesh, or overwrite either source
+Avatar. Transform/Animator changes and SampleAnimation operate on clones.
+HumanPoseHandlers are disposed by using; finally destroys graphs before clone
+objects and then the temporary Generic Avatar, including exception paths.
+All five clone initializations are inside that cleanup scope. Clone also
+destroys its own temporary object if initialization fails before returning it.
+The source Human Avatars are never destroyed. This narrow cleanup repair does
+not alter the sampled motion, reference rig, comparison or quality criteria.
+
+Final evidence handling
+Tools/Test-MeshyPilot.ps1 is configured to rerun the roundtrip diagnostic on the
+clean final commit SHA, alongside final verification. Read that run's fresh
+reports for execution results; the earlier dirty-worktree measurements above
+are diagnostic history, not a substitute for clean-final-SHA evidence.
+
+Limits
+Eight sampled phases are not an exhaustive continuous-motion/contact proof.
+No new choreography, motion donor, rig, mesh, weight or floor correction was
+introduced by the roundtrip experiment. Full-body screenshots and separate
+joint/garment/contact QA remain binding. These local diagnostic artifacts must
+not be promoted to final-SHA evidence without rerunning the required gates.

@@ -1,0 +1,39 @@
+Meshy Hasan pilot: source / public-repository policy
+Audit date: 2026-10-04. This is a practical repository policy, not legal advice.
+
+Official sources retrieved live using Firecrawl:
+https://www.meshy.ai/terms-of-use
+Last Updated: September 19, 2026; sections 2.2, 2.4, 3.1, 3.2, 3.3, 3.4.
+https://help.meshy.ai/en/articles/16102098-can-i-use-meshy-assets-commercially
+
+The terms assign paid-plan Customer Output ownership to the customer as between
+Meshy and that customer, to the extent the law permits. Incorporated service
+assets (including rigs/animations) may be distributed only as needed to exploit
+that output. Input rights remain the customer's responsibility. AI-identifying
+metadata must not be removed. Meshy Community publication has separate terms;
+we do not infer that this model was published there or label it CC0.
+
+The official commercial-use article permits paid-model commercial use, resale
+and delivery in client projects, subject to rights in underlying references.
+It links ownership to the plan at creation and says paid attribution is optional.
+
+Decision (inference from those sources, not an explicit GitHub-specific clause):
+User confirmed creation in their own Meshy Pro account and authorized FOC use.
+Commercial game integration and derivative optimization are supported by the
+stated paid-output rights. Distribution of the optimized complete character with
+its incorporated rig/motions is supported; isolated resale of Meshy service rigs
+or animation-library assets is not assumed. No source-image rights certification
+or paid-account history verification is claimed.
+
+Repository policy:
+- Keep the original ZIP, FBX and full-size textures in ignored local Artifacts.
+- Track optimized complete-character derivatives, scripts and provenance only.
+- Do not grant a blanket CC0/open-source license to this art by inference.
+- Preserve AI/tool attribution, original hashes and relevant FBX metadata.
+- No new source download, paid service operation or account change.
+
+Prior history disclosure: raw FBX was already committed in 7fad661 and pushed
+before this audit request. Replacing current-tree data with an optimized file
+does not remove old Git objects. No history rewrite/force push is performed.
+Current terms do not indicate a categorical prohibition on distributing the
+user-owned paid output, but the original-reference rights remain unverified.

@@ -1,0 +1,62 @@
+{
+  "status": "REAL_WINDOWS_CAPTURE_NOT_AUTOMATIC_PILOT_ACCEPTANCE",
+  "sourceSha": "5d3ea5b9f32992a64df056a03a28549774ac9772",
+  "diagnosticDirtyRun": true,
+  "runId": "d53aa75644f84798bbf6b282e22b0e9d",
+  "sourceDirectory": "C:\\Users\\zxc28\\Documents\\ChatGPT\\FOC\\TestResults\\MeshyPilot\\Runs\\5d3ea5b9f32992a64df056a03a28549774ac9772\\d53aa75644f84798bbf6b282e22b0e9d\\Captures",
+  "images": [
+    {
+      "path": "01-front.png",
+      "sourceFile": "01-rest-front.png",
+      "sha256": "47774381a5068d30749b977cf7cf6732651af52f1a500ff8ef9d2744772eabfb"
+    },
+    {
+      "path": "02-side.png",
+      "sourceFile": "02-rest-side.png",
+      "sha256": "37912faa9c36f3db2a907cff8057d73de34d2e20febdf3ccc32e074212c5a4e1"
+    },
+    {
+      "path": "03-three-quarter.png",
+      "sourceFile": "03-three-quarter.png",
+      "sha256": "e88ab025376685df5f39b5539804b67d5112ef1ffacfeededbb451327b1e147b"
+    },
+    {
+      "path": "04-walk-a.png",
+      "sourceFile": "05-walking-0.25.png",
+      "sha256": "75875f9402d78a0d2914433d8439c1ac60e50e724aee3e06f21ce99f379c79f9"
+    },
+    {
+      "path": "05-walk-b.png",
+      "sourceFile": "07-walking-0.75.png",
+      "sha256": "d67bd2b8ce89e7e383f4c90c6b86748222487d7116c1daf1f63c358d0eb2d420"
+    },
+    {
+      "path": "06-run-a.png",
+      "sourceFile": "09-running-0.25.png",
+      "sha256": "da3c729fe62b6943610d0722107e50d91c6600bc3af44d2713abd41f926114b6"
+    },
+    {
+      "path": "07-run-b.png",
+      "sourceFile": "11-running-0.75.png",
+      "sha256": "1e98d200607cc2c43f89dc0a2720c07d9ca6b39a5b914387887ab347b79469fc"
+    },
+    {
+      "path": "08-foc-idle-retarget.png",
+      "sourceFile": "08-foc-idle-retarget.png",
+      "sha256": "ab0f89a4ccd4569b0be414e788de8132d3fbbdec7739711a585a98e8f8f8d421"
+    },
+    {
+      "path": "09-foc-attack-retarget.png",
+      "sourceFile": "09-foc-attack-retarget.png",
+      "sha256": "c783cf996c6efcf08fd7ab87025865446da322ca4a6914c0935ff96dfa9f6144"
+    },
+    {
+      "path": "10-foc-crouch-retarget.png",
+      "sourceFile": "10-foc-crouch-retarget.png",
+      "sha256": "2dcacd811f242896e4cc06f42f2666996807af307df47b8f82ffa87158702f98"
+    }
+  ],
+  "noRetouch": true,
+  "mounted": "NOT_RUN_ON_FOOT_ACCEPTANCE_REQUIRED",
+  "note": "Committed visual-review snapshot. If diagnosticDirtyRun is true, sourceSha identifies the base HEAD, not the modified code contents. Final-SHA test evidence is separately recorded by Test-MeshyPilot in its fresh run directory."
+}

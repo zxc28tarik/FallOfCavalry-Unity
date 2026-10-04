@@ -15,7 +15,8 @@ foreach($entry in $expectedMaps.GetEnumerator()) {
     if((Get-FileHash -LiteralPath (Join-Path $source $entry.Key) -Algorithm SHA256).Hash.ToLowerInvariant() -ne $entry.Value){throw ('Unexpected Meshy texture hash: '+$entry.Key)}
 }
 New-Item -ItemType Directory -Force -Path $destination | Out-Null
-Copy-Item -LiteralPath $fbx -Destination (Join-Path $destination 'Hasan_Meshy.fbx')
+# Original FBX remains in ignored intake storage. The lossless media-cleaning
+# pipeline prepares the runtime FBX; do not overwrite it with the 71 MB source.
 Add-Type -AssemblyName System.Drawing
 Add-Type -ReferencedAssemblies System.Drawing.Common,System.Drawing.Primitives,System.Private.Windows.GdiPlus,System.Private.Windows.Core,System.Runtime.InteropServices -TypeDefinition @'
 using System;
@@ -60,4 +61,9 @@ $texturePrefix = Join-Path $source 'Meshy_AI_hasan_agha_rigged_biped_texture_0'
 $base = [MeshyTexturePacking]::Resize(($texturePrefix + '.png'),2048)
 try { $base.Save((Join-Path $destination 'BaseColor.png'),[Drawing.Imaging.ImageFormat]::Png) } finally { $base.Dispose() }
 [MeshyTexturePacking]::Pack(($texturePrefix + '_metallic.png'),($texturePrefix + '_roughness.png'),(Join-Path $destination 'MetallicSmoothness.png'),2048)
-Write-Output 'MESHY_TEXTURES_PREPARED BaseColor=2048 sRGB; MetallicSmoothness=2048 linear RGB=metallic A=1-roughness. Original archive unchanged.'
+foreach($size in @(4096,1024)) {
+    $variantBase = [MeshyTexturePacking]::Resize(($texturePrefix + '.png'),$size)
+    try { $variantBase.Save((Join-Path $destination ('BaseColor_'+$size+'.png')),[Drawing.Imaging.ImageFormat]::Png) } finally { $variantBase.Dispose() }
+    [MeshyTexturePacking]::Pack(($texturePrefix + '_metallic.png'),($texturePrefix + '_roughness.png'),(Join-Path $destination ('MetallicSmoothness_'+$size+'.png')),$size)
+}
+Write-Output 'MESHY_TEXTURES_PREPARED 4096/2048/1024 sRGB base and linear RGB metallic/A=1-roughness; original ZIP/FBX untouched, raw FBX not copied to Assets.'

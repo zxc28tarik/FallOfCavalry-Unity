@@ -7,16 +7,20 @@ and use. This supersedes further procedural garment retries for this pilot.
 No Implementation 15. No production profile activation in this package.
 
 Source preservation
-The imported FBX is a byte-identical copy of the user's source, SHA256:
+The preserved original FBX in local ignored intake storage has SHA256:
 0ee0076119289b4748fa0eeb11fa631d9a03e55b9b1208db6afe19beba410b27
 Original archive SHA256:
 58acdcc19240ebde805dc1aa1fa877dee844eceaab8319f500de68054b141cde
+The runtime FBX is a lossless media-only derivative (974700 bytes), SHA256:
+356dd92317ec1787f48aabe4e85157d31dfec2dd029168c856c5ffd6a125fadf
+Independent Blender mesh/weights/rig/animation digests match the original.
 The original ZIP, FBX, and 8K/4K textures remain in local intake storage.
 Provenance and exact source filenames are recorded in:
 UnityProject/Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/provenance.json
-This is user-supplied Meshy Pro output, not a CC0 attribution. The source page,
-generation-date license terms and original reference-image provenance were not
-independently verified. No historical authenticity certification is claimed.
+This is user-supplied Meshy Pro output, not a CC0 attribution. Official current
+terms and conservative repository policy are documented in
+Docs/IMPLEMENTATION_14C_MESHY_LICENSE_AUDIT.txt. Source-image rights and account
+history are not independently certified; no historical authenticity claim.
 
 Adaptation
 - Whole clothed humanoid: 9,586 source triangles, one skin, 23 source bones.
@@ -40,6 +44,8 @@ Adaptation
 - Base color reduced from 8192 to 2048 for the pilot. Metallic and roughness
   reduced from 4096 to 2048 and packed for Unity Standard: RGB metallic,
   alpha = 1 - roughness. No invented normal map or flat replacement colors.
+  Additional 4096/1024 material comparison variants use the same explicit opaque,
+  non-emissive Standard shader, compression and mipmaps.
 - Walking and Running are the only source clips. They must be tested as real
   Unity Humanoid animation, not renamed proof animation.
 - For the in-place FOC view, source vertical root movement is baked into pose
@@ -69,23 +75,32 @@ Gameplay SoldierInstance, persistent loadout, deterministic signatures, domain,
 save schema v14, and production historical catalog are unchanged.
 
 Source limitations / pending production work
-- Only one actual supplied LOD. LOD1/LOD2 are pending; no fake duplicate LODs.
+- One supplied LOD0; genuinely reduced LOD1/LOD2 have 5752/2396 triangles.
+  Decimated weights are limited/renormalized to four influences; source LOD0 is
+  unchanged. Derived surface/weight errors are recorded in optimization-manifest.
+  Three skins share one retained rig, with one renderer selected per LOD.
 - No finger bones. Hand sockets do not establish a correct weapon grip.
 - No Idle, Attack, Crouch, mounted locomotion or seated animation was supplied.
 - Walking toe penetration needs motion/foot-contact cleanup before production.
-- The existing proof shared library is not a production Humanoid muscle library;
-  playing its transform clips is not evidence of successful retargeting.
+- The existing proof shared library is not a production Humanoid muscle library.
+  Existing articulated HasanMotionReview generic diagnostic clips are converted
+  using their unchanged Avatar to real Humanoid muscle/body curves for this pilot.
+  Conversion does not improve choreography or certify clothing/contact quality.
 - Mounted integration is deliberately rejected until pelvis/saddle alignment
   and actual mounted deformation are demonstrated.
 - Sipahi, Cebeli and Tufekci replacements are not supplied by this pilot.
 - Historical and final visual review are separate from technical import tests.
-- 100/250/500-actor benchmarks and proof-versus-production comparison are not
-  executed by the 12-actor pilot capture suite; no frame-rate claim is made.
+- Optional actual-path 1/12/100 runtime benchmark follows on-foot review. It is
+  opt-in with Test-MeshyPilot -RunBenchmark; null performance means NOT RUN.
+  250/500 and proof-versus-production comparison remain outside this pilot.
 
 Reproduction
 Prepare source: Tools/Art/Prepare-MeshyPilot.ps1
 Generate import/prefab: Unity -batchmode -nographics -projectPath UnityProject
   -executeMethod FOC.Editor.Visuals.MeshyHasanPilotPipeline.Run -logFile <log>
+Convert existing FOC diagnostic motions: Unity -batchmode -nographics
+  -projectPath UnityProject -executeMethod
+  FOC.Editor.Visuals.MeshyHasanPilotMotionAdaptation.Run -logFile <log>
 Final clean-SHA local evidence: Tools/Test-MeshyPilot.ps1 -UnityEditor <path>
 That runner restores/builds/tests .NET, verifies imported pilot assets, runs all
 Unity EditMode tests, builds the Windows pilot, captures real rendered images,
