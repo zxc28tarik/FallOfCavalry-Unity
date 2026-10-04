@@ -1,0 +1,120 @@
+{
+    "version": 1,
+    "prefab": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/CHR_HasanAga_MeshyPilot.prefab",
+    "profile": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/TargetContact/Profiles/CTC_Idle_Torch_Loop.asset",
+    "profileHash": "c1fdcb741963b0b993b134bc87cc6528a41972197587d3a71fff9e93b8dd3c32",
+    "sourceClipName": "Armature|Idle_Torch_Loop",
+    "policy": {
+        "id": "meshy-ual-footik-presentation-contact-Idle_Torch_Loop",
+        "referenceAndSourcePoseReviewed": true,
+        "sourcePoseGateEvidence": "Root visual review: TestResults/MeshyMotionClosure/Trial3 and Trial4FootIK (calibrated source-retarget, Sword/Crouch .35; original choreography retained). Numeric paired evidence: TestResults/MeshyContact/foot-ik-comparison.json. This permits contact authoring, not final motion acceptance.",
+        "loop": true,
+        "useSourceFootIK": true,
+        "authorHz": 60,
+        "validationSubdivisions": 2,
+        "groundY": 0.0,
+        "supportKeys": [
+            {
+                "phase": 0.0,
+                "support": 3
+            },
+            {
+                "phase": 1.0,
+                "support": 3
+            }
+        ],
+        "requireHeelAndToeSupport": true,
+        "contactTolerance": 0.0020000000949949028,
+        "flatSoleHoverTolerance": 0.006000000052154064,
+        "maximumBodyCorrection": 0.11999999731779099,
+        "externalPlanarMotionKnown": false,
+        "expectedPlanarDisplacementPerCycle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+        },
+        "supportProvenance": "Explicit Both support for reviewed grounded idle/torch source. Any dual-contact mismatch remains FAIL; no airborne inference."
+    },
+    "immutableInputs": [
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/BaseColor.png",
+            "sha256": "6b1a43a19835d333f89d1ba35187483628989ecb0c194b0b5237a80b01ababf6"
+        },
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/BaseColor.png.meta",
+            "sha256": "d1b033c1095384cc80b07776056007405c8a059501d22a3a6c042b46f592d39d"
+        },
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy.fbx",
+            "sha256": "356dd92317ec1787f48aabe4e85157d31dfec2dd029168c856c5ffd6a125fadf"
+        },
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy.fbx.meta",
+            "sha256": "0b9993399fdcaa264415db44d84b05d9d9a39a1e7c1f7f467bd08100a90cd2db"
+        },
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/MetallicSmoothness.png",
+            "sha256": "0379492149a9aa25576f82e0a46e2f24102e1b5400825d2117eed2b2edd2cf2e"
+        },
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/MetallicSmoothness.png.meta",
+            "sha256": "5a92b8d33f9c6bea08d8e5fadc84892d5eba682a867876ec5bc5d1f683154ae7"
+        },
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MotionLibrary/UAL1_Standard.fbx",
+            "sha256": "21b32d912da3cb93426d974fb945e86f5b2e86970acd2ce89905e0fbf9f1dcc2"
+        },
+        {
+            "path": "Assets/FOC/ArtSource/HistoricalSlice/MotionLibrary/UAL1_Standard.fbx.meta",
+            "sha256": "89abf1226881b140447f977cd681220a51220f5bd0e3f790b5891470367896d8"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/ANM_HasanAga_MeshyPilot.controller",
+            "sha256": "2c27a52b54c8c69e01b6ce39e2862113151c1f1c691dfb2bee6300dc81af7aae"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/ANM_HasanAga_MeshyPilot.controller.meta",
+            "sha256": "8024f8061f1a83dfb76f03604e732287d6af02cc9cdc686b2d0d8e761959419b"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/CHR_HasanAga_MeshyPilot.prefab",
+            "sha256": "3720d6f8921f6a239e33c1a927a0571fbada0a180de3a3d4e20aee00a271eb0d"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/CHR_HasanAga_MeshyPilot.prefab.meta",
+            "sha256": "0e5f250b5c1cba143e2c4e3c42c2cba98f90beebcaf3774761eb63ac77922b98"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/AVT_MeshyHasan_Calibrated.asset",
+            "sha256": "0d77fc08fecac6451d943909ff906e0f06ea5d8abcbbf6209718b73b7887b9e6"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/AVT_MeshyHasan_Calibrated.asset.meta",
+            "sha256": "697089c0eb1fc07caf593992b1514fb10c9ff9c970e7bf4df1c2b4d2d27b0cde"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MAT_HasanAga_MeshyPilot.mat",
+            "sha256": "aed60cc83ea3d46a91fa8826d96bc74b50952d7c34664fc46406e6b8c5c57e9d"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MAT_HasanAga_MeshyPilot.mat.meta",
+            "sha256": "a2158d8abf9ff0f93b8a011d2cda87999d2ff6707a9597d89178f1121ca99fe2"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD1.asset",
+            "sha256": "abd35c6858a0e6a0a3831247bca4e075aa627450cfc0e83d54d1b7ccda8a3ac0"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD1.asset.meta",
+            "sha256": "37dcd83fbe468fbdce4972588568e3e89185d2d32737ad60d482e1d8e31f5c16"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD2.asset",
+            "sha256": "5d643a48033b569a18ee973ebe528178d916fa0a13b7a00df79d22b3b2987418"
+        },
+        {
+            "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD2.asset.meta",
+            "sha256": "bb50151fa82270683100c5f29b3cc061e5374bd44e06820e53f3b156818de30c"
+        }
+    ]
+}

@@ -83,8 +83,8 @@ namespace FOC.Editor.Visuals
                 groundY=0,maximumBodyCorrection=.12f,contactTolerance=.002f,flatSoleHoverTolerance=.006f,requireHeelAndToeSupport=!sword,
                 referenceAndSourcePoseReviewed=true,
                 sourcePoseGateEvidence="Root visual review: TestResults/MeshyMotionClosure/Trial3 and Trial4FootIK (calibrated source-retarget, Sword/Crouch .35; original choreography retained). Numeric paired evidence: TestResults/MeshyContact/foot-ik-comparison.json. This permits contact authoring, not final motion acceptance.",
-                supportProvenance=sword?"FootIK 60Hz measured support + reviewed Trial4. Both start/end; Right support [.15,.80), during which Left intentionally lifts up to ~7cm. No mirror/choreography edit. Dual contact outside that interval still audited.":"Explicit Both support for reviewed grounded idle/crouch/torch source. Any dual-contact mismatch remains FAIL; no airborne inference.",
-                supportKeys=sword?new[]{K(0,Support.Both),K(.15f,Support.Right),K(.8f,Support.Both),K(1,Support.Both)}:new[]{K(0,Support.Both),K(1,Support.Both)}
+                supportProvenance=sword?"FootIK 60Hz measured support + reviewed Trial4. Both start/end; Left support [.15,.80), while the right foot is intentionally lifted through the downstroke. No mirror/choreography edit. Dual contact outside that interval remains audited.":name=="Crouch_Idle_Loop"?"FootIK 60Hz measured support + reviewed Trial4. Crouch holds the left foot as the explicit planted support; the right foot is a raised/repositioning leg in this source choreography. No mirror/choreography edit; no inference of dual support.":"Explicit Both support for reviewed grounded idle/torch source. Any dual-contact mismatch remains FAIL; no airborne inference.",
+                supportKeys=sword?new[]{K(0,Support.Left),K(.25f,Support.Right),K(.8f,Support.Both),K(1,Support.Both)}:name=="Crouch_Idle_Loop"?new[]{K(0,Support.Left),K(1,Support.Left)}:new[]{K(0,Support.Both),K(1,Support.Both)}
             };
         }
         private static MeshyTargetContact.SupportKey K(float p,Support s)=>new MeshyTargetContact.SupportKey{phase=p,support=s};

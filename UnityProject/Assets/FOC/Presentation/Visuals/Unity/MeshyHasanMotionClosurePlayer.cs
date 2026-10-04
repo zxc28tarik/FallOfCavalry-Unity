@@ -11,6 +11,7 @@ namespace FOC.Presentation.Visuals
     public sealed partial class MeshyHasanPilotPlayer
     {
         public AnimationClip[] libraryMotionClips=Array.Empty<AnimationClip>();
+        public AnimationClip[] locomotionClips=Array.Empty<AnimationClip>();
         public MeshyTargetContactProfile[] contactProfiles=Array.Empty<MeshyTargetContactProfile>();
         [Serializable] public sealed class MotionClosureEvidence
         {
@@ -56,7 +57,7 @@ namespace FOC.Presentation.Visuals
             if(contactProfiles.Length<4)throw new InvalidOperationException("No complete reviewed contact candidate set.");
             foreach(var profile in contactProfiles)
             {
-                ClearActors();var actor=CreateActor(profile.sourceClip,Vector3.zero,profile.targetAvatar,profile);
+                ClearActors();var actor=CreateActorCore(profile.sourceClip,Vector3.zero,profile.targetAvatar,profile,false);
                 actor.calibrationScenario="MeasuredContact";actor.sourceClipName=profile.sourceClip.name;
                 foreach(var phase in new[]{0f,.15f,.35f,.55f,.75f,.99f})
                 {

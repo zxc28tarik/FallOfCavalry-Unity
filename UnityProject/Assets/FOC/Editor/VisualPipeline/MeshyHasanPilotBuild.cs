@@ -33,6 +33,15 @@ namespace FOC.Editor.Visuals
             {
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath)
                     ?? throw new InvalidOperationException("Import Meshy Hasan pilot before building the review player.");
+                var kilicPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/FOC/Presentation/Equipment/Ottoman1648/WPN_Kilic_01.prefab")
+                    ?? throw new InvalidOperationException("The existing FOC WPN_Kilic_01 prefab is missing.");
+                var horsePrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/FOC/Presentation/Mounts/Ottoman1648/MNT_Horse_Anatolian_01.prefab")
+                    ?? throw new InvalidOperationException("The existing FOC horse prefab is missing.");
+                var harnessPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/FOC/Presentation/Equipment/Ottoman1648/HAR_SipahiHarness_01.prefab")
+                    ?? throw new InvalidOperationException("The existing FOC harness prefab is missing.");
+                var horseClips = new[] { "Idle", "Walk", "Trot", "Gallop", "Turn" }
+                    .Select(name => AssetDatabase.LoadAssetAtPath<AnimationClip>("Assets/FOC/Presentation/Mounts/Ottoman1648/ANM_Horse_" + name + ".anim")
+                        ?? throw new InvalidOperationException("Missing horse clip " + name)).ToArray();
                 var animator = prefab.GetComponent<Animator>();
                 if (animator == null || animator.avatar == null || !animator.avatar.isValid || !animator.avatar.isHuman)
                     throw new InvalidOperationException("Pilot must retain its own valid Humanoid avatar.");
@@ -59,6 +68,10 @@ namespace FOC.Editor.Visuals
                 var changed = review == null;
                 if (review == null) review = new GameObject("Isolated Meshy Hasan player review").AddComponent<MeshyHasanPilotPlayer>();
                 if (review.characterPrefab != prefab) { review.characterPrefab = prefab; changed = true; }
+                if (review.kilicPrefab != kilicPrefab) { review.kilicPrefab = kilicPrefab; changed = true; }
+                if (review.horsePrefab != horsePrefab) { review.horsePrefab = horsePrefab; changed = true; }
+                if (review.harnessPrefab != harnessPrefab) { review.harnessPrefab = harnessPrefab; changed = true; }
+                if (!review.horseClips.SequenceEqual(horseClips)) { review.horseClips = horseClips; changed = true; }
                 if (!review.clips.SequenceEqual(required)) { review.clips = required; changed = true; }
                 var retargets=MeshyHasanPilotMotionAdaptation.LoadClips();
                 if(!review.retargetClips.SequenceEqual(retargets)){review.retargetClips=retargets;changed=true;}
@@ -73,6 +86,8 @@ namespace FOC.Editor.Visuals
                 if(!review.dualCalibrationClips.SequenceEqual(dual)){review.dualCalibrationClips=dual;changed=true;}
                 var library=MeshyMotionLibraryIntake.ReviewClips();
                 if(!review.libraryMotionClips.SequenceEqual(library)){review.libraryMotionClips=library;changed=true;}
+                var locomotion=new[]{"Walk_Loop","Jog_Fwd_Loop","Sprint_Loop"}.Select(MeshyMotionLibraryIntake.Clip).ToArray();
+                if(!review.locomotionClips.SequenceEqual(locomotion)){review.locomotionClips=locomotion;changed=true;}
                 var contactRoot=MeshyHasanPilotPipeline.OutputRoot+"/TargetContact/Profiles";
                 var contacts=Directory.Exists(contactRoot)?AssetDatabase.FindAssets("t:MeshyTargetContactProfile",new[]{contactRoot})
                     .Select(AssetDatabase.GUIDToAssetPath).OrderBy(p=>p,StringComparer.Ordinal).Select(AssetDatabase.LoadAssetAtPath<MeshyTargetContactProfile>).ToArray():Array.Empty<MeshyTargetContactProfile>();

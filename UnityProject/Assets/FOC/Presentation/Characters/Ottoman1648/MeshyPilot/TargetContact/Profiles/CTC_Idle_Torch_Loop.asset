@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf13ab7ef71445c1a8e86c9442b6cb22, type: 3}
+  m_Name: CTC_Idle_Torch_Loop
+  m_EditorClassIdentifier: FOC.Visuals.Unity::FOC.Presentation.Visuals.MeshyTargetContactProfile
+  sourceClip: {fileID: -7342238307180667810, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  targetAvatar: {fileID: 9000000, guid: 4c826caa188bf19449731f9daec9d8c0, type: 2}
+  useFootIK: 1
+  groundY: 0
+  loop: 1
+  maximumBodyCorrection: 0.12
+  correctionMeters:
+  - 0.010207023
+  - 0.010206993
+  - 0.010207395
+  - 0.010207142
+  - 0.01020747
+  - 0.010208259
+  - 0.010210018
+  - 0.010211463
+  - 0.010211314
+  - 0.010205383
+  - 0.010197396
+  - 0.010195906
+  - 0.010196636
+  - 0.0101975305
+  - 0.010198082
+  - 0.010199989
+  - 0.01020285
+  - 0.010205234
+  - 0.010207172
+  - 0.010210137
+  - 0.01021188
+  - 0.010207082
+  - 0.010198767
+  - 0.010196189
+  - 0.0101975305
+  - 0.010197545
+  - 0.010198037
+  - 0.010197948
+  - 0.010198156
+  - 0.010199214
+  - 0.0102006
+  - 0.010201733
+  - 0.010203402
+  - 0.010204862
+  - 0.010206397
+  - 0.010206799
+  - 0.010207678
+  - 0.010208408
+  - 0.010208885
+  - 0.010209064
+  - 0.010208617
+  - 0.010208453
+  - 0.010207544
+  - 0.010207067
+  - 0.010206054
+  - 0.010204296
+  - 0.010202478
+  - 0.01020133
+  - 0.010199497
+  - 0.010198395
+  - 0.010198484
+  - 0.01019838
+  - 0.010198395
+  - 0.01019832
+  - 0.010197784
+  - 0.01019762
+  - 0.010196368
+  - 0.010198261
+  - 0.0102065755
+  - 0.01021124
+  - 0.010208766
+  - 0.010206069
+  - 0.010203446
+  - 0.0102013005
+  - 0.010198901
+  - 0.010197024
+  - 0.010197173
+  - 0.010196905
+  - 0.0101961
+  - 0.010196994
+  - 0.010204445
+  - 0.010210614
+  - 0.010210673
+  - 0.010208602
+  - 0.010208349
+  - 0.010207961
+  - 0.010207514
+  - 0.010207023
+  sourcePoseGateEvidence: 'Root visual review: TestResults/MeshyMotionClosure/Trial3
+    and Trial4FootIK (calibrated source-retarget, Sword/Crouch .35; original choreography
+    retained). Numeric paired evidence: TestResults/MeshyContact/foot-ik-comparison.json.
+    This permits contact authoring, not final motion acceptance.'
+  supportProvenance: Explicit Both support for reviewed grounded idle/torch source.
+    Any dual-contact mismatch remains FAIL; no airborne inference.

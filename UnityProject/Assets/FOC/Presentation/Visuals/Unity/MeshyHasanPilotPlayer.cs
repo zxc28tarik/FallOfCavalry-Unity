@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using FOC.Domain.Common;
 using FOC.Domain.Soldiers;
+using FOC.Visuals.Core;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -18,6 +19,10 @@ namespace FOC.Presentation.Visuals
     public sealed partial class MeshyHasanPilotPlayer : MonoBehaviour
     {
         public GameObject characterPrefab = null!;
+        public GameObject kilicPrefab = null!;
+        public GameObject horsePrefab = null!;
+        public GameObject harnessPrefab = null!;
+        public AnimationClip[] horseClips = Array.Empty<AnimationClip>();
         public AnimationClip[] clips = Array.Empty<AnimationClip>();
         public AnimationClip[] retargetClips = Array.Empty<AnimationClip>();
         public Material[] textureVariants = Array.Empty<Material>();
@@ -65,6 +70,7 @@ namespace FOC.Presentation.Visuals
             public MeshyTargetContactProfile? contactProfile;
             public Vector3 presentationRestPosition;
             public float contactOffsetMeters;
+            public GameObject? weaponInstance;
         }
 
         [Serializable]
@@ -166,6 +172,38 @@ namespace FOC.Presentation.Visuals
                 yield break;
             }
 
+            if (Arg("--meshy-weapon-attack") == "true")
+            {
+                var weaponReview = RunWeaponAttackReview();
+                try { while (weaponReview.MoveNext()) yield return weaponReview.Current; }
+                finally { (weaponReview as IDisposable)?.Dispose(); }
+                yield break;
+            }
+
+            if (Arg("--meshy-locomotion-review") == "true")
+            {
+                var locomotion = RunLocomotionReview();
+                try { while (locomotion.MoveNext()) yield return locomotion.Current; }
+                finally { (locomotion as IDisposable)?.Dispose(); }
+                yield break;
+            }
+
+            if (Arg("--meshy-calibrated-benchmark") == "true")
+            {
+                var benchmark = RunCalibratedBenchmark();
+                try { while (benchmark.MoveNext()) yield return benchmark.Current; }
+                finally { (benchmark as IDisposable)?.Dispose(); }
+                yield break;
+            }
+
+            if (Arg("--meshy-mounted-review") == "true")
+            {
+                var mounted = RunMountedReview();
+                try { while (mounted.MoveNext()) yield return mounted.Current; }
+                finally { (mounted as IDisposable)?.Dispose(); }
+                yield break;
+            }
+
             if (Arg("--meshy-calibration") == "true")
             {
                 var calibration = RunCalibration();
@@ -176,7 +214,7 @@ namespace FOC.Presentation.Visuals
 
             if (output == null)
             {
-                var actor = CreateActor(FindClip("Walking"), Vector3.zero);
+                var actor = CreateActor(FindClip("Walking"), Vector3.zero, null);
                 Evaluate(actor, 1f / 60f);
                 Frame("quarter");
                 interactive = true;
@@ -187,7 +225,7 @@ namespace FOC.Presentation.Visuals
             foreach (var direction in new[] { "front", "side", "back" })
             {
                 ClearActors();
-                CreateActor(null, Vector3.zero);
+                CreateActor(null, Vector3.zero, null);
                 yield return null;
                 Frame(direction);
                 Capture((captures.Count + 1).ToString("00") + "-rest-" + direction + ".png", direction, 0);
@@ -195,7 +233,7 @@ namespace FOC.Presentation.Visuals
             foreach (var motion in new[] { "Walking", "Running" })
             {
                 ClearActors();
-                var actor = CreateActor(FindClip(motion), Vector3.zero);
+                var actor = CreateActor(FindClip(motion), Vector3.zero, null);
                 // Playables genuinely evaluate source humanoid animation in the
                 // built player. Fixed steps make results reproducible; these are
                 // simulated animation steps, not frame-rate/performance claims.
@@ -224,7 +262,7 @@ namespace FOC.Presentation.Visuals
             ClearActors();
             for (var i = 0; i < 12; i++)
             {
-                CreateActor(FindClip("Walking"), new Vector3((i % 4 - 1.5f) * 1.05f, 0, -(i / 4) * 1.25f));
+                CreateActor(FindClip("Walking"), new Vector3((i % 4 - 1.5f) * 1.05f, 0, -(i / 4) * 1.25f), null);
             }
             yield return null;
             for (var i = 0; i < actors.Count; i++) SetPhase(actors[i], i / 12f);
@@ -234,14 +272,14 @@ namespace FOC.Presentation.Visuals
             Frame("group12");
             Capture("12-group12.png", "group12", 0);
             ClearActors();
-            CreateActor(null,Vector3.zero);
+            CreateActor(null,Vector3.zero, null);
             yield return new WaitForEndOfFrame();Frame("quarter");Capture("03-three-quarter.png","quarter",0);
             foreach(var name in new[]{"Idle","Turn","OneHandedAttack","ArmRaise","Crouch"})
             {
                 ClearActors();
                 var matches=retargetClips.Where(c=>c!=null&&c.name.EndsWith("_"+name,StringComparison.Ordinal)).ToArray();
                 if(matches.Length!=1)throw new InvalidOperationException("Missing real FOC diagnostic retarget: "+name);
-                var actor=CreateActor(matches[0],Vector3.zero);
+                var actor=CreateActor(matches[0],Vector3.zero, null);
                 for(var step=0;step<60;step++){Evaluate(actor,1f/60f);if(step%6==0)yield return null;}
                 foreach(var phase in new[]{.25f,.5f,.75f})
                 {
@@ -253,7 +291,7 @@ namespace FOC.Presentation.Visuals
             }
             // Compare texture resolutions on the same consolidated FOC actor;
             // this does not enable unsupported modular Narrative/Crowd tiers.
-            ClearActors();var textureActor=CreateActor(null,Vector3.zero);
+            ClearActors();var textureActor=CreateActor(null,Vector3.zero, null);
             foreach(var material in textureVariants)
             {
                 if(material==null)throw new InvalidOperationException("Missing comparison material.");
@@ -262,7 +300,7 @@ namespace FOC.Presentation.Visuals
             }
             // Explicitly restore shared materials before returning pooled views.
             foreach(var skin in textureActor.view.GetComponentsInChildren<SkinnedMeshRenderer>())skin.sharedMaterial=characterPrefab.GetComponentInChildren<SkinnedMeshRenderer>().sharedMaterial;
-            ClearActors();var lodActor=CreateActor(FindClip("Walking"),Vector3.zero);
+            ClearActors();var lodActor=CreateActor(FindClip("Walking"),Vector3.zero, null);
             for(var index=0;index<3;index++)
             {
                 lodActor.forcedLod=index;
@@ -305,7 +343,12 @@ namespace FOC.Presentation.Visuals
             Application.Quit(0);
         }
 
-        private Actor CreateActor(AnimationClip? clip, Vector3 location, Avatar? avatarOverride = null, MeshyTargetContactProfile? contactProfile = null)
+        // Keep the three-argument reflection/test contract stable. Extended
+        // review-only options live in the explicitly named core method.
+        private Actor CreateActor(AnimationClip? clip, Vector3 location, Avatar? avatarOverride)
+            => CreateActorCore(clip, location, avatarOverride, null, false);
+
+        private Actor CreateActorCore(AnimationClip? clip, Vector3 location, Avatar? avatarOverride, MeshyTargetContactProfile? contactProfile, bool attachKilic)
         {
             var index = actorSequence++;
             var troop = new TroopDefinition(TroopDefinitionId.Create("meshy-hasan-review"), "Meshy Hasan pilot",
@@ -316,11 +359,20 @@ namespace FOC.Presentation.Visuals
                 RecruitmentRecordId.Create("pilot-review-record-" + index)), new SoldierLoadout(Array.Empty<WeaponSlotAssignment>()), troop.DefaultCombatRoleId);
             var view = pool.Rent();
             Actor? actor = null;
+            GameObject? weaponInstance = null;
             try
             {
             view.transform.localPosition = location;
             MeshyHasanPilotCatalog.Assemble(assembler, pilotCatalog, view, soldier, troop,
                 new Dictionary<EquipmentInstanceId, EquipmentInstance>());
+            if (attachKilic)
+            {
+                if (kilicPrefab == null) throw new InvalidOperationException("FOC WPN_Kilic_01 prefab is not assigned.");
+                if (!view.TryGetSocket(VisualSocket.RightHand, out var rightHand) || rightHand == null)
+                    throw new InvalidOperationException("Meshy pilot has no actual Socket_RightHand for the kilic review.");
+                weaponInstance = Instantiate(kilicPrefab, rightHand, false);
+                weaponInstance.name = "WPN_Kilic_01_REVIEW_RightHand";
+            }
             var animator = view.GetComponentsInChildren<Animator>(true).Single();
             if (animator.avatar == null || !animator.avatar.isValid || !animator.avatar.isHuman)
                 throw new InvalidOperationException("Source humanoid avatar is missing or invalid.");
@@ -328,7 +380,8 @@ namespace FOC.Presentation.Visuals
             foreach (var skin in view.GetComponentsInChildren<SkinnedMeshRenderer>()) skin.updateWhenOffscreen = true;
             actor = new Actor { view = view, animator = animator, clip = clip,
                 originalController = animator.runtimeAnimatorController, originalAvatar = animator.avatar,
-                contactProfile = contactProfile, presentationRestPosition = animator.transform.localPosition };
+                contactProfile = contactProfile, presentationRestPosition = animator.transform.localPosition,
+                weaponInstance = weaponInstance };
             animator.applyRootMotion = false;
             animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             // A manual graph exclusively owns this review Animator. Retaining
@@ -358,7 +411,8 @@ namespace FOC.Presentation.Visuals
                 actor.graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
                 actor.playable = AnimationClipPlayable.Create(actor.graph, clip);
                 if (contactProfile != null) contactProfile.ValidateBinding(animator, clip);
-                actor.playable.SetApplyFootIK(contactProfile != null ? contactProfile.useFootIK : Arg("--meshy-motion-closure") == "true" && Arg("--meshy-foot-ik") == "true");
+                actor.playable.SetApplyFootIK(contactProfile != null ? contactProfile.useFootIK :
+                    (Arg("--meshy-motion-closure") == "true" || Arg("--meshy-weapon-attack") == "true") && Arg("--meshy-foot-ik") == "true");
                 actor.playable.SetApplyPlayableIK(false);
                 var animationOutput = AnimationPlayableOutput.Create(actor.graph, "Humanoid source clip", animator);
                 animationOutput.SetSourcePlayable(actor.playable);
@@ -384,7 +438,9 @@ namespace FOC.Presentation.Visuals
                     actor.animator.avatar = actor.originalAvatar;
                     actor.animator.runtimeAnimatorController = actor.originalController;
                     actor.animator.transform.localPosition = actor.presentationRestPosition;
+                    if (weaponInstance != null) DestroyObject(weaponInstance);
                 }
+                else if (weaponInstance != null) DestroyObject(weaponInstance);
                 pool.Return(view);
                 throw;
             }
@@ -451,6 +507,7 @@ namespace FOC.Presentation.Visuals
                 actor.animator.avatar = actor.originalAvatar;
                 actor.animator.runtimeAnimatorController = actor.originalController;
                 actor.animator.transform.localPosition = actor.presentationRestPosition;
+                if (actor.weaponInstance != null) DestroyObject(actor.weaponInstance);
                 pool.Return(actor.view);
             }
             actors.Clear();
@@ -534,9 +591,15 @@ namespace FOC.Presentation.Visuals
 
         private static Renderer[] VisibleRenderers(Actor actor)
         {
-            var groups=actor.view.GetComponentsInChildren<LODGroup>();
-            if(groups.Length!=1)throw new InvalidOperationException("Expected one consolidated pilot LOD group.");
-            return groups[0].GetLODs()[actor.forcedLod].renderers;
+            // A review-only weapon has its own LODGroup. Select the consolidated
+            // character group by its skinned renderer and include the attached
+            // weapon's currently enabled renderers separately.
+            var groups=actor.view.GetComponentsInChildren<LODGroup>()
+                .Where(g=>g.GetLODs().SelectMany(l=>l.renderers).OfType<SkinnedMeshRenderer>().Any()).ToArray();
+            if(groups.Length!=1)throw new InvalidOperationException("Expected one consolidated pilot skinned LOD group.");
+            var renderers=groups[0].GetLODs()[Mathf.Clamp(actor.forcedLod,0,groups[0].GetLODs().Length-1)].renderers.ToList();
+            if(actor.weaponInstance!=null)renderers.AddRange(actor.weaponInstance.GetComponentsInChildren<Renderer>(true));
+            return renderers.Distinct().ToArray();
         }
 
         private void Capture(string filename, string view, float phase)

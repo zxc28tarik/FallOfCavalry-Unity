@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf13ab7ef71445c1a8e86c9442b6cb22, type: 3}
+  m_Name: CTC_Sword_Attack
+  m_EditorClassIdentifier: FOC.Visuals.Unity::FOC.Presentation.Visuals.MeshyTargetContactProfile
+  sourceClip: {fileID: -2807887025256620907, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  targetAvatar: {fileID: 9000000, guid: 4c826caa188bf19449731f9daec9d8c0, type: 2}
+  useFootIK: 1
+  groundY: 0
+  loop: 0
+  maximumBodyCorrection: 0.12
+  correctionMeters:
+  - 0.010215159
+  - 0.010226998
+  - 0.010213013
+  - 0.010198067
+  - 0.010205093
+  - 0.010208643
+  - 0.010227191
+  - 0.010223414
+  - 0.010220987
+  - 0.010205134
+  - 0.010211048
+  - 0.010190552
+  - 0.0102166785
+  - 0.010199285
+  - 0.0102054505
+  - 0.01020671
+  - 0.010197616
+  - 0.015213343
+  - 0.0140004
+  - 0.013138044
+  - 0.010482716
+  - 0.011509146
+  - 0.010939817
+  - 0.0163442
+  - 0.009129922
+  - 0.009231131
+  - 0.008552291
+  - 0.010272956
+  - 0.008545925
+  - 0.008244763
+  - 0.008148062
+  - 0.007902416
+  - 0.007929075
+  - 0.007925774
+  - 0.00795469
+  - 0.007990892
+  - 0.008036974
+  - 0.008093159
+  - 0.008152041
+  - 0.00826976
+  - 0.008397068
+  - 0.008344303
+  - 0.008884515
+  - 0.009106855
+  - 0.00888368
+  - 0.008773993
+  - 0.008752639
+  - 0.008640836
+  - 0.008695166
+  - 0.008658181
+  - 0.008734393
+  - 0.008730891
+  - 0.008732113
+  - 0.008737835
+  - 0.008768092
+  - 0.008785191
+  - 0.008806876
+  - 0.008818652
+  - 0.008831418
+  - 0.008863754
+  - 0.008878438
+  - 0.008927467
+  - 0.008923969
+  - 0.008963275
+  - 0.0089739775
+  - 0.009035886
+  - 0.009018472
+  - 0.009062993
+  - 0.009081154
+  - 0.009109053
+  - 0.009123175
+  - 0.0091217635
+  - 0.0091486825
+  - 0.010476391
+  - 0.010516408
+  - 0.010228041
+  - 0.010238419
+  - 0.010240505
+  - 0.010219957
+  - 0.010205994
+  - 0.010207179
+  - 0.010209921
+  - 0.010210614
+  - 0.010211798
+  - 0.0102126105
+  - 0.010212774
+  - 0.010213564
+  - 0.010214384
+  - 0.010214317
+  - 0.010213862
+  - 0.010214533
+  - 0.010214451
+  - 0.010214712
+  - 0.010214987
+  sourcePoseGateEvidence: 'Root visual review: TestResults/MeshyMotionClosure/Trial3
+    and Trial4FootIK (calibrated source-retarget, Sword/Crouch .35; original choreography
+    retained). Numeric paired evidence: TestResults/MeshyContact/foot-ik-comparison.json.
+    This permits contact authoring, not final motion acceptance.'
+  supportProvenance: FootIK 60Hz measured support + reviewed Trial4. Both start/end;
+    Left support [.15,.80), while the right foot is intentionally lifted through
+    the downstroke. No mirror/choreography edit. Dual contact outside that interval
+    remains audited.

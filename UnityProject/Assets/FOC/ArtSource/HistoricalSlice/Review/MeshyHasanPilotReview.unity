@@ -163,7 +163,25 @@ MonoBehaviour:
   - {fileID: -6676812269523803463, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
   - {fileID: -7342238307180667810, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
   - {fileID: -2328835098782832033, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  locomotionClips:
+  - {fileID: -7003542030617561338, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  - {fileID: -8815886378510225334, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  - {fileID: -4950333804767787469, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  contactProfiles:
+  - {fileID: 11400000, guid: 8fe5e99e88e19ab4c9d4183801095339, type: 2}
+  - {fileID: 11400000, guid: f52d034f3a687904a9ea958404357df8, type: 2}
+  - {fileID: 11400000, guid: 86818cf8f33b8fa46b08a3412c01838a, type: 2}
+  - {fileID: 11400000, guid: d928d31ef7cb4354ba912bc5bf2ba3ae, type: 2}
   characterPrefab: {fileID: 6726799632366432074, guid: c48a2882be13e4742ba560e3729ee27a, type: 3}
+  kilicPrefab: {fileID: 4942412780471566043, guid: 5bc24367a61f7bf4caac4796cfc9e15e, type: 3}
+  horsePrefab: {fileID: 584812927179999994, guid: 7f50412d58306854faed198b41007685, type: 3}
+  harnessPrefab: {fileID: 8625875386003552060, guid: e4fda1b46ca295c45998befa053af702, type: 3}
+  horseClips:
+  - {fileID: 7400000, guid: 462efb4bb25ed604b82701a14fe51c63, type: 2}
+  - {fileID: 7400000, guid: dabb38e8f763e2940be7593c7b6c663d, type: 2}
+  - {fileID: 7400000, guid: 01fa7131b07144447bd67d2bcdbadf7d, type: 2}
+  - {fileID: 7400000, guid: 0a51c504f88aa5b4cba3171730daf4f3, type: 2}
+  - {fileID: 7400000, guid: 0c743a4790f236e40bfb4ccd08b2b40e, type: 2}
   clips:
   - {fileID: 7051438618928365143, guid: 1cd9d272b2bd25548b6e0cc3d90bbb50, type: 3}
   - {fileID: -6575673343129379932, guid: 1cd9d272b2bd25548b6e0cc3d90bbb50, type: 3}
