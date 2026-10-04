@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "assetId": "MOTION_DONOR_Quaternius_UAL1_Standard_v3",
+  "category": "HumanoidAnimationDonor",
+  "authoringStatus": "LICENSED_INTAKE_ONLY_NOT_RUNTIME_OR_VISUAL_ACCEPTANCE",
+  "intakeDateUtc": "2026-10-04",
+  "baseCommit": "0c6ccff569f7d37b87f36ad660baa6a6f9e94d13",
+  "creator": "Quaternius; official pack credits animator Gonzalo Furnier",
+  "product": "Universal Animation Library [Standard]",
+  "tier": "Free Standard; no paid Pro or Source files acquired",
+  "upstreamProductUrl": "https://quaternius.com/packs/universalanimationlibrary.html",
+  "upstreamDownloadPage": "https://quaternius.itch.io/universal-animation-library",
+  "upstreamFileEndpoint": "https://quaternius.itch.io/universal-animation-library/file/17958403?source=game_download",
+  "upstreamUploadId": "17958403",
+  "downloadMethod": "Anonymous official itch.io zero-price download flow. Signed CDN URL expires and is intentionally not treated as a permanent source URL. No account, signup, payment or purchase.",
+  "reproductionScript": "Tools/Art/Fetch-QuaterniusMotion.ps1",
+  "upstreamArchiveName": "Universal Animation Library[Standard].zip",
+  "localArchive": "Artifacts/MotionLibraryIntake/QuaterniusStandard.zip",
+  "archiveBytes": 15904933,
+  "archiveSha256": "cc73fc4e495b82958207316596317a3f40b9fa38065bde1027937452da537724",
+  "localExtractionRoot": "Artifacts/MotionLibraryIntake/QuaterniusStandard-cc73fc4e495b/Universal Animation Library[Standard]",
+  "extractionPolicy": "All ZIP destinations validated before extraction: absolute paths, colon paths, escaping normalized paths and case-insensitive duplicate destinations rejected. No merge into an existing extraction directory.",
+  "license": {
+    "identifier": "CC0-1.0",
+    "officialUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "archiveLicenseFile": "License.txt",
+    "archiveLicenseSha256": "6d01f55c6e4c49a2c9963e147e561945ae2c83958c8ca667d90a6bffdbfac061",
+    "reviewedEvidence": "Included License.txt and README.txt both explicitly state CC0 1.0 Universal Public Domain Dedication. Official author product/download pages also state CC0.",
+    "redistributionBasis": "The CC0 deed permits copying, modifying and distributing the work, including commercial use, without additional permission. This covers redistribution of downloaded motion-source exports and derived clips; it is not permission to claim authorship or endorsement. Retain provenance voluntarily.",
+    "notAcquired": "Paid Blender source/control-rig files, paid Pro files, unrelated third-party animations"
+  },
+  "archiveFiles": [
+    {"path": "Godot_Setup.png", "bytes": 499312},
+    {"path": "License.txt", "bytes": 332},
+    {"path": "README.txt", "bytes": 702},
+    {"path": "Unity/UAL1_Standard.fbx", "bytes": 23754684, "sha256": "21b32d912da3cb93426d974fb945e86f5b2e86970acd2ce89905e0fbf9f1dcc2", "selectedForFirstImport": true},
+    {"path": "Unity/UAL1_Standard_RM.fbx", "bytes": 23767852, "sha256": "5a5f5de6f18e9c91cdbc40eb26319ec85cc45070bc00965bc2737beb4b2984ea", "selectedForFirstImport": false},
+    {"path": "Unity_Setup.png", "bytes": 237945},
+    {"path": "Unreal-Godot/UAL1_Standard.glb", "bytes": 7618436},
+    {"path": "Unreal-Godot/UAL1_Standard_RM.glb", "bytes": 7620504},
+    {"path": "Unreal_Setup.png", "bytes": 148412}
+  ],
+  "upstreamVersionEvidence": {
+    "reportedVersion": "v3.0 (2026-06-16), from official download-page changelog",
+    "changelogUrl": "https://quaternius.itch.io/universal-animation-library/devlog/1555893/added-root-motion-and-other-fixes",
+    "rootMotionVariants": "Included README says suffix _RM contains root motion; other export has root motion disabled. First candidate is the non-RM Unity FBX.",
+    "historicalFixes": "Official v2.0 changed rig naming to match modular outfits/base characters and fixed sword-swing elbow twist; v2.1 corrected 24/30fps export; v3.0 fixed Unity scale warnings and directional step synchronization. These are upstream claims, not local test results."
+  },
+  "readOnlyGlbInspection": {
+    "file": "Unreal-Godot/UAL1_Standard.glb",
+    "method": "Read glTF JSON and float quaternion accessors directly in Node; no Blender or Unity process",
+    "generator": "Khronos glTF Blender I/O v4.5.48",
+    "skinCount": 1,
+    "skinName": "Armature",
+    "jointCount": 65,
+    "sharedHierarchy": "All inspected animation channels address the same node hierarchy. Includes root/pelvis/spine_01/02/03, neck_01/Head, clavicle/upperarm/lowerarm/hand, articulated fingers, thigh/calf/foot/ball pairs.",
+    "animationCount": 43,
+    "animations": ["A_TPose", "Crouch_Fwd_Loop", "Crouch_Idle_Loop", "Dance_Loop", "Death01", "Driving_Loop", "Fixing_Kneeling", "Hit_Chest", "Hit_Head", "Idle_Loop", "Idle_Talking_Loop", "Idle_Torch_Loop", "Interact", "Jog_Fwd_Loop", "Jump_Land", "Jump_Loop", "Jump_Start", "PickUp_Table", "Pistol_Aim_Down", "Pistol_Aim_Neutral", "Pistol_Aim_Up", "Pistol_Idle_Loop", "Pistol_Reload", "Pistol_Shoot", "Punch_Cross", "Punch_Jab", "Push_Loop", "Roll", "Sitting_Enter", "Sitting_Exit", "Sitting_Idle_Loop", "Sitting_Talking_Loop", "Spell_Simple_Enter", "Spell_Simple_Exit", "Spell_Simple_Idle_Loop", "Spell_Simple_Shoot", "Sprint_Loop", "Swim_Fwd_Loop", "Swim_Idle_Loop", "Sword_Attack", "Sword_Idle", "Walk_Formal_Loop", "Walk_Loop"],
+    "swordAttack": {
+      "durationSeconds": 1.5333333015441895,
+      "keysPerRotationTrack": 47,
+      "localQuaternionMaximumPairwiseExcursionDegrees": {"pelvis": 79.640, "spine_02": 21.600, "spine_03": 96.338, "upperarm_r": 89.660, "lowerarm_r": 108.977, "hand_r": 86.640},
+      "interpretation": "The source contains authored torso and right-labelled arm motion, unlike the previous arm-only diagnostic. Actual anatomical hand ownership, retarget quality, ground contact and visual acceptance must still be verified in Unity. Local quaternion excursions are not world-space attack direction or acceptance."
+    },
+    "missingNamedActions": ["Dedicated Turn", "Dedicated ArmRaise", "Horse-mounted rider locomotion"],
+    "countCaveat": "Current downloaded non-RM export contains 43 animations. Do not report advertised 120+ total across paid tiers or the older Defold example's 45 mixed-RM clip list as this archive's clip count."
+  },
+  "usageBoundary": "Animation donor only. Included body mesh is a rig/reference fixture, not replacement character art. Original Meshy body, clothing, 23-bone rig, weights, materials, LODs, equipment/loadout truth, gameplay and save remain unchanged by this intake. No production catalog activation or Unity import performed by the intake task.",
+  "firstCandidateClips": ["Sword_Attack", "Sword_Idle", "Idle_Loop", "Crouch_Idle_Loop", "Walk_Loop", "Jog_Fwd_Loop", "Sprint_Loop"],
+  "fallbackReviewedNotDownloaded": {
+    "product": "KayKit - Character Animations Free 1.1",
+    "url": "https://kaylousberg.itch.io/kaykit-character-animations",
+    "license": "CC0-1.0",
+    "advertisedDownloadSize": "14 MB",
+    "formats": ["FBX", "GLTF"],
+    "rigs": ["Rig_Medium", "Rig_Large"],
+    "advertisedContents": "161 animations including one-handed melee, idle, crouch, movement and simulation emotes. Dedicated horseback compatibility was not verified. The author cautions retargeting to other proportions can look different.",
+    "status": "OFFICIAL_PAGE_REVIEWED_ONLY; NO DOWNLOAD, SOURCE FILE OR UNITY VALIDATION"
+  }
+}

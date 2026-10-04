@@ -1,0 +1,99 @@
+IMPLEMENTATION 14C — LOD2-ONLY REPAIR PREPARATION
+
+Status: PREPARED; ACTUAL ASSET GENERATION / UNITY IMPORT / VISUAL QA NOT RUN.
+Authoritative prior calibration commit: 0c6ccff569f7d37b87f36ad660baa6a6f9e94d13.
+This tooling does not activate production content or change gameplay/save data.
+
+PRECONDITION
+Do not generate/adopt LOD2 until the current on-foot motion/contact visual gate
+has passed. The script requires an explicit --onfoot-accepted flag and a file
+path to the reviewed evidence, hashes that evidence, and records the acceptance
+as operator-supplied. It does not infer visual acceptance from JSON status text.
+
+CAUSE / ALGORITHM
+The earlier audit_and_build_meshy_lods.py weld_derived_only() merges coincident
+positions on the derived copy, then performs unconstrained collapse decimation.
+It does not protect UV/material/normal/skin discontinuities or the waist/face.
+The original LOD0 itself was not altered by that operation.
+
+New meshy_lod2_constraints.py is a deterministic constrained edge-collapse
+simplifier. Geometric connectivity may share coincident source positions, but
+export retains distinct corner UV, normals and skin attributes. It locks:
+- UV/material/hard-normal seams, boundaries and nonmanifold edges;
+- true weight discontinuities at the SAME position across a seam;
+- every original triangle touching the measured neck/head/headgear region;
+- every original triangle touching the Hips-anchored waist/belt region;
+- small disconnected source components, including source detail pieces.
+Ordinary smoothly changing weights ALONG an edge do not constitute a seam.
+
+Only unprotected manifold edges collapse, using endpoint/midpoint quadric cost,
+the manifold link condition and a triangle normal/area safety check. A failed
+reduction target does not unlock features. All protected feature triangles and
+attributes are checked unchanged. Derived weights interpolate, then retain the
+strongest four normalized influences; this is NOT an exact-source-weight claim
+for reduced vertices. The source/runtime LOD0 rig/geometry/UV/weights/animations
+remain byte- and independently snapshot-identical.
+
+Target ratio defaults to .45 (roughly4314 triangles from9586). The request is a
+guide, not permission to damage a protected feature. A safely higher count is
+allowed only below the current5748-triangle LOD1. Existing2396-triangle LOD2 is
+retained until a replacement is actually reviewed. A25mm bidirectional REST
+surface-distance bound is a mechanical rejection threshold, NOT art acceptance.
+Actual near/far silhouette, texture, belt, face and animated screenshots remain
+mandatory; they may reject a candidate whose structure passes.
+
+EXECUTION (AFTER ROOT CONFIRMS ON-FOOT ACCEPTANCE)
+Blender4.5.9 background with factory-startup and disable-autoexec:
+  --python-exit-code 1 --python Tools/Art/repair_meshy_lod2.py --
+  --generate --onfoot-accepted --onfoot-evidence <actual reviewed JSON path>
+  --ratio .45 --output-directory Artifacts/MeshyPilotLod2Repair/Candidate01
+Output must be a NEW directory below ignored Artifacts; overwriting is refused.
+The tool writes only Hasan_Meshy_LOD2.json and LOD2-Candidate-Provenance.json.
+It does not copy to Unity, generate a Unity asset, edit prefab or refresh hashes.
+
+IMMUTABLE BASELINE / NARROW ADOPTION PLAN
+CalibrationProvenance.json remains byte-identical:
+  SHA2567804ef74e08c0631ee5d9e39741ad0689aa97f8598d403cec266a2763f8b24cf
+Its original124 inputs and generated Avatar/clip outputs remain the historical
+calibration baseline. Do not call GenerateBoth merely to refresh these inputs.
+
+Currently MeshyHumanoidCalibration.CheckHashes() strictly compares every input
+at line601; Verify() invokes it before/after audit at line182, and playback
+metadata verification invokes it around line347. An intentional replacement of
+the existing LOD2 mesh will correctly fail that old blanket comparison.
+
+After candidate review, create a SEPARATE reviewed derivation overlay, containing:
+- unchanged baseline manifest hash and original124-input list hash;
+- original before hash and approved after hash for each allowed changed file;
+- selected candidate JSON/tool/evidence hashes and validation results;
+- exact shared bone/rest metadata and preserved source/runtime/LOD1 hashes;
+- explicit status that original calibration evidence is historical, while new
+  contact/animation/LOD evidence belongs to the new final source SHA.
+
+The maximum allowlist for modified EXISTING asset files is exactly:
+  Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy_LOD2.json
+  Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD2.asset
+The first JSON is NOT in the124 dependency-derived guard and must be independently
+guarded by the overlay. The second mesh IS guarded; its old hash must match the
+existing baseline entry before substitution. Do not glob every LOD2 asset: older
+donor/proof assets and all other paths remain protected.
+
+No .meta/GUID, prefab, LOD1, LOD0, material, texture, rig, Avatar or motion changes
+are implied. Prefer updating only the isolated existing LOD2 mesh in place,
+preserving its GUID and the unchanged prefab binding. Avoid full-pipeline
+regeneration, which may rewrite unrelated assets/settings.
+
+The closure verifier can explicitly opt in to that reviewed overlay: compare
+every other baseline input/output to its original hash, and require EACH declared
+exception's original hash to match the baseline and new hash to match the actual
+approved output. Reject extra exceptions, missing exceptions, stale outputs,
+changed manifest, changed metas and changed LOD0/LOD1. The old calibration
+experiment's strict verification must not silently treat a broad refreshed hash
+snapshot as equivalent evidence. No such guard exception is implemented here.
+
+TESTS ACTUALLY RUN
+  python -B Tools/Art/repair_meshy_lod2.py --selfcheck
+Result: PASS. Synthetic288-triangle plane ->190 triangles;49 valid collapses;
+six seam cases, deterministic repetition, input immutable, normalized weights.
+No actual Meshy candidate generation, Blender process, Unity process or screenshot
+was executed for this LOD2 preparation task.

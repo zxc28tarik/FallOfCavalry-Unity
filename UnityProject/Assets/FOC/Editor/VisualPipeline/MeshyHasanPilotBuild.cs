@@ -71,6 +71,12 @@ namespace FOC.Editor.Visuals
                 var dual=dualPaths.Select(AssetDatabase.LoadAssetAtPath<AnimationClip>).Where(c=>c!=null).ToArray();
                 if(dual.Length!=0&&dual.Length!=6)throw new InvalidOperationException("Partial dual-calibration candidate set.");
                 if(!review.dualCalibrationClips.SequenceEqual(dual)){review.dualCalibrationClips=dual;changed=true;}
+                var library=MeshyMotionLibraryIntake.ReviewClips();
+                if(!review.libraryMotionClips.SequenceEqual(library)){review.libraryMotionClips=library;changed=true;}
+                var contactRoot=MeshyHasanPilotPipeline.OutputRoot+"/TargetContact/Profiles";
+                var contacts=Directory.Exists(contactRoot)?AssetDatabase.FindAssets("t:MeshyTargetContactProfile",new[]{contactRoot})
+                    .Select(AssetDatabase.GUIDToAssetPath).OrderBy(p=>p,StringComparer.Ordinal).Select(AssetDatabase.LoadAssetAtPath<MeshyTargetContactProfile>).ToArray():Array.Empty<MeshyTargetContactProfile>();
+                if(!review.contactProfiles.SequenceEqual(contacts)){review.contactProfiles=contacts;changed=true;}
                 // No SHA/time fields are serialized: final-SHA evidence is passed
                 // via --meshy-sha. Rebuilding an unchanged scene does not churn it.
                 if (changed) { EditorUtility.SetDirty(review); EditorSceneManager.SaveScene(scene, ScenePath); }

@@ -62,6 +62,9 @@ namespace FOC.Presentation.Visuals
             public float normalizedPhase;
             public bool renderBoundaryPoseStable;
             public int forcedLod;
+            public MeshyTargetContactProfile? contactProfile;
+            public Vector3 presentationRestPosition;
+            public float contactOffsetMeters;
         }
 
         [Serializable]
@@ -154,6 +157,14 @@ namespace FOC.Presentation.Visuals
             template.transform.SetParent(transform, false);
             template.gameObject.SetActive(false);
             pool.Configure(template, 16);
+
+            if (Arg("--meshy-motion-closure") == "true")
+            {
+                var closure = RunMotionClosure();
+                try { while (closure.MoveNext()) yield return closure.Current; }
+                finally { (closure as IDisposable)?.Dispose(); }
+                yield break;
+            }
 
             if (Arg("--meshy-calibration") == "true")
             {
@@ -294,7 +305,7 @@ namespace FOC.Presentation.Visuals
             Application.Quit(0);
         }
 
-        private Actor CreateActor(AnimationClip? clip, Vector3 location, Avatar? avatarOverride = null)
+        private Actor CreateActor(AnimationClip? clip, Vector3 location, Avatar? avatarOverride = null, MeshyTargetContactProfile? contactProfile = null)
         {
             var index = actorSequence++;
             var troop = new TroopDefinition(TroopDefinitionId.Create("meshy-hasan-review"), "Meshy Hasan pilot",
@@ -316,7 +327,8 @@ namespace FOC.Presentation.Visuals
             foreach (var lod in view.GetComponentsInChildren<LODGroup>()) lod.ForceLOD(0);
             foreach (var skin in view.GetComponentsInChildren<SkinnedMeshRenderer>()) skin.updateWhenOffscreen = true;
             actor = new Actor { view = view, animator = animator, clip = clip,
-                originalController = animator.runtimeAnimatorController, originalAvatar = animator.avatar };
+                originalController = animator.runtimeAnimatorController, originalAvatar = animator.avatar,
+                contactProfile = contactProfile, presentationRestPosition = animator.transform.localPosition };
             animator.applyRootMotion = false;
             animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             // A manual graph exclusively owns this review Animator. Retaining
@@ -345,14 +357,15 @@ namespace FOC.Presentation.Visuals
                 actor.graph = PlayableGraph.Create("Meshy source humanoid " + index);
                 actor.graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
                 actor.playable = AnimationClipPlayable.Create(actor.graph, clip);
-                actor.playable.SetApplyFootIK(false);
+                if (contactProfile != null) contactProfile.ValidateBinding(animator, clip);
+                actor.playable.SetApplyFootIK(contactProfile != null ? contactProfile.useFootIK : Arg("--meshy-motion-closure") == "true" && Arg("--meshy-foot-ik") == "true");
                 actor.playable.SetApplyPlayableIK(false);
                 var animationOutput = AnimationPlayableOutput.Create(actor.graph, "Humanoid source clip", animator);
                 animationOutput.SetSourcePlayable(actor.playable);
                 actor.graph.Play();
                 actor.graph.Evaluate(0);
             }
-            var trackedBones = Arg("--meshy-calibration") == "true" ? CalibrationTrackedBones : new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot };
+            var trackedBones = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" ? CalibrationTrackedBones : new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot };
             actor.tracked = trackedBones
                 .Select(animator.GetBoneTransform).Where(bone => bone != null).ToArray();
             if (actor.tracked.Length != trackedBones.Length) throw new InvalidOperationException("Humanoid tracked joint mapping incomplete.");
@@ -370,6 +383,7 @@ namespace FOC.Presentation.Visuals
                     actor.animator.enabled = false;
                     actor.animator.avatar = actor.originalAvatar;
                     actor.animator.runtimeAnimatorController = actor.originalController;
+                    actor.animator.transform.localPosition = actor.presentationRestPosition;
                 }
                 pool.Return(view);
                 throw;
@@ -380,8 +394,16 @@ namespace FOC.Presentation.Visuals
         {
             if (actor.clip == null) return;
             if (actor.playable.GetTime() >= actor.clip.length) actor.playable.SetTime(actor.playable.GetTime() % actor.clip.length);
+            actor.animator.transform.localPosition = actor.presentationRestPosition;
             actor.graph.Evaluate(delta);
+            ApplyContact(actor, (float)(actor.playable.GetTime() % actor.clip.length / actor.clip.length));
             RecordEvaluation(actor);
+        }
+
+        private static void ApplyContact(Actor actor, float phase)
+        {
+            actor.contactOffsetMeters = actor.contactProfile == null ? 0f : actor.contactProfile.Evaluate(phase);
+            actor.animator.transform.localPosition = actor.presentationRestPosition + Vector3.up * actor.contactOffsetMeters;
         }
 
         private static void RecordEvaluation(Actor actor)
@@ -395,8 +417,10 @@ namespace FOC.Presentation.Visuals
         {
             actor.normalizedPhase = phase;
             actor.renderBoundaryPoseStable = false;
+            actor.animator.transform.localPosition = actor.presentationRestPosition;
             actor.playable.SetTime(phase * actor.clip!.length);
             actor.graph.Evaluate(0);
+            ApplyContact(actor, phase);
             RecordEvaluation(actor);
         }
 
@@ -426,6 +450,7 @@ namespace FOC.Presentation.Visuals
                 actor.animator.enabled = false;
                 actor.animator.avatar = actor.originalAvatar;
                 actor.animator.runtimeAnimatorController = actor.originalController;
+                actor.animator.transform.localPosition = actor.presentationRestPosition;
                 pool.Return(actor.view);
             }
             actors.Clear();
@@ -454,7 +479,7 @@ namespace FOC.Presentation.Visuals
             QualitySettings.shadows = ShadowQuality.All; QualitySettings.shadowDistance = 40;
             var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
             ground.name = "Neutral review floor (not character art)"; ground.transform.localScale = Vector3.one * 10;
-            groundHeight = Arg("--meshy-calibration") == "true" ? 0f : -.015f;
+            groundHeight = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" ? 0f : -.015f;
             ground.transform.position = new Vector3(0, groundHeight, 0);
             var surface = new Material(Shader.Find("Standard")) { color = new Color(.17f, .18f, .20f) };
             surface.SetFloat("_Glossiness", .05f); ground.GetComponent<Renderer>().sharedMaterial = surface;
@@ -580,7 +605,7 @@ namespace FOC.Presentation.Visuals
                 maximumJointTravelMeters = actors.Max(actor => actor.maximumTravel), animationEvaluationSteps = actors.Sum(actor => actor.evaluatedSteps),
                 signature = actors[0].view.ActiveRepresentationRoot!.GetComponent<VisualRuntimeVariant>().Signature,
                 forcedLod=actors[0].forcedLod,triangles=skins.Sum(s=>s.sharedMesh.triangles.Length/3),material=skins[0].sharedMaterial.name,
-                calibrationScenario=actors[0].calibrationScenario,avatarName=actors[0].animator.avatar.name,groundingApplied=false,
+                calibrationScenario=actors[0].calibrationScenario,avatarName=actors[0].animator.avatar.name,groundingApplied=actors.All(a=>a.contactProfile!=null),
                 sourceClipName=actors[0].sourceClipName,
                 sourceRestBindPoseRestored = actors.All(actor => actor.clip == null && actor.restoredBindTransforms > 0),
                 poses = poseEvidence

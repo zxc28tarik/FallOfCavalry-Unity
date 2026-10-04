@@ -50,6 +50,7 @@ namespace FOC.Presentation.Visuals
         [Serializable] public sealed class Case
         {
             public int actors, cachedVariants, pooledRepresentations, activeLeasesAfterReturn;
+            public string effectiveAvatar = "", avatarOrigin = "";
             public Operation coldAssembly = new Operation(), warmAssembly = new Operation();
             public GeometryInventory geometry = new GeometryInventory();
             public FrameSamples timing = new FrameSamples();
@@ -59,6 +60,8 @@ namespace FOC.Presentation.Visuals
         {
             public string status = "TECHNICAL_BENCHMARK_NOT_PRODUCTION_ACCEPTANCE";
             public string unityVersion = "", graphicsDevice = "", graphicsApi = "", platform = "", clip = "";
+            public string effectiveAvatar = "", sourcePrefabAvatar = "", avatarOrigin = "";
+            public string contactProfile = "NONE";
             public string scope = "Empty-loadout single Hasan variant through real VisualSoldier3DAssembler/cache/VisualSoldierPool. Cold means fresh FOC caches, not cold disk/GPU assets. No gameplay, save, horse or production catalog mutation.";
             public Case[] cases = Array.Empty<Case>();
         }
@@ -67,8 +70,11 @@ namespace FOC.Presentation.Visuals
         {
             public Animator animator = null!;
             public RuntimeAnimatorController? previousController;
+            public Avatar? previousAvatar;
             public PlayableGraph graph;
             public AnimationClipPlayable playable;
+            public MeshyTargetContactProfile? contact;
+            public Vector3 presentationRestPosition;
         }
         private sealed class Counters
         {
@@ -78,14 +84,19 @@ namespace FOC.Presentation.Visuals
 
         /// <summary>Caller should drain this enumerator directly so exceptions reach its exit-code handler.</summary>
         public static IEnumerator Run(GameObject sourcePrefab, AnimationClip motionClip, Transform parent,
-            Action<Report> completed, Action<Bounds>? frameActors = null, int frameSamples = 30)
+            Action<Report> completed, Action<Bounds>? frameActors = null, int frameSamples = 30, Avatar? avatarOverride = null, MeshyTargetContactProfile? contactProfile = null)
         {
             if (sourcePrefab == null || motionClip == null || parent == null || completed == null) throw new ArgumentNullException("Benchmark requires prefab, clip, parent and completion callback.");
             if (!motionClip.isHumanMotion || motionClip.length <= 0) throw new InvalidOperationException("Benchmark requires a real imported Humanoid motion clip.");
+            if (avatarOverride != null && (!avatarOverride.isHuman || !avatarOverride.isValid))
+                throw new InvalidOperationException("Benchmark candidate Avatar must be valid and Humanoid.");
             if (frameSamples < 2 || frameSamples > 600) throw new ArgumentOutOfRangeException(nameof(frameSamples));
             if (!Application.isPlaying || SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
                 throw new InvalidOperationException("Runtime benchmark must execute in the graphics-enabled player, not EditMode or -nographics.");
             var catalog = MeshyHasanPilotCatalog.Create(sourcePrefab);
+            var sourceAvatar = sourcePrefab.GetComponent<Animator>().avatar;
+            var effectiveAvatar = avatarOverride != null ? avatarOverride : sourceAvatar;
+            var avatarOrigin = avatarOverride != null ? "EXPLICIT_CANDIDATE_OVERRIDE" : "ORIGINAL_SOURCE_PREFAB_AVATAR";
             var results = new List<Case>();
             try
             {
@@ -110,7 +121,7 @@ namespace FOC.Presentation.Visuals
                     var equipment = new Dictionary<EquipmentInstanceId, EquipmentInstance>();
                     try
                     {
-                        var result = new Case { actors = count };
+                        var result = new Case { actors = count, effectiveAvatar = effectiveAvatar.name, avatarOrigin = avatarOrigin };
                         result.coldAssembly = Measure(pool, assembler, () => Assemble(views, pool, assembler, catalog, soldiers, troop, equipment));
                         foreach (var view in views) pool.Return(view);
                         views.Clear();
@@ -119,7 +130,13 @@ namespace FOC.Presentation.Visuals
                             && result.warmAssembly.reusedViews == count && result.warmAssembly.reusedRepresentations == count;
                         if (!result.warmReusedAllViewsAndRepresentations) throw new InvalidOperationException("Warm benchmark failed actual FOC pool reuse for " + count + " actors.");
                         result.geometry = InspectGeometry(views);
-                        for (var i = 0; i < views.Count; i++) motions.Add(Animate(views[i], motionClip, i / (float)count));
+                        for (var i = 0; i < views.Count; i++)
+                        {
+                            motions.Add(contactProfile == null ? Animate(views[i], sourcePrefab, motionClip, i / (float)count, avatarOverride)
+                                : AnimateWithContact(views[i], sourcePrefab, motionClip, i / (float)count, avatarOverride, contactProfile));
+                            if (motions[i].animator.avatar != effectiveAvatar)
+                                throw new InvalidOperationException("Benchmark actor did not retain the selected effective Avatar.");
+                        }
                         frameActors?.Invoke(VisibleBounds(views));
                         for (var warmup = 0; warmup < 5; warmup++)
                         {
@@ -180,7 +197,8 @@ namespace FOC.Presentation.Visuals
                     yield return null;
                 }
                 completed(new Report { unityVersion = Application.unityVersion, graphicsDevice = SystemInfo.graphicsDeviceName,
-                    graphicsApi = SystemInfo.graphicsDeviceType.ToString(), platform = Application.platform.ToString(), clip = motionClip.name, cases = results.ToArray() });
+                    graphicsApi = SystemInfo.graphicsDeviceType.ToString(), platform = Application.platform.ToString(), clip = motionClip.name,
+                    effectiveAvatar = effectiveAvatar.name, sourcePrefabAvatar = sourceAvatar.name, avatarOrigin = avatarOrigin, contactProfile = contactProfile == null ? "NONE" : contactProfile.name, cases = results.ToArray() });
             }
             finally { Object.Destroy(catalog); }
         }
@@ -223,34 +241,81 @@ namespace FOC.Presentation.Visuals
             var method = typeof(GC).GetMethod("GetAllocatedBytesForCurrentThread", Type.EmptyTypes);
             return method == null ? null : (Func<long>)Delegate.CreateDelegate(typeof(Func<long>), method);
         }
-        private static Motion Animate(VisualSoldier3D view, AnimationClip clip, float phase)
+        private static Motion Animate(VisualSoldier3D view, GameObject sourcePrefab, AnimationClip clip, float phase, Avatar? avatarOverride)
         {
             var animator = view.GetComponentsInChildren<Animator>(true).Single();
             if (animator.avatar == null || !animator.avatar.isValid || !animator.avatar.isHuman) throw new InvalidOperationException("Benchmark actor lost its Humanoid avatar.");
-            var motion = new Motion { animator = animator, previousController = animator.runtimeAnimatorController };
-            animator.runtimeAnimatorController = null; animator.enabled = true; animator.applyRootMotion = false; animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
-            motion.graph = PlayableGraph.Create("Meshy benchmark real Humanoid"); motion.graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
-            motion.playable = AnimationClipPlayable.Create(motion.graph, clip); motion.playable.SetApplyFootIK(false); motion.playable.SetApplyPlayableIK(false);
-            AnimationPlayableOutput.Create(motion.graph, "Benchmark supplied motion", animator).SetSourcePlayable(motion.playable);
-            motion.graph.Play(); motion.playable.SetTime(phase * clip.length); motion.graph.Evaluate(0);
-            return motion;
+            var motion = new Motion { animator = animator, previousController = animator.runtimeAnimatorController, previousAvatar = animator.avatar, presentationRestPosition = animator.transform.localPosition };
+            try
+            {
+                animator.runtimeAnimatorController = null;
+                if (avatarOverride != null)
+                {
+                    if (!avatarOverride.isHuman || !avatarOverride.isValid)
+                        throw new InvalidOperationException("Benchmark candidate Avatar must be valid and Humanoid.");
+                    animator.enabled = false;
+                    MeshyHasanPilotPlayer.RestoreSourceBindPose(sourcePrefab, animator.gameObject);
+                    animator.avatar = avatarOverride;
+                    animator.Rebind();
+                }
+                animator.enabled = true; animator.applyRootMotion = false; animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                if (clip == null || !clip.isHumanMotion || clip.length <= 0)
+                    throw new InvalidOperationException("Benchmark requires a real imported Humanoid motion clip.");
+                motion.graph = PlayableGraph.Create("Meshy benchmark real Humanoid"); motion.graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
+                motion.playable = AnimationClipPlayable.Create(motion.graph, clip); motion.playable.SetApplyFootIK(false); motion.playable.SetApplyPlayableIK(false);
+                AnimationPlayableOutput.Create(motion.graph, "Benchmark supplied motion", animator).SetSourcePlayable(motion.playable);
+                motion.graph.Play(); motion.playable.SetTime(phase * clip.length); motion.graph.Evaluate(0);
+                return motion;
+            }
+            catch
+            {
+                // A failed Animate call is not yet in Run's motions list.
+                // Restore its cached source state here before Run returns views.
+                StopMotion(motion);
+                throw;
+            }
         }
         private static void Advance(List<Motion> motions, float length, float delta)
         {
             foreach (var motion in motions)
             {
                 if (motion.playable.GetTime() >= length) motion.playable.SetTime(motion.playable.GetTime() % length);
+                motion.animator.transform.localPosition = motion.presentationRestPosition;
                 motion.graph.Evaluate(delta);
+                if (motion.contact != null) motion.animator.transform.localPosition = motion.presentationRestPosition
+                    + Vector3.up * motion.contact.Evaluate((float)(motion.playable.GetTime() % length / length));
             }
+        }
+        private static Motion AnimateWithContact(VisualSoldier3D view, GameObject prefab, AnimationClip clip, float phase, Avatar? avatar, MeshyTargetContactProfile contact)
+        {
+            var motion = Animate(view, prefab, clip, phase, avatar);
+            try
+            {
+                contact.ValidateBinding(motion.animator, clip);
+                motion.contact = contact;
+                motion.playable.SetApplyFootIK(contact.useFootIK);
+                motion.animator.transform.localPosition = motion.presentationRestPosition;
+                motion.graph.Evaluate(0);
+                motion.animator.transform.localPosition = motion.presentationRestPosition + Vector3.up * contact.Evaluate(phase);
+                return motion;
+            }
+            catch { StopMotion(motion); throw; }
         }
         private static void StopMotion(List<Motion> motions)
         {
-            foreach (var motion in motions)
-            {
-                if (motion.graph.IsValid()) motion.graph.Destroy();
-                if (motion.animator != null) { motion.animator.enabled = false; motion.animator.runtimeAnimatorController = motion.previousController; }
-            }
+            foreach (var motion in motions) StopMotion(motion);
             motions.Clear();
+        }
+        private static void StopMotion(Motion motion)
+        {
+            if (motion.graph.IsValid()) motion.graph.Destroy();
+            if (motion.animator != null)
+            {
+                motion.animator.enabled = false;
+                motion.animator.avatar = motion.previousAvatar;
+                motion.animator.runtimeAnimatorController = motion.previousController;
+                motion.animator.transform.localPosition = motion.presentationRestPosition;
+            }
         }
 
         public static GeometryInventory InspectGeometry(IReadOnlyList<VisualSoldier3D> views)

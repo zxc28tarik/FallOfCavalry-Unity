@@ -156,6 +156,13 @@ MonoBehaviour:
   - {fileID: 7400000, guid: edef41afe364bb646a206e0fd31f5c15, type: 2}
   - {fileID: 7400000, guid: e4be9a0fc77b02b4297bb68a816f55ab, type: 2}
   - {fileID: 7400000, guid: ef80f182dc7ab924f83688de9e10694c, type: 2}
+  libraryMotionClips:
+  - {fileID: 7994627924475153551, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  - {fileID: -2807887025256620907, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  - {fileID: -7993625790543202706, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  - {fileID: -6676812269523803463, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  - {fileID: -7342238307180667810, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
+  - {fileID: -2328835098782832033, guid: cd496f540a163bc459b11405f8ad1b76, type: 3}
   characterPrefab: {fileID: 6726799632366432074, guid: c48a2882be13e4742ba560e3729ee27a, type: 3}
   clips:
   - {fileID: 7051438618928365143, guid: 1cd9d272b2bd25548b6e0cc3d90bbb50, type: 3}
