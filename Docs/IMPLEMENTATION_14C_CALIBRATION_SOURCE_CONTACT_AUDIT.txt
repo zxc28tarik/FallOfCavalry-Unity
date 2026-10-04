@@ -1,0 +1,138 @@
+Implementation 14C — Independent source/reference/contact audit
+Base: 3a11ec640448443a72058cfa91cea8d4a30f9da3
+Date: 2026-10-04
+Status: READ-ONLY PRE-CALIBRATION FINDINGS; NOT VISUAL ACCEPTANCE
+
+Scope and method
+----------------
+Read the original donor generator, Meshy reference configuration, HumanPose
+conversion, saved prefab transforms, unchanged donor mesh JSON and final-base
+roundtrip evidence. Computed transform/geometry measurements with read-only
+Node/PowerShell. No Unity/Blender process, geometry/weight edit, Avatar edit,
+animation edit or contact correction was performed for this audit. Line numbers
+below identify the base versions, before the separate calibration experiments.
+
+Source evidence
+---------------
+1. HistoricalArtCandidatePipeline.cs:96-97 creates donor transforms at source
+   world positions with identity rotations, then reparents them. Lines 168-172
+   build the Human Avatar directly from this reference and name-based mapping,
+   with default HumanLimits; there is no measured T-pose normalization.
+
+   Original donor left upper-arm direction is 48.909 degrees below lateral
+   horizontal. Its forearm is already deflected 46.370 degrees from the upper
+   arm at reference. Segment lengths are 0.255982m and 0.264200m. Therefore
+   valid/human flags alone do not establish compatible neutral muscle semantics.
+
+2. MeshyHasanPilotPipeline.cs:32-33 maps source Chest/UpperChest to required
+   Humanoid Spine/Chest; lines 175-180 use the original restored FBX bind as the
+   HumanDescription skeleton. The preserved target is also not a straight-arm
+   T-pose. It must remain unchanged as geometry/bind data; a separate Avatar
+   calibration is the permitted experiment, not a rig or weight rebuild.
+
+3. Physical forward and name-based side conflict on the donor, but not Meshy:
+
+   Donor named UpperLeg_L is +X; UpperLeg_R is -X. Mapped-right direction is
+   (-1,0,0). Pelvis-to-head up is (0,0.986490,0.163819). Their cross product,
+   normalized, is (0,0.163819,-0.986490), pointing mostly -Z.
+
+   Actual donor foot geometry points +Z: Foot_L ankle z=0.019043m; vertices
+   with at least 0.75 Foot_L influence span z=-0.055418..+0.238756m. The right
+   foot has the same asymmetry. Thus the toe side extends approximately 0.220m
+   forward, versus 0.074m behind the ankle. The source authoring also treats
+   +Z as forward (HasanDonorPipeline.cs:119-175).
+
+   Meshy named LeftUpperLeg is x=-0.132865m and RightUpperLeg x=+0.122815m.
+   Both ankle-to-toe vectors point forward +Z after projecting off vertical;
+   their averaged horizontal direction is approximately (0.0184,0,0.9998).
+   Head to headfront is approximately (0,0,+0.111081)m. Its mapped-right axis
+   and torso-up produce forward approximately (-0.002295,0.087492,0.996163),
+   consistent with the visible anatomical front.
+
+   This is a measured source convention conflict, not authorization for an
+   arbitrary X sign flip or 180-degree root yaw. Anatomical source mapping may
+   be corrected in a separate Avatar experiment without renaming any bone.
+   However, source named Hand_R is on the anatomical-left side in this target
+   convention. A mapping-only correction transfers that existing arm action to
+   anatomical Left; it does NOT create the required right-hand attack. Record
+   this distinction rather than hiding it with a clip mirror or weapon swap.
+
+4. MeshyHasanPilotMotionAdaptation.cs:154-183 samples the unchanged Transform
+   clip using a temporary Generic Avatar, while the original saved Human Avatar
+   extracts the HumanPose. Lines 188-207 write normalized body transform and
+   muscle curves. In final-base motion-roundtrip.json, Meshy direct SetHumanPose
+   and converted Animator clip execution have zero positional discrepancy in
+   the recorded samples. This localizes the observed arm divergence before the
+   final clip/Playable execution, not to a guessed curve-format sign error.
+
+   Extracted Idle and Attack body rotations are identity; Crouch at phase 0.5
+   is approximately (0.112739,0,0,0.993625), or 12.95 degrees X pitch. There is
+   no recorded hidden 180-degree body yaw justifying a global yaw correction.
+
+5. Choreography is an independent limit. HasanDonorPipeline.cs:154-160 changes
+   only the named right arm during OneHandedAttack. Source hips/spine/chest
+   positions are unchanged between phases 0 and 0.5. The authored wrist moves
+   (-0.360,1.630,0.130) -> (0.015,1.180,0.390)m: down and forward.
+   The original target moves (0.151,1.135,0.168) -> (0.564,1.391,0.169)m:
+   outward and up. Calibration should test whether it repairs semantic transfer;
+   it cannot invent missing torso/stance intent or change an anatomical-left
+   source action into right-hand production choreography merely by reference
+   calibration. A documented mirrored candidate could change handedness, but
+   would still not supply the missing torso/stance movement.
+
+Measured contact defects before calibration
+------------------------------------------
+Final-base real Windows captures and player-evidence.json show Crouch soles
+below the stage floor by 0.037692m at phases 0.25/0.75 and 0.056745m at phase
+0.5. Idle/Turn are approximately 0.01227m below the floor. These are skin-mesh
+measurements, not ankle-center inference. They do not prove the same error will
+remain after Avatar calibration. Source Walking toe penetration is a separate
+existing issue, not evidence that the new target model should be replaced.
+
+Bounded presentation-contact proposal — NOT IMPLEMENTED
+------------------------------------------------------
+Prerequisite: original/calibrated target and, if needed, anatomically calibrated
+source comparisons must first establish correct body/arm reference semantics.
+
+* Build an immutable target-specific profile keyed by exact Avatar, mesh and
+  clip hashes. At >=60 samples/second, evaluate the actual Animator and LOD0
+  skin. Identify left/right heel, toe and sole samples from original Foot/Toes
+  skin influences, rather than a whole-renderer AABB or a fixed ankle offset.
+* Record per-foot sole height, foot/toe orientation and phase contact envelope.
+  Validate stance masks against the motion. Preserve Running flight phases.
+  Do not call a stationary local-XZ foot the only valid contact: an in-place
+  walk naturally moves the planted foot backward relative to the actor.
+* After animation evaluation, derive foot endpoint correction from the measured
+  sole deficit to floor+0.002m. A small downward correction is allowed only in
+  validated stance; positive collision protection may operate during swing.
+  Solve two-bone leg IK using the current knee plane and original segment
+  lengths. Initially preserve authored foot/toe rotation. Do not move campaign
+  position, gameplay root or alter root-motion authority.
+* Bound displacement by the measured leg length (initial proposal: 8%, around
+  0.06m on this target), plus explicit knee-plane and extension bounds. If the
+  correction cannot leave <=0.002m sole penetration without violating bounds,
+  report failure; do not silently clamp and mark success. A fixed global +7cm
+  lift is not this algorithm. Pelvis compensation, if needed for reach, requires
+  a separately measured small bound and fresh two-foot validation.
+* Re-bake held-out phases after correction. Check both soles, heel/toe hover,
+  original stance XZ trajectory, knee behavior, loop seam and continuous phase
+  interpolation. Use precomputed/contact-proxy data at runtime, not BakeMesh
+  per actor per frame. Full skin baking belongs to authoring/validation.
+
+Evidence paths
+--------------
+UnityProject/Assets/FOC/Editor/VisualPipeline/HistoricalArtCandidatePipeline.cs
+UnityProject/Assets/FOC/Editor/VisualPipeline/HasanDonorPipeline.cs
+UnityProject/Assets/FOC/Editor/VisualPipeline/MeshyHasanPilotPipeline.cs
+UnityProject/Assets/FOC/Editor/VisualPipeline/MeshyHasanPilotMotionAdaptation.cs
+UnityProject/Assets/FOC/ArtSource/HistoricalSlice/HasanDonor/CHR_HasanAga_DonorDraft.focmesh.json
+UnityProject/Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/CHR_HasanAga_MeshyPilot.prefab
+TestResults/MeshyPilot/Runs/3a11ec640448443a72058cfa91cea8d4a30f9da3/0177f30f140e42f998e8e09524f831c7/motion-roundtrip.json
+TestResults/MeshyPilot/Runs/3a11ec640448443a72058cfa91cea8d4a30f9da3/0177f30f140e42f998e8e09524f831c7/player-evidence.json
+
+Decision
+--------
+Hold contact changes. Reference calibration and actual Windows visual evidence
+must distinguish Avatar transfer failure from the source's anatomical side and
+missing attack choreography. Production catalog remains inactive; this audit
+does not certify animation, mounted fit, historical quality or Implementation14C.

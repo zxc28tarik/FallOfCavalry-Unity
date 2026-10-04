@@ -148,6 +148,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39f6d1a2c95d4cb2a6994af9dc40a013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: FOC.Visuals.Unity::FOC.Presentation.Visuals.MeshyHasanPilotPlayer
+  calibratedAvatar: {fileID: 9000000, guid: 4c826caa188bf19449731f9daec9d8c0, type: 2}
+  dualCalibrationClips:
+  - {fileID: 7400000, guid: 7b183c14bdef96f41aa827c30a6b4605, type: 2}
+  - {fileID: 7400000, guid: 80094122e5a66f141a5a40230aded8ad, type: 2}
+  - {fileID: 7400000, guid: 9a1b7804c626226409017c4405e31fba, type: 2}
+  - {fileID: 7400000, guid: edef41afe364bb646a206e0fd31f5c15, type: 2}
+  - {fileID: 7400000, guid: e4be9a0fc77b02b4297bb68a816f55ab, type: 2}
+  - {fileID: 7400000, guid: ef80f182dc7ab924f83688de9e10694c, type: 2}
   characterPrefab: {fileID: 6726799632366432074, guid: c48a2882be13e4742ba560e3729ee27a, type: 3}
   clips:
   - {fileID: 7051438618928365143, guid: 1cd9d272b2bd25548b6e0cc3d90bbb50, type: 3}

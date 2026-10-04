@@ -15,7 +15,7 @@ using UnityEngine.Rendering;
 namespace FOC.Presentation.Visuals
 {
     /// <summary>Isolated real-player intake review. Never activates a production profile or changes campaign data.</summary>
-    public sealed class MeshyHasanPilotPlayer : MonoBehaviour
+    public sealed partial class MeshyHasanPilotPlayer : MonoBehaviour
     {
         public GameObject characterPrefab = null!;
         public AnimationClip[] clips = Array.Empty<AnimationClip>();
@@ -31,6 +31,7 @@ namespace FOC.Presentation.Visuals
         private string? output;
         private int actorSequence;
         private const int Width = 1600, Height = 1100;
+        private float groundHeight = -.015f;
         // Original, unmodified FBX in Blender 4.5.9, 12 Walking phases i/12.
         // This preserves a source comparison, NOT production foot-contact approval:
         // the source itself penetrates the review floor near phase 1/3.
@@ -48,6 +49,9 @@ namespace FOC.Presentation.Visuals
             public Animator animator = null!;
             public AnimationClip? clip;
             public RuntimeAnimatorController? originalController;
+            public Avatar? originalAvatar;
+            public string calibrationScenario = "";
+            public string sourceClipName = "";
             public PlayableGraph graph;
             public AnimationClipPlayable playable;
             public Transform[] tracked = Array.Empty<Transform>();
@@ -89,6 +93,9 @@ namespace FOC.Presentation.Visuals
             public int actors, rendererCount, materialSlots, boneCount, animationEvaluationSteps;
             public int forcedLod, triangles;
             public string material = "";
+            public string calibrationScenario = "", avatarName = "";
+            public string sourceClipName = "";
+            public bool groundingApplied;
             public bool humanoidAvatarValid, realWindowsPlayer = true;
             public bool sourceRestBindPoseRestored;
             public PoseEvidence[] poses = Array.Empty<PoseEvidence>();
@@ -147,6 +154,14 @@ namespace FOC.Presentation.Visuals
             template.transform.SetParent(transform, false);
             template.gameObject.SetActive(false);
             pool.Configure(template, 16);
+
+            if (Arg("--meshy-calibration") == "true")
+            {
+                var calibration = RunCalibration();
+                try { while (calibration.MoveNext()) yield return calibration.Current; }
+                finally { (calibration as IDisposable)?.Dispose(); }
+                yield break;
+            }
 
             if (output == null)
             {
@@ -279,7 +294,7 @@ namespace FOC.Presentation.Visuals
             Application.Quit(0);
         }
 
-        private Actor CreateActor(AnimationClip? clip, Vector3 location)
+        private Actor CreateActor(AnimationClip? clip, Vector3 location, Avatar? avatarOverride = null)
         {
             var index = actorSequence++;
             var troop = new TroopDefinition(TroopDefinitionId.Create("meshy-hasan-review"), "Meshy Hasan pilot",
@@ -289,6 +304,9 @@ namespace FOC.Presentation.Visuals
                 troop.Id, new SoldierRecruitmentProvenance(RecruitmentSourceId.Create("pilot-review-source"),
                 RecruitmentRecordId.Create("pilot-review-record-" + index)), new SoldierLoadout(Array.Empty<WeaponSlotAssignment>()), troop.DefaultCombatRoleId);
             var view = pool.Rent();
+            Actor? actor = null;
+            try
+            {
             view.transform.localPosition = location;
             MeshyHasanPilotCatalog.Assemble(assembler, pilotCatalog, view, soldier, troop,
                 new Dictionary<EquipmentInstanceId, EquipmentInstance>());
@@ -297,13 +315,21 @@ namespace FOC.Presentation.Visuals
                 throw new InvalidOperationException("Source humanoid avatar is missing or invalid.");
             foreach (var lod in view.GetComponentsInChildren<LODGroup>()) lod.ForceLOD(0);
             foreach (var skin in view.GetComponentsInChildren<SkinnedMeshRenderer>()) skin.updateWhenOffscreen = true;
-            var actor = new Actor { view = view, animator = animator, clip = clip,
-                originalController = animator.runtimeAnimatorController };
+            actor = new Actor { view = view, animator = animator, clip = clip,
+                originalController = animator.runtimeAnimatorController, originalAvatar = animator.avatar };
             animator.applyRootMotion = false;
             animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             // A manual graph exclusively owns this review Animator. Retaining
             // the default controller lets Unity overwrite a sampled clip pose.
             animator.runtimeAnimatorController = null;
+            if (avatarOverride != null)
+            {
+                if (!avatarOverride.isHuman || !avatarOverride.isValid) throw new InvalidOperationException("Invalid calibration Avatar candidate.");
+                animator.enabled = false;
+                RestoreSourceBindPose(characterPrefab, animator.gameObject);
+                animator.avatar = avatarOverride;
+                animator.Rebind();
+            }
             animator.enabled = clip != null;
             if (clip == null)
             {
@@ -326,12 +352,28 @@ namespace FOC.Presentation.Visuals
                 actor.graph.Play();
                 actor.graph.Evaluate(0);
             }
-            actor.tracked = new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot }
+            var trackedBones = Arg("--meshy-calibration") == "true" ? CalibrationTrackedBones : new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot };
+            actor.tracked = trackedBones
                 .Select(animator.GetBoneTransform).Where(bone => bone != null).ToArray();
-            if (actor.tracked.Length != 4) throw new InvalidOperationException("Humanoid hand/foot mapping incomplete.");
+            if (actor.tracked.Length != trackedBones.Length) throw new InvalidOperationException("Humanoid tracked joint mapping incomplete.");
             actor.initial = actor.tracked.Select(bone => bone.position).ToArray();
             actors.Add(actor);
             return actor;
+            }
+            catch
+            {
+                // A failed candidate never reaches actors/ClearActors. Return
+                // its lease and restore the cached original Avatar even here.
+                if (actor != null)
+                {
+                    if (actor.graph.IsValid()) actor.graph.Destroy();
+                    actor.animator.enabled = false;
+                    actor.animator.avatar = actor.originalAvatar;
+                    actor.animator.runtimeAnimatorController = actor.originalController;
+                }
+                pool.Return(view);
+                throw;
+            }
         }
 
         private static void Evaluate(Actor actor, float delta)
@@ -339,6 +381,11 @@ namespace FOC.Presentation.Visuals
             if (actor.clip == null) return;
             if (actor.playable.GetTime() >= actor.clip.length) actor.playable.SetTime(actor.playable.GetTime() % actor.clip.length);
             actor.graph.Evaluate(delta);
+            RecordEvaluation(actor);
+        }
+
+        private static void RecordEvaluation(Actor actor)
+        {
             actor.evaluatedSteps++;
             for (var i = 0; i < actor.tracked.Length; i++)
                 actor.maximumTravel = Mathf.Max(actor.maximumTravel, Vector3.Distance(actor.initial[i], actor.tracked[i].position));
@@ -350,6 +397,7 @@ namespace FOC.Presentation.Visuals
             actor.renderBoundaryPoseStable = false;
             actor.playable.SetTime(phase * actor.clip!.length);
             actor.graph.Evaluate(0);
+            RecordEvaluation(actor);
         }
 
         private static Vector3[] SnapshotTrackedJoints(Actor actor)
@@ -376,6 +424,7 @@ namespace FOC.Presentation.Visuals
             {
                 if (actor.graph.IsValid()) actor.graph.Destroy();
                 actor.animator.enabled = false;
+                actor.animator.avatar = actor.originalAvatar;
                 actor.animator.runtimeAnimatorController = actor.originalController;
                 pool.Return(actor.view);
             }
@@ -405,7 +454,8 @@ namespace FOC.Presentation.Visuals
             QualitySettings.shadows = ShadowQuality.All; QualitySettings.shadowDistance = 40;
             var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
             ground.name = "Neutral review floor (not character art)"; ground.transform.localScale = Vector3.one * 10;
-            ground.transform.position = new Vector3(0, -.015f, 0);
+            groundHeight = Arg("--meshy-calibration") == "true" ? 0f : -.015f;
+            ground.transform.position = new Vector3(0, groundHeight, 0);
             var surface = new Material(Shader.Find("Standard")) { color = new Color(.17f, .18f, .20f) };
             surface.SetFloat("_Glossiness", .05f); ground.GetComponent<Renderer>().sharedMaterial = surface;
             cameraView = new GameObject("Actual player review camera").AddComponent<Camera>();
@@ -472,7 +522,7 @@ namespace FOC.Presentation.Visuals
                 // Compare the imported motion against the actual source at the
                 // same phase. Do not silently raise feet or lower the review floor.
                 // Running legitimately has flight and is not covered by this audit.
-                var compareSource = actor.forcedLod==0 && actor.clip != null && actor.clip.name.IndexOf("Walking", StringComparison.OrdinalIgnoreCase) >= 0;
+                var compareSource = actor.calibrationScenario.Length==0 && actor.forcedLod==0 && actor.clip != null && actor.clip.name.IndexOf("Walking", StringComparison.OrdinalIgnoreCase) >= 0;
                 var sourceMinimumY = 0f;
                 if (compareSource)
                 {
@@ -495,7 +545,7 @@ namespace FOC.Presentation.Visuals
                     sampledClipSeconds = actor.clip == null ? 0 : actor.playable.GetTime(),
                     runtimeControllerDetached = actor.animator.runtimeAnimatorController == null,
                     renderBoundaryPoseStable = actor.renderBoundaryPoseStable,
-                    minimumMeshWorldY = minimumY, groundWorldY = -.015f, minimumMeshGroundClearance = minimumY + .015f,
+                    minimumMeshWorldY = minimumY, groundWorldY = groundHeight, minimumMeshGroundClearance = minimumY - groundHeight,
                     sourceGroundComparisonAvailable = compareSource, sourceMinimumMeshY = sourceMinimumY,
                     sourceGroundDifferenceMeters = compareSource ? minimumY - sourceMinimumY : 0,
                     joints = actor.tracked.Select(joint => new JointEvidence
@@ -530,6 +580,8 @@ namespace FOC.Presentation.Visuals
                 maximumJointTravelMeters = actors.Max(actor => actor.maximumTravel), animationEvaluationSteps = actors.Sum(actor => actor.evaluatedSteps),
                 signature = actors[0].view.ActiveRepresentationRoot!.GetComponent<VisualRuntimeVariant>().Signature,
                 forcedLod=actors[0].forcedLod,triangles=skins.Sum(s=>s.sharedMesh.triangles.Length/3),material=skins[0].sharedMaterial.name,
+                calibrationScenario=actors[0].calibrationScenario,avatarName=actors[0].animator.avatar.name,groundingApplied=false,
+                sourceClipName=actors[0].sourceClipName,
                 sourceRestBindPoseRestored = actors.All(actor => actor.clip == null && actor.restoredBindTransforms > 0),
                 poses = poseEvidence
             });

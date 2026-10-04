@@ -64,6 +64,13 @@ namespace FOC.Editor.Visuals
                 if(!review.retargetClips.SequenceEqual(retargets)){review.retargetClips=retargets;changed=true;}
                 var variants=new[]{4096,2048,1024}.Select(size=>AssetDatabase.LoadAssetAtPath<Material>(MeshyHasanPilotPipeline.OutputRoot+"/MAT_HasanAga_MeshyPilot"+(size==2048?"":"_"+size)+".mat")??throw new InvalidOperationException("Missing texture comparison variant "+size)).ToArray();
                 if(!review.textureVariants.SequenceEqual(variants)){review.textureVariants=variants;changed=true;}
+                // Optional calibration candidates never replace the original prefab Avatar.
+                var calibrated=AssetDatabase.LoadAssetAtPath<Avatar>(MeshyHasanPilotPipeline.OutputRoot+"/Calibration/AVT_MeshyHasan_Calibrated.asset");
+                if(review.calibratedAvatar!=calibrated){review.calibratedAvatar=calibrated;changed=true;}
+                var dualPaths=MeshyHasanPilotMotionAdaptation.MotionNames.Select(name=>MeshyHasanPilotPipeline.OutputRoot+"/Calibration/ScenarioC/ANM_HumanoidCandidate_"+name+".anim").ToArray();
+                var dual=dualPaths.Select(AssetDatabase.LoadAssetAtPath<AnimationClip>).Where(c=>c!=null).ToArray();
+                if(dual.Length!=0&&dual.Length!=6)throw new InvalidOperationException("Partial dual-calibration candidate set.");
+                if(!review.dualCalibrationClips.SequenceEqual(dual)){review.dualCalibrationClips=dual;changed=true;}
                 // No SHA/time fields are serialized: final-SHA evidence is passed
                 // via --meshy-sha. Rebuilding an unchanged scene does not churn it.
                 if (changed) { EditorUtility.SetDirty(review); EditorSceneManager.SaveScene(scene, ScenePath); }
