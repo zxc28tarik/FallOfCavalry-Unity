@@ -71,6 +71,8 @@ namespace FOC.Presentation.Visuals
             public Vector3 presentationRestPosition;
             public float contactOffsetMeters;
             public GameObject? weaponInstance;
+            public MeshyPilotSoleContact? soleContact;
+            public float soleGroundY;
         }
 
         [Serializable]
@@ -372,6 +374,12 @@ namespace FOC.Presentation.Visuals
                     throw new InvalidOperationException("Meshy pilot has no actual Socket_RightHand for the kilic review.");
                 weaponInstance = Instantiate(kilicPrefab, rightHand, false);
                 weaponInstance.name = "WPN_Kilic_01_REVIEW_RightHand";
+                // The equipment origin is the guard, not the grip midpoint.
+                // Meshy's hand +Y follows the open fingers. A handle must lie
+                // across the palm, not along those fingers with its guard at
+                // the wrist. This isolated fit never changes a loadout/socket.
+                weaponInstance.transform.localRotation = Quaternion.Euler(0f, 0f, -90f);
+                weaponInstance.transform.localPosition = new Vector3(.080f, .055f, .018f);
             }
             var animator = view.GetComponentsInChildren<Animator>(true).Single();
             if (animator.avatar == null || !animator.avatar.isValid || !animator.avatar.isHuman)
@@ -412,12 +420,18 @@ namespace FOC.Presentation.Visuals
                 actor.playable = AnimationClipPlayable.Create(actor.graph, clip);
                 if (contactProfile != null) contactProfile.ValidateBinding(animator, clip);
                 actor.playable.SetApplyFootIK(contactProfile != null ? contactProfile.useFootIK :
-                    (Arg("--meshy-motion-closure") == "true" || Arg("--meshy-weapon-attack") == "true") && Arg("--meshy-foot-ik") == "true");
+                    (Arg("--meshy-motion-closure") == "true" || Arg("--meshy-weapon-attack") == "true" || Arg("--meshy-locomotion-review") == "true") && Arg("--meshy-foot-ik") == "true");
                 actor.playable.SetApplyPlayableIK(false);
                 var animationOutput = AnimationPlayableOutput.Create(actor.graph, "Humanoid source clip", animator);
                 animationOutput.SetSourcePlayable(actor.playable);
                 actor.graph.Play();
                 actor.graph.Evaluate(0);
+                if(Arg("--meshy-contact-cleanup")=="true"&&Arg("--meshy-locomotion-review")=="true")
+                {
+                    actor.soleContact=new MeshyPilotSoleContact(characterPrefab,animator);
+                    actor.soleGroundY=groundHeight;
+                    actor.soleContact.Apply(actor.soleGroundY);
+                }
             }
             var trackedBones = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" ? CalibrationTrackedBones : new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot };
             actor.tracked = trackedBones
@@ -460,6 +474,7 @@ namespace FOC.Presentation.Visuals
         {
             actor.contactOffsetMeters = actor.contactProfile == null ? 0f : actor.contactProfile.Evaluate(phase);
             actor.animator.transform.localPosition = actor.presentationRestPosition + Vector3.up * actor.contactOffsetMeters;
+            actor.soleContact?.Apply(actor.soleGroundY);
         }
 
         private static void RecordEvaluation(Actor actor)
@@ -536,7 +551,7 @@ namespace FOC.Presentation.Visuals
             QualitySettings.shadows = ShadowQuality.All; QualitySettings.shadowDistance = 40;
             var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
             ground.name = "Neutral review floor (not character art)"; ground.transform.localScale = Vector3.one * 10;
-            groundHeight = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" ? 0f : -.015f;
+            groundHeight = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" || Arg("--meshy-locomotion-review") == "true" || Arg("--meshy-weapon-attack") == "true" ? 0f : -.015f;
             ground.transform.position = new Vector3(0, groundHeight, 0);
             var surface = new Material(Shader.Find("Standard")) { color = new Color(.17f, .18f, .20f) };
             surface.SetFloat("_Glossiness", .05f); ground.GetComponent<Renderer>().sharedMaterial = surface;

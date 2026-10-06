@@ -59,9 +59,12 @@ namespace FOC.Presentation.Visuals
         [Serializable] public sealed class Report
         {
             public string status = "TECHNICAL_BENCHMARK_NOT_PRODUCTION_ACCEPTANCE";
+            public string sourceSha = "NOT_SUPPLIED";
             public string unityVersion = "", graphicsDevice = "", graphicsApi = "", platform = "", clip = "";
             public string effectiveAvatar = "", sourcePrefabAvatar = "", avatarOrigin = "";
             public string contactProfile = "NONE";
+            public bool builtInHumanoidFootIk;
+            public bool measuredSoleCleanup;
             public string scope = "Empty-loadout single Hasan variant through real VisualSoldier3DAssembler/cache/VisualSoldierPool. Cold means fresh FOC caches, not cold disk/GPU assets. No gameplay, save, horse or production catalog mutation.";
             public Case[] cases = Array.Empty<Case>();
         }
@@ -75,6 +78,7 @@ namespace FOC.Presentation.Visuals
             public AnimationClipPlayable playable;
             public MeshyTargetContactProfile? contact;
             public Vector3 presentationRestPosition;
+            public MeshyPilotSoleContact? soleContact;
         }
         private sealed class Counters
         {
@@ -84,7 +88,7 @@ namespace FOC.Presentation.Visuals
 
         /// <summary>Caller should drain this enumerator directly so exceptions reach its exit-code handler.</summary>
         public static IEnumerator Run(GameObject sourcePrefab, AnimationClip motionClip, Transform parent,
-            Action<Report> completed, Action<Bounds>? frameActors = null, int frameSamples = 30, Avatar? avatarOverride = null, MeshyTargetContactProfile? contactProfile = null)
+            Action<Report> completed, Action<Bounds>? frameActors = null, int frameSamples = 30, Avatar? avatarOverride = null, MeshyTargetContactProfile? contactProfile = null, bool useFootIK = false, bool measuredSoleCleanup = false)
         {
             if (sourcePrefab == null || motionClip == null || parent == null || completed == null) throw new ArgumentNullException("Benchmark requires prefab, clip, parent and completion callback.");
             if (!motionClip.isHumanMotion || motionClip.length <= 0) throw new InvalidOperationException("Benchmark requires a real imported Humanoid motion clip.");
@@ -134,6 +138,8 @@ namespace FOC.Presentation.Visuals
                         {
                             motions.Add(contactProfile == null ? Animate(views[i], sourcePrefab, motionClip, i / (float)count, avatarOverride)
                                 : AnimateWithContact(views[i], sourcePrefab, motionClip, i / (float)count, avatarOverride, contactProfile));
+                            if(contactProfile==null&&useFootIK){motions[i].playable.SetApplyFootIK(true);motions[i].graph.Evaluate(0);}
+                            if(measuredSoleCleanup){motions[i].soleContact=new MeshyPilotSoleContact(sourcePrefab,motions[i].animator);motions[i].soleContact!.Apply(0f);}
                             if (motions[i].animator.avatar != effectiveAvatar)
                                 throw new InvalidOperationException("Benchmark actor did not retain the selected effective Avatar.");
                         }
@@ -196,7 +202,7 @@ namespace FOC.Presentation.Visuals
                     // Let Unity process deferred Destroy before the next case.
                     yield return null;
                 }
-                completed(new Report { unityVersion = Application.unityVersion, graphicsDevice = SystemInfo.graphicsDeviceName,
+                completed(new Report { measuredSoleCleanup=measuredSoleCleanup,builtInHumanoidFootIk=contactProfile!=null?contactProfile.useFootIK:useFootIK, unityVersion = Application.unityVersion, graphicsDevice = SystemInfo.graphicsDeviceName,
                     graphicsApi = SystemInfo.graphicsDeviceType.ToString(), platform = Application.platform.ToString(), clip = motionClip.name,
                     effectiveAvatar = effectiveAvatar.name, sourcePrefabAvatar = sourceAvatar.name, avatarOrigin = avatarOrigin, contactProfile = contactProfile == null ? "NONE" : contactProfile.name, cases = results.ToArray() });
             }
@@ -284,6 +290,7 @@ namespace FOC.Presentation.Visuals
                 motion.graph.Evaluate(delta);
                 if (motion.contact != null) motion.animator.transform.localPosition = motion.presentationRestPosition
                     + Vector3.up * motion.contact.Evaluate((float)(motion.playable.GetTime() % length / length));
+                motion.soleContact?.Apply(0f);
             }
         }
         private static Motion AnimateWithContact(VisualSoldier3D view, GameObject prefab, AnimationClip clip, float phase, Avatar? avatar, MeshyTargetContactProfile contact)

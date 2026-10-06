@@ -20,6 +20,8 @@ namespace FOC.Presentation.Visuals
             public Vector3 weaponPosition;
             public Quaternion weaponRotation;
             public float handToWeaponDistance;
+            public Vector3 gripWorldPosition,palmGripTarget;
+            public float gripFitDistance;
             public string socketName = "";
             public string weaponParentPath = "";
             public bool actualRightHandSocket;
@@ -92,6 +94,9 @@ namespace FOC.Presentation.Visuals
                         Capture(image, "weapon-attack-" + view, phase);
                         var weaponBounds = RenderBounds(weaponRenderers);
                         var bodyBounds = RenderBounds(actor.view.GetComponentsInChildren<Renderer>(true).Where(r => !r.transform.IsChildOf(actor.weaponInstance!.transform)).ToArray());
+                        var grip=actor.weaponInstance.transform.TransformPoint(new Vector3(-.006f,-.080f,0f));
+                        var palm=rightHand.TransformPoint(new Vector3(0f,.061f,.018f));
+                        if(Vector3.Distance(grip,palm)>.003f)throw new InvalidOperationException("Kilic grip is not aligned to the reviewed right palm.");
                         samples.Add(new WeaponAttackSample
                         {
                             image = image,
@@ -101,6 +106,7 @@ namespace FOC.Presentation.Visuals
                             weaponPosition = actor.weaponInstance.transform.position,
                             weaponRotation = actor.weaponInstance.transform.rotation,
                             handToWeaponDistance = Vector3.Distance(rightHand.position, actor.weaponInstance.transform.position),
+                            gripWorldPosition=grip,palmGripTarget=palm,gripFitDistance=Vector3.Distance(grip,palm),
                             socketName = socket.name,
                             weaponParentPath = TransformPath(socket, actor.view.transform),
                             actualRightHandSocket = evidence.rightHandSocketOwned,

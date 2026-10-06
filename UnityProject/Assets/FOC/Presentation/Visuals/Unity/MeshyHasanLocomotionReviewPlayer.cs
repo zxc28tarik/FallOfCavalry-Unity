@@ -16,6 +16,7 @@ namespace FOC.Presentation.Visuals
             public string sourceClipPolicy = "Meshy Walking/Running remain on their original source Avatar; calibrated Avatar uses the retained CC0 UAL Walk/Jog/Sprint Humanoid library because direct cross-Avatar rebake was measured lossy.";
             public string[] requiredChecks = { "heel/toe contact", "penetration", "hover", "foot sliding", "loop continuity", "calibrated-avatar arm stability" };
             public CaptureEvidence[] captures = Array.Empty<CaptureEvidence>();
+            public LocomotionContactMeasurement[] measurements=Array.Empty<LocomotionContactMeasurement>();
         }
 
         private IEnumerator RunLocomotionReview()
@@ -24,12 +25,14 @@ namespace FOC.Presentation.Visuals
                 throw new InvalidOperationException("Locomotion review requires a valid calibrated Avatar and output path.");
             if (locomotionClips.Length < 3) throw new InvalidOperationException("Walk/Jog/Sprint library clips are missing.");
             var names = new[] { "Walking", "Running" };
+            var measurements=new System.Collections.Generic.List<LocomotionContactMeasurement>();
             foreach (var name in names)
             {
                 ClearActors();
                 var actor = CreateActor(FindClip(name), Vector3.zero, null);
                 actor.calibrationScenario = "SourceMeshy-" + name;
                 actor.sourceClipName = name;
+                measurements.Add(MeasureLocomotion(actor));
                 foreach (var phase in new[] { 0f, .25f, .5f, .75f })
                 {
                     yield return null; SetPhase(actor, phase); var sampled = SnapshotTrackedJoints(actor);
@@ -44,6 +47,7 @@ namespace FOC.Presentation.Visuals
                 var actor = CreateActor(clip, Vector3.zero, calibratedAvatar);
                 actor.calibrationScenario = "CalibratedLibrary-" + clip.name;
                 actor.sourceClipName = clip.name;
+                measurements.Add(MeasureLocomotion(actor));
                 foreach (var phase in new[] { 0f, .25f, .5f, .75f })
                 {
                     yield return null; SetPhase(actor, phase); var sampled = SnapshotTrackedJoints(actor);
@@ -57,7 +61,7 @@ namespace FOC.Presentation.Visuals
             {
                 status = "WINDOWS_CAPTURE_COMPLETE_VISUAL_CONTACT_AND_ARM_QA_REQUIRED",
                 sourceSha = Arg("--meshy-sha") ?? "NOT_SUPPLIED", unityVersion = Application.unityVersion,
-                avatar = calibratedAvatar.name, captures = captures.ToArray()
+                avatar = calibratedAvatar.name, captures = captures.ToArray(),measurements=measurements.ToArray()
             };
             File.WriteAllText(Path.Combine(output, "locomotion-evidence.json"), JsonUtility.ToJson(result, true));
             Application.Quit(0);
@@ -72,11 +76,12 @@ namespace FOC.Presentation.Visuals
             if (clip == null) throw new InvalidOperationException("Calibrated benchmark motion is missing.");
             MeshyHasanPilotBenchmark.Report? report = null;
             var benchmark = MeshyHasanPilotBenchmark.Run(characterPrefab, clip, transform,
-                r => report = r, b => FrameBounds(b), 30, calibratedAvatar);
+                r => report = r, b => FrameBounds(b), 30, calibratedAvatar, null, Arg("--meshy-foot-ik")=="true",Arg("--meshy-contact-cleanup")=="true");
             try { while (benchmark.MoveNext()) yield return benchmark.Current; }
             finally { (benchmark as IDisposable)?.Dispose(); }
             if (report == null || report.cases.Length != 3) throw new InvalidOperationException("Calibrated 1/12/100 benchmark did not produce all cases.");
             report.status = "CALIBRATED_AVATAR_ASSEMBLER_POOL_BENCHMARK_COMPLETE";
+            report.sourceSha=Arg("--meshy-sha")??"NOT_SUPPLIED";
             File.WriteAllText(Path.Combine(output, "calibrated-benchmark.json"), JsonUtility.ToJson(report, true));
             Application.Quit(0);
         }

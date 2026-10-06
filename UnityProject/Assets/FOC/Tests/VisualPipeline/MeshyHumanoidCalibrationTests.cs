@@ -22,7 +22,10 @@ namespace FOC.Tests.VisualPipeline
             Assert.That(candidate,Is.Not.SameAs(original));Assert.That(candidate.isValid&&candidate.isHuman,Is.True);
             var originalMap=original.humanDescription.human.Select(h=>h.humanName+":"+h.boneName).OrderBy(s=>s).ToArray();
             var candidateMap=candidate.humanDescription.human.Select(h=>h.humanName+":"+h.boneName).OrderBy(s=>s).ToArray();
-            Assert.That(candidateMap,Is.EqualTo(originalMap));Assert.That(report.inputAssetsUnchanged,Is.True);
+            Assert.That(candidateMap,Is.EqualTo(originalMap));
+            Assert.That(report.inputAssetsUnchanged,Is.EqualTo(!MeshyLod2Derivation.Exists));
+            Assert.That(report.reviewedLod2DerivationApplied,Is.EqualTo(MeshyLod2Derivation.Exists));
+            if(MeshyLod2Derivation.Exists)MeshyLod2Derivation.Verify();
         }
 
         [TestCase("CalibratedTarget")]

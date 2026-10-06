@@ -1,0 +1,587 @@
+{
+  "version": 1,
+  "status": "REVIEWED_LOD2_DERIVATION",
+  "baselineManifestSha256": "7804ef74e08c0631ee5d9e39741ad0689aa97f8598d403cec266a2763f8b24cf",
+  "method": "Strict seam/feature-constrained derivation from unchanged LOD1; 2304 head/belt triangles frozen; no original LOD0 edit. Advisory target not reached; safe 5606 retained below 5752.",
+  "visualEvidence": "TestResults/MeshyLod2Candidate20261006/lod-2-walking.png + lod-2-tactical.png; actual Windows player; close/far review accepted on 2026-10-06. Pre-commit review only; final-SHA evidence must be regenerated.",
+  "changes": [
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy_LOD2.json",
+      "beforeSha256": "1d4c0f5e973522564bcd1c977ea5bb39c0cdcffd7eab798617eaff0786b92fdb",
+      "afterSha256": "7febc47a7d16c849c34c70ac5e8266ec634713bd47322af9db20e513c9ffe4c4"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD2.asset",
+      "beforeSha256": "5d643a48033b569a18ee973ebe528178d916fa0a13b7a00df79d22b3b2987418",
+      "afterSha256": "9e63a30e42d1aef08ead7b1c83dc93a742009471fa4de646fa8b5b0fe8d39cf5"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/HairCards02_D.png",
+      "sha256": "47fe33831a3929567c733356dd66243116e05df2ace1f884ddca0080b728229f"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/HairCards02_D.png.meta",
+      "sha256": "3c9516dad2792afd72644e387e7c33af7320ae8e2be397c4ae48005a711a9616"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/HairCardsBeard_D.png",
+      "sha256": "5e2d2163cd7157a3a53fc128495f3a86c7a7c91810943d62eb18e2cfc6c0aed2"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/HairCardsBeard_D.png.meta",
+      "sha256": "1a6719a7d56f9ea1fdb0d6f000d923c33e86f468fb17774ea54aff4ca64d6323"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/HairCardsMoustache_D.png",
+      "sha256": "a04f14f45e2beb1fee055a87754846057fb8cd15c4f84f76d57fcb86d3f949ee"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/HairCardsMoustache_D.png.meta",
+      "sha256": "0f800cac15deb697cc83d2285046dfeffc51f5bfbcbcc6d3b0ec53fa148052b8"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/SkinMature_D.png",
+      "sha256": "3f94f3f6a5cab92dedf5cce392a87332312fc435f1cb44c6e7b897daef9a5fbb"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/Characters/SkinMature_D.png.meta",
+      "sha256": "8705d97c526ba91fdd4237322218e74a8007e5f3bc41fe4ba843643b7a455e0c"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/media-strip-audit.json",
+      "sha256": "fc1d120df56708660c1025b3928357dce283c66ed8562b5a43a64e0e957ea625"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/media-strip-audit.json.meta",
+      "sha256": "985998ed56216f8b1b5ab3539b0a8e0d228946f12e390274af96b9c043ff545c"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/optimization-manifest.json",
+      "sha256": "38a91e7e2a057a4b000f31f0219ea792bcfb4ee7b6952a449fa1ac82018d40ae"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/optimization-manifest.json.meta",
+      "sha256": "3253aebc2dcce052089742403f1b0f6e945ec01cdfc2671409da5892f28c97c9"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/provenance.json",
+      "sha256": "052ee346b2c4e3ee119a3de121ed7258daa2f9951c0851c7b34a37702f24343f"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/provenance.json.meta",
+      "sha256": "851ee4eb85aee52c723d08d59307c020d8c17421d6fbcce42ba46ea5c4f8ba7a"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/BaseColor.png",
+      "sha256": "6b1a43a19835d333f89d1ba35187483628989ecb0c194b0b5237a80b01ababf6"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/BaseColor.png.meta",
+      "sha256": "d1b033c1095384cc80b07776056007405c8a059501d22a3a6c042b46f592d39d"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy.fbx",
+      "sha256": "356dd92317ec1787f48aabe4e85157d31dfec2dd029168c856c5ffd6a125fadf"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy.fbx.meta",
+      "sha256": "0b9993399fdcaa264415db44d84b05d9d9a39a1e7c1f7f467bd08100a90cd2db"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy_LOD1.json",
+      "sha256": "265bcf3423bfafc95b37b252e0fb6965b1514e011f04d0725052010233d4709d"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy_LOD1.json.meta",
+      "sha256": "20c7da5f84668300e3fdfe7dd6be42d57bd3e0ac24cd1bd8ce7f626806055a02"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy_LOD2.json.meta",
+      "sha256": "b90d8365513d1c149d6a712ec0778ea23d7b910a69a111a3a7c763e91fdc2590"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/MetallicSmoothness.png",
+      "sha256": "0379492149a9aa25576f82e0a46e2f24102e1b5400825d2117eed2b2edd2cf2e"
+    },
+    {
+      "path": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/MetallicSmoothness.png.meta",
+      "sha256": "5a92b8d33f9c6bea08d8e5fadc84892d5eba682a867876ec5bc5d1f683154ae7"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft.prefab",
+      "sha256": "2ab566d3c638b3d4b2cb4394d001afa4ecbcfbbbdd97b1d998083e468fc64396"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft.prefab.meta",
+      "sha256": "c37cc40c29b00fe6a20a92d18993e3de1716cfabb34a85c7ee94c732a8c59e1f"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_Avatar.asset",
+      "sha256": "adad6db8d684770436c196b85b0a814200d5004e9a82124d6307f14261e68ec3"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_Avatar.asset.meta",
+      "sha256": "437e3fe95588fb5d42021aa6bb0d774dec6457c47804d380b94535d507aecb43"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD0.asset",
+      "sha256": "fc113618447e1278d688a43480039be3a682fc8179a50aa428622d2070213e16"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD0.asset.meta",
+      "sha256": "d7771afa80fd943aba89e3f34b63f2563c2fd288cf840f4c1bd4a7d34e5a392c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD1.asset",
+      "sha256": "3c6f7ad2ff1d1645beecf7655fa975cd65aea03586eca794b47cbcb0657d851e"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD1.asset.meta",
+      "sha256": "ebec3194d82957c660187a67f3abfeed3e517d37757b0a6d0cd13b8ebbd505aa"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD2.asset",
+      "sha256": "5ad8e048cb0068c073a0bfdf4bc459b7409cd5264fbd5554c1172f8bdf60c795"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/CHR_HasanAga_DonorDraft_LOD2.asset.meta",
+      "sha256": "500132db7ca6ba9c07968b1b9b8969cd35368352be72012c84710917222dc2de"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_ArmRaise.anim",
+      "sha256": "e3ba1698ef6d379ae15d53a020defbf8b4886d62ed9d105c2b626971377d417a"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_ArmRaise.anim.meta",
+      "sha256": "7336908ce370ec1e8571826c57c96858ea6b6b8b43a72260ecb9fef7f65de234"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Crouch.anim",
+      "sha256": "ad19736b4469fffce3b1ddbc24b05a09b6405b970c54e7d3d33cc7a6ba57643f"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Crouch.anim.meta",
+      "sha256": "e88457a6657fb84ac7a88ac460e22a893b6299ffe85429090a15701e9c122b25"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Idle.anim",
+      "sha256": "fdefcebce6cd63ce7fd472f7d8c4551e40d8706dd47406c54765e6c7a1c762d2"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Idle.anim.meta",
+      "sha256": "29ee2ddfa2ce88d6e67899250d4fa469b0a0cc04ae602a82634adbcb3cc21728"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_MountedSeated.anim",
+      "sha256": "989949e47ff3f0c51d6c33879ba5fcd09f588360ba5cc1917b3b2d23321863c1"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_MountedSeated.anim.meta",
+      "sha256": "87ba630a77d55bda84b3602e727bb88ab639548c1da55da1086502736033cba5"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_OneHandedAttack.anim",
+      "sha256": "9d2db3f1c041b81e67773fc774d167d73c726a839fe87986204f4d98d8f6d319"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_OneHandedAttack.anim.meta",
+      "sha256": "3b0424b70c1127e4c8a814e1a0f7ceb37dc15d57c1507db4a469846790c80b54"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Run.anim",
+      "sha256": "b936ae4a1127fd2c54262a9bb10e196fb07b44226b95de49693021f4a980f60a"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Run.anim.meta",
+      "sha256": "bed0589a798ad5173340d806d97ccecf1f9a5e9088a4da4a6943be045c09f149"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Turn.anim",
+      "sha256": "e2274ef18cd3d0561d441eb42876477cc9547313b895cd6bb6d600a1eeb2354d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Turn.anim.meta",
+      "sha256": "7b6cf1898260aa0932381e1ac08489e1f7954dbbee07fccfe0f15ae9be3e9bdf"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Walk.anim",
+      "sha256": "a7cc8dcb2ef394258f0495a8f49362fd4d56e7b8427436d05438a74461ebe1c2"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/ANM_HasanDonor_Walk.anim.meta",
+      "sha256": "28d897a311da7b42fd412066a7b0f5921f7c21d6cc0cd1b7915ed71841fa6b30"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/HasanDonorReview.controller",
+      "sha256": "b10b406b45e416616180d02a30e2cee1150ae4ab8bed1aed54dff69d66a5e72c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/HasanMotionReview/HasanDonorReview.controller.meta",
+      "sha256": "79949ed550e69d18b3d4dcdff791c0992a348204202dd2ff0bf9351e82e81035"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/ANM_HasanAga_MeshyPilot.controller",
+      "sha256": "2c27a52b54c8c69e01b6ce39e2862113151c1f1c691dfb2bee6300dc81af7aae"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/ANM_HasanAga_MeshyPilot.controller.meta",
+      "sha256": "8024f8061f1a83dfb76f03604e732287d6af02cc9cdc686b2d0d8e761959419b"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/AVT_FOC_Donor_Calibrated.asset",
+      "sha256": "b45a3c0dce0ba760c98a763c3195e49015b5dece81bfbde1589c8cb0bac322a1"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/AVT_MeshyHasan_Calibrated.asset",
+      "sha256": "0d77fc08fecac6451d943909ff906e0f06ea5d8abcbbf6209718b73b7887b9e6"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/CalibrationProvenance.json",
+      "sha256": "7804ef74e08c0631ee5d9e39741ad0689aa97f8598d403cec266a2763f8b24cf"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/ScenarioC/ANM_HumanoidCandidate_ArmRaise.anim",
+      "sha256": "b12c9cc06cb6d614fc5df2c5ed8f3e32d63aa156adbc45bda326cc639df1d469"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/ScenarioC/ANM_HumanoidCandidate_Crouch.anim",
+      "sha256": "fbcdb50c8df78e442f71df91197283622f9328e9f3fe01680617b5b97a3502c6"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/ScenarioC/ANM_HumanoidCandidate_Idle.anim",
+      "sha256": "3f289abe8aa35f1d7535bf78ee7b005e51b951c5e55c73f8e119376e2519d4f1"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/ScenarioC/ANM_HumanoidCandidate_MountedSeated.anim",
+      "sha256": "cd5921c536acd60e5f24504afea12fa15b0bf348e71267f8c28ec00e823ed258"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/ScenarioC/ANM_HumanoidCandidate_OneHandedAttack.anim",
+      "sha256": "4e94a6d132ede316d643a486ff135d5950dd9556e09207a1f0ed86bc371dc06d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Calibration/ScenarioC/ANM_HumanoidCandidate_Turn.anim",
+      "sha256": "50026703c71c9a46e289604ce2e897ae62eeb27a04a885f3d2b285e86e691424"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/CHR_HasanAga_MeshyPilot.prefab",
+      "sha256": "3720d6f8921f6a239e33c1a927a0571fbada0a180de3a3d4e20aee00a271eb0d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/CHR_HasanAga_MeshyPilot.prefab.meta",
+      "sha256": "0e5f250b5c1cba143e2c4e3c42c2cba98f90beebcaf3774761eb63ac77922b98"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MAT_HasanAga_MeshyPilot.mat",
+      "sha256": "aed60cc83ea3d46a91fa8826d96bc74b50952d7c34664fc46406e6b8c5c57e9d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MAT_HasanAga_MeshyPilot.mat.meta",
+      "sha256": "a2158d8abf9ff0f93b8a011d2cda87999d2ff6707a9597d89178f1121ca99fe2"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD1.asset",
+      "sha256": "abd35c6858a0e6a0a3831247bca4e075aa627450cfc0e83d54d1b7ccda8a3ac0"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD1.asset.meta",
+      "sha256": "37dcd83fbe468fbdce4972588568e3e89185d2d32737ad60d482e1d8e31f5c16"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD2.asset.meta",
+      "sha256": "bb50151fa82270683100c5f29b3cc061e5374bd44e06820e53f3b156818de30c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_ArmRaise.anim",
+      "sha256": "6841b50acf95ea3e9f8f37ebb546b488997c50e1cdac5a7dc0d88f69fbf48684"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_ArmRaise.anim.meta",
+      "sha256": "0591153be5d0cd6575cda71cded4c2152f9cef502bf71a18c58f5c64012fab87"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Crouch.anim",
+      "sha256": "2fee7c312a882909ea26f975a5c249b2c1bc0e9f14e575fb28aef856111bd868"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Crouch.anim.meta",
+      "sha256": "0af54a153eb8e8496810070d93f6313e7023b3b51fb22503bf1f73e022998ab5"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Idle.anim",
+      "sha256": "0a4b0ce5d8031dbc3be236352bcedcf668d6607989a738ac9c0431079a8ebeae"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Idle.anim.meta",
+      "sha256": "1d9fde2dbdacc3d9468ad210b2d8d2854a79cd02266a1c6cae599bfaece4acb9"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_MountedSeated.anim",
+      "sha256": "5ce7420f4e620b93eceef697036d9e10ea709091cc0db501c65c2dc84a1a471c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_MountedSeated.anim.meta",
+      "sha256": "ed6c6949d7f549f957d2bcbc03d3960c368a68fdf24e7f3f1aecb574f7067641"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_OneHandedAttack.anim",
+      "sha256": "2ccbdee2cc3469bbe6b66e50413244d2a47a5a137fd97d8147df23ef0013ba70"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_OneHandedAttack.anim.meta",
+      "sha256": "66251458e4f21c9a77d26cb52bba1647e740a5e434e19dc2a9efe1ea978c9bd8"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Turn.anim",
+      "sha256": "76ceecef716272132c671357a7c75702c41f6d11b858e7e23e4a8b159b40b2de"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Retargeted/ANM_FOCDiagnostic_Turn.anim.meta",
+      "sha256": "d2064e90daac3737a519cf5fad918d15d9973e342ff839ee7580d7a6f804ab21"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_ClothBlue.mat",
+      "sha256": "3477573bdcf28b4e21090068bfa383be35d619bc4afbcb7e63457661fe0482e8"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_ClothBlue.mat.meta",
+      "sha256": "289f75e6e7b44c43b85925e2ee20b96ac14542aa058675b784e644d5206e9a1e"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_ClothRed.mat",
+      "sha256": "65218c08ac6ab01b31922df4be5f25b5cf4d89bdfc5749ca34ea7825fda2ce8c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_ClothRed.mat.meta",
+      "sha256": "9c6819952de1a14a54c253ca7c545bada659082b6a23de194d333c9453a71875"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_EyeWhite.mat",
+      "sha256": "a19b7c5569abf8fdcc46097c5505e7268bb413aa8dc408b7534260500db0e199"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_EyeWhite.mat.meta",
+      "sha256": "46fc5067e07216560da28d76c21bc18291fa1b880013cdee3a1d9c70c5d9d8e2"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_Hair.mat",
+      "sha256": "fea309d67633f5cf73ef7baa2ca28deb05b65e060f5c70a1c05be56d2021eec0"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_Hair.mat.meta",
+      "sha256": "1f3cc773fd149c3e1b4e6c465a611f1c918e24208ef88d6f9c5c51356c3f5ed7"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HairCards02.mat",
+      "sha256": "729ff68550cbfade3d044adc6e03257d8b942f49c60126b939d153ae146af90d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HairCards02.mat.meta",
+      "sha256": "a127e2ae3329b0adb864f501ac29aa5d537813920648c9a4c8ba557083449e4b"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HairCardsBeard.mat",
+      "sha256": "d9c5eb073f6be68159ccddbb0f66aa40972eef67a89ac96f5128d80be0723213"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HairCardsBeard.mat.meta",
+      "sha256": "abf3e296808adaea82bfc635c755a191e8835f056184d3e5cea7811504e48cb0"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HairCardsMoustache.mat",
+      "sha256": "96ba3c0f5e78ffef5e4716b97dbe384dddd66269a501169c73153e663d79788b"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HairCardsMoustache.mat.meta",
+      "sha256": "48bfb5375b797f2b5fea5c72229a2452ea19d9bb790575ae587a3bdfabe1e4d1"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HasanBinding.mat",
+      "sha256": "13158bda190c5192f57ff069415d1e03ae59137199bd8f28cc255fcfb5f8defa"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HasanBinding.mat.meta",
+      "sha256": "b69a8eb4771aa083a9c516badf2a3077a30de19e70f6e7d4f24ef5b829c09ba2"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HasanSash.mat",
+      "sha256": "2b0683fdb1e119f599a94978d1f3df7157d9df8a001e3e36dc6d8be800b50d6c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_HasanSash.mat.meta",
+      "sha256": "e034ed122cf127e41ce4900d5cac86b7b9dd9c9fb46322edb6dd0bf0d7aabd28"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_Leather.mat",
+      "sha256": "2f1f1824641ce09b2879be4dc9e513f618cd7cc2e3742dca439d0ec78476830b"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_Leather.mat.meta",
+      "sha256": "56c42679026c5c1f094c037ddf04cb404730a414577bced959c1fe2e5b5e26af"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_Linen.mat",
+      "sha256": "6c035f3345e710cefd07690a8ffa6f55746fd3207cb87f8d1ed89f436dfda48d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_Linen.mat.meta",
+      "sha256": "c7eb8985b94b3ab558dbf54e441df6833061f62dabff35932ca906acb173ef21"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_SkinMature.mat",
+      "sha256": "4cf278e37d66b6ed4ff67253e68b3e37c4a835958e5c285d19fca24c8bfcfa29"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/MAT_SkinMature.mat.meta",
+      "sha256": "4563190597ef9c5baa34b746a58f45b41920a98e1b3297e3883cf78efd43d375"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothBlue_SurfaceN.asset",
+      "sha256": "8778275d23520380bf8fab6db4cd20e3c6db0bafdda5033385fbb7ce440f940e"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothBlue_SurfaceN.asset.meta",
+      "sha256": "0e37c943dfb4e688e85f45bbbebcd4bac8542eada44a7e4c3c5a66a6ed4fbd73"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothBlue_Weave.asset",
+      "sha256": "7eb2e514be36093b66fe5b7c98d9a216e3dc20e02f1208919ffa578e74757f1a"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothBlue_Weave.asset.meta",
+      "sha256": "099df239bed03277a3c13c8bcc7420d11b131b7e7a53636349b8b7541940b50c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothRed_SurfaceN.asset",
+      "sha256": "aa4efa16b486681004c998c2b4ae9f5f85a1208c811961e2785710fe89e83985"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothRed_SurfaceN.asset.meta",
+      "sha256": "51cc62b861b581d48c0b56b7ade353356a9d75c1e108da0d1df4504417d402c8"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothRed_Weave.asset",
+      "sha256": "cf19dbf0ed8ff50f95d7cf7e113230332e78a78cfa2e50d0233744536385437c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_ClothRed_Weave.asset.meta",
+      "sha256": "f3d10169085dde2df86126d9432f37835642f03f8cafe0df2d5fa3e51cf6e2bd"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_EyeWhite_SurfaceN.asset",
+      "sha256": "b56a335708c4ecad8881d1f76cf06666ee601314f07431f8f7ff88ac7f0b3c10"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_EyeWhite_SurfaceN.asset.meta",
+      "sha256": "9bd4d6432a13555fabfa5ea29eabceb457d44e0918e7dd66e69620e063d04fa7"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_EyeWhite_Weave.asset",
+      "sha256": "fe54b05363f8bc5068e76f363ad3b18294ddf462879d115af98755a5ef513504"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_EyeWhite_Weave.asset.meta",
+      "sha256": "0f1f6855ffa168e21fb9dd4f6ab1f8316ff63b008ecf5afb6d51606781a1884d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Hair_SurfaceN.asset",
+      "sha256": "8867460b5c956e909d89e70db5098ce40cd3d0e8e5a8818b2fae20788910cf2f"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Hair_SurfaceN.asset.meta",
+      "sha256": "2734afe74a10a7e88c1f310b5a5da89ca15f5ff6e6698a559cccda08c77da08f"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Hair_Weave.asset",
+      "sha256": "152b6bd69fa12ac417d3b554ec9251e8ddec092ae0b259fbadfa1263d7e602dc"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Hair_Weave.asset.meta",
+      "sha256": "33a40b41c348be975deea5530573af8e724651150e5207317d632d63cd897624"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanBinding_SurfaceN.asset",
+      "sha256": "561fe8da609b0610395cf44ec563f6873f6b27f0fc060218e477eee33269f78d"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanBinding_SurfaceN.asset.meta",
+      "sha256": "7afdf7c356d0cf1c20b3b2c622a96656200e4910025335ace153ca5f4d40453c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanBinding_Weave.asset",
+      "sha256": "cc5bc5fdce521652b3a5cfa4aed6310b7ce9efa31e8ba39bdaf4a88d1cf9501c"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanBinding_Weave.asset.meta",
+      "sha256": "6b2bd2c4b9c9f809798986d3ccff12a8d61248827cdac2addddd4de67abca68a"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_SurfaceN.asset",
+      "sha256": "ad10db10f9f1c620721bff44a17703c2df3b286c8a6c6a0e3a0a4f5af8eba63e"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_SurfaceN.asset.meta",
+      "sha256": "6666853d66e6b62feeb850fe6bfe40086b78725f27b719bcab3cafadb482af5b"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_Weave.asset",
+      "sha256": "f61508cef3ec692e90fdb75a8a3784be6855305e61eb589cfa71452c53448cf0"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_HasanSash_Weave.asset.meta",
+      "sha256": "9d1bfed30bfb3cd054d1a035b08a31ccec0ab6c2a14854d68dcc56f3ae316baf"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Leather_SurfaceN.asset",
+      "sha256": "61c24ebb137d2c152d54aba8bb88b1a61b56b96560c82600e85e0d41da9095e4"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Leather_SurfaceN.asset.meta",
+      "sha256": "b84ba18b0efaa4372edb39aa411fa97a67d70f6290c376b2130e7091753c0cf8"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Leather_Weave.asset",
+      "sha256": "1cfdaf727ee2e64db074b8c695cc6c5396568296dff2a5d0de8313b4c871124e"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Leather_Weave.asset.meta",
+      "sha256": "c7bbfcff533b843a48bb4b4fd4356ad98600894e05054f115b947e2c701dfdc5"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Linen_SurfaceN.asset",
+      "sha256": "84f0393b66220dec65105e554a631218a67f8d5af9e604ed7c6c4f84ef0638ce"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Linen_SurfaceN.asset.meta",
+      "sha256": "91b90ab84ce562bec1e3a8af86392357fed1ad911da2f6133453073b114d077e"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Linen_Weave.asset",
+      "sha256": "bf4b53b2f3641a78923316c5a2fd5e5968ba8ce2001d49ccbde89b8f9822d688"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_Linen_Weave.asset.meta",
+      "sha256": "349299019a59ff3981209cf12039df36a7436ff48aab5fb40f139b1bf156b1ed"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_SkinMature_SurfaceN.asset",
+      "sha256": "f0ae54b6fb4fa0ad7c95e57c86229a5fac1605a6ffa59898d8ee5cb33c5fd801"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Materials/Ottoman1648/TEX_SkinMature_SurfaceN.asset.meta",
+      "sha256": "651955b09f63b388acd995a51913e3a9e9288eb49b1ed89dccc4e312ee28195b"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Visuals/Unity/HasanGarmentPoseCorrectives.cs",
+      "sha256": "023e087c1849767c4d2d5c9ef983e449c31272b18d6f8b63c224218a2fae6ed3"
+    },
+    {
+      "path": "Assets/FOC/Presentation/Visuals/Unity/HasanGarmentPoseCorrectives.cs.meta",
+      "sha256": "63210354aed52335e8e7baeeb70bdc5df40bebbef00bafdf596594a3d3843741"
+    }
+  ],
+  "triangles": 5606,
+  "productionActivated": false
+}

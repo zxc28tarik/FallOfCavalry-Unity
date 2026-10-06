@@ -15,6 +15,7 @@ import math
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from meshy_lod2_constraints import seam_reasons, simplify
 
 REPO = Path(__file__).resolve().parents[2]
@@ -141,14 +142,16 @@ def generate(args):
     by_name = {b["name"]: b for b in common["bones"]}
     hip_z = by_name["Hips"]["headWorld"][2]
     head_region_z = by_name["Neck"]["headWorld"][2] - .03
+    derivation_geometry = original_geometry if args.derivation_base == "lod0" else lod1
     feature_spec = {"faceHeadgearAtOrAboveZ": head_region_z,
                     "beltZRange": [hip_z - .025, hip_z + .15], "beltMaximumAbsX": .31,
-                    "policy": "Every triangle touching the measured head/neck or waist band is frozen, including UV/normals/weights; not semantic clothing reconstruction."}
+                    "derivationBase": args.derivation_base,
+                    "policy": "Every derivation-input triangle touching the measured head/neck or waist band is frozen, including UV/normals/weights. The explicit lod1 option retains the already-reviewed LOD1 features, not original-LOD0 topology. No protected seams are unlocked."}
 
     def feature(point, _):
         return point[2] >= head_region_z or (hip_z - .025 <= point[2] <= hip_z + .15 and abs(point[0]) <= .31)
 
-    geometry, simplification = simplify(original_geometry, round(9586 * args.ratio), feature)
+    geometry, simplification = simplify(derivation_geometry, round(9586 * args.ratio), feature)
     triangles = len(geometry["triangles"]) // 3
     if triangles >= len(lod1["triangles"]) // 3:
         raise ValueError("Protected regions prevent a genuine LOD2 below LOD1; do not relax safeguards silently")
@@ -173,6 +176,8 @@ def generate(args):
               "originalSourceSha256": PINNED_ORIGINAL_SHA, "runtimeLod0Sha256": PINNED_RUNTIME_SHA,
               "preservedBefore": before, "preservedAfter": after, "sourceUnchanged": True,
               "oldLod2Sha256": sha(SOURCE / "Source/Hasan_Meshy_LOD2.json"),
+              "derivationInput": {"kind": args.derivation_base, "lod1Sha256": sha(SOURCE / "Source/Hasan_Meshy_LOD1.json"),
+                                  "note": "Requested ratio is advisory. A safely higher triangle count is retained below LOD1; no seam/feature constraint is relaxed to hit the target."},
               "candidate": {"path": str(candidate_path), "sha256": sha(candidate_path), "structure": structure},
               "features": feature_spec, "simplification": simplification, "surfaceDistances": distances,
               "productionActivated": False, "unityImport": "NOT_RUN", "deformation": "NOT_RUN", "nearFarScreenshotQA": "NOT_RUN",
@@ -191,6 +196,7 @@ def main():
     parser.add_argument("--onfoot-accepted", action="store_true")
     parser.add_argument("--onfoot-evidence", type=Path)
     parser.add_argument("--ratio", type=float, default=.45)
+    parser.add_argument("--derivation-base", choices=("lod0", "lod1"), default="lod0")
     parser.add_argument("--output-directory", type=Path, default=REPO / "Artifacts/MeshyPilotLod2Repair/Candidate01")
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else None)
     if args.selfcheck:

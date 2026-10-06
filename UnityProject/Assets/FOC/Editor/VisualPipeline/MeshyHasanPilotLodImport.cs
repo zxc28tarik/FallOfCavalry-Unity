@@ -47,6 +47,26 @@ namespace FOC.Editor.Visuals
                 var data=JsonUtility.FromJson<LodData>(File.ReadAllText(path));
                 Require(data.format=="FOC_MESHY_REST_LOD_MESH_V1"&&data.lod==index&&data.sourceSha256==MeshyHasanPilotPipeline.ExpectedSourceHash&&data.runtimeSourceSha256==RuntimeHash,"LOD provenance/schema mismatch.");
                 Require(data.coordinates=="BLENDER_WORLD_METERS_Z_UP"&&data.bones.Length==23,"Unknown LOD space/rig.");
+                var mesh=CreateDerivedMesh(instance,data,index);
+                var bones=data.bones.Select(b=>all[b.name]).ToArray();
+                var meshPath=MeshyHasanPilotPipeline.OutputRoot+"/MESH_HasanAga_MeshyPilot_LOD"+index+".asset";
+                var existing=AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
+                if(existing==null){AssetDatabase.CreateAsset(mesh,meshPath);existing=mesh;}
+                else{EditorUtility.CopySerialized(mesh,existing);UnityEngine.Object.DestroyImmediate(mesh);EditorUtility.SetDirty(existing);}
+                var go=new GameObject("MeshyDerivedLOD"+index);go.transform.SetParent(instance.transform,false);
+                var skin=go.AddComponent<SkinnedMeshRenderer>();skin.sharedMesh=existing;skin.bones=bones;skin.rootBone=original.rootBone;skin.sharedMaterial=material;skin.quality=SkinQuality.Bone4;skin.updateWhenOffscreen=true;skin.localBounds=existing.bounds;
+                levels[index]=new LOD(index==1?.25f:.025f,new Renderer[]{skin});
+            }
+            var group=instance.GetComponent<LODGroup>();if(group==null)group=instance.AddComponent<LODGroup>();
+            group.SetLODs(levels);group.RecalculateBounds();
+        }
+
+        /// <summary>Shared import conversion for isolated LOD2 review/adoption. Does not edit the prefab or rig.</summary>
+        public static Mesh CreateDerivedMesh(GameObject instance,LodData data,int index)
+        {
+                Require(data.format=="FOC_MESHY_REST_LOD_MESH_V1"&&data.lod==index&&data.sourceSha256==MeshyHasanPilotPipeline.ExpectedSourceHash&&data.runtimeSourceSha256==RuntimeHash,"LOD provenance/schema mismatch.");
+                Require(data.coordinates=="BLENDER_WORLD_METERS_Z_UP"&&data.bones.Length==23,"Unknown LOD space/rig.");
+                var all=instance.GetComponentsInChildren<Transform>(true).ToDictionary(t=>t.name,StringComparer.Ordinal);
                 var source=data.bones.ToDictionary(b=>b.name,b=>V(b.headWorld),StringComparer.Ordinal);
                 var conversion=Basis(n=>all[n].position)*Basis(n=>source[n]).inverse;
                 var worst=data.bones.Max(b=>Vector3.Distance(conversion.MultiplyPoint3x4(source[b.name]),all[b.name].position));
@@ -71,17 +91,8 @@ namespace FOC.Editor.Visuals
                 var mesh=new Mesh{name="MESH_HasanAga_MeshyPilot_LOD"+index};mesh.vertices=vertices;mesh.normals=normals;
                 mesh.uv=Enumerable.Range(0,count).Select(i=>new Vector2(data.uv[i*2],data.uv[i*2+1])).ToArray();mesh.triangles=triangles;mesh.boneWeights=weights;
                 mesh.bindposes=bones.Select(b=>b.worldToLocalMatrix*instance.transform.localToWorldMatrix).ToArray();mesh.RecalculateTangents();mesh.RecalculateBounds();
-                var meshPath=MeshyHasanPilotPipeline.OutputRoot+"/MESH_HasanAga_MeshyPilot_LOD"+index+".asset";
-                var existing=AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
-                if(existing==null){AssetDatabase.CreateAsset(mesh,meshPath);existing=mesh;}
-                else{EditorUtility.CopySerialized(mesh,existing);UnityEngine.Object.DestroyImmediate(mesh);EditorUtility.SetDirty(existing);}
-                var go=new GameObject("MeshyDerivedLOD"+index);go.transform.SetParent(instance.transform,false);
-                var skin=go.AddComponent<SkinnedMeshRenderer>();skin.sharedMesh=existing;skin.bones=bones;skin.rootBone=original.rootBone;skin.sharedMaterial=material;skin.quality=SkinQuality.Bone4;skin.updateWhenOffscreen=true;skin.localBounds=existing.bounds;
-                levels[index]=new LOD(index==1?.25f:.025f,new Renderer[]{skin});
                 Debug.Log("FOC_MESHY_LOD_IMPORT lod="+index+" triangles="+triangles.Length/3+" alignmentError="+worst);
-            }
-            var group=instance.GetComponent<LODGroup>();if(group==null)group=instance.AddComponent<LODGroup>();
-            group.SetLODs(levels);group.RecalculateBounds();
+                return mesh;
         }
     }
 }

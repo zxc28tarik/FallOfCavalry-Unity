@@ -123,7 +123,7 @@ namespace FOC.Editor.Visuals
             public string status="NOT_COMPLETED";public string operation="";public string utc="";public string unityVersion="";public string error="";
             public string acceptance="MEASUREMENT ONLY. Same-frame Windows A/B/C visual acceptance is separate. No automatically selected winning Avatar.";
             public string[] jointOrder=JointOrder.Select(b=>b.ToString()).ToArray();public string[] limbOrder=LimbStarts.Select((b,i)=>b+" -> "+LimbEnds[i]).ToArray();
-            public bool inputAssetsUnchanged;public RigAudit[] rigs=Array.Empty<RigAudit>();public ScenarioAudit[] scenarios=Array.Empty<ScenarioAudit>();public QualityDiagnostic[] qualityDiagnostics=Array.Empty<QualityDiagnostic>();
+            public bool inputAssetsUnchanged,reviewedLod2DerivationApplied;public RigAudit[] rigs=Array.Empty<RigAudit>();public ScenarioAudit[] scenarios=Array.Empty<ScenarioAudit>();public QualityDiagnostic[] qualityDiagnostics=Array.Empty<QualityDiagnostic>();
         }
 
         public static string CandidateClipPath(string motion)=>OutputRoot+"/ScenarioC/ANM_HumanoidCandidate_"+motion+".anim";
@@ -180,7 +180,8 @@ namespace FOC.Editor.Visuals
             {
                 var manifest=JsonUtility.FromJson<Manifest>(File.ReadAllText(ManifestPath))??throw new InvalidOperationException("Missing calibration provenance.");Require(manifest.version==1,"Unknown calibration provenance.");
                 CheckHashes(manifest.inputs);CheckHashes(manifest.outputs);AuditScenarios(report,manifest);CheckHashes(manifest.inputs);
-                report.inputAssetsUnchanged=true;report.status="CALIBRATION_EXPERIMENT_COMPLETE_VISUAL_ACCEPTANCE_PENDING";return report;
+                report.reviewedLod2DerivationApplied=MeshyLod2Derivation.Exists;
+                report.inputAssetsUnchanged=!report.reviewedLod2DerivationApplied;report.status="CALIBRATION_EXPERIMENT_COMPLETE_VISUAL_ACCEPTANCE_PENDING";return report;
             }
             catch(Exception e){report.error=e.ToString();throw;}
             finally{WriteReport(report);}
@@ -598,7 +599,7 @@ namespace FOC.Editor.Visuals
             return paths.Concat(AssetDatabase.GetDependencies(paths,true)).Where(p=>p.StartsWith("Assets/",StringComparison.Ordinal)&&File.Exists(p)&&!p.StartsWith(OutputRoot+"/",StringComparison.Ordinal)).Distinct(StringComparer.Ordinal).SelectMany(p=>File.Exists(p+".meta")?new[]{p,p+".meta"}:new[]{p}).OrderBy(p=>p,StringComparer.Ordinal).Select(Hash).ToArray();
         }
         private static InputHash Hash(string path){using(var sha=SHA256.Create())using(var stream=File.OpenRead(path))return new InputHash{path=path,sha256=BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant()};}
-        private static void CheckHashes(IEnumerable<InputHash> inputs){foreach(var input in inputs)Require(Hash(input.path).sha256==input.sha256,"Calibration must not change original/input assets: "+input.path);}
+        private static void CheckHashes(IEnumerable<InputHash> inputs){foreach(var input in inputs)Require(Hash(input.path).sha256==input.sha256||MeshyLod2Derivation.AllowsInput(input.path,input.sha256),"Calibration must not change original/input assets: "+input.path);}
         private static void Store<T>(T generated,string path) where T:Object
         {
             var existing=AssetDatabase.LoadAssetAtPath<T>(path);if(existing==null)AssetDatabase.CreateAsset(generated,path);else{EditorUtility.CopySerialized(generated,existing);EditorUtility.SetDirty(existing);}

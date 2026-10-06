@@ -440,7 +440,7 @@ namespace FOC.Editor.Visuals
             return roots.Concat(AssetDatabase.GetDependencies(roots, true)).Where(p => p.StartsWith("Assets/", StringComparison.Ordinal) && File.Exists(p) && !p.StartsWith(OutputRoot + "/", StringComparison.Ordinal))
                 .Distinct(StringComparer.Ordinal).SelectMany(p => File.Exists(p + ".meta") ? new[] { p, p + ".meta" } : new[] { p }).OrderBy(p => p, StringComparer.Ordinal).Select(Hash).ToArray();
         }
-        private static void CheckHashes(IEnumerable<AssetHash> hashes) { foreach (var h in hashes) Require(Hash(h.path).sha256 == h.sha256, "Protected conversion asset changed: " + h.path); }
+        private static void CheckHashes(IEnumerable<AssetHash> hashes) { foreach (var h in hashes) Require(Hash(h.path).sha256 == h.sha256 || MeshyLod2Derivation.AllowsInput(h.path,h.sha256), "Protected conversion asset changed: " + h.path); }
         private static AssetHash Hash(string path)
         { using (var sha = SHA256.Create()) using (var file = File.OpenRead(path)) return new AssetHash { path = path, sha256 = BitConverter.ToString(sha.ComputeHash(file)).Replace("-", "").ToLowerInvariant() }; }
         private static void Store(AnimationClip generated, string path)
