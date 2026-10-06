@@ -192,6 +192,16 @@ class AnimationIntakeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             record(self.doc)
 
+    def test_changed_inherited_rest_default_requires_review(self):
+        template = node("PropertyTemplate", "FbxNode", children=[node("Properties70", children=[node("P", "Lcl Rotation", "Vector3D", "Vector", "", 0., 180., 0.)])])
+        self.doc.nodes.append(node("Definitions", children=[node("ObjectType", "Model", children=[template])]))
+        self.assert_review(self.doc)
+
+    def test_animation_template_is_not_character_template(self):
+        template = node("PropertyTemplate", "FbxAnimStack", children=[node("Properties70", children=[node("P", "LocalStart", "KTime", "Time", "", 0), node("P", "LocalStop", "KTime", "Time", "", 0)])])
+        self.doc.nodes.append(node("Definitions", children=[node("ObjectType", "AnimationStack", children=[template])]))
+        self.assert_match(self.doc)
+
     def test_unresolved_bind_reference_rejected(self):
         objects(self.doc)[5].children[0].children[0] = node("Node", 999)
         with self.assertRaises(ValueError):

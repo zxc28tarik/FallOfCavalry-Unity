@@ -182,8 +182,8 @@ integrity are recorded in ignored `TestResults/MeshyAnimationIntake/` reports.
 The default comparison is the existing authoritative runtime Hasan FBX.
 
 It compares decoded Geometry (including UV/material-index layers), Model rest
-properties, Deformer/skin data, bind Pose, protected object connections and
-coordinate/unit settings. Exporter object-ID renumbering, object/connection
+properties and inherited defaults, Deformer/skin data, bind Pose, protected
+object connections and coordinate/unit settings. Exporter object-ID renumbering, object/connection
 ordering and array compression do not create false character-change reports.
 All other exact-data differences require review; ordinary DCC float/layout
 differences are NOT silently accepted as equivalent. Animation stacks use
@@ -194,7 +194,7 @@ The original supplied ZIP compared to the media-stripped runtime FBX returns
 `CONTINUITY_MATCH_NOT_ACCEPTANCE`, with only Running (0.708333333s) and Walking
 (0.433333333s), no added clips, and unchanged source hashes. Its ZIP hash remains
 `58acdcc19240ebde805dc1aa1fa877dee844eceaab8319f500de68054b141cde`.
-The preflight has 28 synthetic regressions, including changed geometry, UV,
+The preflight has 30 synthetic regressions, including changed geometry, UV,
 weights, parent/rest/bind transforms, axes, malformed data, object-ID changes,
 ZIP selection and archive path-traversal names (no extraction occurs).
 

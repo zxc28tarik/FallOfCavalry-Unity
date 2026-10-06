@@ -141,6 +141,21 @@ def inventory(data):
         return [node.name.decode(), values, [tree(c) for c in node.children]]
 
     protected = {label: digest(tree(obj, True)) for label, obj in identified.values() if obj.name in PROTECTED}
+    # Rest transforms can inherit omitted values from FBX property templates.
+    # Comparing only explicit object properties would miss changed defaults.
+    protected_templates = {}
+    for definitions in (n for n in root.children if n.name == b"Definitions"):
+        for object_type in definitions.children:
+            category = properties(object_type) if object_type.name == b"ObjectType" else []
+            if len(category) != 1 or category[0].encode() not in PROTECTED:
+                continue
+            for template in object_type.children:
+                if template.name != b"PropertyTemplate":
+                    continue
+                key = json.dumps([category[0], properties(template)])
+                if key in protected_templates:
+                    raise ValueError("Ambiguous protected property template")
+                protected_templates[key] = digest(tree(template))
     if not all(any(obj.name == category for _, obj in identified.values()) for category in PROTECTED):
         raise ValueError("Expected rigged complete-character Geometry/Model/Deformer/Pose")
     connections = []
@@ -202,6 +217,7 @@ def inventory(data):
         raise ValueError("Expected mesh, bone models and at least one animation stack")
     return {"fbx_version": doc.version, "sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data),
             "protected_objects": protected, "protected_connections_sha256": digest(connections),
+            "protected_property_templates": protected_templates,
             "coordinate_settings": axes, "meshes": meshes, "bone_names": sorted(bones),
             "clips": sorted(clips, key=lambda c: c["name"])}
 
@@ -243,11 +259,13 @@ def compare(baseline, candidate):
     changed = sorted(n for n in names if baseline["protected_objects"].get(n) != candidate["protected_objects"].get(n))
     same_connections = baseline["protected_connections_sha256"] == candidate["protected_connections_sha256"]
     same_axes = baseline["coordinate_settings"] == candidate["coordinate_settings"]
-    same = not changed and same_connections and same_axes
+    same_defaults = baseline["protected_property_templates"] == candidate["protected_property_templates"]
+    same = not changed and same_connections and same_axes and same_defaults
     original_clips = {c["name"] for c in baseline["clips"]}
     return {"status": "CONTINUITY_MATCH_NOT_ACCEPTANCE" if same else "CONTINUITY_REVIEW_REQUIRED",
             "same_protected_character_data": same, "changed_protected_objects": changed,
             "protected_connections_equal": same_connections, "coordinate_settings_equal": same_axes,
+            "protected_property_templates_equal": same_defaults,
             "additional_clip_names": [c["name"] for c in candidate["clips"] if c["name"] not in original_clips],
             "unity_avatar": "NOT_RUN", "runtime_visual_qa": "NOT_RUN", "animation_quality": "NOT_DECIDED",
             "license": "NEW_MOTION_PROVENANCE_REVIEW_REQUIRED_BEFORE_PUBLIC_DISTRIBUTION",
