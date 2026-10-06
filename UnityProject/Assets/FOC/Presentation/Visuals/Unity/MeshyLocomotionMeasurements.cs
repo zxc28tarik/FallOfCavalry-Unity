@@ -12,6 +12,7 @@ namespace FOC.Presentation.Visuals
         {
             public float phase,leftHeel,leftToe,rightHeel,rightToe;
             public Vector3 leftSupport,rightSupport,rightHand,leftHand;
+            public Vector3 leftHeelCenter,leftToeCenter,rightHeelCenter,rightToeCenter;
         }
         [Serializable] public sealed class LocomotionContactMeasurement
         {
@@ -20,6 +21,8 @@ namespace FOC.Presentation.Visuals
             public bool measuredSoleCleanup;
             public float maximumSoleCorrectionMeters;
             public float groundY,minimumHeelToeClearance,maximumLowestFootClearance,loopSurfaceGap,loopHandGap,rootTravel;
+            public float durationSeconds;
+            public float diagnosticStrideSpeedMetersPerSecond;
             public string sliding="In-place local support trajectories only. World-space sliding requires reviewed stance windows and external motion speed; no gameplay speed is assumed.";
             public LocomotionContactFrame[] frames=Array.Empty<LocomotionContactFrame>();
         }
@@ -71,14 +74,17 @@ namespace FOC.Presentation.Visuals
                     if(vertices.Any(p=>float.IsNaN(p.y)||float.IsInfinity(p.y)))throw new InvalidOperationException("Nonfinite locomotion skin.");
                     if(i==0)first=vertices;if(i==120)last=vertices;
                     Vector3 Lowest(IEnumerable<int> indices)=>indices.Select(v=>vertices[v]).OrderBy(v=>v.y).First();
+                    Vector3 Center(int[] indices)=>indices.Aggregate(Vector3.zero,(sum,index)=>sum+vertices[index])/indices.Length;
                     frames.Add(new LocomotionContactFrame{phase=phase,leftHeel=Lowest(leftRegion.heel).y-groundHeight,leftToe=Lowest(leftRegion.toe).y-groundHeight,
                         rightHeel=Lowest(rightRegion.heel).y-groundHeight,rightToe=Lowest(rightRegion.toe).y-groundHeight,
                         leftSupport=Lowest(leftRegion.heel.Concat(leftRegion.toe)),rightSupport=Lowest(rightRegion.heel.Concat(rightRegion.toe)),
+                        leftHeelCenter=Center(leftRegion.heel),leftToeCenter=Center(leftRegion.toe),rightHeelCenter=Center(rightRegion.heel),rightToeCenter=Center(rightRegion.toe),
                         rightHand=actor.animator.GetBoneTransform(HumanBodyBones.RightHand).position,leftHand=actor.animator.GetBoneTransform(HumanBodyBones.LeftHand).position});
                     rootTravel=Mathf.Max(rootTravel,Vector3.Distance(root,actor.view.transform.position));
                 }
-                return new LocomotionContactMeasurement{clip=actor.clip!.name,avatar=actor.animator.avatar.name,footIk=actor.playable.GetApplyFootIK(),groundY=groundHeight,
+                return new LocomotionContactMeasurement{clip=actor.clip!.name,avatar=actor.animator.avatar.name,durationSeconds=actor.clip.length,footIk=actor.playable.GetApplyFootIK(),groundY=groundHeight,
                     measuredSoleCleanup=actor.soleContact!=null,maximumSoleCorrectionMeters=actor.soleContact?.MaximumCorrectionMeters??0f,
+                    diagnosticStrideSpeedMetersPerSecond=actor.soleContact?.DiagnosticStrideSpeedMetersPerSecond??0f,
                     minimumHeelToeClearance=frames.Min(f=>Mathf.Min(f.leftHeel,f.leftToe,f.rightHeel,f.rightToe)),
                     maximumLowestFootClearance=frames.Max(f=>Mathf.Min(f.leftHeel,f.leftToe,f.rightHeel,f.rightToe)),
                     loopSurfaceGap=Enumerable.Range(0,first!.Length).Max(i=>Vector3.Distance(first[i],last![i])),

@@ -71,8 +71,7 @@ namespace FOC.Presentation.Visuals
             public Vector3 presentationRestPosition;
             public float contactOffsetMeters;
             public GameObject? weaponInstance;
-            public MeshyPilotSoleContact? soleContact;
-            public float soleGroundY;
+            public MeshyPilotContactLookup? soleContact;
         }
 
         [Serializable]
@@ -428,9 +427,8 @@ namespace FOC.Presentation.Visuals
                 actor.graph.Evaluate(0);
                 if(Arg("--meshy-contact-cleanup")=="true"&&Arg("--meshy-locomotion-review")=="true")
                 {
-                    actor.soleContact=new MeshyPilotSoleContact(characterPrefab,animator);
-                    actor.soleGroundY=groundHeight;
-                    actor.soleContact.Apply(actor.soleGroundY);
+                    actor.soleContact=MeshyPilotContactLookup.Create(characterPrefab,animator,clip,actor.graph,actor.playable,groundHeight);
+                    actor.soleContact.Apply(0f);
                 }
             }
             var trackedBones = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" ? CalibrationTrackedBones : new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot };
@@ -474,7 +472,7 @@ namespace FOC.Presentation.Visuals
         {
             actor.contactOffsetMeters = actor.contactProfile == null ? 0f : actor.contactProfile.Evaluate(phase);
             actor.animator.transform.localPosition = actor.presentationRestPosition + Vector3.up * actor.contactOffsetMeters;
-            actor.soleContact?.Apply(actor.soleGroundY);
+            actor.soleContact?.Apply(phase);
         }
 
         private static void RecordEvaluation(Actor actor)

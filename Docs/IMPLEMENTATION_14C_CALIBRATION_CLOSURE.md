@@ -77,11 +77,63 @@ Avatar, motion, material and LOD1 hashes must still match.
 
 ## PERFORMANCE
 
-Historical PASS for the technical assembler/cache/pool benchmark. Evidence:
-`TestResults/MeshyMotionClosure/CalibratedBenchmark1/calibrated-benchmark.json`.
-The effective Avatar is `AVT_MeshyHasan_Calibrated`; warm reuse passed for 1,
-12 and 100 actors with zero active leases after return. GPU frame timings were
-not available on the MX130 driver and are reported as unavailable, not zero.
+The earlier historical benchmark did not include the newly measured sole
+cleanup. A fresh, otherwise identical 100-actor review on `79e2c10` found
+46.28ms animation evaluation / 61.34ms scene CPU with per-actor measured
+cleanup, versus 8.32ms / 30.20ms without it. That regression is NOT a PASS.
+
+The continuation now samples the actual clip/Avatar/FootIK path once and shares
+a bounded eight-profile, 240-interval contact lookup. Runtime applies six leg
+rotation deltas; source assets, arms, gameplay position and save remain unchanged.
+The binding rejects changed Avatar, scale, floor/root height and orientation.
+First-profile preparation is deliberately reported separately from assembly
+and frame timing: it is not a free operation or hidden from the benchmark.
+
+Pre-commit diagnostic benchmark with calibrated Avatar and all contact cleanup:
+1 / 12 / 100 actors used 0.32 / 1.91 / 8.87ms animation CPU and
+16.71 / 16.81 / 28.82ms scene CPU. First profile plus Animator setup took
+360.85ms; 12 / 100 warm-profile Animator setups took 15.25 / 120.32ms.
+Warm cache/pool reuse passed, with zero active leases after return.
+Evidence: `TestResults/MeshyMotionClosure/LookupDiagnostic20261006/StrideBenchmark/`.
+These are dirty-worktree diagnostics, not final-SHA acceptance. GPU frame
+timings are unavailable on this driver, not zero. This is technical pilot
+viability on the MX130, not a universal 60fps production budget.
+
+## Separate horizontal support review
+
+Vertical contact alone is not a sliding test. Fixed heel/toe surface centroids
+are now measured from actual skinned output. A diagnostic external +Z speed is
+fit using even samples; odd support samples are held out. The speed is derived
+from the native clip stride, NOT assigned to gameplay or silently changed in
+the clip. At native playback the Meshy Walking / Running fits are 3.857 /
+5.262m/s; Walking's short source loop therefore needs playback-rate matching
+for an ordinary walking speed. The calibrated UAL Walk fit is 0.959m/s.
+
+Presentation-only support correction blends in/out around measured support
+windows, preserves ankle roll and is bounded to 12cm horizontally. It never
+edits clips, skeleton/weights, source geometry, campaign position or the motion
+library. Real-player side captures show fixed ground support markers while an
+isolated review actor moves externally at the documented fitted speed.
+
+Pre-commit before/after held-out maximum horizontal support drift:
+- Meshy Walking: approximately 7cm -> 3.29cm (toe/heel roll overlap retained).
+- Meshy Running: approximately 10cm -> 1.62cm.
+- Calibrated UAL Walk: approximately 4cm -> 1.39cm.
+
+The supplied two clips retain -0.91mm / +0.25mm worst heel/toe clearance and
+zero measured loop surface/hand gap; airborne feet are not snapped down.
+Supplemental Jog/Sprint still show 3.31 / 6.42cm support residuals, respectively.
+Those results must not be advertised as final high-speed production contact.
+All values are flat-floor review evidence, not terrain, turning, transition,
+arbitrary-speed or production movement activation. Exact-source Walking and
+Running still use their original Avatar; calibrated Avatar uses the retained
+UAL clips. Direct rejected cross-Avatar rebake is not promoted.
+
+Evidence: `TestResults/MeshyMotionClosure/LookupDiagnostic20261006/StanceCorrected/`.
+The executable regression measures 481 actual baked poses between lookup knots,
+checks floor contact and unchanged hand/root positions, and rejects stale
+bindings. A separate synthetic regression proves held-out sliding is not
+hidden by the fitted speed or an automatic PASS label.
 
 ## Tests
 
@@ -95,6 +147,13 @@ separate focused run. .NET restore, Release build and 486/486 tests passed.
 These are diagnostic results, not final-SHA acceptance. Full Unity, all eleven
 existing pipelines, real-player captures and the calibrated 1/12/100 benchmark
 must be repeated on the final clean commit, followed by push and exact-SHA CI.
+
+On clean `79e2c10128b4c7721ae22a6c829ca4d893e0900f`, full .NET 486/486,
+Unity 711/711 and all eleven existing pipelines passed with zero failures or
+skips. Foundation CI run `37494754914` succeeded on that exact SHA. Its scope is
+.NET restore/build/test; it does not stand in for local Unity/player validation.
+Those results are historical after the lookup/support refinements above and
+must NOT be reused as final evidence for a later commit.
 
 ## Continuation boundary
 

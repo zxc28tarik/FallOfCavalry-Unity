@@ -17,6 +17,7 @@ namespace FOC.Presentation.Visuals
             public string[] requiredChecks = { "heel/toe contact", "penetration", "hover", "foot sliding", "loop continuity", "calibrated-avatar arm stability" };
             public CaptureEvidence[] captures = Array.Empty<CaptureEvidence>();
             public LocomotionContactMeasurement[] measurements=Array.Empty<LocomotionContactMeasurement>();
+            public MeshyLocomotionStanceAudit.Result[] stanceReviews=Array.Empty<MeshyLocomotionStanceAudit.Result>();
         }
 
         private IEnumerator RunLocomotionReview()
@@ -32,7 +33,7 @@ namespace FOC.Presentation.Visuals
                 var actor = CreateActor(FindClip(name), Vector3.zero, null);
                 actor.calibrationScenario = "SourceMeshy-" + name;
                 actor.sourceClipName = name;
-                measurements.Add(MeasureLocomotion(actor));
+                var measurement=MeasureLocomotion(actor);measurements.Add(measurement);
                 foreach (var phase in new[] { 0f, .25f, .5f, .75f })
                 {
                     yield return null; SetPhase(actor, phase); var sampled = SnapshotTrackedJoints(actor);
@@ -40,6 +41,9 @@ namespace FOC.Presentation.Visuals
                     Frame("quarter");
                     Capture("source-" + name.ToLowerInvariant() + "-" + phase.ToString("0.00", CultureInfo.InvariantCulture) + ".png", "quarter", phase);
                 }
+                var stanceReview=CaptureWorldStanceReview(actor,measurement);
+                try{while(stanceReview.MoveNext())yield return stanceReview.Current;}
+                finally{(stanceReview as IDisposable)?.Dispose();}
             }
             foreach (var clip in locomotionClips)
             {
@@ -47,7 +51,7 @@ namespace FOC.Presentation.Visuals
                 var actor = CreateActor(clip, Vector3.zero, calibratedAvatar);
                 actor.calibrationScenario = "CalibratedLibrary-" + clip.name;
                 actor.sourceClipName = clip.name;
-                measurements.Add(MeasureLocomotion(actor));
+                var measurement=MeasureLocomotion(actor);measurements.Add(measurement);
                 foreach (var phase in new[] { 0f, .25f, .5f, .75f })
                 {
                     yield return null; SetPhase(actor, phase); var sampled = SnapshotTrackedJoints(actor);
@@ -55,13 +59,17 @@ namespace FOC.Presentation.Visuals
                     Frame("quarter");
                     Capture("calibrated-" + clip.name.Replace('|', '_') + "-" + phase.ToString("0.00", CultureInfo.InvariantCulture) + ".png", "quarter", phase);
                 }
+                var stanceReview=CaptureWorldStanceReview(actor,measurement);
+                try{while(stanceReview.MoveNext())yield return stanceReview.Current;}
+                finally{(stanceReview as IDisposable)?.Dispose();}
             }
             ClearActors();
             var result = new LocomotionEvidence
             {
                 status = "WINDOWS_CAPTURE_COMPLETE_VISUAL_CONTACT_AND_ARM_QA_REQUIRED",
                 sourceSha = Arg("--meshy-sha") ?? "NOT_SUPPLIED", unityVersion = Application.unityVersion,
-                avatar = calibratedAvatar.name, captures = captures.ToArray(),measurements=measurements.ToArray()
+                avatar = calibratedAvatar.name, captures = captures.ToArray(),measurements=measurements.ToArray(),
+                stanceReviews=measurements.Select(MeshyLocomotionStanceAudit.Measure).ToArray()
             };
             File.WriteAllText(Path.Combine(output, "locomotion-evidence.json"), JsonUtility.ToJson(result, true));
             Application.Quit(0);

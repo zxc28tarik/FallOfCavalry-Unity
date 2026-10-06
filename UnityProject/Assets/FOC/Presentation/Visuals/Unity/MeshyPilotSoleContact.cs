@@ -7,14 +7,15 @@ using UnityEngine;
 namespace FOC.Presentation.Visuals
 {
     /// <summary>Isolated, measured penetration-only presentation correction.
-    /// Never grounds an airborne foot, translates gameplay, edits a clip/rig,
-    /// or claims to solve horizontal stance locking.</summary>
+    /// Never grounds an airborne foot, translates gameplay or edits a clip/rig.
+    /// Horizontal support is a separate, bounded review-only request.</summary>
     public sealed class MeshyPilotSoleContact
     {
         private sealed class Foot
         {
             public Transform upper=null!,lower=null!,ankle=null!;
             public int[] indices=Array.Empty<int>();
+            public int[] heel=Array.Empty<int>(),toe=Array.Empty<int>();
         }
         private readonly SkinnedMeshRenderer skin;
         private readonly Vector3[] vertices;
@@ -50,12 +51,33 @@ namespace FOC.Presentation.Visuals
                     }
                     if(candidates.Count<12)throw new InvalidOperationException("Missing weighted boot sole.");
                     var min=candidates.Values.Min(p=>p.y);var max=candidates.Values.Max(p=>p.y);
+                    var indices=candidates.Keys.Where(i=>candidates[i].y<=min+.3f*(max-min)).ToArray();
+                    var forward=Vector3.ProjectOnPlane(toe.position-ankle.position,Vector3.up).normalized;
+                    var projections=indices.ToDictionary(i=>i,i=>Vector3.Dot(candidates[i]-ankle.position,forward));
+                    var near=projections.Values.Min();var far=projections.Values.Max();
                     return new Foot{upper=target.GetBoneTransform(left?HumanBodyBones.LeftUpperLeg:HumanBodyBones.RightUpperLeg),
                         lower=target.GetBoneTransform(left?HumanBodyBones.LeftLowerLeg:HumanBodyBones.RightLowerLeg),ankle=target.GetBoneTransform(footBone),
-                        indices=candidates.Keys.Where(i=>candidates[i].y<=min+.3f*(max-min)).ToArray()};
+                        indices=indices,heel=indices.Where(i=>projections[i]<=near+.3f*(far-near)).ToArray(),
+                        toe=indices.Where(i=>projections[i]>=far-.3f*(far-near)).ToArray()};
                 }
             }
             finally{if(Application.isPlaying)UnityEngine.Object.Destroy(reference);else UnityEngine.Object.DestroyImmediate(reference);}
+        }
+        public MeshyHasanPilotPlayer.LocomotionContactFrame MeasureFrame(float phase,float groundY)
+        {
+            UpdateMatrices();
+            Vector3 Center(int[] indices)=>indices.Aggregate(Vector3.zero,(sum,index)=>sum+Point(index))/indices.Length;
+            float Minimum(int[] indices)=>indices.Min(index=>Point(index).y)-groundY;
+            return new MeshyHasanPilotPlayer.LocomotionContactFrame{phase=phase,
+                leftHeel=Minimum(feet[0].heel),leftToe=Minimum(feet[0].toe),rightHeel=Minimum(feet[1].heel),rightToe=Minimum(feet[1].toe),
+                leftHeelCenter=Center(feet[0].heel),leftToeCenter=Center(feet[0].toe),rightHeelCenter=Center(feet[1].heel),rightToeCenter=Center(feet[1].toe)};
+        }
+        public void ApplyHorizontalSupport(int side,Vector3 offset)
+        {
+            if(side<0||side>1||float.IsNaN(offset.sqrMagnitude)||float.IsInfinity(offset.sqrMagnitude))throw new ArgumentException("Invalid measured horizontal support.");
+            var foot=feet[side];var rotation=foot.ankle.rotation;
+            HistoricalArtPoseReview.Limb(foot.upper,foot.lower,foot.ankle,foot.ankle.position+Vector3.ClampMagnitude(Vector3.ProjectOnPlane(offset,Vector3.up),.12f),foot.lower.position-foot.upper.position);
+            foot.ankle.rotation=rotation;
         }
         public void Apply(float groundY)
         {

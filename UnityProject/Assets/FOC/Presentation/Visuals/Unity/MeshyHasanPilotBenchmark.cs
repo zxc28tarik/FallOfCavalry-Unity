@@ -50,6 +50,8 @@ namespace FOC.Presentation.Visuals
         [Serializable] public sealed class Case
         {
             public int actors, cachedVariants, pooledRepresentations, activeLeasesAfterReturn;
+            public double animatorAndContactSetupMilliseconds;
+            public int contactLookupProfilesBeforeSetup,contactLookupProfilesAfterSetup;
             public string effectiveAvatar = "", avatarOrigin = "";
             public Operation coldAssembly = new Operation(), warmAssembly = new Operation();
             public GeometryInventory geometry = new GeometryInventory();
@@ -78,7 +80,7 @@ namespace FOC.Presentation.Visuals
             public AnimationClipPlayable playable;
             public MeshyTargetContactProfile? contact;
             public Vector3 presentationRestPosition;
-            public MeshyPilotSoleContact? soleContact;
+            public MeshyPilotContactLookup? soleContact;
         }
         private sealed class Counters
         {
@@ -134,15 +136,19 @@ namespace FOC.Presentation.Visuals
                             && result.warmAssembly.reusedViews == count && result.warmAssembly.reusedRepresentations == count;
                         if (!result.warmReusedAllViewsAndRepresentations) throw new InvalidOperationException("Warm benchmark failed actual FOC pool reuse for " + count + " actors.");
                         result.geometry = InspectGeometry(views);
+                        result.contactLookupProfilesBeforeSetup=MeshyPilotContactLookup.CachedProfileCount;
+                        var setupWatch=Stopwatch.StartNew();
                         for (var i = 0; i < views.Count; i++)
                         {
                             motions.Add(contactProfile == null ? Animate(views[i], sourcePrefab, motionClip, i / (float)count, avatarOverride)
                                 : AnimateWithContact(views[i], sourcePrefab, motionClip, i / (float)count, avatarOverride, contactProfile));
                             if(contactProfile==null&&useFootIK){motions[i].playable.SetApplyFootIK(true);motions[i].graph.Evaluate(0);}
-                            if(measuredSoleCleanup){motions[i].soleContact=new MeshyPilotSoleContact(sourcePrefab,motions[i].animator);motions[i].soleContact!.Apply(0f);}
+                            if(measuredSoleCleanup){motions[i].soleContact=MeshyPilotContactLookup.Create(sourcePrefab,motions[i].animator,motionClip,motions[i].graph,motions[i].playable,0f);motions[i].soleContact!.Apply(i/(float)count);}
                             if (motions[i].animator.avatar != effectiveAvatar)
                                 throw new InvalidOperationException("Benchmark actor did not retain the selected effective Avatar.");
                         }
+                        setupWatch.Stop();result.animatorAndContactSetupMilliseconds=setupWatch.Elapsed.TotalMilliseconds;
+                        result.contactLookupProfilesAfterSetup=MeshyPilotContactLookup.CachedProfileCount;
                         frameActors?.Invoke(VisibleBounds(views));
                         for (var warmup = 0; warmup < 5; warmup++)
                         {
@@ -290,7 +296,7 @@ namespace FOC.Presentation.Visuals
                 motion.graph.Evaluate(delta);
                 if (motion.contact != null) motion.animator.transform.localPosition = motion.presentationRestPosition
                     + Vector3.up * motion.contact.Evaluate((float)(motion.playable.GetTime() % length / length));
-                motion.soleContact?.Apply(0f);
+                motion.soleContact?.Apply((float)(motion.playable.GetTime()%length/length));
             }
         }
         private static Motion AnimateWithContact(VisualSoldier3D view, GameObject prefab, AnimationClip clip, float phase, Avatar? avatar, MeshyTargetContactProfile contact)
