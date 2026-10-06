@@ -161,3 +161,78 @@ Continue from the calibrated Meshy assets and these measured presentation fixes.
 Do not return to procedural clothing, regenerate the model/rig, weaken the
 ProductionArt gate, change gameplay/save schema, or begin Implementation 15.
 Full 14C completion and production catalog activation remain separate gates.
+
+## Additional Meshy motion preparation — 2026-10-06
+
+The user is preparing extra motions on the same retained Meshy Hasan and asked
+for useful parallel preparation. This supersedes the earlier prohibition on
+requesting additional exports only to the extent that the user voluntarily
+supplies more animations; no replacement character, clothing, texture, rig or
+gameplay work is authorized. Implementation 15 remains outside scope.
+
+Preparation started on clean `3d30cedfe3df17050fb30b8f3caae3a7204add30`, with
+the same SHA verified on `origin/codex/impl-14c-production-character-art`.
+Prior calibration evidence remains evidence for that SHA, not new motion
+acceptance or test results for a later preparation commit.
+
+`Tools/Art/audit_meshy_animation_intake.py` is a read-only binary-FBX preflight.
+It accepts one FBX or reads one FBX member directly from a ZIP WITHOUT extracting
+files or copying anything into Unity. SHA-256 provenance and original input
+integrity are recorded in ignored `TestResults/MeshyAnimationIntake/` reports.
+The default comparison is the existing authoritative runtime Hasan FBX.
+
+It compares decoded Geometry (including UV/material-index layers), Model rest
+properties, Deformer/skin data, bind Pose, protected object connections and
+coordinate/unit settings. Exporter object-ID renumbering, object/connection
+ordering and array compression do not create false character-change reports.
+All other exact-data differences require review; ordinary DCC float/layout
+differences are NOT silently accepted as equivalent. Animation stacks use
+their in-file defaults to inventory durations; labels do not prove motion
+quality, handedness, looping or in-place movement.
+
+The original supplied ZIP compared to the media-stripped runtime FBX returns
+`CONTINUITY_MATCH_NOT_ACCEPTANCE`, with only Running (0.708333333s) and Walking
+(0.433333333s), no added clips, and unchanged source hashes. Its ZIP hash remains
+`58acdcc19240ebde805dc1aa1fa877dee844eceaab8319f500de68054b141cde`.
+The preflight has 28 synthetic regressions, including changed geometry, UV,
+weights, parent/rest/bind transforms, axes, malformed data, object-ID changes,
+ZIP selection and archive path-traversal names (no extraction occurs).
+
+Commands (Python 3.11+; no Blender or extra Python package required):
+
+```powershell
+python Tools/Art/test_meshy_animation_intake.py
+python Tools/Art/audit_meshy_animation_intake.py --candidate "C:\path\new-motions.zip"
+# If the ZIP contains multiple FBX exports, choose exactly one member:
+python Tools/Art/audit_meshy_animation_intake.py --candidate "C:\path\new-motions.zip" --fbx-member "exact/path/model.fbx"
+```
+
+Exit 0 means exact protected-character continuity ONLY; exit 2 requests manual
+continuity review; malformed/unsupported inputs fail with a nonzero exit.
+No original, runtime asset or material is overwritten, and no motion is
+automatically installed, retargeted or promoted. External textures, shader
+settings and material quality still need the existing Unity/player checks.
+
+When the actual new export arrives:
+
+1. Keep it in ignored local intake storage and record container/FBX hashes,
+   source Meshy identity and the user's selected motion names. Review new
+   incorporated-motion provenance before any public distribution; the prior
+   license audit is not a blanket permission to redistribute standalone clips.
+2. Run continuity preflight. Investigate differences without changing the
+   authoritative character; matching data does not certify an Avatar or motion.
+3. Test each actual clip on the retained original Meshy Avatar first, then A/B
+   against the calibrated Avatar. Do NOT force native Meshy clips onto the
+   calibrated cross-Avatar path that was previously measured as lossy.
+4. Evaluate real Mecanim/skinned output through the existing assembler,
+   cache/pool and unchanged right-hand kilic attachment. Compare native versus
+   existing candidate Idle and Attack; check right-side slash/torso, socket,
+   contact, sliding, loops and material preservation in Windows player captures.
+5. Keep missing finger articulation and final weapon-grasp limitations explicit.
+   Extra animation cannot introduce bones the model does not have.
+6. Promote only visually validated isolated candidates, repeat affected tests
+   and final-SHA CI, and leave production-catalog/full-14C gates separate.
+
+At preparation closure, NEW_MESHY_MOTION_QA = NOT RUN: the additional animation
+export has not been provided. No new Avatar, attack, locomotion, mounted or
+production-art PASS is asserted by this preparation work. Save remains v14.
