@@ -1,5 +1,7 @@
 # Fall of Cavalry oynanabilir ekranlar ilerleme planı
 
+Son durma noktası ve devam sırası: [Y0 devam notu](Y0_HANDOFF.md).
+
 Harita ve normal oyun ekranları, şehir ve asker sanatını beklemeden geliştirilecek. Amaç, mevcut sistemleri oyuncunun gerçekten kullanabildiği bir kampanya döngüsüne bağlamak. Şehir yönetim ekranının tamamlanması şehirlerin 3D görünüşünün; ordu veya savaş sonuç ekranının tamamlanması asker görsellerinin kabul edildiği anlamına gelmez.
 
 Bu bir ilerleme planıdır. Paketler tamamlanmış değildir ve bu plan Implementation 14C kapsamını genişletmez. Yeni oynanış uygulamaları başlamadan ilgili paketin kapsamı ve gerekli tasarım kararları ayrıca kilitlenir. Implementation 15 başlamaz.
