@@ -75,6 +75,61 @@ namespace FOC.Tests.BootstrapSmoke
             Run(bootstrap);
         }
 
+        [Test]
+        public void RebindingSaveSurface_OneUiActivationMustWriteOnce()
+        {
+            var store = new ReadCountingStore(new AtomicFileSaveStore(_root), false);
+            var bootstrap = Create(store, "smoke");
+            var document = _object!.AddComponent<UIDocument>();
+            var root = document.rootVisualElement;
+            root.Add(new TextField { name = "save-slot", value = "smoke" });
+            root.Add(new Label { name = "save-feedback" });
+            var save = new Button { name = "save-campaign" };
+            root.Add(save);
+            root.Add(new Button { name = "load-campaign" });
+            var bind = typeof(DevelopmentCampaignBootstrap).GetMethod("BindSaveLoadSurface", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            for (var i = 0; i < 5; i++) bind.Invoke(bootstrap, null);
+            InvokeDetachedButtonCallbacks(save);
+            Assert.That(store.WriteCount, Is.EqualTo(1), "A reload/rebind must not multiply one UI activation.");
+        }
+
+        [Test]
+        public void DisableCallback_MustDetachSaveSurface()
+        {
+            var store = new ReadCountingStore(new AtomicFileSaveStore(_root), false);
+            var bootstrap = Create(store, "smoke");
+            var document = _object!.AddComponent<UIDocument>();
+            var root = document.rootVisualElement;
+            root.Add(new TextField { name = "save-slot", value = "smoke" });
+            root.Add(new Label { name = "save-feedback" });
+            var save = new Button { name = "save-campaign" };
+            root.Add(save);
+            root.Add(new Button { name = "load-campaign" });
+            typeof(DevelopmentCampaignBootstrap).GetMethod("BindSaveLoadSurface", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(bootstrap, null);
+            // Non-ExecuteAlways behaviours do not receive runtime lifecycle callbacks
+            // in EditMode. Exercise the callback itself here; the real player soak
+            // separately disables the component and submits the attached button.
+            var disable = typeof(DevelopmentCampaignBootstrap).GetMethod("OnDisable", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(disable, Is.Not.Null, "The runtime disable callback must exist.");
+            disable!.Invoke(bootstrap, null);
+            InvokeDetachedButtonCallbacks(save);
+            Assert.That(store.WriteCount, Is.Zero, "Detached/disabled surfaces must not save.");
+        }
+
+        [TestCase("10", 10)]
+        [TestCase("7200", 7200)]
+        [TestCase("14400", 14400)]
+        public void SoakDuration_AcceptsBoundedIntegerSeconds(string value, int expected) =>
+            Assert.That(DevelopmentPlayerSoak.ParseDuration(value), Is.EqualTo(expected));
+
+        [TestCase("9")]
+        [TestCase("14401")]
+        [TestCase("-1")]
+        [TestCase("1.5")]
+        [TestCase(" ")]
+        public void SoakDuration_RejectsMalformedOrUnboundedRun(string value) =>
+            Assert.Throws<ArgumentException>(() => DevelopmentPlayerSoak.ParseDuration(value));
+
         private DevelopmentCampaignBootstrap Create(IAtomicSaveStore store, string slot)
         {
             _object = new GameObject("Isolated save smoke regression");
@@ -92,6 +147,15 @@ namespace FOC.Tests.BootstrapSmoke
         private static void Set(DevelopmentCampaignBootstrap target, string field, object value) =>
             typeof(DevelopmentCampaignBootstrap).GetField(field, BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(target, value);
 
+        // Detached EditMode roots have no event dispatcher. Inspect/invoke the real
+        // registered callback list; the Windows soak separately uses attached UI events.
+        private static void InvokeDetachedButtonCallbacks(Button button)
+        {
+            var field = typeof(Clickable).GetField("clicked", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null, "Unity callback backing field changed; this diagnostic must be updated, not skipped.");
+            ((Action?)field!.GetValue(button.clickable))?.Invoke();
+        }
+
         private static void Run(DevelopmentCampaignBootstrap bootstrap)
         {
             var routine = (IEnumerator)typeof(DevelopmentCampaignBootstrap).GetMethod("RunSmoke", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(bootstrap, null);
@@ -104,7 +168,12 @@ namespace FOC.Tests.BootstrapSmoke
             private readonly bool _failRead;
             public ReadCountingStore(IAtomicSaveStore inner, bool failRead) { _inner = inner; _failRead = failRead; }
             public int ReadCount { get; private set; }
-            public SaveStoreResult Write(string slotName, string content, Func<string, bool> validateContent) => _inner.Write(slotName, content, validateContent);
+            public int WriteCount { get; private set; }
+            public SaveStoreResult Write(string slotName, string content, Func<string, bool> validateContent)
+            {
+                WriteCount++;
+                return _inner.Write(slotName, content, validateContent);
+            }
             public SaveStoreResult Read(string slotName, Func<string, bool> validateContent)
             {
                 ReadCount++;

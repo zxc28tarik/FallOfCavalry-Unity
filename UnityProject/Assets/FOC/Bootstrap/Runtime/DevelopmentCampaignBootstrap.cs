@@ -39,6 +39,8 @@ namespace FOC.Bootstrap.Unity
         private TextField? _slot;
         private VisualSoldier3D? _previewView;
         private string? _saveRoot;
+        private Button? _saveButton;
+        private Button? _loadButton;
 
         public CampaignRuntimeState? CurrentCampaign => _campaign;
 
@@ -47,6 +49,12 @@ namespace FOC.Bootstrap.Unity
             try
             {
                 var smoke = HasCommandLineArgument("-focSmokeTest");
+                var soak = HasCommandLineArgument("-focPlayerSoak");
+                if (soak && (smoke || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
+                    throw new InvalidOperationException("Player soak must run separately from other diagnostic modes.");
+                if (!soak && HasCommandLineArgument("-focSoakSeconds")) throw new InvalidOperationException("Soak duration requires -focPlayerSoak.");
+                if (HasCommandLineArgument("-focSoakSeconds") && string.IsNullOrWhiteSpace(CommandLineValue("-focSoakSeconds"))) throw new InvalidOperationException("-focSoakSeconds requires a value.");
+                var soakSeconds = soak ? DevelopmentPlayerSoak.ParseDuration(CommandLineValue("-focSoakSeconds")) : 0;
                 if (smoke && HasCommandLineArgument("-focCaptureScreenshot"))
                     throw new InvalidOperationException("Smoke and screenshot modes must be run separately.");
                 var requestedRoot = CommandLineValue("-focSmokeSaveRoot");
@@ -55,7 +63,7 @@ namespace FOC.Bootstrap.Unity
                 if (!smoke && (HasCommandLineArgument("-focSmokeSlot") || HasCommandLineArgument("-focSmokeCorruptAfterSave")))
                     throw new InvalidOperationException("Smoke diagnostics require -focSmokeTest.");
                 var playerSaveRoot = Path.Combine(UnityEngine.Application.persistentDataPath, "FOC", "VerticalSliceSaves");
-                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke, requestedRoot);
+                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke || soak, requestedRoot);
                 _saveRoot = root;
                 var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice location content is missing.");
                 var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice route content is missing.");
@@ -77,6 +85,7 @@ namespace FOC.Bootstrap.Unity
                 _host = GetComponent<PresentationRuntimeHost>() ?? gameObject.AddComponent<PresentationRuntimeHost>();
                 PresentCampaign();
                 if (smoke) _slot!.value = CommandLineValue("-focSmokeSlot") ?? "smoke";
+                if (soak) _slot!.value = "soak";
                 if(HasCommandLineArgument("-focSoldierPreview"))ConfigureHistoricalSoldierPreview();
                 if (HasCommandLineArgument("-focTravelDemo"))
                 {
@@ -88,6 +97,7 @@ namespace FOC.Bootstrap.Unity
                 Debug.Log(ReadyMarker + " campaign=" + _campaign.CampaignId.Value + " saveRoot=" + root);
                 if (HasCommandLineArgument("-focCaptureScreenshot")) StartCoroutine(CaptureScreenshot());
                 else if (smoke) StartCoroutine(RunSmoke());
+                else if (soak) gameObject.AddComponent<DevelopmentPlayerSoak>().Configure(this, root, soakSeconds);
             }
             catch (Exception exception)
             {
@@ -97,6 +107,11 @@ namespace FOC.Bootstrap.Unity
                 if (HasCommandLineArgument("-focSmokeTest"))
                 {
                     Debug.LogError("FOC_DEVELOPMENT_SMOKE_FAIL STARTUP_FAILED " + exception.Message);
+                    UnityEngine.Application.Quit(1);
+                }
+                if (HasCommandLineArgument("-focPlayerSoak"))
+                {
+                    Debug.LogError("FOC_PLAYER_SOAK_FAIL STARTUP_FAILED " + exception.Message);
                     UnityEngine.Application.Quit(1);
                 }
             }
@@ -130,6 +145,7 @@ namespace FOC.Bootstrap.Unity
 
         private void BindSaveLoadSurface()
         {
+            UnbindSaveLoadSurface();
             var document = GetComponent<UIDocument>();
             if (document == null) throw new InvalidOperationException("Presentation UIDocument is unavailable.");
             var root = document.rootVisualElement;
@@ -139,7 +155,20 @@ namespace FOC.Bootstrap.Unity
             var load = root.Q<Button>("load-campaign") ?? throw new InvalidOperationException("Load button is missing.");
             save.clicked += Save;
             load.clicked += Load;
+            _saveButton = save;
+            _loadButton = load;
         }
+
+        private void UnbindSaveLoadSurface()
+        {
+            if (_saveButton != null) _saveButton.clicked -= Save;
+            if (_loadButton != null) _loadButton.clicked -= Load;
+            _saveButton = null;
+            _loadButton = null;
+        }
+
+        private void OnDisable() => UnbindSaveLoadSurface();
+        private void OnDestroy() { UnbindSaveLoadSurface(); _bindings?.Dispose(); }
 
         private void Save() => SaveCampaign();
 
