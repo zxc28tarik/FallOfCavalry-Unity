@@ -165,6 +165,14 @@ namespace FOC.Presentation.Visuals
             template.gameObject.SetActive(false);
             pool.Configure(template, 16);
 
+            if (Arg("--meshy-user-motion") == "true")
+            {
+                var userMotion = RunUserMotionReview();
+                try { while (userMotion.MoveNext()) yield return userMotion.Current; }
+                finally { (userMotion as IDisposable)?.Dispose(); }
+                yield break;
+            }
+
             if (Arg("--meshy-motion-closure") == "true")
             {
                 var closure = RunMotionClosure();
@@ -419,7 +427,7 @@ namespace FOC.Presentation.Visuals
                 actor.playable = AnimationClipPlayable.Create(actor.graph, clip);
                 if (contactProfile != null) contactProfile.ValidateBinding(animator, clip);
                 actor.playable.SetApplyFootIK(contactProfile != null ? contactProfile.useFootIK :
-                    (Arg("--meshy-motion-closure") == "true" || Arg("--meshy-weapon-attack") == "true" || Arg("--meshy-locomotion-review") == "true") && Arg("--meshy-foot-ik") == "true");
+                    (Arg("--meshy-motion-closure") == "true" || Arg("--meshy-weapon-attack") == "true" || Arg("--meshy-locomotion-review") == "true" || Arg("--meshy-user-motion") == "true") && Arg("--meshy-foot-ik") == "true");
                 actor.playable.SetApplyPlayableIK(false);
                 var animationOutput = AnimationPlayableOutput.Create(actor.graph, "Humanoid source clip", animator);
                 animationOutput.SetSourcePlayable(actor.playable);
@@ -431,7 +439,7 @@ namespace FOC.Presentation.Visuals
                     actor.soleContact.Apply(0f);
                 }
             }
-            var trackedBones = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" ? CalibrationTrackedBones : new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot };
+            var trackedBones = Arg("--meshy-calibration") == "true" || Arg("--meshy-motion-closure") == "true" || Arg("--meshy-user-motion") == "true" ? CalibrationTrackedBones : new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand, HumanBodyBones.LeftFoot, HumanBodyBones.RightFoot };
             actor.tracked = trackedBones
                 .Select(animator.GetBoneTransform).Where(bone => bone != null).ToArray();
             if (actor.tracked.Length != trackedBones.Length) throw new InvalidOperationException("Humanoid tracked joint mapping incomplete.");

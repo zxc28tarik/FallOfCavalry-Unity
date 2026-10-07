@@ -54,6 +54,7 @@ namespace FOC.Bootstrap.Unity
                     throw new InvalidOperationException("Player soak must run separately from other diagnostic modes.");
                 if (!soak && HasCommandLineArgument("-focSoakSeconds")) throw new InvalidOperationException("Soak duration requires -focPlayerSoak.");
                 if (!soak && HasCommandLineArgument("-focSoakMemoryAudit")) throw new InvalidOperationException("Memory audit requires -focPlayerSoak.");
+                if (!soak && HasCommandLineArgument("-focSoakAllocationAudit")) throw new InvalidOperationException("Allocation audit requires -focPlayerSoak.");
                 if (HasCommandLineArgument("-focSoakSeconds") && string.IsNullOrWhiteSpace(CommandLineValue("-focSoakSeconds"))) throw new InvalidOperationException("-focSoakSeconds requires a value.");
                 var soakSeconds = soak ? DevelopmentPlayerSoak.ParseDuration(CommandLineValue("-focSoakSeconds")) : 0;
                 if (smoke && HasCommandLineArgument("-focCaptureScreenshot"))

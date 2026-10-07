@@ -9,6 +9,8 @@ using FOC.Application.Save;
 using FOC.Domain.Geography;
 using FOC.Infrastructure.Save;
 using FOC.Presentation.Core;
+using Unity.Profiling;
+using Unity.Profiling.LowLevel;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Rendering;
@@ -37,6 +39,9 @@ namespace FOC.Bootstrap.Unity
         private bool _samplingIdle;
         private long _idleMinimumManagedBytes;
         private int _idleSamples;
+        private bool _allocationAudit;
+        private ProfilerRecorder _allocationRecorder;
+        private ProfilerRecorder _frameAllocationRecorder;
 
         public static int ParseDuration(string? value)
         {
@@ -56,6 +61,8 @@ namespace FOC.Bootstrap.Unity
             _report.graphicsDevice = SystemInfo.graphicsDeviceType.ToString();
             _memoryAudit = Array.Exists(Environment.GetCommandLineArgs(), x => StringComparer.Ordinal.Equals(x, "-focSoakMemoryAudit"));
             _report.memoryAudit = _memoryAudit;
+            _allocationAudit = Array.Exists(Environment.GetCommandLineArgs(), x => StringComparer.Ordinal.Equals(x, "-focSoakAllocationAudit"));
+            _report.allocationAudit = _allocationAudit;
         }
 
         private IEnumerator Start()
@@ -77,6 +84,7 @@ namespace FOC.Bootstrap.Unity
 
         private IEnumerator Exercise()
         {
+            if (_allocationAudit) InitializeAllocationRecorders();
             yield return null;
             yield return null;
             Require(_bootstrap?.CurrentCampaign != null, "CAMPAIGN_MISSING");
@@ -168,6 +176,13 @@ namespace FOC.Bootstrap.Unity
                 Sample();
                 WriteState();
                 Require(_unexpectedError == null, "UNEXPECTED_PLAYER_ERROR " + _unexpectedError);
+                if (_allocationAudit && _report.cycles == 3)
+                {
+                    // Diagnostic-only frame windows separate callbacks whose
+                    // byte counter is flushed at frame end. Never acceptance.
+                    var probe = CaptureAllocationProbe();
+                    while (probe.MoveNext()) yield return probe.Current;
+                }
             } while (Time.realtimeSinceStartupAsDouble - _started < _report.requestedSeconds);
             var feedbackEvents = _report.saveFeedbackEvents;
             var saveButton = Document.Q<Button>("save-campaign");
@@ -186,13 +201,29 @@ namespace FOC.Bootstrap.Unity
         private string Title => Feedback("screen-title");
         private List<Button> Actions => Document.Q<VisualElement>("action-content").Query<Button>().ToList();
         private string Feedback(string name) => Document.Q<Label>(name)?.text ?? throw new InvalidOperationException("LABEL_MISSING " + name);
-        private string Fingerprint() => SavePayloadFingerprint.Compute(new CampaignSaveTextSerializer(), CampaignSaveMapper.ToSaveData(_bootstrap!.CurrentCampaign!));
+        private string Fingerprint()
+        {
+            BeginAllocationMeasurement();
+            var result = SavePayloadFingerprint.Compute(new CampaignSaveTextSerializer(), CampaignSaveMapper.ToSaveData(_bootstrap!.CurrentCampaign!));
+            if (_allocationAudit && !_finished) { _report.fingerprintAllocationEvents += EndAllocationMeasurement(); _report.fingerprintAllocationSamples++; }
+            return result;
+        }
         private void Activate(Button? button)
         {
             Require(button != null && button.enabledInHierarchy && button.panel != null, "BUTTON_UNAVAILABLE");
             var started = Time.realtimeSinceStartupAsDouble;
+            BeginAllocationMeasurement();
             button!.Focus();
             using (var submit = NavigationSubmitEvent.GetPooled()) button.SendEvent(submit);
+            var events = EndAllocationMeasurement();
+            // GC.Alloc marker samples count allocation events, not bytes. Its
+            // timing sample values must not be mislabeled as byte measurements.
+            if (_allocationAudit && button.name.StartsWith("nav-", StringComparison.Ordinal))
+            { _report.navigationAllocationEvents += events; _report.navigationAllocationSamples++; }
+            else if (_allocationAudit && button.name == "save-campaign")
+            { _report.saveAllocationEvents += events; _report.saveAllocationSamples++; }
+            else if (_allocationAudit && button.name == "load-campaign")
+            { _report.loadAllocationEvents += events; _report.loadAllocationSamples++; }
             _report.maxUiOperationMilliseconds = Math.Max(_report.maxUiOperationMilliseconds, (Time.realtimeSinceStartupAsDouble - started) * 1000);
             _report.uiActivations++;
         }
@@ -203,6 +234,7 @@ namespace FOC.Bootstrap.Unity
             var ms = (now - _lastFrame) * 1000;
             _lastFrame = now;
             _report.frames++;
+            if (_allocationAudit && _frameAllocationRecorder.Valid) _report.frameAllocatedBytes += _frameAllocationRecorder.LastValue;
             _report.maxFrameMilliseconds = Math.Max(_report.maxFrameMilliseconds, ms);
             _frameHistogram[Math.Min(2000, Math.Max(0, (int)Math.Ceiling(ms)))]++;
             if (_report.frames % 10 == 0)
@@ -270,7 +302,7 @@ namespace FOC.Bootstrap.Unity
             _finished = true;
             UnityEngine.Application.logMessageReceived -= OnLog;
             _report.error = error ?? _unexpectedError ?? string.Empty;
-            _report.status = string.IsNullOrEmpty(_report.error) ? (_memoryAudit ? "DIAGNOSTIC_COMPLETE" : "PASS") : "FAIL";
+            _report.status = string.IsNullOrEmpty(_report.error) ? (_memoryAudit || _allocationAudit ? "DIAGNOSTIC_COMPLETE" : "PASS") : "FAIL";
             if (_memoryAudit)
             {
                 _report.auditFinalCollectedBytes = DiagnosticCollectedMemory();
@@ -282,6 +314,7 @@ namespace FOC.Bootstrap.Unity
             _report.finalFingerprint = _bootstrap?.CurrentCampaign == null ? string.Empty : Fingerprint();
             try { WriteState(); }
             catch (Exception failure) { _report.status = "FAIL"; _report.error += " REPORT_WRITE_FAILED " + failure.Message; }
+            ReleaseAllocationRecorders();
             Debug.Log("FOC_PLAYER_SOAK_" + _report.status + " cycles=" + _report.cycles + " seconds=" + _report.elapsedSeconds.ToString("F1", CultureInfo.InvariantCulture) + " error=" + _report.error);
             UnityEngine.Application.Quit(string.IsNullOrEmpty(_report.error) ? 0 : 1);
         }
@@ -290,7 +323,74 @@ namespace FOC.Bootstrap.Unity
             if (condition.StartsWith("FOC_SAVE_UI ", StringComparison.Ordinal)) _report.saveFeedbackEvents++;
             if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) _unexpectedError ??= condition;
         }
-        private void OnDisable() => UnityEngine.Application.logMessageReceived -= OnLog;
+        private void OnDisable() { UnityEngine.Application.logMessageReceived -= OnLog; ReleaseAllocationRecorders(); }
+        private void InitializeAllocationRecorders()
+        {
+            // Raw per-allocation EVENT samples. Byte values come separately
+            // from the frame counter. Bounded native storage; no managed array.
+            _allocationRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC.Alloc", 65536, ProfilerRecorderOptions.CollectOnlyOnCurrentThread);
+            _allocationRecorder.Stop();
+            _frameAllocationRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame", 1);
+            Require(_allocationRecorder.Valid, "ALLOCATION_MARKER_UNAVAILABLE");
+            _report.allocationMarkerUnit = _allocationRecorder.UnitType.ToString();
+            Require(_frameAllocationRecorder.Valid && _frameAllocationRecorder.UnitType == ProfilerMarkerDataUnit.Bytes, "FRAME_ALLOCATION_COUNTER_UNAVAILABLE");
+        }
+        private void BeginAllocationMeasurement()
+        {
+            if (!_allocationAudit || _finished) return;
+            _allocationRecorder.Reset();
+            _allocationRecorder.Start();
+        }
+        private long EndAllocationMeasurement()
+        {
+            if (!_allocationAudit || _finished) return 0;
+            _allocationRecorder.Stop();
+            Require(_allocationRecorder.Count < _allocationRecorder.Capacity, "ALLOCATION_SAMPLE_CAPACITY_EXCEEDED");
+            return _allocationRecorder.Count;
+        }
+        private IEnumerator CaptureAllocationProbe()
+        {
+            var expected = Fingerprint();
+            var screens = new[] { "map", "city", "character", "organization", "trade", "army", "diplomacy", "battle", "reports", "ledger" };
+            for (var round = 0; round < 5; round++)
+            {
+                // Frame windows include engine/layout work, not exclusively the
+                // named callback. Compare like windows; do not infer live heap.
+                yield return null;
+                _report.probeIdleFrameBytes += _frameAllocationRecorder.LastValue;
+                _report.probeIdleSamples++;
+                foreach (var screen in screens)
+                {
+                    Activate(Document.Q<Button>("nav-" + screen));
+                    yield return null;
+                    _report.probeNavigationFrameBytes += _frameAllocationRecorder.LastValue;
+                    _report.probeNavigationSamples++;
+                }
+                yield return null;
+                Slot.value = "soak";
+                Activate(Document.Q<Button>("save-campaign"));
+                yield return null;
+                _report.probeSaveFrameBytes += _frameAllocationRecorder.LastValue;
+                _report.probeSaveSamples++;
+                Require(Feedback("save-feedback") == "SAVED", "ALLOCATION_PROBE_SAVE_FAILED");
+                Activate(Document.Q<Button>("load-campaign"));
+                yield return null;
+                _report.probeLoadFrameBytes += _frameAllocationRecorder.LastValue;
+                _report.probeLoadSamples++;
+                Require(Feedback("save-feedback") == "LOADED", "ALLOCATION_PROBE_LOAD_FAILED");
+                Require(Fingerprint() == expected, "ALLOCATION_PROBE_ROUNDTRIP_MISMATCH");
+                yield return null;
+                Fingerprint();
+                yield return null;
+                _report.probeFingerprintFrameBytes += _frameAllocationRecorder.LastValue;
+                _report.probeFingerprintSamples++;
+            }
+        }
+        private void ReleaseAllocationRecorders()
+        {
+            if (_allocationRecorder.Valid) _allocationRecorder.Dispose();
+            if (_frameAllocationRecorder.Valid) _frameAllocationRecorder.Dispose();
+        }
         private static long DiagnosticCollectedMemory()
         {
             // Explicitly separate, opt-in diagnostic. Never executed by an acceptance run.
@@ -312,10 +412,16 @@ namespace FOC.Bootstrap.Unity
             public long monoUsedBytes, monoHeapBytes;
             public int retiredCampaignsTracked, retiredCampaignsAlive, retiredFieldListsTracked, retiredFieldListsAlive;
             public bool memoryAudit;
+            public bool allocationAudit;
+            public string allocationMarkerUnit = string.Empty;
             public long auditWarmCollectedBytes, auditFinalCollectedBytes;
             public int auditFinalRetiredCampaignsAlive, auditFinalRetiredFieldListsAlive;
             public long idleMinimumManagedBytes;
             public int idleSamples;
+            public long frameAllocatedBytes, navigationAllocationEvents, saveAllocationEvents, loadAllocationEvents, fingerprintAllocationEvents;
+            public int navigationAllocationSamples, saveAllocationSamples, loadAllocationSamples, fingerprintAllocationSamples;
+            public long probeIdleFrameBytes, probeNavigationFrameBytes, probeSaveFrameBytes, probeLoadFrameBytes, probeFingerprintFrameBytes;
+            public int probeIdleSamples, probeNavigationSamples, probeSaveSamples, probeLoadSamples, probeFingerprintSamples;
         }
     }
 }

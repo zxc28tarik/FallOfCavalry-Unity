@@ -16,6 +16,7 @@ namespace FOC.Editor.Visuals
             // Licensed external motion rigs need their own measured Avatar and
             // readable/exposed joints; canonical FOC stripping is not valid here.
             if(assetPath.StartsWith(MeshyMotionLibraryIntake.SourceRoot+"/",StringComparison.Ordinal))return;
+            if(assetPath.StartsWith(MeshyUserMotionIntake.SourceRoot+"/",StringComparison.Ordinal))return;
             if(!assetPath.StartsWith("Assets/FOC/ArtSource/",StringComparison.Ordinal))return;var importer=(ModelImporter)assetImporter;var mount=assetPath.IndexOf("/Mounts/",StringComparison.Ordinal)>=0;importer.globalScale=1f;importer.useFileScale=true;importer.importCameras=false;importer.importLights=false;importer.importVisibility=false;importer.importBlendShapes=false;importer.importAnimation=true;importer.animationType=mount?ModelImporterAnimationType.Generic:ModelImporterAnimationType.Human;importer.avatarSetup=ModelImporterAvatarSetup.CreateFromThisModel;importer.meshCompression=ModelImporterMeshCompression.Medium;importer.isReadable=false;importer.materialImportMode=ModelImporterMaterialImportMode.None;importer.optimizeGameObjects=true;importer.extraExposedTransformPaths=(mount?new[]{CanonicalRig.RiderSocket}:CanonicalRig.HumanSockets.Values).OrderBy(x=>x,StringComparer.Ordinal).ToArray();
         }
 

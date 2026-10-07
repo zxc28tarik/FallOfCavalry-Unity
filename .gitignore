@@ -22,6 +22,7 @@ Recordings/
 sysinfo.txt
 crashlytics-build.properties
 **/TestResults/
+**/TestResults.meta
 **/bin/
 **/obj/
 /Artifacts/

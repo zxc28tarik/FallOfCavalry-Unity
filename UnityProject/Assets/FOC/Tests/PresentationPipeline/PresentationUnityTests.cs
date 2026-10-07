@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Linq;
+using System.Reflection;
 using FOC.Presentation.Core;
 using FOC.Presentation.Unity;
 using FOC.Presentation.Visuals;
@@ -69,6 +70,112 @@ namespace FOC.Tests
         }
 
         [Test]
+        public void FieldCollections_AreReusedAndBindTheCurrentRouteRatherThanOldFields()
+        {
+            var root = LoadShell().Instantiate();
+            using var navigator = new PresentationNavigator();
+            using var viewModel = new PresentationShellViewModel(navigator, new ChangingSource());
+            using var controller = new PresentationShellController(root, viewModel, new KeyFallbackLocalizer());
+            controller.Open(new PresentationRoute(PresentationScreenId.Map));
+            var list = root.Q<VisualElement>("current-content").Q<ListView>();
+            var row = list.makeItem();
+            list.bindItem(row, 0);
+            Assert.That(row.Q<Label>("field-label").text, Is.EqualTo("field.Map"));
+            controller.Open(new PresentationRoute(PresentationScreenId.Army));
+            Assert.That(root.Q<VisualElement>("current-content").Q<ListView>(), Is.SameAs(list));
+            list.bindItem(row, 0);
+            Assert.That(row.Q<Label>("field-label").text, Is.EqualTo("field.Army"));
+            Assert.That(row.Q<Button>("field-value").userData, Is.EqualTo(new PresentationEntityRef(PresentationEntityKind.City, "new-city")));
+            list.destroyItem(row);
+            Assert.That(row.Q<Button>("field-value").userData, Is.Null);
+            Assert.That(row.GetType().GetField("_click", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(row), Is.Null,
+                "Destroyed rows must release the delegate's captured controller, not only unsubscribe it.");
+        }
+
+        [Test]
+        public void DetailSlots_AreBoundedAndInactiveCollectionsReleaseOldData()
+        {
+            var root = LoadShell().Instantiate();
+            using var navigator = new PresentationNavigator();
+            using var viewModel = new PresentationShellViewModel(navigator, new ChangingSource());
+            var controller = new PresentationShellController(root, viewModel, new KeyFallbackLocalizer());
+            try
+            {
+                controller.Open(new PresentationRoute(PresentationScreenId.Map));
+                var initial = root.Q<VisualElement>("details-content").Query<ListView>().ToList().ToArray();
+                Assert.That(initial.Length, Is.EqualTo(3));
+                for (var i = 0; i < 30; i++)
+                {
+                    controller.Open(new PresentationRoute(PresentationScreenId.Army));
+                    Assert.That(initial[1].itemsSource, Is.Null);
+                    Assert.That(initial[2].itemsSource, Is.Null);
+                    controller.Open(new PresentationRoute(PresentationScreenId.City));
+                    Assert.That(root.Q<VisualElement>("current-content").Q<ListView>(), Is.Null);
+                    Assert.That(root.Q<VisualElement>("details-content").Query<ListView>().ToList(), Is.Empty);
+                    controller.Open(new PresentationRoute(PresentationScreenId.Map));
+                    Assert.That(root.Q<VisualElement>("details-content").Query<ListView>().ToList(), Is.EqualTo(initial));
+                }
+                controller.Dispose();
+                foreach (var list in initial)
+                {
+                    Assert.That(list.itemsSource, Is.Null);
+                    Assert.That(list.makeItem, Is.Null);
+                    Assert.That(list.bindItem, Is.Null);
+                    Assert.That(list.parent, Is.Null);
+                }
+            }
+            finally { controller.Dispose(); }
+        }
+
+        [Test]
+        public void DisposedController_ReopeningTheSameTreeDoesNotAccumulateDetailContainers()
+        {
+            var root = LoadShell().Instantiate();
+            for (var i = 0; i < 30; i++)
+            {
+                using var navigator = new PresentationNavigator();
+                using var viewModel = new PresentationShellViewModel(navigator, new ChangingSource());
+                using var controller = new PresentationShellController(root, viewModel, new KeyFallbackLocalizer());
+                controller.Open(new PresentationRoute(PresentationScreenId.Map));
+                Assert.That(root.Q<VisualElement>("details-content").childCount, Is.EqualTo(3));
+                controller.Dispose();
+                Assert.That(root.Q<VisualElement>("details-content").childCount, Is.Zero);
+                Assert.That(root.Query<ListView>().ToList(), Is.Empty);
+            }
+        }
+
+        [Test]
+        public void RecycledFieldButton_OpensOnlyItsCurrentEntityAndDoesNotDispatchAfterDisposal()
+        {
+            var root = LoadShell().Instantiate();
+            using var navigator = new PresentationNavigator();
+            var source = new ChangingSource();
+            using var viewModel = new PresentationShellViewModel(navigator, source);
+            var controller = new PresentationShellController(root, viewModel, new KeyFallbackLocalizer());
+            try
+            {
+                controller.Open(new PresentationRoute(PresentationScreenId.Map));
+                var list = root.Q<VisualElement>("current-content").Q<ListView>();
+                var row = list.makeItem();
+                list.bindItem(row, 0);
+                controller.Open(new PresentationRoute(PresentationScreenId.Army));
+                list.bindItem(row, 0);
+                var value = row.Q<Button>("field-value");
+                var clicked = typeof(Clickable).GetField("clicked", BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(clicked, Is.Not.Null, "Unity callback backing field changed; do not skip this check.");
+                var queries = source.Queries;
+                ((Action?)clicked!.GetValue(value.clickable))?.Invoke();
+                Assert.That(source.Queries, Is.EqualTo(queries + 1), "Row rebinding must not add duplicate click callbacks.");
+                Assert.That(navigator.Current!.Value.Subject, Is.EqualTo(new PresentationEntityRef(PresentationEntityKind.City, "new-city")));
+                controller.Dispose();
+                queries = source.Queries;
+                ((Action?)clicked.GetValue(value.clickable))?.Invoke();
+                Assert.That(source.Queries, Is.EqualTo(queries), "Retained external rows cannot open a retired controller.");
+            }
+            finally { controller.Dispose(); }
+        }
+
+        [Test]
         public void ExistingVisualSoldierPipeline_IsThePreviewImplementation()
         {
             Assert.That(typeof(VisualSoldier3DAssembler).Assembly.GetName().Name, Is.EqualTo("FOC.Visuals.Unity"));
@@ -116,6 +223,26 @@ namespace FOC.Tests
                 return new ScreenPresentationState(route.Screen, "presentation.screen." + route.Screen.ToString().ToLowerInvariant(), route.Subject,
                     new PresentationSection("presentation.section.current", PresentationAvailability.Available, fields), PresentationTrend.InsufficientHistory,
                     PresentationAvailability.Unavailable, null, "presentation.why.unavailable", null, null, null);
+            }
+        }
+
+        private sealed class ChangingSource : IPresentationScreenSource
+        {
+            public int Queries { get; private set; }
+            public ScreenPresentationState Get(PresentationRoute route)
+            {
+                Queries++;
+                var field = new PresentationField("field." + route.Screen, "value." + route.Screen,
+                    PresentationKnowledge.ExactSelf, new PresentationEntityRef(PresentationEntityKind.City,
+                        route.Screen == PresentationScreenId.Map ? "old-city" : "new-city"));
+                var current = route.Screen == PresentationScreenId.City
+                    ? PresentationSection.Unavailable("current", "unknown.current")
+                    : new PresentationSection("current", PresentationAvailability.Available, new[] { field });
+                var count = route.Screen == PresentationScreenId.Map ? 3 : route.Screen == PresentationScreenId.Army ? 1 : 0;
+                return new ScreenPresentationState(route.Screen, "screen." + route.Screen, route.Subject, current,
+                    PresentationTrend.InsufficientHistory, PresentationAvailability.Unavailable, null, "why.unavailable",
+                    null, null, null, details: Enumerable.Range(0, count).Select(i =>
+                        new PresentationSection("detail." + i, PresentationAvailability.Available, new[] { field })));
             }
         }
     }

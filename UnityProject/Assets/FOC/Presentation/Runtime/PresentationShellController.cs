@@ -24,6 +24,11 @@ namespace FOC.Presentation.Unity
         private readonly List<Tuple<Button, Action>> _buttonHandlers = new List<Tuple<Button, Action>>();
         private readonly EventCallback<KeyDownEvent> _keyHandler;
         private readonly EventCallback<GeometryChangedEvent> _geometryHandler;
+        private ListView? _currentFieldList;
+        private Label? _currentUnavailable;
+        private readonly List<Foldout> _detailFoldouts = new List<Foldout>();
+        private readonly List<ListView> _detailFieldLists = new List<ListView>();
+        private readonly List<Label> _detailUnavailable = new List<Label>();
         private bool _disposed;
 
         public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null)
@@ -111,44 +116,82 @@ namespace FOC.Presentation.Unity
         private void RenderSection(VisualElement? container, PresentationSection section)
         {
             if (container == null) return;
-            container.Clear();
             if (section.Availability != PresentationAvailability.Available)
             {
-                container.Add(StatusLabel(section.UnavailableReasonKey, "foc-status--unknown"));
+                if (_currentFieldList != null) _currentFieldList.itemsSource = null;
+                _currentUnavailable ??= StatusLabel(section.UnavailableReasonKey, "foc-status--unknown");
+                _currentUnavailable.text = _localizer.Get(section.UnavailableReasonKey);
+                SetOnlyChild(container, _currentUnavailable);
                 return;
             }
-            container.Add(CreateFieldList(section.Fields));
+            _currentFieldList ??= CreateFieldList();
+            UpdateFieldList(_currentFieldList, section.Fields);
+            SetOnlyChild(container, _currentFieldList);
         }
 
-        private ListView CreateFieldList(IReadOnlyList<PresentationField> fields)
+        private ListView CreateFieldList()
         {
             var list = new ListView
             {
-                itemsSource = fields as System.Collections.IList ?? fields.ToList(),
                 fixedItemHeight = 34,
                 virtualizationMethod = CollectionVirtualizationMethod.FixedHeight,
                 selectionType = SelectionType.None,
-                focusable = true,
-                makeItem = () =>
-                {
-                    var row = new VisualElement(); row.AddToClassList("foc-field-row");
-                    var label = new Label { name = "field-label" }; label.AddToClassList("foc-field-label");
-                    var value = new Button { name = "field-value" }; value.AddToClassList("foc-field-value"); value.clicked += () => { if (value.userData is PresentationEntityRef target) OpenEntity(target); };
-                    var quality = new Label { name = "field-quality" }; quality.AddToClassList("foc-quality-chip");
-                    row.Add(label); row.Add(value); row.Add(quality); return row;
-                },
-                bindItem = (element, index) =>
-                {
-                    var field = fields[index];
-                    element.Q<Label>("field-label").text = _localizer.Get(field.LabelKey);
-                    var value=element.Q<Button>("field-value"); value.text = field.Link.HasValue ? EntityLabel(field.Link.Value) : _localizer.Get(field.DisplayValue); value.userData=field.Link.HasValue?(object)field.Link.Value:null; value.SetEnabled(field.Link.HasValue);
-                    element.Q<Label>("field-quality").text = _localizer.Get("presentation.precision." + field.Knowledge.Precision.ToString().ToLowerInvariant());
-                    element.tooltip = string.IsNullOrEmpty(field.TooltipKey) ? _localizer.Get(field.Knowledge.SourceKey) : _localizer.Get(field.TooltipKey);
-                }
+                focusable = true
             };
+            list.makeItem = () => new FieldRow(this);
+            list.bindItem = (element, index) =>
+            {
+                // Read the CURRENT item source. Never close over an old route's
+                // fields when a virtual row or collection is reused.
+                var field = (PresentationField)list.itemsSource[index];
+                var row = (FieldRow)element;
+                row.Label.text = _localizer.Get(field.LabelKey);
+                row.Value.text = field.Link.HasValue ? EntityLabel(field.Link.Value) : _localizer.Get(field.DisplayValue);
+                row.Value.userData = field.Link.HasValue ? (object)field.Link.Value : null;
+                row.Value.SetEnabled(field.Link.HasValue);
+                row.Quality.text = _localizer.Get("presentation.precision." + field.Knowledge.Precision.ToString().ToLowerInvariant());
+                row.tooltip = string.IsNullOrEmpty(field.TooltipKey) ? _localizer.Get(field.Knowledge.SourceKey) : _localizer.Get(field.TooltipKey);
+            };
+            list.unbindItem = (element, _) => ((FieldRow)element).Value.userData = null;
+            list.destroyItem = element => ((FieldRow)element).Release();
             list.AddToClassList("foc-virtual-list");
-            list.style.height = Mathf.Clamp(fields.Count * 34f, 42f, 272f);
             return list;
+        }
+
+        private static void UpdateFieldList(ListView list, IReadOnlyList<PresentationField> fields)
+        {
+            list.itemsSource = fields as System.Collections.IList ?? fields.ToList();
+            list.style.height = Mathf.Clamp(fields.Count * 34f, 42f, 272f);
+            var scroll = list.Q<ScrollView>();
+            if (scroll != null) scroll.scrollOffset = Vector2.zero;
+        }
+
+        private static void SetOnlyChild(VisualElement parent, VisualElement child)
+        {
+            if (parent.childCount == 1 && ReferenceEquals(parent[0], child)) return;
+            parent.Clear();
+            parent.Add(child);
+        }
+
+        private sealed class FieldRow : VisualElement
+        {
+            public readonly Label Label = new Label { name = "field-label" };
+            public readonly Button Value = new Button { name = "field-value" };
+            public readonly Label Quality = new Label { name = "field-quality" };
+            private Action? _click;
+            public FieldRow(PresentationShellController owner)
+            {
+                AddToClassList("foc-field-row"); Label.AddToClassList("foc-field-label");
+                Value.AddToClassList("foc-field-value"); Quality.AddToClassList("foc-quality-chip");
+                _click = () => { if (!owner._disposed && Value.userData is PresentationEntityRef target) owner.OpenEntity(target); };
+                Value.clicked += _click;
+                Add(Label); Add(Value); Add(Quality);
+            }
+            public void Release()
+            {
+                if (_click != null) { Value.clicked -= _click; _click = null; }
+                Value.userData = null;
+            }
         }
 
         private void RenderFactors(VisualElement? container, PresentationAvailability availability, IReadOnlyList<PresentationFactor> factors, string reason)
@@ -199,14 +242,38 @@ namespace FOC.Presentation.Unity
 
         private void RenderDetails(VisualElement? container, IReadOnlyList<PresentationSection> details)
         {
-            if (container == null) return; container.Clear();
-            foreach (var detail in details)
+            if (container == null) return;
+            // Slot reuse is bounded by the largest visible detail set, not by
+            // route count. Inactive slots must release their old data sources.
+            for (var i = details.Count; i < _detailFoldouts.Count; i++)
             {
-                var foldout = new Foldout { text = _localizer.Get(detail.HeadingKey), value = false };
-                foldout.AddToClassList("foc-detail-foldout");
-                if (detail.Availability == PresentationAvailability.Available) foldout.Add(CreateFieldList(detail.Fields));
-                else foldout.Add(StatusLabel(detail.UnavailableReasonKey, "foc-status--unknown"));
-                container.Add(foldout);
+                _detailFieldLists[i].itemsSource = null;
+                _detailFoldouts[i].RemoveFromHierarchy();
+            }
+            for (var i = 0; i < details.Count; i++)
+            {
+                if (i == _detailFoldouts.Count)
+                {
+                    var created = new Foldout { value = false }; created.AddToClassList("foc-detail-foldout");
+                    _detailFoldouts.Add(created); _detailFieldLists.Add(CreateFieldList());
+                    _detailUnavailable.Add(StatusLabel("presentation.unknown", "foc-status--unknown"));
+                }
+                var detail = details[i];
+                var foldout = _detailFoldouts[i];
+                foldout.text = _localizer.Get(detail.HeadingKey);
+                foldout.value = false; // Preserve the prior per-render collapsed behavior.
+                if (detail.Availability == PresentationAvailability.Available)
+                {
+                    UpdateFieldList(_detailFieldLists[i], detail.Fields);
+                    SetOnlyChild(foldout, _detailFieldLists[i]);
+                }
+                else
+                {
+                    _detailFieldLists[i].itemsSource = null;
+                    _detailUnavailable[i].text = _localizer.Get(detail.UnavailableReasonKey);
+                    SetOnlyChild(foldout, _detailUnavailable[i]);
+                }
+                if (!ReferenceEquals(foldout.parent, container)) container.Add(foldout);
             }
         }
 
@@ -247,6 +314,19 @@ namespace FOC.Presentation.Unity
             foreach (var binding in _buttonHandlers) binding.Item1.clicked -= binding.Item2;
             _buttonHandlers.Clear();
             _disposed = true;
+            if (_currentFieldList != null) ReleaseFieldList(_currentFieldList);
+            foreach (var list in _detailFieldLists) ReleaseFieldList(list);
+            _currentUnavailable?.RemoveFromHierarchy();
+            foreach (var foldout in _detailFoldouts) foldout.RemoveFromHierarchy();
+            _currentFieldList = null; _currentUnavailable = null;
+            _detailFieldLists.Clear(); _detailFoldouts.Clear(); _detailUnavailable.Clear();
+        }
+        private static void ReleaseFieldList(ListView list)
+        {
+            list.RemoveFromHierarchy();
+            list.itemsSource = null;
+            list.Rebuild(); // Destroy owned rows while their release hook exists.
+            list.makeItem = null; list.bindItem = null; list.unbindItem = null; list.destroyItem = null;
         }
         private void ThrowIfDisposed() { if (_disposed) throw new ObjectDisposedException(nameof(PresentationShellController)); }
     }

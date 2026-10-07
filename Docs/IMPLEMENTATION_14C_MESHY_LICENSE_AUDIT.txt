@@ -37,3 +37,28 @@ before this audit request. Replacing current-tree data with an optimized file
 does not remove old Git objects. No history rewrite/force push is performed.
 Current terms do not indicate a categorical prohibition on distributing the
 user-owned paid output, but the original-reference rights remain unverified.
+
+Follow-up audit: 2026-10-07, new user-supplied animation ZIP.
+Live Firecrawl fetches (maxAge=0), both HTTP 200:
+https://www.meshy.ai/terms-of-use
+https://help.meshy.ai/en/articles/16102098-can-i-use-meshy-assets-commercially
+Terms still state Last Updated: September 19, 2026.
+
+ZIP SHA-256:
+d88ac5898a6b5edf90762a1c121648107bf99fdc67fd73051cd92a3ab8930730
+
+Sections 2.3/3.1 distinguish service rigs/animations from paid customer output;
+service-asset distribution is limited to incorporation needed to exploit output.
+The help article supports commercial use of paid generated models, subject to
+reference rights. Neither source supplies a blanket standalone animation-library
+redistribution license or a GitHub-specific approval.
+
+Safe workflow (project-policy inference, not legal advice): retain raw ZIP/FBXs
+locally, ignored; perform isolated motion-donor tests on the existing Hasan.
+Public derivatives must remain documented, character/game-associated runtime
+use, not a general-purpose animation release. Preserve AI-identifying metadata
+and hashes; do not infer CC0. If a proposed derivative cannot meet that boundary,
+keep it local rather than silently publishing it. No new raw or standalone
+motion asset was uploaded by this audit. Source-reference rights and paid-plan
+history were not independently certified; the user's prior Pro confirmation
+remains the recorded evidence.

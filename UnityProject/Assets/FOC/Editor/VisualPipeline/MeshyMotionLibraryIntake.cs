@@ -66,7 +66,7 @@ namespace FOC.Editor.Visuals
             catch(Exception e){Debug.LogException(e);code=1;}
             EditorApplication.Exit(code);
         }
-        private static MotionComparison Measure(GameObject prefab,Avatar? avatarOverride,AnimationClip clip,string variant)
+        public static MotionComparison Measure(GameObject prefab,Avatar? avatarOverride,AnimationClip clip,string variant,bool footIK=false)
         {
             var actor=Object.Instantiate(prefab);PlayableGraph graph=default;var mesh=new Mesh();
             try
@@ -79,7 +79,7 @@ namespace FOC.Editor.Visuals
                 if(animator.avatar==null||!animator.avatar.isValid||!animator.avatar.isHuman||!clip.isHumanMotion)throw new InvalidOperationException("Cannot measure non-Humanoid source/target.");
                 animator.enabled=true;animator.Rebind();animator.applyRootMotion=false;animator.cullingMode=AnimatorCullingMode.AlwaysAnimate;
                 graph=PlayableGraph.Create("Licensed motion measurement");graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
-                var playable=AnimationClipPlayable.Create(graph,clip);playable.SetApplyFootIK(false);playable.SetApplyPlayableIK(false);
+                var playable=AnimationClipPlayable.Create(graph,clip);playable.SetApplyFootIK(footIK);playable.SetApplyPlayableIK(false);
                 AnimationPlayableOutput.Create(graph,"Measured humanoid",animator).SetSourcePlayable(playable);graph.Play();
                 graph.Evaluate(0);
                 var joints=AuditBones.Select(animator.GetBoneTransform).ToArray();

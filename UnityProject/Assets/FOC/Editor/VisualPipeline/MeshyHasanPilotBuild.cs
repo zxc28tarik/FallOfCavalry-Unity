@@ -19,7 +19,14 @@ namespace FOC.Editor.Visuals
         public const string ScenePath = "Assets/FOC/ArtSource/HistoricalSlice/Review/MeshyHasanPilotReview.unity";
 
         public static void Run()
+            => Build(false);
+
+        public static void RunUserMotion()
+            => Build(true);
+
+        private static void Build(bool userMotion)
         {
+            var scenePath=userMotion?MeshyUserMotionIntake.SourceRoot+"/UserMotionReview.unity":ScenePath;
             const string settingsPath = "ProjectSettings/ProjectSettings.asset";
             var settingsSnapshot = File.ReadAllBytes(settingsPath);
             var target = NamedBuildTarget.Standalone;
@@ -56,12 +63,12 @@ namespace FOC.Editor.Visuals
                     return matches[0];
                 }).ToArray();
 
-                Directory.CreateDirectory(Path.GetDirectoryName(ScenePath)!);
+                Directory.CreateDirectory(Path.GetDirectoryName(scenePath)!);
                 AssetDatabase.Refresh();
-                var existing = AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath);
+                var existing = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
                 var scene = existing == null
                     ? EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single)
-                    : EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+                    : EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
                 var reviews = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<MeshyHasanPilotPlayer>(true)).ToArray();
                 if (reviews.Length > 1) throw new InvalidOperationException("Review scene contains duplicate player components.");
                 var review = reviews.SingleOrDefault();
@@ -86,6 +93,12 @@ namespace FOC.Editor.Visuals
                 if(!review.dualCalibrationClips.SequenceEqual(dual)){review.dualCalibrationClips=dual;changed=true;}
                 var library=MeshyMotionLibraryIntake.ReviewClips();
                 if(!review.libraryMotionClips.SequenceEqual(library)){review.libraryMotionClips=library;changed=true;}
+                if(userMotion)
+                {
+                    review.userMotionClips=MeshyUserMotionIntake.Names.Select(MeshyUserMotionIntake.Clip).ToArray();
+                    review.userMotionContactProfiles=MeshyUserMotionIntake.Names.Select(name=>AssetDatabase.LoadAssetAtPath<MeshyTargetContactProfile>(MeshyUserMotionIntake.ContactPath(name))).Where(p=>p!=null).ToArray();
+                    changed=true;
+                }
                 var locomotion=new[]{"Walk_Loop","Jog_Fwd_Loop","Sprint_Loop"}.Select(MeshyMotionLibraryIntake.Clip).ToArray();
                 if(!review.locomotionClips.SequenceEqual(locomotion)){review.locomotionClips=locomotion;changed=true;}
                 var contactRoot=MeshyHasanPilotPipeline.OutputRoot+"/TargetContact/Profiles";
@@ -94,17 +107,17 @@ namespace FOC.Editor.Visuals
                 if(!review.contactProfiles.SequenceEqual(contacts)){review.contactProfiles=contacts;changed=true;}
                 // No SHA/time fields are serialized: final-SHA evidence is passed
                 // via --meshy-sha. Rebuilding an unchanged scene does not churn it.
-                if (changed) { EditorUtility.SetDirty(review); EditorSceneManager.SaveScene(scene, ScenePath); }
+                if (changed) { EditorUtility.SetDirty(review); EditorSceneManager.SaveScene(scene, scenePath); }
                 PlayerSettings.SetScriptingBackend(target, ScriptingImplementation.Mono2x);
                 PlayerSettings.runInBackground = true;
                 PlayerSettings.defaultScreenWidth = 1280;
                 PlayerSettings.defaultScreenHeight = 900;
                 PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
-                var output = Path.GetFullPath("../Artifacts/MeshyPilotPlayer/FallOfCavalry-MeshyPilot.exe");
+                var output = Path.GetFullPath(userMotion?"../Artifacts/MeshyUserMotionPlayer/FallOfCavalry-MeshyUserMotion.exe":"../Artifacts/MeshyPilotPlayer/FallOfCavalry-MeshyPilot.exe");
                 Directory.CreateDirectory(Path.GetDirectoryName(output)!);
                 var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
                 {
-                    scenes = new[] { ScenePath }, locationPathName = output,
+                    scenes = new[] { scenePath }, locationPathName = output,
                     target = BuildTarget.StandaloneWindows64, options = BuildOptions.Development
                 });
                 if (report.summary.result != BuildResult.Succeeded)

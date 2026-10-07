@@ -131,15 +131,17 @@ namespace FOC.Tests.BootstrapSmoke
         public void SoakDuration_RejectsMalformedOrUnboundedRun(string value) =>
             Assert.Throws<ArgumentException>(() => DevelopmentPlayerSoak.ParseDuration(value));
 
-        [TestCase(false, "PASS")]
-        [TestCase(true, "DIAGNOSTIC_COMPLETE")]
-        public void SoakOutcome_MemoryCollectionDiagnosticCannotBeAcceptancePass(bool memoryAudit, string expected)
+        [TestCase(false, false, "PASS")]
+        [TestCase(true, false, "DIAGNOSTIC_COMPLETE")]
+        [TestCase(false, true, "DIAGNOSTIC_COMPLETE")]
+        public void SoakOutcome_MemoryCollectionDiagnosticCannotBeAcceptancePass(bool memoryAudit, bool allocationAudit, string expected)
         {
-            var soak = CreateSoak(memoryAudit);
+            var soak = CreateSoak(memoryAudit, allocationAudit);
             FinishSoak(soak, null);
             var report = JsonUtility.FromJson<SoakOutcome>(File.ReadAllText(Path.Combine(_root, "player-soak.json")));
             Assert.That(report.status, Is.EqualTo(expected));
             Assert.That(report.memoryAudit, Is.EqualTo(memoryAudit));
+            Assert.That(report.allocationAudit, Is.EqualTo(allocationAudit));
             Assert.That(report.auditFinalCollectedBytes > 0, Is.EqualTo(memoryAudit));
         }
 
@@ -152,6 +154,38 @@ namespace FOC.Tests.BootstrapSmoke
             var report = JsonUtility.FromJson<SoakOutcome>(File.ReadAllText(Path.Combine(_root, "player-soak.json")));
             Assert.That(report.status, Is.EqualTo("FAIL"));
             Assert.That(report.error, Is.EqualTo("KNOWN_GUARD_FAILURE"));
+        }
+
+        [UnityTest]
+        public IEnumerator SoakAllocationRecorder_RecordsRealEventsAndFrameBytesAndReleasesStorage()
+        {
+            var soak = CreateSoak(false, true);
+            var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            typeof(DevelopmentPlayerSoak).GetMethod("InitializeAllocationRecorders", flags)!.Invoke(soak, null);
+            typeof(DevelopmentPlayerSoak).GetMethod("BeginAllocationMeasurement", flags)!.Invoke(soak, null);
+            GC.KeepAlive(new byte[4096]);
+            var events = (long)typeof(DevelopmentPlayerSoak).GetMethod("EndAllocationMeasurement", flags)!.Invoke(soak, null)!;
+            Assert.That(events, Is.GreaterThanOrEqualTo(1), "Marker counts events; its timing values are not bytes.");
+            yield return null;
+            var frame = (Unity.Profiling.ProfilerRecorder)typeof(DevelopmentPlayerSoak).GetField("_frameAllocationRecorder", flags)!.GetValue(soak)!;
+            Assert.That(frame.LastValue, Is.GreaterThanOrEqualTo(4096), "Require a live Unity frame-byte counter, not fabricated zero.");
+            typeof(DevelopmentPlayerSoak).GetMethod("ReleaseAllocationRecorders", flags)!.Invoke(soak, null);
+            foreach (var field in new[] { "_allocationRecorder", "_frameAllocationRecorder" })
+                Assert.That(((Unity.Profiling.ProfilerRecorder)typeof(DevelopmentPlayerSoak).GetField(field, flags)!.GetValue(soak)!).Valid, Is.False);
+        }
+
+        [Test]
+        public void SoakAllocationFailure_StillWritesOriginalFailureWithoutRestartingAnUnavailableRecorder()
+        {
+            var soak = CreateSoak(false, true);
+            var bootstrap = _object!.AddComponent<DevelopmentCampaignBootstrap>();
+            bootstrap.enabled = false;
+            Set(bootstrap, "_campaign", IntegratedProofCampaignFactory.Create());
+            typeof(DevelopmentPlayerSoak).GetField("_bootstrap", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, bootstrap);
+            FinishSoak(soak, "ALLOCATION_MARKER_UNAVAILABLE");
+            var report = JsonUtility.FromJson<SoakOutcome>(File.ReadAllText(Path.Combine(_root, "player-soak.json")));
+            Assert.That(report.status, Is.EqualTo("FAIL"));
+            Assert.That(report.error, Is.EqualTo("ALLOCATION_MARKER_UNAVAILABLE"));
         }
 
         [Test]
@@ -192,15 +226,17 @@ namespace FOC.Tests.BootstrapSmoke
             Assert.That((int)report.GetType().GetField("gc0")!.GetValue(report)!, Is.EqualTo(GC.CollectionCount(0)));
         }
 
-        private DevelopmentPlayerSoak CreateSoak(bool memoryAudit)
+        private DevelopmentPlayerSoak CreateSoak(bool memoryAudit, bool allocationAudit = false)
         {
             _object = new GameObject("Soak diagnostic outcome regression");
             var soak = _object.AddComponent<DevelopmentPlayerSoak>();
             soak.enabled = false;
             typeof(DevelopmentPlayerSoak).GetField("_root", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, _root);
             typeof(DevelopmentPlayerSoak).GetField("_memoryAudit", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, memoryAudit);
+            typeof(DevelopmentPlayerSoak).GetField("_allocationAudit", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, allocationAudit);
             var report = typeof(DevelopmentPlayerSoak).GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(soak)!;
             report.GetType().GetField("memoryAudit")!.SetValue(report, memoryAudit);
+            report.GetType().GetField("allocationAudit")!.SetValue(report, allocationAudit);
             return soak;
         }
 
@@ -212,6 +248,7 @@ namespace FOC.Tests.BootstrapSmoke
         {
             public string status = string.Empty, error = string.Empty;
             public bool memoryAudit;
+            public bool allocationAudit;
             public long auditFinalCollectedBytes;
         }
 

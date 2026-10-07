@@ -81,10 +81,16 @@ namespace FOC.Presentation.Visuals
                 throw new InvalidOperationException("Calibrated benchmark requires a valid calibrated Avatar and output path.");
             var clip = locomotionClips.FirstOrDefault(c => c != null && c.name.EndsWith("Walk_Loop", StringComparison.Ordinal))
                 ?? locomotionClips.FirstOrDefault(c => c != null);
+            MeshyTargetContactProfile? userContact=null;
+            if(Arg("--meshy-user-motion-benchmark")=="true")
+            {
+                clip=SelectedUserMotion("Right_Hand_Sword_Slash");
+                userContact=userMotionContactProfiles.Single(p=>p.sourceClip==clip&&p.targetAvatar==calibratedAvatar);
+            }
             if (clip == null) throw new InvalidOperationException("Calibrated benchmark motion is missing.");
             MeshyHasanPilotBenchmark.Report? report = null;
             var benchmark = MeshyHasanPilotBenchmark.Run(characterPrefab, clip, transform,
-                r => report = r, b => FrameBounds(b), 30, calibratedAvatar, null, Arg("--meshy-foot-ik")=="true",Arg("--meshy-contact-cleanup")=="true");
+                r => report = r, b => FrameBounds(b), 30, calibratedAvatar, userContact, Arg("--meshy-foot-ik")=="true",Arg("--meshy-contact-cleanup")=="true");
             try { while (benchmark.MoveNext()) yield return benchmark.Current; }
             finally { (benchmark as IDisposable)?.Dispose(); }
             if (report == null || report.cases.Length != 3) throw new InvalidOperationException("Calibrated 1/12/100 benchmark did not produce all cases.");
