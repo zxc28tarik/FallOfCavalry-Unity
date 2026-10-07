@@ -1,0 +1,10 @@
+{
+  "name": "FOC.Bootstrap.Tests",
+  "rootNamespace": "FOC.Tests.BootstrapSmoke",
+  "references": ["FOC.Domain", "FOC.Application", "FOC.Infrastructure", "FOC.Bootstrap.Unity"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "autoReferenced": false,
+  "overrideReferences": false,
+  "noEngineReferences": false
+}

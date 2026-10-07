@@ -38,6 +38,7 @@ namespace FOC.Bootstrap.Unity
         private Label? _feedback;
         private TextField? _slot;
         private VisualSoldier3D? _previewView;
+        private string? _saveRoot;
 
         public CampaignRuntimeState? CurrentCampaign => _campaign;
 
@@ -45,11 +46,21 @@ namespace FOC.Bootstrap.Unity
         {
             try
             {
+                var smoke = HasCommandLineArgument("-focSmokeTest");
+                if (smoke && HasCommandLineArgument("-focCaptureScreenshot"))
+                    throw new InvalidOperationException("Smoke and screenshot modes must be run separately.");
+                var requestedRoot = CommandLineValue("-focSmokeSaveRoot");
+                if (HasCommandLineArgument("-focSmokeSaveRoot") && (string.IsNullOrWhiteSpace(requestedRoot) || requestedRoot!.StartsWith("-", StringComparison.Ordinal)))
+                    throw new InvalidOperationException("-focSmokeSaveRoot requires a path.");
+                if (!smoke && (HasCommandLineArgument("-focSmokeSlot") || HasCommandLineArgument("-focSmokeCorruptAfterSave")))
+                    throw new InvalidOperationException("Smoke diagnostics require -focSmokeTest.");
+                var playerSaveRoot = Path.Combine(UnityEngine.Application.persistentDataPath, "FOC", "VerticalSliceSaves");
+                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke, requestedRoot);
+                _saveRoot = root;
                 var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice location content is missing.");
                 var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice route content is missing.");
                 var historical=Resources.Load<TextAsset>("FOC/HistoricalSlice/historical-slice-content") ?? throw new InvalidOperationException("Historical-slice content is missing.");
                 _campaign = VerticalSliceCampaignFactory.Create(locations.text,routes.text,historical.text);
-                var root = Path.Combine(UnityEngine.Application.persistentDataPath, "FOC", "VerticalSliceSaves");
                 var serializer = new CampaignSaveTextSerializer();
                 var service = new CampaignSaveService(
                     serializer,
@@ -65,6 +76,7 @@ namespace FOC.Bootstrap.Unity
                 ConfigureTravelPresentation();
                 _host = GetComponent<PresentationRuntimeHost>() ?? gameObject.AddComponent<PresentationRuntimeHost>();
                 PresentCampaign();
+                if (smoke) _slot!.value = CommandLineValue("-focSmokeSlot") ?? "smoke";
                 if(HasCommandLineArgument("-focSoldierPreview"))ConfigureHistoricalSoldierPreview();
                 if (HasCommandLineArgument("-focTravelDemo"))
                 {
@@ -75,13 +87,18 @@ namespace FOC.Bootstrap.Unity
                 }
                 Debug.Log(ReadyMarker + " campaign=" + _campaign.CampaignId.Value + " saveRoot=" + root);
                 if (HasCommandLineArgument("-focCaptureScreenshot")) StartCoroutine(CaptureScreenshot());
-                else if (HasCommandLineArgument("-focSmokeTest")) StartCoroutine(RunSmoke());
+                else if (smoke) StartCoroutine(RunSmoke());
             }
             catch (Exception exception)
             {
                 Debug.LogException(exception);
                 Debug.LogError("FOC_DEVELOPMENT_BOOTSTRAP_FAILED " + exception.Message);
                 enabled = false;
+                if (HasCommandLineArgument("-focSmokeTest"))
+                {
+                    Debug.LogError("FOC_DEVELOPMENT_SMOKE_FAIL STARTUP_FAILED " + exception.Message);
+                    UnityEngine.Application.Quit(1);
+                }
             }
         }
 
@@ -124,44 +141,79 @@ namespace FOC.Bootstrap.Unity
             load.clicked += Load;
         }
 
-        private void Save()
+        private void Save() => SaveCampaign();
+
+        private SaveStoreResult SaveCampaign()
         {
-            if (_saveCoordinator == null || _campaign == null || _slot == null) return;
-            var result = _saveCoordinator.Save(_slot.value, _campaign);
+            var result = _saveCoordinator == null || _campaign == null || _slot == null
+                ? SaveStoreResult.Failed("SAVE_UI_NOT_INITIALIZED")
+                : _saveCoordinator.Save(_slot.value, _campaign);
             SetFeedback(result.Success ? "SAVED" : "SAVE FAILED", result.Error);
+            return result;
         }
 
-        private void Load()
+        private void Load() => LoadCampaign();
+
+        private CampaignLoadRuntimeResult LoadCampaign()
         {
-            if (_saveCoordinator == null || _slot == null) return;
-            var result = _saveCoordinator.Load(_slot.value);
+            var result = _saveCoordinator == null || _slot == null
+                ? CampaignLoadRuntimeResult.Failed("LOAD_UI_NOT_INITIALIZED")
+                : _saveCoordinator.Load(_slot.value);
             if (!result.Success || result.Campaign == null)
             {
                 SetFeedback("LOAD FAILED", result.Error);
-                return;
+                return result;
             }
 
             _campaign = result.Campaign;
             ConfigureTravelPresentation();
             PresentCampaign();
             SetFeedback(result.RecoveryStatus == SaveRecoveryStatus.RecoveredFromBackup ? "BACKUP RECOVERED" : "LOADED", result.RecoveryReason);
+            return result;
         }
 
         private void SetFeedback(string state, string? detail)
         {
-            if (_feedback == null) return;
-            _feedback.text = string.IsNullOrWhiteSpace(detail) ? state : state + ": " + detail;
-            Debug.Log("FOC_SAVE_UI " + _feedback.text);
+            var text = string.IsNullOrWhiteSpace(detail) ? state : state + ": " + detail;
+            if (_feedback != null) _feedback.text = text;
+            Debug.Log("FOC_SAVE_UI " + text);
         }
 
         private IEnumerator RunSmoke()
         {
             yield return null;
             yield return null;
-            Save();
-            Load();
-            Debug.Log("FOC_DEVELOPMENT_SMOKE_PASS campaign=" + (_campaign?.CampaignId.Value ?? "missing"));
-            UnityEngine.Application.Quit(0);
+            try
+            {
+                if (_campaign == null || _slot == null) throw new InvalidOperationException("SMOKE_UI_NOT_INITIALIZED");
+                var serializer = new CampaignSaveTextSerializer();
+                var expected = SavePayloadFingerprint.Compute(serializer, CampaignSaveMapper.ToSaveData(_campaign));
+                var slot = _slot.value;
+                var saved = SaveCampaign();
+                if (!saved.Success) throw new InvalidOperationException("SAVE_STEP_FAILED " + saved.Error);
+
+                // A test-only mutation proves load reconstructs saved state rather than leaving it untouched.
+                _campaign.Clock.Advance(new WorldDuration(1));
+                _campaign.Random.NextUInt64();
+                if (HasCommandLineArgument("-focSmokeCorruptAfterSave"))
+                {
+                    if (_saveRoot == null) throw new InvalidOperationException("SMOKE_SAVE_ROOT_MISSING");
+                    File.WriteAllText(Path.Combine(_saveRoot, slot + ".focsave"), "INJECTED_SMOKE_CORRUPTION");
+                    Debug.Log("FOC_SMOKE_CORRUPTION_INJECTED");
+                }
+                var loaded = LoadCampaign();
+                if (!loaded.Success || loaded.Campaign == null) throw new InvalidOperationException("LOAD_STEP_FAILED " + loaded.Error);
+                if (loaded.RecoveryStatus != SaveRecoveryStatus.LoadedCurrent) throw new InvalidOperationException("SMOKE_EXPECTED_FRESH_CURRENT");
+                var actual = SavePayloadFingerprint.Compute(serializer, CampaignSaveMapper.ToSaveData(loaded.Campaign));
+                if (!StringComparer.Ordinal.Equals(expected, actual)) throw new InvalidOperationException("SMOKE_ROUND_TRIP_MISMATCH");
+                Debug.Log("FOC_DEVELOPMENT_SMOKE_PASS campaign=" + loaded.Campaign.CampaignId.Value + " fingerprint=" + actual);
+                UnityEngine.Application.Quit(0);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("FOC_DEVELOPMENT_SMOKE_FAIL " + exception.Message);
+                UnityEngine.Application.Quit(1);
+            }
         }
 
         private IEnumerator CaptureScreenshot()
