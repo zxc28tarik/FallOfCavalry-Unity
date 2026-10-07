@@ -84,7 +84,7 @@ namespace FOC.Infrastructure.Save
                 return SaveStoreResult.Failed("Temporary save failed validation; current save was not replaced.");
             }
 
-            if (File.Exists(paths.Current)) ReplaceWithBackup(paths);
+            if (File.Exists(paths.Current)) ReplaceWithBackup(paths, validateContent);
             else
             {
                 Inject(AtomicSaveStage.Replace);
@@ -154,26 +154,35 @@ namespace FOC.Infrastructure.Save
                 return false;
             }
 
-            content = File.ReadAllText(path, _encoding);
+            try
+            {
+                content = File.ReadAllText(path, _encoding);
+            }
+            catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException || exception is DecoderFallbackException)
+            {
+                // An unavailable or undecodable candidate must not prevent trying the backup.
+                content = null;
+                return false;
+            }
+
             return validateContent(content);
         }
 
-        private void ReplaceWithBackup(SavePaths paths)
+        private void ReplaceWithBackup(SavePaths paths, Func<string, bool> validateContent)
         {
             Inject(AtomicSaveStage.Backup);
-            if (File.Exists(paths.Backup))
-            {
-                File.Delete(paths.Backup);
-            }
+            // Only a validated current generation may replace the last known good backup.
+            // Keep the backup intact until the filesystem replacement actually succeeds.
+            var backupCurrent = TryReadValid(paths.Current, validateContent, out _);
 
             Inject(AtomicSaveStage.Replace);
             try
             {
-                File.Replace(paths.Temp, paths.Current, paths.Backup, true);
+                File.Replace(paths.Temp, paths.Current, backupCurrent ? paths.Backup : null, true);
             }
             catch (PlatformNotSupportedException)
             {
-                File.Copy(paths.Current, paths.Backup, true);
+                if (backupCurrent) File.Copy(paths.Current, paths.Backup, true);
                 File.Copy(paths.Temp, paths.Current, true);
                 File.Delete(paths.Temp);
             }

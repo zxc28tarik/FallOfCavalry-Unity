@@ -214,6 +214,130 @@ namespace FOC.Tests
         }
 
         [Test]
+        public void InvalidUtf8Current_RecoversFullCampaignBackupWithoutRewritingEitherFile()
+        {
+            var serializer = new CampaignSaveTextSerializer();
+            var service = Service(serializer);
+            WriteIntegratedGenerations(service);
+            var current = Path.Combine(_directory, "slot.focsave");
+            var backup = current + ".bak";
+            var expected = File.ReadAllBytes(backup);
+            var corrupt = new byte[] { 0xff, 0xff, 0xc3, 0x28 };
+            File.WriteAllBytes(current, corrupt);
+
+            var read = service.Load("slot");
+
+            Assert.That(read.Success, Is.True, read.Error);
+            Assert.That(read.RecoveryStatus, Is.EqualTo(SaveRecoveryStatus.RecoveredFromBackup));
+            Assert.That(read.RecoveryReason, Is.Not.Empty);
+            Assert.That(serializer.Serialize(read.Data!), Is.EqualTo(System.Text.Encoding.UTF8.GetString(expected)));
+            Assert.That(read.Data!.Soldiers, Has.Count.EqualTo(2));
+            Assert.That(read.Data.AIControllers, Has.Count.EqualTo(1));
+            Assert.That(File.ReadAllBytes(current), Is.EqualTo(corrupt));
+            Assert.That(File.ReadAllBytes(backup), Is.EqualTo(expected));
+        }
+
+        [TestCase(AtomicSaveStage.TempCreate)]
+        [TestCase(AtomicSaveStage.TempWrite)]
+        [TestCase(AtomicSaveStage.DurableFlush)]
+        [TestCase(AtomicSaveStage.TempValidation)]
+        [TestCase(AtomicSaveStage.Backup)]
+        [TestCase(AtomicSaveStage.Replace)]
+        [TestCase(AtomicSaveStage.FinalRead)]
+        public void CorruptCurrentAndValidBackup_WriteFaultNeverLosesLastValidCampaign(AtomicSaveStage stage)
+        {
+            var serializer = new CampaignSaveTextSerializer();
+            var service = Service(serializer);
+            var runtime = WriteIntegratedGenerations(service);
+            var current = Path.Combine(_directory, "slot.focsave");
+            var backupPayload = File.ReadAllText(current + ".bak");
+            File.WriteAllText(current, "corrupt-current");
+            runtime.Clock.Advance(new WorldDuration(9));
+            runtime.Random.NextUInt64();
+            var newPayload = serializer.Serialize(CampaignSaveMapper.ToSaveData(runtime));
+            var faulted = new CampaignSaveService(serializer, new AtomicFileSaveStore(_directory, new ThrowOnce(stage)), new CampaignSaveValidator(), CampaignSaveDefaults.CreateMigrationPipeline());
+
+            Assert.That(faulted.Save("slot", runtime).Success, Is.False);
+            var read = service.Load("slot");
+
+            Assert.That(read.Success, Is.True, "Lost the only valid campaign at " + stage + ": " + read.Error);
+            Assert.That(new[] { backupPayload, newPayload }, Does.Contain(serializer.Serialize(read.Data!)));
+            Assert.That(new CampaignSaveValidator().Validate(read.Data!).IsValid, Is.True);
+            Assert.That(read.Data!.SaveVersion, Is.EqualTo(14));
+        }
+
+        [Test]
+        public void ReplacingCorruptCurrent_PreservesLastValidBackupRatherThanBackingUpCorruption()
+        {
+            var service = Service(new CampaignSaveTextSerializer());
+            var runtime = WriteIntegratedGenerations(service);
+            var current = Path.Combine(_directory, "slot.focsave");
+            var previousBackup = File.ReadAllBytes(current + ".bak");
+            File.WriteAllText(current, "corrupt-current");
+            runtime.Clock.Advance(new WorldDuration(1));
+
+            Assert.That(service.Save("slot", runtime).Success, Is.True);
+            Assert.That(File.ReadAllBytes(current + ".bak"), Is.EqualTo(previousBackup));
+            File.WriteAllText(current, "corrupt-again");
+            var recovered = service.Load("slot");
+            Assert.That(recovered.Success, Is.True, recovered.Error);
+            Assert.That(recovered.RecoveryStatus, Is.EqualTo(SaveRecoveryStatus.RecoveredFromBackup));
+            Assert.That(recovered.Data!.WorldTime, Is.EqualTo(10));
+            Assert.That(File.Exists(current + ".tmp"), Is.False);
+        }
+
+        [Test]
+        public void UnreadableCurrent_UsesValidBackupAndDoesNotRepairFiles()
+        {
+            var service = Service(new CampaignSaveTextSerializer());
+            WriteIntegratedGenerations(service);
+            var current = Path.Combine(_directory, "slot.focsave");
+            var currentBytes = File.ReadAllBytes(current);
+            var backupBytes = File.ReadAllBytes(current + ".bak");
+            using (new FileStream(current, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                var read = service.Load("slot");
+                Assert.That(read.Success, Is.True, read.Error);
+                Assert.That(read.RecoveryStatus, Is.EqualTo(SaveRecoveryStatus.RecoveredFromBackup));
+                Assert.That(read.Data!.WorldTime, Is.EqualTo(10));
+            }
+            Assert.That(File.ReadAllBytes(current), Is.EqualTo(currentBytes));
+            Assert.That(File.ReadAllBytes(current + ".bak"), Is.EqualTo(backupBytes));
+        }
+
+        [Test]
+        public void InvalidUtf8InBothGenerations_FailsAndNeverPromotesValidStaleTemporarySave()
+        {
+            var service = Service(new CampaignSaveTextSerializer());
+            WriteIntegratedGenerations(service);
+            var current = Path.Combine(_directory, "slot.focsave");
+            File.Copy(current + ".bak", current + ".tmp");
+            var tempBytes = File.ReadAllBytes(current + ".tmp");
+            var corruptCurrent = new byte[] { 0xff, 0xff };
+            var corruptBackup = new byte[] { 0xc3, 0x28 };
+            File.WriteAllBytes(current, corruptCurrent);
+            File.WriteAllBytes(current + ".bak", corruptBackup);
+
+            var result = service.Load("slot");
+
+            Assert.That(result.Success, Is.False);
+            Assert.That(result.Error, Is.Not.Empty);
+            Assert.That(File.ReadAllBytes(current), Is.EqualTo(corruptCurrent));
+            Assert.That(File.ReadAllBytes(current + ".bak"), Is.EqualTo(corruptBackup));
+            Assert.That(File.ReadAllBytes(current + ".tmp"), Is.EqualTo(tempBytes));
+        }
+
+        private CampaignRuntimeState WriteIntegratedGenerations(CampaignSaveService service)
+        {
+            var runtime = IntegratedCampaignTestFixture.Create();
+            Assert.That(service.Save("slot", runtime).Success, Is.True);
+            runtime.Clock.Advance(new WorldDuration(7));
+            runtime.Random.NextUInt64();
+            Assert.That(service.Save("slot", runtime).Success, Is.True);
+            return runtime;
+        }
+
+        [Test]
         public void SaveSchemaDocumentation_CodeAndMigrationChainAgreeOnVersionFourteen()
         {
             var path = FindRepositoryFile("Docs", "SAVE_SCHEMA.md");

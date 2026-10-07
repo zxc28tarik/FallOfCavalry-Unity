@@ -224,7 +224,7 @@ namespace FOC.Tests
 
     internal sealed class LongRunResult
     {
-        public LongRunResult(string fingerprint, int cycles, int failures, string counts, double elapsed, long allocated) { FinalFingerprint=fingerprint; SaveLoadCycles=cycles; ValidationFailures=failures; StartCounts=counts; EndCounts=counts; ElapsedMilliseconds=elapsed; AllocatedBytes=allocated; }
+        public LongRunResult(string fingerprint, int cycles, int failures, string startCounts, string endCounts, double elapsed, long allocated) { FinalFingerprint=fingerprint; SaveLoadCycles=cycles; ValidationFailures=failures; StartCounts=startCounts; EndCounts=endCounts; ElapsedMilliseconds=elapsed; AllocatedBytes=allocated; }
         public string FinalFingerprint { get; } public int SaveLoadCycles { get; } public int ValidationFailures { get; } public string StartCounts { get; } public string EndCounts { get; } public double ElapsedMilliseconds { get; } public long AllocatedBytes { get; }
     }
 
@@ -249,8 +249,9 @@ namespace FOC.Tests
                 }
             }
             watch.Stop(); var final = CampaignSaveMapper.ToSaveData(campaign); if (!validator.Validate(final).IsValid) failures++;
-            var result = new LongRunResult(SavePayloadFingerprint.Compute(serializer, final), cycles, failures, startCounts, watch.Elapsed.TotalMilliseconds, GC.GetAllocatedBytesForCurrentThread()-before);
-            if (!StringComparer.Ordinal.Equals(startCounts, Counts(campaign))) throw new InvalidOperationException("Long-run entity-count drift detected.");
+            var endCounts = Counts(campaign);
+            var result = new LongRunResult(SavePayloadFingerprint.Compute(serializer, final), cycles, failures, startCounts, endCounts, watch.Elapsed.TotalMilliseconds, GC.GetAllocatedBytesForCurrentThread()-before);
+            if (!StringComparer.Ordinal.Equals(startCounts, endCounts)) throw new InvalidOperationException("Long-run entity-count drift detected.");
             return result;
         }
         private static string Counts(CampaignRuntimeState c) => $"characters={c.Characters.Count};cities={c.Cities.OrderedCities.Count};armies={c.Military.Armies.OrderedArmies.Count};soldiers={c.Soldiers.Soldiers.OrderedSoldiers.Count};reports={c.Diplomacy.Reports.OrderedReports.Count};encounters={c.EncounterContracts.Encounters.OrderedEncounters.Count};contracts={c.EncounterContracts.Contracts.OrderedContracts.Count};ai={c.AI.Controllers.OrderedControllers.Count}";
