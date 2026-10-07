@@ -1,7 +1,8 @@
 param(
     [string]$PlayerPath,
     [ValidateRange(10,14400)][int]$DurationSeconds=7200,
-    [switch]$AllowDirty
+    [switch]$AllowDirty,
+    [switch]$MemoryAudit
 )
 $ErrorActionPreference='Stop'
 $repo=Split-Path -Parent $PSScriptRoot
@@ -42,10 +43,11 @@ $log=Join-Path $evidence 'player.log'
 $samplesPath=Join-Path $evidence 'process-samples.csv'
 $manifestPath=Join-Path $evidence 'manifest.json'
 $arguments=@('-batchmode','-force-d3d11','-screen-fullscreen','0','-screen-width','1366','-screen-height','768','-focPlayerSoak','-focSoakSeconds',$DurationSeconds,'-focSmokeSaveRoot',('"'+$saveRoot+'"'),'-logFile',('"'+$log+'"'))
+if($MemoryAudit){$arguments+='-focSoakMemoryAudit'}
 $started=[DateTime]::UtcNow
 $process=$null;$ownedProcessId=$null;$exitCode=$null;$report=$null;$failure=$null;$samples=0;$workingBaseline=0L;$peakWorking=0L;$lastHeartbeat=0.0;$lastProgress=$started
 function Write-Manifest([string]$Status) {
-    [ordered]@{status=$Status;runKind=if($DurationSeconds -lt 3600){'SHORT_FLOW'}else{'LONG_SOAK'};startSha=$sha;endSha=$endSha;runId=$runId;startedUtc=$started.ToString('o');updatedUtc=[DateTime]::UtcNow.ToString('o');requestedSeconds=$DurationSeconds;playerPath=$PlayerPath;bootstrapSha256=(Get-FileHash -LiteralPath $assembly -Algorithm SHA256).Hash;command=$PlayerPath+' '+($arguments -join ' ');processId=$ownedProcessId;exitCode=$exitCode;saveRoot=$saveRoot;playerReport=$reportPath;log=$log;processSamples=$samplesPath;sampleCount=$samples;peakWorkingSetBytes=$peakWorking;warmWorkingSetBytes=$workingBaseline;playerSavesUnchanged=$unchanged;playerSaveSnapshotBefore=($before | ConvertFrom-Json);playerSaveSnapshotAfter=if($after){$after | ConvertFrom-Json}else{$null};worktree=$worktree;error=$failure;uiInput='Synthetic UI Toolkit NavigationSubmit/KeyDown events on real attached runtime controls, not OS mouse/keyboard input';rendering='D3D11 requested; no -nographics; no art-quality acceptance'} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $manifestPath -Encoding utf8
+    [ordered]@{status=$Status;runKind=if($MemoryAudit){'MEMORY_DIAGNOSTIC'}elseif($DurationSeconds -lt 3600){'SHORT_FLOW'}else{'LONG_SOAK'};memoryAudit=[bool]$MemoryAudit;startSha=$sha;endSha=$endSha;runId=$runId;startedUtc=$started.ToString('o');updatedUtc=[DateTime]::UtcNow.ToString('o');requestedSeconds=$DurationSeconds;playerPath=$PlayerPath;bootstrapSha256=(Get-FileHash -LiteralPath $assembly -Algorithm SHA256).Hash;command=$PlayerPath+' '+($arguments -join ' ');processId=$ownedProcessId;exitCode=$exitCode;saveRoot=$saveRoot;log=$log;playerReport=$reportPath;processSamples=$samplesPath;sampleCount=$samples;peakWorkingSetBytes=$peakWorking;warmWorkingSetBytes=$workingBaseline;playerSavesUnchanged=$unchanged;playerSaveSnapshotBefore=($before | ConvertFrom-Json);playerSaveSnapshotAfter=if($after){$after | ConvertFrom-Json}else{$null};worktree=$worktree;error=$failure;uiInput='Synthetic UI Toolkit NavigationSubmit/KeyDown events on real attached runtime controls, not OS mouse/keyboard input';rendering='D3D11 requested; no -nographics; no art-quality acceptance'} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $manifestPath -Encoding utf8
 }
 $endSha=$sha;$worktree=if($initialDirty.Count){'dirty'}else{'clean'};$unchanged=$null;$after=$null
 Write-Manifest 'RUNNING'
@@ -79,11 +81,15 @@ try {
     }finally{$csv.Dispose()}
     $report=Get-Content -LiteralPath $reportPath -Raw | ConvertFrom-Json
     $text=Get-Content -LiteralPath $log -Raw
-    if($exitCode -ne 0 -or $report.status -ne 'PASS' -or $report.requestedSeconds -ne $DurationSeconds -or $report.elapsedSeconds -lt $DurationSeconds -or $report.roundtrips -lt 2 -or $report.lifecycleChecks -ne 1 -or $report.graphicsDevice -eq 'Null' -or $samples -lt 2 -or -not $text.Contains('FOC_PLAYER_SOAK_PASS') -or -not $text.Contains('saveRoot='+$saveRoot)){throw "Player soak did not satisfy its gate: exit=$exitCode status=$($report.status) error=$($report.error)"}
-    Copy-Item -LiteralPath $reportPath -Destination (Join-Path $evidence 'player-soak.json')
+    $expectedStatus=if($MemoryAudit){'DIAGNOSTIC_COMPLETE'}else{'PASS'}
+    if($exitCode -ne 0 -or $report.status -ne $expectedStatus -or [bool]$report.memoryAudit -ne [bool]$MemoryAudit -or $report.requestedSeconds -ne $DurationSeconds -or $report.elapsedSeconds -lt $DurationSeconds -or $report.roundtrips -lt 2 -or $report.lifecycleChecks -ne 1 -or $report.graphicsDevice -eq 'Null' -or $samples -lt 2 -or -not $text.Contains('FOC_PLAYER_SOAK_'+$expectedStatus) -or -not $text.Contains('saveRoot='+$saveRoot)){throw "Player soak did not satisfy its gate: exit=$exitCode status=$($report.status) error=$($report.error)"}
 }catch{$failure=$_.Exception.Message}
 finally{
     if($process){if(-not $process.HasExited){Stop-Process -Id $process.Id};$process.Dispose()}
+    if(Test-Path -LiteralPath $reportPath){
+        try{Copy-Item -LiteralPath $reportPath -Destination (Join-Path $evidence 'player-soak.json')}
+        catch{$failure=($failure+' PLAYER_REPORT_COPY_FAILED '+$_.Exception.Message).Trim()}
+    }
 }
 $after=Snapshot-PlayerSaves;$unchanged=$before -ceq $after
 $endSha=git -C $repo rev-parse HEAD;$shaExit=$LASTEXITCODE
@@ -92,7 +98,7 @@ $worktree=if($dirty.Count){'dirty'}else{'clean'}
 if(-not $unchanged){$failure='Normal player saves changed; no repair/overwrite attempted.'}
 if($shaExit -ne 0 -or $statusExit -ne 0 -or $sha -ne $endSha){$failure='HEAD changed or git evidence unavailable.'}
 if($dirty.Count -and -not $AllowDirty){$failure='Final worktree is dirty.'}
-$status=if($failure){'FAIL'}elseif($initialDirty.Count -or $dirty.Count){'DEVELOPMENT_PASS'}else{'PASS'}
+$status=if($failure){'FAIL'}elseif($MemoryAudit){'DIAGNOSTIC_COMPLETE'}elseif($initialDirty.Count -or $dirty.Count){'DEVELOPMENT_PASS'}else{'PASS'}
 Write-Manifest $status
 Write-Output "FOC_WINDOWS_PLAYER_SOAK_RESULT $status $manifestPath"
 if($failure){throw $failure}

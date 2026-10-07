@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -129,6 +130,90 @@ namespace FOC.Tests.BootstrapSmoke
         [TestCase(" ")]
         public void SoakDuration_RejectsMalformedOrUnboundedRun(string value) =>
             Assert.Throws<ArgumentException>(() => DevelopmentPlayerSoak.ParseDuration(value));
+
+        [TestCase(false, "PASS")]
+        [TestCase(true, "DIAGNOSTIC_COMPLETE")]
+        public void SoakOutcome_MemoryCollectionDiagnosticCannotBeAcceptancePass(bool memoryAudit, string expected)
+        {
+            var soak = CreateSoak(memoryAudit);
+            FinishSoak(soak, null);
+            var report = JsonUtility.FromJson<SoakOutcome>(File.ReadAllText(Path.Combine(_root, "player-soak.json")));
+            Assert.That(report.status, Is.EqualTo(expected));
+            Assert.That(report.memoryAudit, Is.EqualTo(memoryAudit));
+            Assert.That(report.auditFinalCollectedBytes > 0, Is.EqualTo(memoryAudit));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SoakOutcome_MemoryAuditMustNotHideFailure(bool memoryAudit)
+        {
+            var soak = CreateSoak(memoryAudit);
+            FinishSoak(soak, "KNOWN_GUARD_FAILURE");
+            var report = JsonUtility.FromJson<SoakOutcome>(File.ReadAllText(Path.Combine(_root, "player-soak.json")));
+            Assert.That(report.status, Is.EqualTo("FAIL"));
+            Assert.That(report.error, Is.EqualTo("KNOWN_GUARD_FAILURE"));
+        }
+
+        [Test]
+        public void SoakLifetimeDiagnostics_AreBoundedWeakReferences()
+        {
+            var references = new List<WeakReference>();
+            var held = new List<object>();
+            var remember = typeof(DevelopmentPlayerSoak).GetMethod("RememberRetired", BindingFlags.Static | BindingFlags.NonPublic)!;
+            for (var i = 0; i < 600; i++)
+            {
+                var value = new object();
+                held.Add(value);
+                remember.Invoke(null, new object[] { references, value });
+            }
+            Assert.That(references.Count, Is.EqualTo(512));
+            Assert.That(references[0].Target, Is.SameAs(held[88]));
+            Assert.That(references[511].Target, Is.SameAs(held[599]));
+        }
+
+        [Test]
+        public void SoakSample_GuardFailureMustKeepCurrentMemoryMeasurements()
+        {
+            var soak = CreateSoak(false);
+            _object!.AddComponent<UIDocument>();
+            var report = typeof(DevelopmentPlayerSoak).GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(soak)!;
+            report.GetType().GetField("cycles")!.SetValue(report, 4);
+            report.GetType().GetField("warmUiElements")!.SetValue(report, 10000);
+            typeof(DevelopmentPlayerSoak).GetField("_managedBaseline", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, -128L * 1024 * 1024);
+            typeof(DevelopmentPlayerSoak).GetField("_nativeBaseline", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong());
+            // A low diagnostic idle minimum must never replace the raw guarded sample.
+            typeof(DevelopmentPlayerSoak).GetField("_idleMinimumManagedBytes", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, 1L);
+            typeof(DevelopmentPlayerSoak).GetField("_idleSamples", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, 20);
+            var failure = Assert.Throws<TargetInvocationException>(() => typeof(DevelopmentPlayerSoak).GetMethod("Sample", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(soak, null));
+            Assert.That(failure!.InnerException!.Message, Is.EqualTo("MANAGED_GROWTH_OVER_64_MIB"));
+            Assert.That((long)report.GetType().GetField("lastManagedBytes")!.GetValue(report)!, Is.GreaterThan(0));
+            Assert.That((long)report.GetType().GetField("monoUsedBytes")!.GetValue(report)!, Is.GreaterThan(0));
+            Assert.That((long)report.GetType().GetField("idleMinimumManagedBytes")!.GetValue(report)!, Is.EqualTo(1));
+            Assert.That((int)report.GetType().GetField("gc0")!.GetValue(report)!, Is.EqualTo(GC.CollectionCount(0)));
+        }
+
+        private DevelopmentPlayerSoak CreateSoak(bool memoryAudit)
+        {
+            _object = new GameObject("Soak diagnostic outcome regression");
+            var soak = _object.AddComponent<DevelopmentPlayerSoak>();
+            soak.enabled = false;
+            typeof(DevelopmentPlayerSoak).GetField("_root", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, _root);
+            typeof(DevelopmentPlayerSoak).GetField("_memoryAudit", BindingFlags.Instance | BindingFlags.NonPublic)!.SetValue(soak, memoryAudit);
+            var report = typeof(DevelopmentPlayerSoak).GetField("_report", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(soak)!;
+            report.GetType().GetField("memoryAudit")!.SetValue(report, memoryAudit);
+            return soak;
+        }
+
+        private static void FinishSoak(DevelopmentPlayerSoak soak, string? error) =>
+            typeof(DevelopmentPlayerSoak).GetMethod("Finish", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(soak, new object?[] { error });
+
+        [Serializable]
+        private sealed class SoakOutcome
+        {
+            public string status = string.Empty, error = string.Empty;
+            public bool memoryAudit;
+            public long auditFinalCollectedBytes;
+        }
 
         private DevelopmentCampaignBootstrap Create(IAtomicSaveStore store, string slot)
         {

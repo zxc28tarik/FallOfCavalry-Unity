@@ -25,12 +25,18 @@ namespace FOC.Bootstrap.Unity
         private readonly Report _report = new Report();
         private readonly int[] _frameHistogram = new int[2001];
         private readonly SlicePresentationLocalizer _localizer = new SlicePresentationLocalizer();
+        private readonly List<WeakReference> _retiredCampaigns = new List<WeakReference>();
+        private readonly List<WeakReference> _retiredFieldLists = new List<WeakReference>();
         private double _started;
         private double _lastFrame;
         private long _nativeBaseline;
         private long _managedBaseline;
         private bool _finished;
         private string? _unexpectedError;
+        private bool _memoryAudit;
+        private bool _samplingIdle;
+        private long _idleMinimumManagedBytes;
+        private int _idleSamples;
 
         public static int ParseDuration(string? value)
         {
@@ -48,6 +54,8 @@ namespace FOC.Bootstrap.Unity
             _report.startedUtc = DateTime.UtcNow.ToString("o");
             _report.unityVersion = UnityEngine.Application.unityVersion;
             _report.graphicsDevice = SystemInfo.graphicsDeviceType.ToString();
+            _memoryAudit = Array.Exists(Environment.GetCommandLineArgs(), x => StringComparer.Ordinal.Equals(x, "-focSoakMemoryAudit"));
+            _report.memoryAudit = _memoryAudit;
         }
 
         private IEnumerator Start()
@@ -135,6 +143,8 @@ namespace FOC.Bootstrap.Unity
                 Slot.value = "soak";
                 var expected = Fingerprint();
                 var old = _bootstrap!.CurrentCampaign;
+                RememberRetired(_retiredCampaigns, old!);
+                foreach (var list in Document.Query<ListView>().ToList()) RememberRetired(_retiredFieldLists, list);
                 Activate(Document.Q<Button>("save-campaign"));
                 Require(Feedback("save-feedback") == "SAVED", "UI_SAVE_FAILED");
                 Activate(Document.Q<Button>("load-campaign"));
@@ -146,10 +156,18 @@ namespace FOC.Bootstrap.Unity
                 Require(Title == _localizer.Get("presentation.screen.map"), "RELOAD_MAP_NOT_REBUILT");
                 Require(Document.panel != null, "RELOAD_PANEL_DETACHED");
                 _report.cycles++;
+                if (_memoryAudit && _report.cycles == 3) _report.auditWarmCollectedBytes = DiagnosticCollectedMemory();
+                // Compare like-for-like quiescent phases, rather than the garbage burst
+                // immediately after graph deserialization and rebuilding every screen.
+                // The same five-second pause already belongs to the workload. No GC is forced.
+                _samplingIdle = true;
+                _idleMinimumManagedBytes = long.MaxValue;
+                _idleSamples = 0;
+                yield return new WaitForSecondsRealtime(5f);
+                _samplingIdle = false;
                 Sample();
                 WriteState();
                 Require(_unexpectedError == null, "UNEXPECTED_PLAYER_ERROR " + _unexpectedError);
-                yield return new WaitForSecondsRealtime(5f);
             } while (Time.realtimeSinceStartupAsDouble - _started < _report.requestedSeconds);
             var feedbackEvents = _report.saveFeedbackEvents;
             var saveButton = Document.Q<Button>("save-campaign");
@@ -187,6 +205,16 @@ namespace FOC.Bootstrap.Unity
             _report.frames++;
             _report.maxFrameMilliseconds = Math.Max(_report.maxFrameMilliseconds, ms);
             _frameHistogram[Math.Min(2000, Math.Max(0, (int)Math.Ceiling(ms)))]++;
+            if (_report.frames % 10 == 0)
+            {
+                var managed = GC.GetTotalMemory(false);
+                _report.peakManagedBytes = Math.Max(_report.peakManagedBytes, managed);
+                if (_samplingIdle)
+                {
+                    _idleMinimumManagedBytes = Math.Min(_idleMinimumManagedBytes, managed);
+                    _idleSamples++;
+                }
+            }
         }
         private void Sample()
         {
@@ -196,6 +224,17 @@ namespace FOC.Bootstrap.Unity
             _report.peakNativeAllocatedBytes = Math.Max(_report.peakNativeAllocatedBytes, native);
             _report.peakManagedBytes = Math.Max(_report.peakManagedBytes, managed);
             _report.maxUiElements = Math.Max(_report.maxUiElements, nodes);
+            _report.lastNativeAllocatedBytes = native;
+            _report.lastManagedBytes = managed;
+            _report.monoUsedBytes = Profiler.GetMonoUsedSizeLong();
+            _report.monoHeapBytes = Profiler.GetMonoHeapSizeLong();
+            _report.retiredCampaignsTracked = _retiredCampaigns.Count;
+            _report.retiredCampaignsAlive = _retiredCampaigns.Count(x => x.IsAlive);
+            _report.retiredFieldListsTracked = _retiredFieldLists.Count;
+            _report.retiredFieldListsAlive = _retiredFieldLists.Count(x => x.IsAlive);
+            _report.gc0 = GC.CollectionCount(0); _report.gc1 = GC.CollectionCount(1); _report.gc2 = GC.CollectionCount(2);
+            _report.idleMinimumManagedBytes = _idleSamples == 0 ? managed : _idleMinimumManagedBytes;
+            _report.idleSamples = _idleSamples;
             // A workload-specific guard, not a universal leak or performance guarantee.
             // Do not force GC: a real accumulating problem must remain observable.
             if (_report.cycles == 3) { _nativeBaseline = native; _managedBaseline = managed; _report.warmUiElements = nodes; }
@@ -207,9 +246,12 @@ namespace FOC.Bootstrap.Unity
                 Require(_report.managedGrowthBytes <= 64L * 1024 * 1024, "MANAGED_GROWTH_OVER_64_MIB");
                 Require(nodes <= _report.warmUiElements + 50, "UI_ELEMENT_GROWTH");
             }
-            _report.lastNativeAllocatedBytes = native;
-            _report.lastManagedBytes = managed;
-            _report.gc0 = GC.CollectionCount(0); _report.gc1 = GC.CollectionCount(1); _report.gc2 = GC.CollectionCount(2);
+        }
+        private static void RememberRetired(List<WeakReference> references, object value)
+        {
+            // Bounded diagnostics, never a strong owner of replaced campaign/UI state.
+            if (references.Count == 512) references.RemoveAt(0);
+            references.Add(new WeakReference(value));
         }
         private void WriteState()
         {
@@ -217,7 +259,10 @@ namespace FOC.Bootstrap.Unity
             _report.elapsedSeconds = Time.realtimeSinceStartupAsDouble - _started;
             _report.updatedUtc = DateTime.UtcNow.ToString("o");
             File.WriteAllText(Path.Combine(_root, "player-soak.json"), JsonUtility.ToJson(_report, true));
-            Debug.Log("FOC_PLAYER_SOAK_HEARTBEAT cycles=" + _report.cycles + " seconds=" + _report.elapsedSeconds.ToString("F1", CultureInfo.InvariantCulture));
+            Debug.Log("FOC_PLAYER_SOAK_HEARTBEAT cycles=" + _report.cycles + " seconds=" + _report.elapsedSeconds.ToString("F1", CultureInfo.InvariantCulture)
+                + " managed=" + _report.lastManagedBytes + " monoUsed=" + _report.monoUsedBytes + " monoHeap=" + _report.monoHeapBytes
+                + " retiredCampaigns=" + _report.retiredCampaignsAlive + "/" + _report.retiredCampaignsTracked
+                + " retiredLists=" + _report.retiredFieldListsAlive + "/" + _report.retiredFieldListsTracked);
         }
         private void Finish(string? error)
         {
@@ -225,14 +270,20 @@ namespace FOC.Bootstrap.Unity
             _finished = true;
             UnityEngine.Application.logMessageReceived -= OnLog;
             _report.error = error ?? _unexpectedError ?? string.Empty;
-            _report.status = string.IsNullOrEmpty(_report.error) ? "PASS" : "FAIL";
+            _report.status = string.IsNullOrEmpty(_report.error) ? (_memoryAudit ? "DIAGNOSTIC_COMPLETE" : "PASS") : "FAIL";
+            if (_memoryAudit)
+            {
+                _report.auditFinalCollectedBytes = DiagnosticCollectedMemory();
+                _report.auditFinalRetiredCampaignsAlive = _retiredCampaigns.Count(x => x.IsAlive);
+                _report.auditFinalRetiredFieldListsAlive = _retiredFieldLists.Count(x => x.IsAlive);
+            }
             var count = 0;
             for (var i = 0; i < _frameHistogram.Length; i++) { count += _frameHistogram[i]; if (count >= Math.Ceiling(_report.frames * .95)) { _report.p95FrameMilliseconds = i; break; } }
             _report.finalFingerprint = _bootstrap?.CurrentCampaign == null ? string.Empty : Fingerprint();
             try { WriteState(); }
             catch (Exception failure) { _report.status = "FAIL"; _report.error += " REPORT_WRITE_FAILED " + failure.Message; }
             Debug.Log("FOC_PLAYER_SOAK_" + _report.status + " cycles=" + _report.cycles + " seconds=" + _report.elapsedSeconds.ToString("F1", CultureInfo.InvariantCulture) + " error=" + _report.error);
-            UnityEngine.Application.Quit(_report.status == "PASS" ? 0 : 1);
+            UnityEngine.Application.Quit(string.IsNullOrEmpty(_report.error) ? 0 : 1);
         }
         private void OnLog(string condition, string trace, LogType type)
         {
@@ -240,6 +291,15 @@ namespace FOC.Bootstrap.Unity
             if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) _unexpectedError ??= condition;
         }
         private void OnDisable() => UnityEngine.Application.logMessageReceived -= OnLog;
+        private static long DiagnosticCollectedMemory()
+        {
+            // Explicitly separate, opt-in diagnostic. Never executed by an acceptance run.
+            // Compare collectable garbage with retained state without certifying this workload.
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            return GC.GetTotalMemory(false);
+        }
         private static void Require(bool condition, string reason) { if (!condition) throw new InvalidOperationException(reason); }
 
         [Serializable]
@@ -249,6 +309,13 @@ namespace FOC.Bootstrap.Unity
             public int requestedSeconds, cycles, navigationChecks, travelChecks, rejectionChecks, roundtrips, uiActivations, frames, gc0, gc1, gc2, warmUiElements, maxUiElements, lifecycleChecks, saveFeedbackEvents;
             public double elapsedSeconds, maxFrameMilliseconds, p95FrameMilliseconds, maxUiOperationMilliseconds;
             public long peakNativeAllocatedBytes, peakManagedBytes, lastNativeAllocatedBytes, lastManagedBytes, nativeGrowthBytes, managedGrowthBytes;
+            public long monoUsedBytes, monoHeapBytes;
+            public int retiredCampaignsTracked, retiredCampaignsAlive, retiredFieldListsTracked, retiredFieldListsAlive;
+            public bool memoryAudit;
+            public long auditWarmCollectedBytes, auditFinalCollectedBytes;
+            public int auditFinalRetiredCampaignsAlive, auditFinalRetiredFieldListsAlive;
+            public long idleMinimumManagedBytes;
+            public int idleSamples;
         }
     }
 }
