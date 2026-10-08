@@ -81,4 +81,3 @@ $manifest=Join-Path $output 'manifest.json'
 Write-Output "FOC_TRADE_RESULT $status $manifest"
 if($failure){throw $failure}
 
-
