@@ -55,6 +55,9 @@ namespace FOC.Bootstrap.Unity
                 var tradeAcceptance = HasCommandLineArgument("-focTradeAcceptance");
                 var armyAcceptance = HasCommandLineArgument("-focArmyAcceptance");
                 var manualTravel = HasCommandLineArgument("-focMapTravelManual");
+                var cityAcceptance = HasCommandLineArgument("-focCityInspectionAcceptance");
+                if (cityAcceptance && (armyAcceptance || tradeAcceptance || smoke || soak || mapAcceptance || manualTravel || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
+                    throw new InvalidOperationException("City inspection acceptance must run separately from other diagnostics.");
                 if (armyAcceptance && (smoke || soak || mapAcceptance || manualTravel || tradeAcceptance || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
                     throw new InvalidOperationException("Army acceptance must run separately from other diagnostics.");
                 if (tradeAcceptance && (smoke || soak || mapAcceptance || manualTravel || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
@@ -76,7 +79,7 @@ namespace FOC.Bootstrap.Unity
                 if (!smoke && (HasCommandLineArgument("-focSmokeSlot") || HasCommandLineArgument("-focSmokeCorruptAfterSave")))
                     throw new InvalidOperationException("Smoke diagnostics require -focSmokeTest.");
                 var playerSaveRoot = Path.Combine(UnityEngine.Application.persistentDataPath, "FOC", "VerticalSliceSaves");
-                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke || soak || mapAcceptance || manualTravel || tradeAcceptance || armyAcceptance, requestedRoot);
+                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke || soak || mapAcceptance || manualTravel || tradeAcceptance || armyAcceptance || cityAcceptance, requestedRoot);
                 _saveRoot = root;
                 var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice location content is missing.");
                 var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice route content is missing.");
@@ -114,6 +117,7 @@ namespace FOC.Bootstrap.Unity
                 else if (mapAcceptance) gameObject.AddComponent<DevelopmentMapTravelAcceptance>().Configure(this, root);
                 else if (tradeAcceptance) gameObject.AddComponent<DevelopmentTradeAcceptance>().Configure(this, root);
                 else if (armyAcceptance) gameObject.AddComponent<DevelopmentArmyAcceptance>().Configure(this, root);
+                else if (cityAcceptance) gameObject.AddComponent<DevelopmentCityInspectionAcceptance>().Configure(this, root);
             }
             catch (Exception exception)
             {
@@ -123,6 +127,7 @@ namespace FOC.Bootstrap.Unity
                 if (HasCommandLineArgument("-focMapTravelAcceptance")) UnityEngine.Application.Quit(1);
                 if (HasCommandLineArgument("-focTradeAcceptance")) UnityEngine.Application.Quit(1);
                 if (HasCommandLineArgument("-focArmyAcceptance")) UnityEngine.Application.Quit(1);
+                if (HasCommandLineArgument("-focCityInspectionAcceptance")) UnityEngine.Application.Quit(1);
                 if (HasCommandLineArgument("-focSmokeTest"))
                 {
                     Debug.LogError("FOC_DEVELOPMENT_SMOKE_FAIL STARTUP_FAILED " + exception.Message);
@@ -139,7 +144,7 @@ namespace FOC.Bootstrap.Unity
         private void PresentCampaign()
         {
             if (_host == null || _campaign == null || _viewer == null || _map == null) return;
-            _host.Configure(new CampaignPresentationScreenSource(_campaign, _viewer, _map),new SlicePresentationLocalizer(),_bindings,new TradePanelSession(_campaign,_viewer),new ArmyPanelSession(_campaign,_viewer));
+            _host.Configure(new CampaignPresentationScreenSource(_campaign, _viewer, _map),new SlicePresentationLocalizer(),_bindings,new TradePanelSession(_campaign,_viewer),new ArmyPanelSession(_campaign,_viewer),new CityInspectionSession(_campaign,_viewer));
             OpenCommandLineScreen();
             BindSaveLoadSurface();
         }

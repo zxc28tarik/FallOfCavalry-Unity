@@ -35,8 +35,10 @@ namespace FOC.Presentation.Unity
         private TradePanel? _tradePanel;
         private readonly ArmyPanelSession? _army;
         private ArmyPanel? _armyPanel;
+        private readonly CityInspectionSession? _city;
+        private CityInspectionPanel? _cityPanel;
 
-        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null)
+        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null, CityInspectionSession? city = null)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
@@ -44,6 +46,7 @@ namespace FOC.Presentation.Unity
             _dispatcher = dispatcher;
             _trade = trade;
             _army = army;
+            _city = city;
             _keyHandler = OnKeyDown;
             _geometryHandler = OnGeometryChanged;
             LocalizeTemplate();
@@ -130,6 +133,20 @@ namespace FOC.Presentation.Unity
                     _tradePanel.Render(state.Subject?.Id);
                 }
                 else { _tradePanel?.Dispose(); _tradePanel = null; }
+            }
+            var cityRoot = _root.Q<VisualElement>("city-inspection-panel");
+            if (cityRoot != null)
+            {
+                var visible = state.ScreenId == PresentationScreenId.City && _city != null;
+                cityRoot.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (visible)
+                {
+                    _cityPanel ??= new CityInspectionPanel(cityRoot, _city!,
+                        id => _viewModel.Open(new PresentationRoute(PresentationScreenId.City, new PresentationEntityRef(PresentationEntityKind.City, id))),
+                        id => _viewModel.Open(new PresentationRoute(PresentationScreenId.Trade, new PresentationEntityRef(PresentationEntityKind.City, id))));
+                    _cityPanel.Render(state.Subject?.Id);
+                }
+                else { _cityPanel?.Dispose(); _cityPanel = null; }
             }
             var armyRoot = _root.Q<VisualElement>("army-panel");
             if (armyRoot != null)
@@ -360,6 +377,7 @@ namespace FOC.Presentation.Unity
             _viewModel.Changed -= Render;
             _tradePanel?.Dispose(); _tradePanel = null; _trade?.Dispose();
             _armyPanel?.Dispose(); _armyPanel = null; _army?.Dispose();
+            _cityPanel?.Dispose(); _cityPanel = null; _city?.Dispose();
             _root.UnregisterCallback(_keyHandler);
             _root.UnregisterCallback(_geometryHandler);
             foreach (var binding in _buttonHandlers) binding.Item1.clicked -= binding.Item2;

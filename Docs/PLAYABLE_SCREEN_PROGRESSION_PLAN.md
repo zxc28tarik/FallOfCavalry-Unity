@@ -41,7 +41,7 @@ Y kodları yalnız bu planın takip etiketleridir; yeni Implementation numaralar
 | Y2 Ticaret | Gerçek alım ve satım, stok, para ve kapasite geri bildirimi | Y1 ve mevcut ekonomi servisleri | 2–4 gün | Teknik aday PASS; Hasan ticaret yetkisi ve birleşik kabul açık |
 | Y3 Ordu yönetimi | Asker toplama, ikmal, maaş ve mevcut komuta işlemleri | Y2 ve mevcut askerî servisler | 3–5 gün | Sınırlı teknik UI adayı; final SHA raporu ayrı, birleşik kabul açık |
 | Y4 Kampanya zamanı ve kervan | Zamanla ilerleyen üretim, tüketim, yolculuk, teslim ve kervan muhasebesi | Y1–Y3 ve onaylı zamanlama kuralları | 5–10 gün | Karar gerekli |
-| Y5 Şehir ve üretim | Alanlar, üretim, ihtiyaçlar ve yetkililerin kullanılabilir ekranı | Y2 ve Y4 | 5–10 gün | Kısmen karar gerekli |
+| Y5 Şehir ve üretim | Alanlar, üretim, ihtiyaçlar ve yetkililerin kullanılabilir ekranı | Tam üretim akışı için Y2 ve Y4 | 5–10 gün | Y5A salt okunur bilgi alt paketi; üretim emri / cadence kararı açık |
 | Y6 Diplomasi ve raporlar | Yetkili gönderim, teslim durumu ve bilgi güncelliği | Y4 ve mevcut Diplomacy servisleri | 4–7 gün | Kısmen karar gerekli |
 | Y7 Karşılaşma ve sözleşmeler | Olay seçimi, sözleşme kabulü, ilerleme ve sonuç | Y4, Y6 ve onaylı içerik | 5–10 gün | Karar gerekli |
 | Y8 Savaş hazırlığı ve sonuç | Yerleştirme, emirler, kurallı çözümleme ve kampanyaya dönüş | Y3 ve onaylı combat politikaları | 10–20 gün | Karar gerekli |
@@ -143,6 +143,8 @@ Karar gerektiren kampanya ve savaş alt kapsamları dahil geniş plan yaklaşık
 Hane, tımar, siyasi tepkiler, Soldier→Character ilerlemesi ve büyük tarihsel dünya genişlemesi ilk harita ticaret ordu döngüsünün dışında kalır. Gerekli ekranların temel verileri gösterilebilir; yeni mekanikler ayrı tasarım ve uygulama paketlerinde ele alınır. Eksik kararlarla çalışan bir mekanik görünümü verilmez.
 
 ## Dayanak belgeler
+
+Y5A [şehir inceleme kapsamı](Y5A_CITY_INSPECTION_SCOPE.md), Y3 teknik temel `57857604b29f0e1e14d69dd4763f8cadeac95e78` üzerinde geliştirilir. Y4 atlanmış veya tamamlanmış sayılmaz: üretim/tüketim cadence'i ve Hasan kervan yetkisi tanımlanmadığından yalnız bağımsız bilgi ekranı yapılır. Dokuz alan, stok/talep, tek reçete uygunluğu ve altyapı kayıtları salt okunurdur. Kethüda'nın yalnız görev referansı gösterilir. Tam Y5 üretim yönetimi ile fiziksel/uzun kullanım kabulü ayrı kalır.
 
 Y2 geliştirme adayı [pazar ekranı kapsamına](Y2_PLAYABLE_TRADE_SCOPE.md) kaydedildi. Başlangıç kervanı NPC yöneticisine aittir; Hasan'ın ticaret yetkisi uydurulmaz. Y0, fiziksel giriş ve tam Y2 oyuncu döngüsü kabulü açık kalır. Bu çalışma Y1 adayının üzerine eklenir; art/Implementation 15 ilerlemesi değildir.
 

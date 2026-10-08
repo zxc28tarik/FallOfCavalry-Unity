@@ -8,6 +8,13 @@ namespace FOC.Presentation.Core
     {
         public static IReadOnlyDictionary<string,string> Turkish { get; } = new Dictionary<string,string>
         {
+            ["presentation.city.area.innercastle"]="İç Kale", ["presentation.city.area.trade"]="Ticaret",
+            ["presentation.city.area.inncaravan"]="Han ve Kervan", ["presentation.city.area.housing"]="Konut",
+            ["presentation.city.area.military"]="Askerî", ["presentation.city.area.health"]="Sağlık",
+            ["presentation.city.area.productioncraft"]="Üretim ve Zanaat", ["presentation.city.area.foodsupply"]="Gıda",
+            ["presentation.city.area.squareculture"]="Meydan ve Kültür",
+            ["presentation.city.fullness.empty"]="Boş", ["presentation.city.fullness.low"]="Düşük doluluk",
+            ["presentation.city.fullness.half"]="Yarı dolu", ["presentation.city.fullness.full"]="Tam dolu",
             ["presentation.trade.reason.none"]="İşlem koşulları uygun; onaydan önce tekrar denetlenir.",
             ["presentation.trade.reason.unauthorized"]="Bu kervanın yöneticisi değilsin. Bilgiyi görmek işlem yetkisi vermez.",
             ["presentation.trade.reason.unavailable"]="İşlem için gerekli aktör, mal veya etkin kervan bulunamadı.",
