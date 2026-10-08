@@ -94,8 +94,8 @@ namespace FOC.Presentation.Visuals
                         Capture(image, "weapon-attack-" + view, phase);
                         var weaponBounds = RenderBounds(weaponRenderers);
                         var bodyBounds = RenderBounds(actor.view.GetComponentsInChildren<Renderer>(true).Where(r => !r.transform.IsChildOf(actor.weaponInstance!.transform)).ToArray());
-                        var grip=actor.weaponInstance.transform.TransformPoint(new Vector3(-.006f,-.080f,0f));
-                        var palm=rightHand.TransformPoint(new Vector3(0f,.061f,.018f));
+                        var grip=actor.weaponInstance.transform.TransformPoint(MeshyKilicGripAttachment.SwordLocalGripAnchor);
+                        var palm=rightHand.TransformPoint(MeshyKilicGripAttachment.CandidatePalmInHand);
                         if(Vector3.Distance(grip,palm)>.003f)throw new InvalidOperationException("Kilic grip is not aligned to the reviewed right palm.");
                         samples.Add(new WeaponAttackSample
                         {

@@ -162,6 +162,9 @@ namespace FOC.Presentation.Visuals
                 foreach(var parameter in animator.parameters){if(parameter.type==AnimatorControllerParameterType.Trigger)animator.ResetTrigger(parameter.name);else if(parameter.type==AnimatorControllerParameterType.Bool)animator.SetBool(parameter.name,false);else if(parameter.type==AnimatorControllerParameterType.Float)animator.SetFloat(parameter.name,0f);else if(parameter.type==AnimatorControllerParameterType.Int)animator.SetInteger(parameter.name,0);}
                 animator.Rebind();animator.Update(0f);
             }
+            // Only the isolated approved right-hand corrective is reset here.
+            // Unrelated garment/face blendshapes must remain untouched.
+            foreach(var grip in root.GetComponentsInChildren<MeshyRightHandGripVisual>(true))grip.ResetForPool();
         }
 
         private void InvalidateCacheInternal(bool count)

@@ -75,6 +75,11 @@ namespace FOC.Editor.Visuals
                 var changed = review == null;
                 if (review == null) review = new GameObject("Isolated Meshy Hasan player review").AddComponent<MeshyHasanPilotPlayer>();
                 if (review.characterPrefab != prefab) { review.characterPrefab = prefab; changed = true; }
+                if(userMotion)
+                {
+                    var gripPrefab=AssetDatabase.LoadAssetAtPath<GameObject>(MeshyKilicGripCorrectivePipeline.PrefabPath);
+                    if(review.gripCandidatePrefab!=gripPrefab){review.gripCandidatePrefab=gripPrefab;changed=true;}
+                }
                 if (review.kilicPrefab != kilicPrefab) { review.kilicPrefab = kilicPrefab; changed = true; }
                 if (review.horsePrefab != horsePrefab) { review.horsePrefab = horsePrefab; changed = true; }
                 if (review.harnessPrefab != harnessPrefab) { review.harnessPrefab = harnessPrefab; changed = true; }

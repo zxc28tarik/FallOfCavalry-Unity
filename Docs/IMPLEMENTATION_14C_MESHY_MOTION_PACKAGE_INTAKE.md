@@ -71,6 +71,8 @@ Eight selected screenshots were copied byte-for-byte into `Docs/Evidence/Impleme
 
 ## Next safe experiment
 
+The subsequent user-approved sword grip and saddle-fit work is recorded in [Grip and mounted fitting](IMPLEMENTATION_14C_GRIP_AND_MOUNTED_FIT.md). R4 hand shape and sword alignment are now accepted; the current priority is seated rider/eyer fit. Preserve that newer decision when continuing this older intake record.
+
 Continue the calibrated pilot, assess the remaining grip/coat clipping limitations, and validate additional selected motions individually. Do not restart RAM closure, request another character/export, replace the retained rig or activate all historical production profiles. Save remains v14.
 
 The separate `MeshyUserMotionIntake` selects only the two pinned donors. Executed Unity entry points: `RunImport`, `RunAudit`, `RunContactCandidates`, then `MeshyHasanPilotBuild.RunUserMotion`. Player flags: `--meshy-user-motion true --meshy-user-contact true --meshy-worktree DIRTY_DEVELOPMENT --meshy-output <fresh directory> --meshy-sha <HEAD>`. Mounted mode uses `--meshy-mounted-review true`; benchmark mode uses `--meshy-calibrated-benchmark true --meshy-user-motion-benchmark true`. Do not run the generic Quaternius intake blindly on all fourteen exports.

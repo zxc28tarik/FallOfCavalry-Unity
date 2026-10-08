@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FOC.Domain.Common;
 using FOC.Domain.Soldiers;
+using FOC.Visuals.Core;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -50,6 +51,9 @@ namespace FOC.Presentation.Visuals
         [Serializable] public sealed class Case
         {
             public int actors, cachedVariants, pooledRepresentations, activeLeasesAfterReturn;
+            public int weaponInstances, closedGripActors;
+            public bool closedGripRuntime;
+            public float maximumGripAnchorErrorMeters = -1f;
             public double animatorAndContactSetupMilliseconds;
             public int contactLookupProfilesBeforeSetup,contactLookupProfilesAfterSetup;
             public string effectiveAvatar = "", avatarOrigin = "";
@@ -67,6 +71,7 @@ namespace FOC.Presentation.Visuals
             public string contactProfile = "NONE";
             public bool builtInHumanoidFootIk;
             public bool measuredSoleCleanup;
+            public bool retainedKilicReview;
             public string scope = "Empty-loadout single Hasan variant through real VisualSoldier3DAssembler/cache/VisualSoldierPool. Cold means fresh FOC caches, not cold disk/GPU assets. No gameplay, save, horse or production catalog mutation.";
             public Case[] cases = Array.Empty<Case>();
         }
@@ -81,6 +86,8 @@ namespace FOC.Presentation.Visuals
             public MeshyTargetContactProfile? contact;
             public Vector3 presentationRestPosition;
             public MeshyPilotContactLookup? soleContact;
+            public GameObject? weaponInstance;
+            public MeshyRightHandGripVisual? gripVisual;
         }
         private sealed class Counters
         {
@@ -90,7 +97,7 @@ namespace FOC.Presentation.Visuals
 
         /// <summary>Caller should drain this enumerator directly so exceptions reach its exit-code handler.</summary>
         public static IEnumerator Run(GameObject sourcePrefab, AnimationClip motionClip, Transform parent,
-            Action<Report> completed, Action<Bounds>? frameActors = null, int frameSamples = 30, Avatar? avatarOverride = null, MeshyTargetContactProfile? contactProfile = null, bool useFootIK = false, bool measuredSoleCleanup = false)
+            Action<Report> completed, Action<Bounds>? frameActors = null, int frameSamples = 30, Avatar? avatarOverride = null, MeshyTargetContactProfile? contactProfile = null, bool useFootIK = false, bool measuredSoleCleanup = false, GameObject? kilicPrefab = null)
         {
             if (sourcePrefab == null || motionClip == null || parent == null || completed == null) throw new ArgumentNullException("Benchmark requires prefab, clip, parent and completion callback.");
             if (!motionClip.isHumanMotion || motionClip.length <= 0) throw new InvalidOperationException("Benchmark requires a real imported Humanoid motion clip.");
@@ -99,6 +106,8 @@ namespace FOC.Presentation.Visuals
             if (frameSamples < 2 || frameSamples > 600) throw new ArgumentOutOfRangeException(nameof(frameSamples));
             if (!Application.isPlaying || SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null)
                 throw new InvalidOperationException("Runtime benchmark must execute in the graphics-enabled player, not EditMode or -nographics.");
+            if (kilicPrefab != null && sourcePrefab.GetComponentInChildren<MeshyRightHandGripVisual>(true) == null)
+                throw new InvalidOperationException("Equipped benchmark requires the approved right-hand derivative, not an uncorrected source.");
             var catalog = MeshyHasanPilotCatalog.Create(sourcePrefab);
             var sourceAvatar = sourcePrefab.GetComponent<Animator>().avatar;
             var effectiveAvatar = avatarOverride != null ? avatarOverride : sourceAvatar;
@@ -135,7 +144,6 @@ namespace FOC.Presentation.Visuals
                         result.warmReusedAllViewsAndRepresentations = result.warmAssembly.createdViews == 0 && result.warmAssembly.createdRepresentations == 0
                             && result.warmAssembly.reusedViews == count && result.warmAssembly.reusedRepresentations == count;
                         if (!result.warmReusedAllViewsAndRepresentations) throw new InvalidOperationException("Warm benchmark failed actual FOC pool reuse for " + count + " actors.");
-                        result.geometry = InspectGeometry(views);
                         result.contactLookupProfilesBeforeSetup=MeshyPilotContactLookup.CachedProfileCount;
                         var setupWatch=Stopwatch.StartNew();
                         for (var i = 0; i < views.Count; i++)
@@ -146,9 +154,14 @@ namespace FOC.Presentation.Visuals
                             if(measuredSoleCleanup){motions[i].soleContact=MeshyPilotContactLookup.Create(sourcePrefab,motions[i].animator,motionClip,motions[i].graph,motions[i].playable,0f);motions[i].soleContact!.Apply(i/(float)count);}
                             if (motions[i].animator.avatar != effectiveAvatar)
                                 throw new InvalidOperationException("Benchmark actor did not retain the selected effective Avatar.");
+                            if (kilicPrefab != null) AttachKilic(motions[i], views[i], kilicPrefab);
                         }
                         setupWatch.Stop();result.animatorAndContactSetupMilliseconds=setupWatch.Elapsed.TotalMilliseconds;
                         result.contactLookupProfilesAfterSetup=MeshyPilotContactLookup.CachedProfileCount;
+                        // Inventory after the retained accessory has been attached:
+                        // its real LOD renderers/materials/textures are included.
+                        result.geometry = InspectGeometry(views);
+                        if (kilicPrefab != null) ValidateEquippedRuntime(motions, result);
                         frameActors?.Invoke(VisibleBounds(views));
                         for (var warmup = 0; warmup < 5; warmup++)
                         {
@@ -188,6 +201,7 @@ namespace FOC.Presentation.Visuals
                         if (!timing.cpuFrameTimingAvailable || !timing.gpuFrameTimingAvailable)
                             timing.unavailableReason = "Unity FrameTiming returned no usable distinct nonzero " + (!timing.cpuFrameTimingAvailable ? "CPU " : "")
                                 + (!timing.gpuFrameTimingAvailable ? "GPU " : "") + "samples; capability/settings/driver availability is not assumed.";
+                        if (kilicPrefab != null) ValidateEquippedRuntime(motions, result);
                         StopMotion(motions);
                         foreach (var view in views) pool.Return(view);
                         views.Clear();
@@ -208,7 +222,10 @@ namespace FOC.Presentation.Visuals
                     // Let Unity process deferred Destroy before the next case.
                     yield return null;
                 }
-                completed(new Report { measuredSoleCleanup=measuredSoleCleanup,builtInHumanoidFootIk=contactProfile!=null?contactProfile.useFootIK:useFootIK, unityVersion = Application.unityVersion, graphicsDevice = SystemInfo.graphicsDeviceName,
+                completed(new Report { retainedKilicReview=kilicPrefab!=null,
+                    scope=kilicPrefab==null ? "Empty-loadout single Hasan variant through real VisualSoldier3DAssembler/cache/VisualSoldierPool. Cold means fresh FOC caches, not cold disk/GPU assets. No gameplay, save, horse or production catalog mutation."
+                        : "Approved grip candidate through actual VisualSoldier3DAssembler/cache/view pool, calibrated animation and retained right-hand kilic. Gameplay loadout remains the empty review fixture. Cold/warm times measure character assembly/reuse; Avatar/contact/accessory setup is measured separately. Weapons are instantiated review accessories, not claimed as pooled reuse. Geometry and frame measurements include visible weapons. No gameplay, save, horse or production catalog mutation.",
+                    measuredSoleCleanup=measuredSoleCleanup,builtInHumanoidFootIk=contactProfile!=null?contactProfile.useFootIK:useFootIK, unityVersion = Application.unityVersion, graphicsDevice = SystemInfo.graphicsDeviceName,
                     graphicsApi = SystemInfo.graphicsDeviceType.ToString(), platform = Application.platform.ToString(), clip = motionClip.name,
                     effectiveAvatar = effectiveAvatar.name, sourcePrefabAvatar = sourceAvatar.name, avatarOrigin = avatarOrigin, contactProfile = contactProfile == null ? "NONE" : contactProfile.name, cases = results.ToArray() });
             }
@@ -297,7 +314,60 @@ namespace FOC.Presentation.Visuals
                 if (motion.contact != null) motion.animator.transform.localPosition = motion.presentationRestPosition
                     + Vector3.up * motion.contact.Evaluate((float)(motion.playable.GetTime() % length / length));
                 motion.soleContact?.Apply((float)(motion.playable.GetTime()%length/length));
+                motion.gripVisual?.ApplyCurrentState();
             }
+        }
+        private static void AttachKilic(Motion motion, VisualSoldier3D view, GameObject kilicPrefab)
+        {
+            if (motion.weaponInstance != null)
+                throw new InvalidOperationException("Benchmark motion already owns a retained weapon accessory.");
+            var driver = view.GetComponentInChildren<MeshyRightHandGripVisual>(true)
+                ?? throw new InvalidOperationException("Equipped benchmark actor has no approved right-hand grip component.");
+            var hand = motion.animator.GetBoneTransform(HumanBodyBones.RightHand);
+            if (hand == null || !view.TryGetSocket(VisualSocket.RightHand, out var socket) || socket == null)
+                throw new InvalidOperationException("Equipped benchmark requires its actual mapped RightHand and socket.");
+            motion.gripVisual = driver;
+            // Retain the existing weapon geometry/scale. Assign immediately so
+            // any later setup failure is cleaned before returning the lease.
+            motion.weaponInstance = Object.Instantiate(kilicPrefab, socket, false);
+            motion.weaponInstance.name = "WPN_Kilic_01_BENCHMARK_RightHand";
+            MeshyKilicGripAttachment.Apply(motion.weaponInstance.transform, hand, socket,
+                MeshyKilicGripAttachment.CorrectivePalmInHand, MeshyKilicGripAttachment.CorrectiveWeaponRotationInHand);
+            foreach (var lod in motion.weaponInstance.GetComponentsInChildren<LODGroup>(true)) lod.ForceLOD(0);
+            driver.SetKilicEquipped(true);
+        }
+        private static void ValidateEquippedRuntime(List<Motion> motions, Case result)
+        {
+            var weapons = 0; var closed = 0; var maximumError = 0f;
+            foreach (var motion in motions)
+            {
+                if (motion.weaponInstance == null || motion.gripVisual == null || !motion.gripVisual.KilicEquipped)
+                    throw new InvalidOperationException("Equipped benchmark lost its retained weapon or closed-grip state.");
+                var hand = motion.animator.GetBoneTransform(HumanBodyBones.RightHand);
+                if (hand == null || !motion.weaponInstance.transform.IsChildOf(hand))
+                    throw new InvalidOperationException("Equipped benchmark weapon escaped the actual right hand.");
+                var skins = motion.gripVisual.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+                if (skins.Length != MeshyRightHandGripVisual.RequiredLodCount)
+                    throw new InvalidOperationException("Equipped benchmark lost its three derivative LODs.");
+                foreach (var skin in skins)
+                {
+                    var shape = skin.sharedMesh.GetBlendShapeIndex(MeshyRightHandGripVisual.ShapeName);
+                    if (shape < 0 || Mathf.Abs(skin.GetBlendShapeWeight(shape) - 100f) > .001f)
+                        throw new InvalidOperationException("Equipped benchmark grip weight is not closed on every LOD.");
+                }
+                var error = MeshyKilicGripAttachment.MeasureAnchorErrorMeters(motion.weaponInstance.transform, hand,
+                    MeshyKilicGripAttachment.CorrectivePalmInHand);
+                if (float.IsNaN(error) || float.IsInfinity(error) || error > .003f)
+                    throw new InvalidOperationException("Equipped benchmark retained hilt drifted from its actual hand anchor.");
+                maximumError = Mathf.Max(maximumError, error);
+                weapons++; closed++;
+            }
+            if (weapons != result.actors || closed != result.actors)
+                throw new InvalidOperationException("Equipped benchmark actor/accessory count is incomplete.");
+            result.weaponInstances = weapons;
+            result.closedGripActors = closed;
+            result.closedGripRuntime = true;
+            result.maximumGripAnchorErrorMeters = Mathf.Max(result.maximumGripAnchorErrorMeters, maximumError);
         }
         private static Motion AnimateWithContact(VisualSoldier3D view, GameObject prefab, AnimationClip clip, float phase, Avatar? avatar, MeshyTargetContactProfile contact)
         {
@@ -322,6 +392,17 @@ namespace FOC.Presentation.Visuals
         private static void StopMotion(Motion motion)
         {
             if (motion.graph.IsValid()) motion.graph.Destroy();
+            if (motion.gripVisual != null) motion.gripVisual.ResetForPool();
+            if (motion.weaponInstance != null)
+            {
+                // Disable and detach before deferred Destroy/pool return: no
+                // transient sword may survive inside a cached representation.
+                motion.weaponInstance.SetActive(false);
+                motion.weaponInstance.transform.SetParent(null, false);
+                if (Application.isPlaying) Object.Destroy(motion.weaponInstance); else Object.DestroyImmediate(motion.weaponInstance);
+                motion.weaponInstance = null;
+            }
+            motion.gripVisual = null;
             if (motion.animator != null)
             {
                 motion.animator.enabled = false;

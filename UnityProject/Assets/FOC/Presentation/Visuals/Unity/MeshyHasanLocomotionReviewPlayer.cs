@@ -89,8 +89,9 @@ namespace FOC.Presentation.Visuals
             }
             if (clip == null) throw new InvalidOperationException("Calibrated benchmark motion is missing.");
             MeshyHasanPilotBenchmark.Report? report = null;
-            var benchmark = MeshyHasanPilotBenchmark.Run(characterPrefab, clip, transform,
-                r => report = r, b => FrameBounds(b), 30, calibratedAvatar, userContact, Arg("--meshy-foot-ik")=="true",Arg("--meshy-contact-cleanup")=="true");
+            var gripBenchmark=Arg("--meshy-grip-candidate")=="true";
+            var benchmark = MeshyHasanPilotBenchmark.Run(gripBenchmark?gripCandidatePrefab!:characterPrefab, clip, transform,
+                r => report = r, b => FrameBounds(b), 30, calibratedAvatar, userContact, Arg("--meshy-foot-ik")=="true",Arg("--meshy-contact-cleanup")=="true",gripBenchmark?kilicPrefab:null);
             try { while (benchmark.MoveNext()) yield return benchmark.Current; }
             finally { (benchmark as IDisposable)?.Dispose(); }
             if (report == null || report.cases.Length != 3) throw new InvalidOperationException("Calibrated 1/12/100 benchmark did not produce all cases.");

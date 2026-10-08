@@ -1,0 +1,52 @@
+{
+    "status": "RIGHT_HAND_CORRECTIVE_CANDIDATE_VISUAL_QA_REQUIRED",
+    "authority": "User explicitly approved only right-hand grasp correction; original source/rig/body/clothing/textures/gameplay remain protected.",
+    "tool": "Unity Editor 6000.3.16f1; continuous spatial finger bend and thumb opposition, welded vertex clearance. Right-hand-only additive shape; no new rig/topology. Does not claim exact digit segment length or face-intersection elimination.",
+    "source": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy.fbx",
+    "sourceSha256": "356dd92317ec1787f48aabe4e85157d31dfec2dd029168c856c5ffd6a125fadf",
+    "sourcePrefabSha256": "3720d6f8921f6a239e33c1a927a0571fbada0a180de3a3d4e20aee00a271eb0d",
+    "dateUtc": "2026-10-07T23:22:38.7667025Z",
+    "revision": "4",
+    "shape": "Grip_Kilic_R",
+    "license": "User-owned Meshy Pro derivative; existing source policy retained. No external asset introduced.",
+    "gripInHandFrame": {
+        "x": -0.026000000536441804,
+        "y": 0.12300000339746475,
+        "z": 0.009999999776482582
+    },
+    "weaponRotationInHandFrame": {
+        "x": 0.5,
+        "y": 0.5,
+        "z": -0.5,
+        "w": -0.5
+    },
+    "lods": [
+        {
+            "lod": 0,
+            "vertices": 13538,
+            "triangles": 9586,
+            "changedVertices": 286,
+            "originalMesh": "Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy.fbx",
+            "derivedMesh": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Candidates/KilicGrip/Hasan_KilicGrip_LOD0.asset",
+            "maximumDeltaMeters": 0.0823352038860321
+        },
+        {
+            "lod": 1,
+            "vertices": 9393,
+            "triangles": 5752,
+            "changedVertices": 186,
+            "originalMesh": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD1.asset",
+            "derivedMesh": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Candidates/KilicGrip/Hasan_KilicGrip_LOD1.asset",
+            "maximumDeltaMeters": 0.0831526443362236
+        },
+        {
+            "lod": 2,
+            "vertices": 9320,
+            "triangles": 5606,
+            "changedVertices": 186,
+            "originalMesh": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/MESH_HasanAga_MeshyPilot_LOD2.asset",
+            "derivedMesh": "Assets/FOC/Presentation/Characters/Ottoman1648/MeshyPilot/Candidates/KilicGrip/Hasan_KilicGrip_LOD2.asset",
+            "maximumDeltaMeters": 0.0831526443362236
+        }
+    ]
+}

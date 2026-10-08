@@ -19,6 +19,7 @@ namespace FOC.Presentation.Visuals
     public sealed partial class MeshyHasanPilotPlayer : MonoBehaviour
     {
         public GameObject characterPrefab = null!;
+        public GameObject? gripCandidatePrefab;
         public GameObject kilicPrefab = null!;
         public GameObject horsePrefab = null!;
         public GameObject harnessPrefab = null!;
@@ -72,6 +73,7 @@ namespace FOC.Presentation.Visuals
             public float contactOffsetMeters;
             public GameObject? weaponInstance;
             public MeshyPilotContactLookup? soleContact;
+            public MeshyRightHandGripVisual? gripVisual;
         }
 
         [Serializable]
@@ -157,13 +159,31 @@ namespace FOC.Presentation.Visuals
             Application.targetFrameRate = 60;
             QualitySettings.vSyncCount = 0;
             CreateStage();
-            pilotCatalog = MeshyHasanPilotCatalog.Create(characterPrefab);
+            var useGripCandidate=Arg("--meshy-grip-candidate")=="true";
+            if(useGripCandidate&&gripCandidatePrefab==null)throw new InvalidOperationException("Explicit right-hand grip candidate is missing.");
+            pilotCatalog = MeshyHasanPilotCatalog.Create(useGripCandidate?gripCandidatePrefab!:characterPrefab);
             assembler = gameObject.AddComponent<VisualSoldier3DAssembler>();
             pool = gameObject.AddComponent<VisualSoldierPool>();
             var template = new GameObject("Isolated Meshy view template").AddComponent<VisualSoldier3D>();
             template.transform.SetParent(transform, false);
             template.gameObject.SetActive(false);
             pool.Configure(template, 16);
+
+            if (Arg("--meshy-grip-acceptance") == "true")
+            {
+                var acceptance = RunGripCameraAcceptance();
+                try { while (acceptance.MoveNext()) yield return acceptance.Current; }
+                finally { (acceptance as IDisposable)?.Dispose(); }
+                yield break;
+            }
+
+            if (Arg("--meshy-grip-review") == "true")
+            {
+                var gripReview = RunGripReview();
+                try { while (gripReview.MoveNext()) yield return gripReview.Current; }
+                finally { (gripReview as IDisposable)?.Dispose(); }
+                yield break;
+            }
 
             if (Arg("--meshy-user-motion") == "true")
             {
@@ -374,21 +394,23 @@ namespace FOC.Presentation.Visuals
             view.transform.localPosition = location;
             MeshyHasanPilotCatalog.Assemble(assembler, pilotCatalog, view, soldier, troop,
                 new Dictionary<EquipmentInstanceId, EquipmentInstance>());
+            var animator = view.GetComponentsInChildren<Animator>(true).Single();
             if (attachKilic)
             {
                 if (kilicPrefab == null) throw new InvalidOperationException("FOC WPN_Kilic_01 prefab is not assigned.");
-                if (!view.TryGetSocket(VisualSocket.RightHand, out var rightHand) || rightHand == null)
+                if (!view.TryGetSocket(VisualSocket.RightHand, out var rightHandSocket) || rightHandSocket == null)
                     throw new InvalidOperationException("Meshy pilot has no actual Socket_RightHand for the kilic review.");
-                weaponInstance = Instantiate(kilicPrefab, rightHand, false);
+                var handBone = animator.GetBoneTransform(HumanBodyBones.RightHand);
+                if (handBone == null) throw new InvalidOperationException("Meshy pilot lacks mapped RightHand.");
+                weaponInstance = Instantiate(kilicPrefab, rightHandSocket, false);
                 weaponInstance.name = "WPN_Kilic_01_REVIEW_RightHand";
-                // The equipment origin is the guard, not the grip midpoint.
-                // Meshy's hand +Y follows the open fingers. A handle must lie
-                // across the palm, not along those fingers with its guard at
-                // the wrist. This isolated fit never changes a loadout/socket.
-                weaponInstance.transform.localRotation = Quaternion.Euler(0f, 0f, -90f);
-                weaponInstance.transform.localPosition = new Vector3(.080f, .055f, .018f);
+                // Solve the handle anchor in the actual hand frame, independently
+                // of socket/prefab pivot. This does NOT close the source fingers
+                // and must never be reported as visually accepted grasping.
+                MeshyKilicGripAttachment.Apply(weaponInstance.transform, handBone, rightHandSocket,
+                    Arg("--meshy-grip-candidate")=="true"?MeshyKilicGripAttachment.CorrectivePalmInHand:MeshyKilicGripAttachment.CandidatePalmInHand,
+                    Arg("--meshy-grip-candidate")=="true"?MeshyKilicGripAttachment.CorrectiveWeaponRotationInHand:MeshyKilicGripAttachment.CandidateWeaponRotationInHand);
             }
-            var animator = view.GetComponentsInChildren<Animator>(true).Single();
             if (animator.avatar == null || !animator.avatar.isValid || !animator.avatar.isHuman)
                 throw new InvalidOperationException("Source humanoid avatar is missing or invalid.");
             foreach (var lod in view.GetComponentsInChildren<LODGroup>()) lod.ForceLOD(0);
@@ -396,7 +418,9 @@ namespace FOC.Presentation.Visuals
             actor = new Actor { view = view, animator = animator, clip = clip,
                 originalController = animator.runtimeAnimatorController, originalAvatar = animator.avatar,
                 contactProfile = contactProfile, presentationRestPosition = animator.transform.localPosition,
-                weaponInstance = weaponInstance };
+                weaponInstance = weaponInstance, gripVisual=view.GetComponentInChildren<MeshyRightHandGripVisual>(true) };
+            if(Arg("--meshy-grip-candidate")=="true"&&actor.gripVisual==null)
+                throw new InvalidOperationException("The explicitly selected grip candidate has no reversible hand-shape driver.");
             animator.applyRootMotion = false;
             animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             // A manual graph exclusively owns this review Animator. Retaining
@@ -444,6 +468,7 @@ namespace FOC.Presentation.Visuals
                 .Select(animator.GetBoneTransform).Where(bone => bone != null).ToArray();
             if (actor.tracked.Length != trackedBones.Length) throw new InvalidOperationException("Humanoid tracked joint mapping incomplete.");
             actor.initial = actor.tracked.Select(bone => bone.position).ToArray();
+            actor.gripVisual?.SetKilicEquipped(attachKilic);
             actors.Add(actor);
             return actor;
             }
@@ -458,9 +483,9 @@ namespace FOC.Presentation.Visuals
                     actor.animator.avatar = actor.originalAvatar;
                     actor.animator.runtimeAnimatorController = actor.originalController;
                     actor.animator.transform.localPosition = actor.presentationRestPosition;
-                    if (weaponInstance != null) DestroyObject(weaponInstance);
+                    ReleaseReviewWeapon(weaponInstance);
                 }
-                else if (weaponInstance != null) DestroyObject(weaponInstance);
+                else ReleaseReviewWeapon(weaponInstance);
                 pool.Return(view);
                 throw;
             }
@@ -528,10 +553,21 @@ namespace FOC.Presentation.Visuals
                 actor.animator.avatar = actor.originalAvatar;
                 actor.animator.runtimeAnimatorController = actor.originalController;
                 actor.animator.transform.localPosition = actor.presentationRestPosition;
-                if (actor.weaponInstance != null) DestroyObject(actor.weaponInstance);
+                actor.gripVisual?.ResetForPool();
+                // Destroy is deferred in a player. Remove the review accessory
+                // from the leased hierarchy BEFORE immediate same-frame reuse.
+                ReleaseReviewWeapon(actor.weaponInstance);
                 pool.Return(actor.view);
             }
             actors.Clear();
+        }
+
+        private static void ReleaseReviewWeapon(GameObject? weapon)
+        {
+            if (weapon == null) return;
+            weapon.SetActive(false);
+            weapon.transform.SetParent(null, true);
+            if (Application.isPlaying) Destroy(weapon); else DestroyImmediate(weapon);
         }
 
         private AnimationClip FindClip(string name)
