@@ -99,3 +99,11 @@
 #city-summary, #city-inspection-note { font-size: 12px; color: rgb(197, 199, 175); }
 #city-inspection-note { margin-top: 8px; }
 #city-open-market { padding-left: 12px; padding-right: 12px; background-color: rgb(57,68,53); color: rgb(250,228,179); }
+
+.foc-report-row { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -unity-text-align: middle-left; padding-left: 10px; background-color: rgb(39,49,44); color: rgb(236,224,191); border-color: rgb(85,95,79); border-width: 1px; }
+.foc-report-selected { background-color: rgb(95,76,39); border-color: rgb(228,188,108); }
+.foc-report-row:hover { background-color: rgb(76,88,65); }
+.foc-report-row:focus { border-color: rgb(247,205,110); border-width: 2px; }
+.foc-report-observation { white-space: normal; overflow: hidden; padding: 6px; margin-bottom: 0; border-bottom-color: rgb(52,64,55); border-bottom-width: 1px; }
+#report-inbox-summary, #report-inbox-empty { font-size: 12px; color: rgb(197,199,175); }
+#report-detail-metadata { font-size: 12px; color: rgb(213,207,183); }

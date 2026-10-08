@@ -8,6 +8,7 @@ namespace FOC.Presentation.Core
     {
         public static IReadOnlyDictionary<string,string> Turkish { get; } = new Dictionary<string,string>
         {
+            ["presentation.reports.delivered"]="Teslim edilmiş rapor",
             ["presentation.city.area.innercastle"]="İç Kale", ["presentation.city.area.trade"]="Ticaret",
             ["presentation.city.area.inncaravan"]="Han ve Kervan", ["presentation.city.area.housing"]="Konut",
             ["presentation.city.area.military"]="Askerî", ["presentation.city.area.health"]="Sağlık",

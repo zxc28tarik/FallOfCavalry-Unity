@@ -264,14 +264,15 @@ namespace FOC.Presentation.Core
             return new BattleReadModel(Standard(PresentationScreenId.Battle, "presentation.screen.battle", subject, fields, null, null, resultDetails));
         }
 
-        public ReportsReadModel BuildReports(PresentationViewerContext viewer)
+        public ReportsReadModel BuildReports(PresentationViewerContext viewer, string? selectedReportId = null)
         {
             var reports = AvailableReports(viewer).OrderByDescending(x => x.ArrivedAt!.Value.Ticks).ThenBy(x => x.Id).Select(x => new ReportRowPresentation(
                 Entity(PresentationEntityKind.Report, x.Id.Value), "presentation.report-type." + Key(x.Type), "presentation.report-source." + Key(x.Source.Kind),
                 x.ObservedAt.Ticks, x.ArrivedAt?.Ticks, x.StalenessAt(_campaign.Clock.Now), "presentation.report-quality." + Key(x.Quality),
                 "presentation.report-precision." + Key(ReportPrecision(x)), "presentation.report-detail." + Key(x.DetailLevel))).ToList().AsReadOnly();
             var fields = new[] { Field("presentation.reports.delivered", reports.Count.ToString(), PresentationKnowledge.ExactSelf) };
-            return new ReportsReadModel(Standard(PresentationScreenId.Reports, "presentation.screen.reports", Entity(PresentationEntityKind.Faction, viewer.ActorId.Value), fields, null, null, null), reports);
+            var subject = selectedReportId == null ? Entity(PresentationEntityKind.Faction, viewer.ActorId.Value) : Entity(PresentationEntityKind.Report, selectedReportId);
+            return new ReportsReadModel(Standard(PresentationScreenId.Reports, "presentation.screen.reports", subject, fields, null, null, null), reports);
         }
 
         public EncounterContractReadModel BuildEncounterContracts(PresentationViewerContext viewer)

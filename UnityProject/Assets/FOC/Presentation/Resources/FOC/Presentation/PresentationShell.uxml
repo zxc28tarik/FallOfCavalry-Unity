@@ -41,6 +41,7 @@
                 <ui:VisualElement name="trade-panel" class="foc-trade-panel" />
                 <ui:VisualElement name="army-panel" class="foc-trade-panel" />
                 <ui:VisualElement name="city-inspection-panel" class="foc-trade-panel" />
+                <ui:VisualElement name="report-inbox-panel" class="foc-trade-panel" />
                 <ui:VisualElement class="foc-summary-grid">
                     <ui:VisualElement class="foc-card foc-card--primary">
                         <ui:Label text="presentation.section.current" class="foc-card-title" />

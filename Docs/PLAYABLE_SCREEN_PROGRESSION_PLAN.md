@@ -1,6 +1,6 @@
 # Fall of Cavalry oynanabilir ekranlar ilerleme planı
 
-Son durma noktası ve devam sırası: [Y0 devam notu](Y0_HANDOFF.md). Yeni harita adayı: [Y1 kapsamı](Y1_MAP_TRAVEL_SCOPE.md).
+Güncel geliştirme önceliği aşağıdaki Sol High geliştirme sırasıdır. Açık uzun kullanım kapısı: [Y0 devam notu](Y0_HANDOFF.md). Harita adayının kapsamı: [Y1 kapsamı](Y1_MAP_TRAVEL_SCOPE.md).
 
 8 Ekim 2026 önceliği: kullanıcı kılıç ve eyer sonucunu onaylayıp karakter görseli dışındaki büyük işlere devam edilmesini istedi. Y1 ayrı bir dalda geliştirme adayı olarak hazırlanır; Y0 uzun kullanım kabulü ve Y1'in birleşik kabul önkoşulu açık kalır. Bu geliştirme önceliği Implementation 15'i veya sanat kapılarını açmaz.
 
@@ -30,7 +30,7 @@ Mevcut kayıt sürümü v14'tür. İlk bağlantı paketlerinde gereksiz schema d
 - İki saatlik Windows testi 882 saniye ve 152 kayıt/yükleme döngüsünden sonra MANAGED_GROWTH_OVER_64_MIB ile FAIL oldu. Normal oyuncu kayıtları değişmedi. Gerçek tutulan nesne artışı, geçici allocation veya ölçüm davranışı ayrımı henüz kesinleşmedi.
 - Yeni oynanış paketlerinin hiçbiri bu planın hazırlanmasıyla tamamlanmış veya başlamış sayılmaz.
 
-## Paket sırası
+## Paket bağımlılıkları
 
 Y kodları yalnız bu planın takip etiketleridir; yeni Implementation numaraları değildir. Süreler, gerekli kararlar hazırken geliştirme ve doğrulama için yaklaşık aktif çalışma günüdür. Takvim veya teslim taahhüdü değildir.
 
@@ -48,6 +48,53 @@ Y kodları yalnız bu planın takip etiketleridir; yeni Implementation numaralar
 | Y9 Birleşik oyuncu kabulü | Yukarıdaki işlemlerin tek kampanyada güvenilir kullanımı | Uygulanan paketlerin kapanışı | 3–7 gün | Planlandı |
 
 Y0 için süre yalnız ilk inceleme turudur. Sorun derin bir nesne yaşam döngüsü veya engine davranışı çıkarsa yeniden tahmin edilir. Yeni özellikler, başarısız testi gizlemek için eklenmez; sınır yalnız testi geçirmek amacıyla yükseltilmez.
+
+## Sol High geliştirme sırası
+
+8 Ekim 2026 kullanıcı kararı: bağımsız Sol High işleri önce geliştirilir; bunlar tamamlandıktan sonra Astra gerektiren paketlere geçilir. Bu sıra model ayarını kendiliğinden değiştirmez. S etiketleri yalnız takip sırasıdır; yeni Implementation numaraları değildir.
+
+Teknik başlangıç dalı codex/y5a-city-inspection-ui, kod SHA a3f5e7776999d524844f3cba2786064c549f2baa. Harita/yolculuk, ticaret, ordu/ikmal ve Y5A şehir inceleme adayları korunur. Y0 uzun kullanım, fiziksel giriş, Hasan ticaret yetkisi ve birleşik kabul açık kalır. Bu öncelik değişikliği onları PASS yapmaz.
+
+İlk dalga mevcut gerçek verileri oyuncunun bilgi sınırları içinde gösterir. Yeni yetki, dünya bilgisi, fiyat, üretim/tüketim takvimi, savaş veya kaynak yaratmaz. Salt okunur ekranlarda kampanya durumu inceleme boyunca değişmez. Başlangıçta veri bulunmayan ekranlar açıklamalı boş durum gösterir; test fixture'ları oyuncu kampanyasına eklenmez.
+
+| Sıra | Önceki 50 maddelik listedeki işler | Sol High kapsamı | Bağımlılık ve sınır |
+| --- | --- | --- | --- |
+| S1 | 1–2 Rapor kutusu ve rapor ayrıntısı | Arama/filtre, kaynak, gözlem/teslim zamanı, bilgi eskiliği ve belirsizlik | Yalnız oyuncuya teslim edilmiş raporlar; gönderim veya yeni teslim zamanlaması yok |
+| S2 | 3 Elçi takibi | Bilinen görevlerin mevcut lifecycle ve teslim durumları | Görev bilgisi için erişim sınırı; yeni elçi gönderimi yok |
+| S3 | 4 Diplomatik ilişkiler | Bilinen ilişkiler, faktörler ve anlaşma ayrıntıları | Gizli veya uzaktaki ilişkiler için sınırsız dünya erişimi yok; yeni anlaşma etkisi yok |
+| S4 | 5 Karakter ayrıntıları | Bilinen kimlik, görev, konum, ilişki ve durum kayıtları | Karakter görüntüsü ve yeni Character üretimi yok; güncel gizli konum açılmaz |
+| S5 | 6 Organizasyon ayrıntıları | Üyelik, görev, rol ve yetkiyi ayrı gösterme; izinli karakter ayrıntısına bağlantı | S4 bağlantıları; yeni atama veya komuta yetkisi yok |
+| S6 | 7 Aile ve hane | Mevcut akrabalık, üyelik, hane başı, servet ve mülk referansları | Family, Household ve House ayrımı; veraset ve servet dağıtımı yok |
+| S7 | 8–9 Klik, din ve mezhep bilgileri | Mevcut üyeler, lider, nüfuz kaynakları ve bilinen bağlılıklar | Yeni siyasi etki veya din farkından otomatik bonus/ceza yok |
+| S8 | 10 Asker listesi | Gerçek Soldier kayıtları, birlik bağlantıları ve durumları | Toplam UnitGroup personeli Soldier instance sayısı gibi gösterilmez |
+| S9 | 11 Teçhizat inceleme | S8'deki askerin kalıcı loadout'u, gerçek ekipman ve at kayıtları | Salt okunur; yeni Soldier veya ücretsiz ekipman yok; model/rig/texture değişmez |
+| S10 | 12 Kervan muhasebesi | Bilinen kervanların mevcut alış/satış/gider/kayıp/net toplamları | Yeni işlem geçmişi tutulmaz; kişisel, hane ve kervan parası birleştirilmez |
+| S11 | 13 Kayıt seçme ve kurtarma arayüzü | Mevcut kayıt/yedek seçimini ve kurtarma açıklamalarını kullanılabilir hâle getirme | Mevcut recovery koordinatörü ve kayıt güvenliği korunur; otomatik silme, üzerine yazma veya yeni schema yok |
+| S12 | 14 Arayüz iyileştirmeleri | Yeni ekranlar arasında gezinme, uzun listeler, metinler, kaydırma ve hata açıklamaları | S1–S11 sonrası ortak düzenleme; ilgisiz ekranların mimarisi yeniden yazılmaz |
+| S13 | 36–37 Fiziksel giriş ve çözünürlük/DPI | Uygulanmış ekranları gerçek Windows player'da fare/klavye ve ekran ölçeğiyle doğrulama | Sentetik olaylar fiziksel kabul sayılmaz; destekli gerçek giriş yolu yoksa Not Run açıkça raporlanır |
+| S14 koşullu | 31–32 Savaş yerleştirme ve emir ekranları | Mevcut deployment/order sözleşmelerini oyuncu yüzeyine bağlama | Yalnız gerçek Battle kaydı, bilgi ve emir yetkisi mevcutsa; başlangıç kampanyasında Battle yok. Eksik önkoşul için savaş/otorite uydurulmaz; bu işler Astra sonrası sıraya devredilir |
+
+İlk uygulama paketi S1'dir; salt okunur rapor kutusu adayı codex/s1-report-inbox-ui dalında geliştirilir. Kilitli sınırlar ve final doğrulama yolu [S1 rapor kapsamındadır](S1_REPORT_INBOX_SCOPE.md). Her paket öncesinde mevcut SHA/worktree, kullanılan gerçek servisler, bilgi/işlem yetkileri ve acceptance kapsamı kilitlenir. Bilgi erişimini yeni bir tasarım kuralı gerektirmeden güvenli biçimde kurmak mümkün değilse yalnız o alt kapsam ertelenir; bağımsız sıradaki işe devam edilir. Ertelenen iş tamamlandı olarak raporlanmaz.
+
+Her pakette ilgili yeni regression testleri, tam .NET/Unity suite, mevcut ilgili pipeline'lar ve gerçek Windows akışı çalıştırılır. Push kapsamındaki kapanışta local/remote/CI SHA eşitliği kontrol edilir. Bunlar 41. maddedeki final doğrulamanın paket düzeyindeki kısmıdır; bütün kampanyanın kabulü değildir. Yeni final SHA için eski test kanıtı kullanılmaz.
+
+Sol dalgasında 38–40. maddelerden uygulanmış ekranların kayıt sürekliliği ve sınırlı UI yük ölçümleri yapılabilir. Henüz geliştirilmemiş üretim, diplomatik gönderim, karşılaşma ve savaş döngülerinin birleşik kabulü tamamlandı sayılmaz. S11'de bir kayıt güvenliği problemi veya herhangi bir pakette kararlılığı engelleyen kritik hata bulunursa gerekli kapı FAIL kalır; model sırasını korumak uğruna hata gizlenmez.
+
+## Astra aşamasına geçiş
+
+Sol dalgasının tamamlanan ve ertelenen işleri, final kod SHA'sı, test/Windows kanıtları ve açık kararları tek devam notunda toplanır. Ayrı sanat kapıları, Save v14 ve Implementation 15 sınırı korunur. Bu aşama planı mekanik sayıları veya yeni authority kararlarını kendiliğinden onaylamaz.
+
+Astra sırası:
+
+1. 35 Uzun kullanım bellek teşhisi ve Y0 kabulü. Önce gerçek neden; ardından gerekli minimum düzeltme ve normal uzun test.
+2. 15–20 Kampanya zamanı, oyuncu kervan yetkisi, tam kervan döngüsü, üretim, tüketim ve fiyat kuralları.
+3. 21–27 Teçhizatlandırma, yetkili atamalar, maaş yükümlülüğü, inşa, altyapı ve şehir ölçütleri.
+4. 28–30 Diplomatik gönderim, karşılaşma ve sözleşme akışları; onaylı yetki, zamanlama ve küçük içerik setiyle.
+5. Koşullu S14'ten devredilen 31–32 ve 33–34 Gerçek savaş politikaları, emir/yerleştirme ve kampanyaya dönüş.
+6. 38–41 Tüm uygulanmış sistemlerin birleşik kampanya, kayıt sürekliliği, performans ve final kabulü.
+7. 42–50 Tımar, veraset, siyaset, Soldier→Character, bağımsız AI, bakım, nüfus/vergi, dünya genişlemesi, ganimet/fidye/kuşatma/deniz savaşı. Bunlar ilk oynanabilir döngünün dışındaki ayrı kapsamlar olarak kalır; yalnız bu sıraya yazılmaları geliştirme başlangıcı değildir.
+
+Sol dalgasının 1–14 ekran işleri için önceki kaba tahmin 2–4 aktif çalışma haftasıdır. Fiziksel giriş/DPI düzeltmeleri ve koşullu savaş ekranları bu tahmine otomatik dahil değildir. Önkoşul, regression veya teknik hata ortaya çıktığında süre yeniden değerlendirilir; model değiştirmek teslim süresi garantisi vermez.
 
 ## Y0 Kararlılık
 
@@ -123,7 +170,7 @@ Bitiş: kesintisiz akış ile ara kayıt/yüklemeli akış tutarlıdır; açıkl
 
 ## Her paketin kapanış ölçütleri
 
-Oyuncu işlemi yapar, gerçek oyun durumu değişir, ekran doğru sonucu gösterir ve kayıt/yükleme sonrası sonuç korunur. Yalnız bir düğmenin görünmesi veya servis testinin geçmesi tamamlanma değildir.
+İşlem paketlerinde oyuncu işlemi yapar, gerçek oyun durumu değişir, ekran doğru sonucu gösterir ve kayıt/yükleme sonrası sonuç korunur. Salt okunur bilgi paketlerinde oyuncu izinli gerçek veriyi inceler; kampanya durumu değişmez ve kayıt/yükleme sonrası doğru bilgi yeniden gösterilir. Yalnız bir düğmenin görünmesi veya servis testinin geçmesi tamamlanma değildir.
 
 Her uygulama paketinde:
 
@@ -136,7 +183,7 @@ Her uygulama paketinde:
 
 ## Süre ve öncelik
 
-İlk hedef Y0–Y3'tür: kararlı kayıt akışı üzerinde harita, ticaret ve ordu işlemleri. Kabaca 3–5 haftalık aktif çalışma penceresi, regression ve hata düzeltme payıyla planlanabilir; Y0 teşhisi sonucu tahmin yenilenir.
+İlk plan Y0–Y3 için kararlı kayıt akışı üzerinde harita, ticaret ve ordu işlemlerini hedefledi. Y1–Y3 ve Y5A teknik adayları korunur. Güncel uygulama önceliği bağımsız Sol High bilgi ekranları, ardından Astra aşamasındaki karar ve entegrasyon işleridir. Y0 teşhisi ve birleşik kabul gerekliliği devam eder; yeni geliştirme sırası bu kapıları kaldırmaz.
 
 Karar gerektiren kampanya ve savaş alt kapsamları dahil geniş plan yaklaşık 3–6 aylık aktif çalışma ölçeğindedir. Tasarım bekleme, yeni kapsam veya önemli teknik sorunlar bunu uzatabilir. Şehir ve asker sanatı, ana hikâye ve yayın hazırlığı bu süreye dahil değildir. Paketler arası ilerleme otomatik zaman veya teslim taahhüdü değildir.
 

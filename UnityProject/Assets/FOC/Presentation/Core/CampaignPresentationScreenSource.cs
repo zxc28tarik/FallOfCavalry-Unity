@@ -62,7 +62,7 @@ namespace FOC.Presentation.Core
                     var id = Subject(route, PresentationEntityKind.Battle) ?? _campaign.Battles.Battles.OrderedBattles.FirstOrDefault()?.Id.Value;
                     return id == null ? _queries.BuildEmpty(route.Screen) : _queries.BuildBattle(_viewer, BattleId.Create(id)).State;
                 }
-                case PresentationScreenId.Reports: return _queries.BuildReports(_viewer).State;
+                case PresentationScreenId.Reports: return _queries.BuildReports(_viewer, Subject(route, PresentationEntityKind.Report)).State;
                 case PresentationScreenId.EncounterContract: return _queries.BuildEncounterContracts(_viewer).State;
                 case PresentationScreenId.Ledger: return _queries.BuildLedger(_viewer);
                 default: return _queries.BuildEmpty(route.Screen);

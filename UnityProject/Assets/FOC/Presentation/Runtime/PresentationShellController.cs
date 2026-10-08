@@ -37,8 +37,10 @@ namespace FOC.Presentation.Unity
         private ArmyPanel? _armyPanel;
         private readonly CityInspectionSession? _city;
         private CityInspectionPanel? _cityPanel;
+        private readonly ReportInboxSession? _reports;
+        private ReportInboxPanel? _reportsPanel;
 
-        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null, CityInspectionSession? city = null)
+        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null, CityInspectionSession? city = null, ReportInboxSession? reports = null)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
@@ -47,6 +49,7 @@ namespace FOC.Presentation.Unity
             _trade = trade;
             _army = army;
             _city = city;
+            _reports = reports;
             _keyHandler = OnKeyDown;
             _geometryHandler = OnGeometryChanged;
             LocalizeTemplate();
@@ -147,6 +150,19 @@ namespace FOC.Presentation.Unity
                     _cityPanel.Render(state.Subject?.Id);
                 }
                 else { _cityPanel?.Dispose(); _cityPanel = null; }
+            }
+            var reportsRoot = _root.Q<VisualElement>("report-inbox-panel");
+            if (reportsRoot != null)
+            {
+                var visible = state.ScreenId == PresentationScreenId.Reports && _reports != null;
+                reportsRoot.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (visible)
+                {
+                    _reportsPanel ??= new ReportInboxPanel(reportsRoot, _reports!,
+                        id => _viewModel.Open(new PresentationRoute(PresentationScreenId.Reports, new PresentationEntityRef(PresentationEntityKind.Report, id))));
+                    _reportsPanel.Render(state.Subject?.Kind == PresentationEntityKind.Report ? state.Subject.Value.Id : null);
+                }
+                else { _reportsPanel?.Dispose(); _reportsPanel = null; }
             }
             var armyRoot = _root.Q<VisualElement>("army-panel");
             if (armyRoot != null)
@@ -378,6 +394,7 @@ namespace FOC.Presentation.Unity
             _tradePanel?.Dispose(); _tradePanel = null; _trade?.Dispose();
             _armyPanel?.Dispose(); _armyPanel = null; _army?.Dispose();
             _cityPanel?.Dispose(); _cityPanel = null; _city?.Dispose();
+            _reportsPanel?.Dispose(); _reportsPanel = null; _reports?.Dispose();
             _root.UnregisterCallback(_keyHandler);
             _root.UnregisterCallback(_geometryHandler);
             foreach (var binding in _buttonHandlers) binding.Item1.clicked -= binding.Item2;
