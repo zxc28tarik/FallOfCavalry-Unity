@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Linq;
+using System.IO;
 using FOC.Application.Economy;
 using FOC.Application.Save;
 using FOC.Domain.Campaign;
@@ -31,7 +32,7 @@ namespace FOC.Tests
                 foreach (CityInspectionTab tab in Enum.GetValues(typeof(CityInspectionTab)))
                 {
                     s.SelectTab(tab);
-                    foreach (CityAreaType a in Enum.GetValues(typeof(CityAreaType))) { s.SelectArea(a); Assert.That(s.Read().Areas.Count, Is.EqualTo(9)); }
+                    foreach (CityAreaType a in Enum.GetValues(typeof(CityAreaType))) { s.SelectArea((int)a); Assert.That(s.Read().Areas.Count, Is.EqualTo(9)); }
                     foreach (var recipe in s.Read().Recipes) { s.SelectRecipe(recipe.Id); s.Read(); }
                     s.FilterStocks("tahıl", false); s.Read(); s.FilterStocks("", true); s.Read(); s.FilterStocks("", false);
                 }
@@ -67,9 +68,9 @@ namespace FOC.Tests
         {
             var c = Campaign(); var city = CityTestFactory.State(); c.Cities.Add(city); var trade = city.GetRequiredArea(CityAreaType.Trade);
             trade.SetFullness(CityAreaFullness.Low); trade.LockBuilding(CityBuildingId.Create("market"));
-            using var s = Session(c, "city-main"); s.SelectArea(CityAreaType.Trade); var r = s.Read();
+            using var s = Session(c, "city-main"); s.SelectArea((int)CityAreaType.Trade); var r = s.Read();
             Assert.That(r.Buildings, Has.Some.Contains("Kilitli")); Assert.That(r.Buildings, Has.Some.Contains("kaldırılmış"));
-            s.SelectArea(CityAreaType.FoodSupply); Assert.That(s.Read().Buildings, Has.All.Contains("Etkin değil"));
+            s.SelectArea((int)CityAreaType.FoodSupply); Assert.That(s.Read().Buildings, Has.All.Contains("Etkin değil"));
             var food = city.GetRequiredArea(CityAreaType.FoodSupply); food.SetFullness(CityAreaFullness.Low); food.ActivateBuilding(CityBuildingId.Create("mill"));
             Assert.That(s.Read().Buildings, Has.Some.EqualTo("Değirmen — Etkin"));
         }
@@ -138,8 +139,19 @@ namespace FOC.Tests
         public void InvalidSelectionAndDisposedSessionCannotExecuteAnything()
         {
             using var s = Session(Campaign()); s.SelectRecipe("missing"); Assert.That(s.Read().ProductionResult, Is.EqualTo(ProductionInspectionResult.Unavailable));
-            Assert.Throws<ArgumentOutOfRangeException>(() => s.SelectTab((CityInspectionTab)99)); Assert.Throws<ArgumentOutOfRangeException>(() => s.SelectArea((CityAreaType)99));
+            Assert.Throws<ArgumentOutOfRangeException>(() => s.SelectTab((CityInspectionTab)99)); Assert.Throws<ArgumentOutOfRangeException>(() => s.SelectArea(99));
             s.Dispose(); Assert.Throws<ObjectDisposedException>(() => s.Read()); Assert.Throws<ObjectDisposedException>(() => s.OpenCity("city-bursa"));
+        }
+        [Test]
+        public void UnityCityViewUsesPresentationOnlyAndSnapshotCarriesNoDomainTypes()
+        {
+            var directory = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
+            while (directory != null && !File.Exists(Path.Combine(directory.FullName, "FallOfCavalry.sln"))) directory = directory.Parent;
+            var source = File.ReadAllText(Path.Combine(directory!.FullName, "UnityProject/Assets/FOC/Presentation/Runtime/CityInspectionPanel.cs"));
+            Assert.That(source, Does.Not.Contain("FOC.Domain")); Assert.That(source, Does.Not.Contain("CampaignRuntimeState"));
+            foreach (var property in typeof(CityInspectionSnapshot).GetProperties())
+                Assert.That(property.PropertyType.Namespace ?? "", Does.Not.StartWith("FOC.Domain"));
+            Assert.That(CityInspectionSession.AreaCount, Is.EqualTo(Enum.GetValues(typeof(CityAreaType)).Length));
         }
         [Test]
         public void EveryCityEnumHasNonemptyTurkishPresentationText()

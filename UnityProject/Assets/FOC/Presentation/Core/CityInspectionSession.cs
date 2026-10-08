@@ -37,7 +37,8 @@ namespace FOC.Presentation.Core
         public string CityId { get; internal set; } = "";
         public string RecipeId { get; internal set; } = "";
         public CityInspectionTab Tab { get; internal set; }
-        public CityAreaType Area { get; internal set; }
+        public int AreaIndex { get; internal set; }
+        public string AreaLabel { get; internal set; } = "";
         public string Search { get; internal set; } = "";
         public bool ShortagesOnly { get; internal set; }
         public IReadOnlyList<CityInspectionChoice> Cities { get; internal set; } = Array.Empty<CityInspectionChoice>();
@@ -64,7 +65,8 @@ namespace FOC.Presentation.Core
         { _campaign = campaign ?? throw new ArgumentNullException(nameof(campaign)); _viewer = viewer ?? throw new ArgumentNullException(nameof(viewer)); }
         public void OpenCity(string? id) { Check(); if (id != null) _city = id; }
         public void SelectTab(CityInspectionTab tab) { Check(); if (!Enum.IsDefined(typeof(CityInspectionTab), tab)) throw new ArgumentOutOfRangeException(nameof(tab)); _tab = tab; }
-        public void SelectArea(CityAreaType area) { Check(); if (!Enum.IsDefined(typeof(CityAreaType), area)) throw new ArgumentOutOfRangeException(nameof(area)); _area = area; }
+        public static int AreaCount => Enum.GetValues(typeof(CityAreaType)).Length;
+        public void SelectArea(int area) { Check(); if (!Enum.IsDefined(typeof(CityAreaType), area)) throw new ArgumentOutOfRangeException(nameof(area)); _area = (CityAreaType)area; }
         public void SelectRecipe(string id) { Check(); _recipe = id ?? ""; }
         public void FilterStocks(string search, bool shortagesOnly) { Check(); _search = search ?? ""; _shortages = shortagesOnly; }
         private bool Known(PresentationEntityKind kind, string id) => _viewer.CanReadExact(new PresentationEntityRef(kind, id));
@@ -73,7 +75,7 @@ namespace FOC.Presentation.Core
             Check();
             var choices = _campaign.Cities.OrderedCities.Where(x => Known(PresentationEntityKind.City, x.Id.Value)).Select(x => new CityInspectionChoice(x.Id.Value, x.Definition.Name)).ToArray();
             if (_city.Length == 0) _city = choices.FirstOrDefault()?.Id ?? "";
-            var s = new CityInspectionSnapshot { CityId = _city, Cities = Array.AsReadOnly(choices), Area = _area, Tab = _tab, Search = _search, ShortagesOnly = _shortages };
+            var s = new CityInspectionSnapshot { CityId = _city, Cities = Array.AsReadOnly(choices), AreaIndex = (int)_area, AreaLabel = CityInspectionText.Area(_area), Tab = _tab, Search = _search, ShortagesOnly = _shortages };
             // Never silently substitute a known city for an explicitly requested unknown one.
             if (!choices.Any(x => x.Id == _city)) return s;
             var city = _campaign.Cities.GetRequired(CityId.Create(_city));

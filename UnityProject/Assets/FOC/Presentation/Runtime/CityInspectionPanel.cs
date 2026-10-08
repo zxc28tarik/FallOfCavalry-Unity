@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FOC.Domain.Cities;
 using FOC.Presentation.Core;
 using UnityEngine.UIElements;
 
@@ -34,8 +33,8 @@ namespace FOC.Presentation.Unity
             var names = new[] { "Alanlar", "Üretim incelemesi", "Stok ve talep", "Altyapı ve görevler" };
             for (var i = 0; i < names.Length; i++) { var tab = (CityInspectionTab)i; var b = Button("city-tab-" + i, names[i], () => { _session.SelectTab(tab); Render(); }); _tabs.Add(b); tabs.Add(b); }
             root.Add(tabs); root.Add(_content); _content.Add(_areaGrid); _areaGrid.AddToClassList("foc-city-areas");
-            foreach (CityAreaType type in Enum.GetValues(typeof(CityAreaType)))
-            { var area = type; var b = Button("city-area-" + (int)type, CityInspectionText.Area(type), () => { _session.SelectArea(area); Render(); }); b.AddToClassList("foc-city-area"); _areas.Add(b); _areaGrid.Add(b); }
+            for (var i = 0; i < CityInspectionSession.AreaCount; i++)
+            { var area = i; var b = Button("city-area-" + i, "", () => { _session.SelectArea(area); Render(); }); b.AddToClassList("foc-city-area"); _areas.Add(b); _areaGrid.Add(b); }
             _content.Add(_recipe); _content.Add(_search); _content.Add(_shortages); _content.Add(_heading); _heading.AddToClassList("foc-city-heading");
             _content.Add(_detail); _content.Add(_reason); _content.Add(_rows); _content.Add(_note);
             _rows.makeItem = () => { var l = new Label(); l.AddToClassList("foc-city-row"); return l; };
@@ -57,7 +56,7 @@ namespace FOC.Presentation.Unity
             _recipe.style.display = s.Tab == CityInspectionTab.Production ? DisplayStyle.Flex : DisplayStyle.None;
             _search.style.display = _shortages.style.display = s.Tab == CityInspectionTab.Stocks ? DisplayStyle.Flex : DisplayStyle.None;
             _detail.style.display = _reason.style.display = s.Tab == CityInspectionTab.Production ? DisplayStyle.Flex : DisplayStyle.None;
-            for (var i = 0; i < _areas.Count; i++) { _areas[i].text = s.Areas[i]; _areas[i].EnableInClassList("foc-city-selected", (int)s.Area == i); }
+            for (var i = 0; i < _areas.Count; i++) { _areas[i].text = s.Areas[i]; _areas[i].EnableInClassList("foc-city-selected", s.AreaIndex == i); }
             Choices(_recipe, s.Recipes, s.RecipeId); _search.SetValueWithoutNotify(s.Search); _shortages.SetValueWithoutNotify(s.ShortagesOnly);
             _detail.text = s.ProductionDetail; _reason.text = CityInspectionText.ProductionReason(s.ProductionResult);
             _reason.EnableInClassList("foc-status--success", s.ProductionResult == ProductionInspectionResult.MechanicallyReady);
@@ -65,7 +64,7 @@ namespace FOC.Presentation.Unity
             switch (s.Tab)
             {
                 case CityInspectionTab.Areas:
-                    _heading.text = CityInspectionText.Area(s.Area) + " · Bina havuzu"; rows.AddRange(s.Buildings);
+                    _heading.text = s.AreaLabel + " · Bina havuzu"; rows.AddRange(s.Buildings);
                     _note.text = "İç Kale sabit tam doludur. Alan doluluğu, etkin bina ve bina kilidi ayrı kayıtlardır. İnşa emri verilmez."; break;
                 case CityInspectionTab.Production:
                     _heading.text = "TEK REÇETE UYGULAMASI · SALT OKUNUR";
