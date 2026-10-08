@@ -43,8 +43,10 @@ namespace FOC.Presentation.Unity
         private EnvoyTrackingPanel? _envoysPanel;
         private readonly DiplomaticRecordsSession? _diplomatic;
         private DiplomaticRecordsPanel? _diplomaticPanel;
+        private readonly CharacterDirectorySession? _characters;
+        private CharacterDirectoryPanel? _characterPanel;
 
-        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null, CityInspectionSession? city = null, ReportInboxSession? reports = null, EnvoyTrackingSession? envoys = null, DiplomaticRecordsSession? diplomatic = null)
+        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null, CityInspectionSession? city = null, ReportInboxSession? reports = null, EnvoyTrackingSession? envoys = null, DiplomaticRecordsSession? diplomatic = null, CharacterDirectorySession? characters = null)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
@@ -56,6 +58,7 @@ namespace FOC.Presentation.Unity
             _reports = reports;
             _envoys = envoys;
             _diplomatic = diplomatic;
+            _characters = characters;
             _keyHandler = OnKeyDown;
             _geometryHandler = OnGeometryChanged;
             LocalizeTemplate();
@@ -131,6 +134,19 @@ namespace FOC.Presentation.Unity
             SetText("alert-count", state.Alerts.Count.ToString());
             RenderMap(state);
             var tradeRoot = _root.Q<VisualElement>("trade-panel");
+            var characterRoot = _root.Q<VisualElement>("character-directory-panel");
+            if (characterRoot != null)
+            {
+                var visible = state.ScreenId == PresentationScreenId.Character && _characters != null;
+                characterRoot.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (visible)
+                {
+                    _characterPanel ??= new CharacterDirectoryPanel(characterRoot, _characters!,
+                        id => _viewModel.Open(new PresentationRoute(PresentationScreenId.Character, new PresentationEntityRef(PresentationEntityKind.Character, id))));
+                    _characterPanel.Render(state.Subject?.Kind == PresentationEntityKind.Character ? state.Subject.Value.Id : null);
+                }
+                else { _characterPanel?.Dispose(); _characterPanel = null; }
+            }
             if (tradeRoot != null)
             {
                 var visible = state.ScreenId == PresentationScreenId.Trade && state.Current.Availability == PresentationAvailability.Available && _trade != null;
@@ -429,6 +445,7 @@ namespace FOC.Presentation.Unity
             _reportsPanel?.Dispose(); _reportsPanel = null; _reports?.Dispose();
             _envoysPanel?.Dispose(); _envoysPanel = null; _envoys?.Dispose();
             _diplomaticPanel?.Dispose(); _diplomaticPanel = null; _diplomatic?.Dispose();
+            _characterPanel?.Dispose(); _characterPanel = null; _characters?.Dispose();
             _root.UnregisterCallback(_keyHandler);
             _root.UnregisterCallback(_geometryHandler);
             foreach (var binding in _buttonHandlers) binding.Item1.clicked -= binding.Item2;

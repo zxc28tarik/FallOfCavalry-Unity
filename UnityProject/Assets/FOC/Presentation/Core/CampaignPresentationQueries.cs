@@ -120,14 +120,14 @@ namespace FOC.Presentation.Core
             {
                 Field("presentation.character.name", character.Definition.DisplayName, PresentationKnowledge.ExactSelf),
                 Field("presentation.character.importance", character.Importance.HasValue ? "presentation.importance." + Key(character.Importance.Value) : "presentation.value.not-applicable", PresentationKnowledge.ExactSelf),
-                Field("presentation.character.location", "presentation.location." + Key(character.Location.Kind), PresentationKnowledge.ExactSelf),
+                Field("presentation.character.location", CharacterDirectoryText.Location(character), PresentationKnowledge.ExactSelf),
                 Field("presentation.character.loyalty", character.CurrentLoyalty.Value.ToString(), PresentationKnowledge.ExactSelf),
                 Field("presentation.character.satisfaction", character.Satisfaction.Value.ToString(), PresentationKnowledge.ExactSelf),
                 Field("presentation.character.reputation", character.BaseReputation.Value.ToString(), PresentationKnowledge.ExactSelf),
                 Field("presentation.character.standing", character.CurrentStanding.Value.ToString(), PresentationKnowledge.ExactSelf),
                 Field("presentation.character.life", "presentation.life." + Key(character.LifeStatus), PresentationKnowledge.ExactSelf),
-                Field("presentation.character.injury", character.Injury == null ? "presentation.state.none" : "presentation.injury." + Key(character.Injury.Severity), PresentationKnowledge.ExactSelf),
-                Field("presentation.character.captivity", character.Captivity == null ? "presentation.state.none" : "presentation.state.captive", PresentationKnowledge.ExactSelf)
+                Field("presentation.character.injury", CharacterDirectoryText.Injury(character), PresentationKnowledge.ExactSelf),
+                Field("presentation.character.captivity", CharacterDirectoryText.Captivity(character), PresentationKnowledge.ExactSelf)
             };
             var memberships = _campaign.Organizations.OrderedOrganizations.SelectMany(o => o.Memberships.Where(m => m.CharacterId.Equals(characterId) && m.IsActive).Select(m => Field("presentation.organization.membership", o.Name + " · presentation.branch." + Key(m.Branch), PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Organization, o.Id.Value))));
             var assignments = _campaign.Organizations.OrderedOrganizations.SelectMany(o => o.OrderedAssignments.Where(a => a.CharacterId.Equals(characterId) && a.IsActive).Select(a => Field("presentation.organization.assignment", a.RoleCode + " · presentation.authority." + Key(a.Authority), PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Organization, o.Id.Value))));
@@ -137,8 +137,9 @@ namespace FOC.Presentation.Core
             var relationFields = _campaign.Characters.Relations.OrderedRelations.Where(x => x.Key.First.Equals(characterId) || x.Key.Second.Equals(characterId)).Select(x =>
             {
                 var other = x.Key.First.Equals(characterId) ? x.Key.Second : x.Key.First;
-                return Field("presentation.character.relation", x.Value.ToString(), PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Character, other.Value));
-            });
+                return new { Other = other, Value = x.Value };
+            }).Where(x => viewer.CanReadExact(Entity(PresentationEntityKind.Character, x.Other.Value)))
+                .Select(x => Field("presentation.character.relation", x.Value.ToString(), PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Character, x.Other.Value)));
             var contracts = _campaign.EncounterContracts.Contracts.OrderedContracts.Where(x => x.AssigneeId.HasValue && x.AssigneeId.Value.Equals(characterId)).Select(x => Field("presentation.contract-category." + Key(x.Category), "presentation.contract-lifecycle." + Key(x.Lifecycle), PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Contract, x.Id.Value)));
             var details = new[]
             {
