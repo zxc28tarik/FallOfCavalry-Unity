@@ -56,3 +56,36 @@
     color: rgb(248, 231, 193);
     background-color: rgba(29, 24, 19, 0.92);
 }
+
+.foc-trade-panel {
+    display: none;
+    background-color: rgb(31, 37, 35);
+    border-color: rgb(153, 127, 78);
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+.foc-trade-panel Label { white-space: normal; margin-bottom: 6px; }
+.foc-trade-selectors { flex-direction: row; flex-wrap: wrap; }
+.foc-trade-selectors > .unity-base-field { flex-grow: 1; min-width: 190px; margin-right: 10px; }
+.foc-trade-data { padding-top: 14px; padding-bottom: 8px; }
+.foc-trade-buttons { flex-direction: row; flex-wrap: wrap; margin-top: 8px; margin-bottom: 8px; }
+.foc-trade-buttons Button { min-width: 140px; min-height: 34px; margin-right: 10px; }
+#trade-price { color: rgb(239, 204, 133); font-size: 18px; }
+#trade-reasons { color: rgb(211, 196, 163); }
+#trade-confirmation { color: rgb(243, 218, 156); }
+#trade-feedback { color: rgb(171, 218, 185); }
+.foc-trade-panel .unity-base-field__label { min-width: 68px; width: 68px; }
+.foc-trade-panel .unity-base-field__input {
+    background-color: rgb(20, 27, 24);
+    color: rgb(243, 231, 202);
+    border-color: rgb(100, 112, 94);
+    border-width: 1px;
+    min-height: 28px;
+}
+.foc-trade-panel .unity-base-popup-field__text { color: rgb(243, 231, 202); }
+.foc-trade-buttons Button { background-color: rgb(57, 68, 53); color: rgb(250, 228, 179); border-color: rgb(171, 143, 84); border-width: 1px; }
+.foc-trade-buttons Button:disabled { background-color: rgb(42, 45, 40); color: rgb(144, 148, 136); border-color: rgb(72, 77, 68); }
+.foc-trade-buttons Button:focus { border-color: rgb(247, 205, 110); border-width: 2px; }
+.foc-trade-buttons Button:hover:enabled { background-color: rgb(76, 88, 65); }

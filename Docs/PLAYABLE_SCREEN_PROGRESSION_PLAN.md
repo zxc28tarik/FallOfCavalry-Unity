@@ -144,6 +144,8 @@ Hane, tımar, siyasi tepkiler, Soldier→Character ilerlemesi ve büyük tarihse
 
 ## Dayanak belgeler
 
+Y2 geliştirme adayı [pazar ekranı kapsamına](Y2_PLAYABLE_TRADE_SCOPE.md) kaydedildi. Başlangıç kervanı NPC yöneticisine aittir; Hasan'ın ticaret yetkisi uydurulmaz. Y0, fiziksel giriş ve tam Y2 oyuncu döngüsü kabulü açık kalır. Bu çalışma Y1 adayının üzerine eklenir; art/Implementation 15 ilerlemesi değildir.
+
 - [Mevcut Windows sürümü ve doğrulama sınırları](DEVELOPMENT_PLAYABLE_BUILD.md)
 - [Kampanya entegrasyonu ve test kapsamı](FULL_CAMPAIGN_INTEGRATION.md)
 - [Tarihsel başlangıç kesitinin kapsamı](IMPLEMENTATION_14B_SCOPE.md)

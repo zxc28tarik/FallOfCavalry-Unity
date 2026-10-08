@@ -185,7 +185,7 @@ namespace FOC.Presentation.Core
             return new TradeReadModel(Standard(PresentationScreenId.Trade, "presentation.screen.trade", subject, fields, factors.Length == 0 ? null : factors, null, new[]
             {
                 new PresentationSection("presentation.trade.demand", PresentationAvailability.Available, market.Demand.OrderedSources.Select(x => Field("presentation.good." + x.GoodId.Value, _format.Integer(x.Quantity.Value), PresentationKnowledge.ExactSelf))),
-                new PresentationSection("presentation.trade.caravans", PresentationAvailability.Available, _campaign.Economy.Caravans.OrderedCaravans.Where(x => x.OriginCityId.Equals(cityId) || x.DestinationCityId.Equals(cityId)).Select(x => Field("presentation.caravan." + x.Id.Value, x.LocationStage + " · " + x.Cargo.UsedWeight(_campaign.Economy.Goods) + "/" + x.WeightCapacity, PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Caravan, x.Id.Value))))
+                new PresentationSection("presentation.trade.caravans", PresentationAvailability.Available, _campaign.Economy.Caravans.OrderedCaravans.Where(x => (x.OriginCityId.Equals(cityId) || x.DestinationCityId.Equals(cityId)) && viewer.CanReadExact(Entity(PresentationEntityKind.Caravan, x.Id.Value))).Select(x => Field("presentation.caravan." + x.Id.Value, x.LocationStage + " · " + x.Cargo.UsedWeight(_campaign.Economy.Goods) + "/" + x.WeightCapacity, PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Caravan, x.Id.Value))))
             }));
         }
 

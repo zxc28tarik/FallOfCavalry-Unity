@@ -31,13 +31,16 @@ namespace FOC.Presentation.Unity
         private readonly List<Label> _detailUnavailable = new List<Label>();
         private bool _disposed;
         private WorldMapTravelPanel? _travelPanel;
+        private readonly TradePanelSession? _trade;
+        private TradePanel? _tradePanel;
 
-        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null)
+        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
             _dispatcher = dispatcher;
+            _trade = trade;
             _keyHandler = OnKeyDown;
             _geometryHandler = OnGeometryChanged;
             LocalizeTemplate();
@@ -112,6 +115,19 @@ namespace FOC.Presentation.Unity
             RenderDetails(_root.Q<VisualElement>("details-content"), state.Details);
             SetText("alert-count", state.Alerts.Count.ToString());
             RenderMap(state);
+            var tradeRoot = _root.Q<VisualElement>("trade-panel");
+            if (tradeRoot != null)
+            {
+                var visible = state.ScreenId == PresentationScreenId.Trade && state.Current.Availability == PresentationAvailability.Available && _trade != null;
+                tradeRoot.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (visible)
+                {
+                    _tradePanel ??= new TradePanel(tradeRoot, _trade!, _localizer,
+                        city => _viewModel.Open(new PresentationRoute(PresentationScreenId.Trade, new PresentationEntityRef(PresentationEntityKind.City, city))), ShowActionResult);
+                    _tradePanel.Render(state.Subject?.Id);
+                }
+                else { _tradePanel?.Dispose(); _tradePanel = null; }
+            }
         }
 
         private void RenderSection(VisualElement? container, PresentationSection section)
@@ -326,6 +342,7 @@ namespace FOC.Presentation.Unity
             if (_disposed) return;
             _travelPanel?.Dispose(); _travelPanel = null;
             _viewModel.Changed -= Render;
+            _tradePanel?.Dispose(); _tradePanel = null; _trade?.Dispose();
             _root.UnregisterCallback(_keyHandler);
             _root.UnregisterCallback(_geometryHandler);
             foreach (var binding in _buttonHandlers) binding.Item1.clicked -= binding.Item2;
