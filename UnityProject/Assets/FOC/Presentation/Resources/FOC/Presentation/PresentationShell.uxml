@@ -42,6 +42,7 @@
                 <ui:VisualElement name="army-panel" class="foc-trade-panel" />
                 <ui:VisualElement name="city-inspection-panel" class="foc-trade-panel" />
                 <ui:VisualElement name="report-inbox-panel" class="foc-trade-panel" />
+                <ui:VisualElement name="diplomatic-records-panel" class="foc-trade-panel" />
                 <ui:VisualElement name="envoy-tracking-panel" class="foc-trade-panel" />
                 <ui:VisualElement class="foc-summary-grid">
                     <ui:VisualElement class="foc-card foc-card--primary">

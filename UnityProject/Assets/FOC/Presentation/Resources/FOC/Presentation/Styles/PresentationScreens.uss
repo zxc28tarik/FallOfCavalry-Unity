@@ -115,3 +115,11 @@
 .foc-envoy-observation { white-space: normal; overflow: hidden; padding: 6px; margin-bottom: 0; border-bottom-color: rgb(52,64,55); border-bottom-width: 1px; }
 #envoy-inbox-summary, #envoy-inbox-empty { font-size: 12px; color: rgb(197,199,175); }
 #envoy-detail-metadata { font-size: 12px; color: rgb(213,207,183); }
+
+.foc-diplomatic-row { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -unity-text-align: middle-left; padding-left: 10px; background-color: rgb(39,49,44); color: rgb(236,224,191); border-color: rgb(85,95,79); border-width: 1px; }
+.foc-diplomatic-selected { background-color: rgb(95,76,39); border-color: rgb(228,188,108); }
+.foc-diplomatic-row:hover { background-color: rgb(76,88,65); }
+.foc-diplomatic-row:focus { border-color: rgb(247,205,110); border-width: 2px; }
+.foc-diplomatic-entry { white-space: normal; overflow: hidden; padding: 6px; margin-bottom: 0; border-bottom-color: rgb(52,64,55); border-bottom-width: 1px; }
+#diplomatic-summary, #diplomatic-empty { font-size: 12px; color: rgb(197,199,175); }
+#diplomatic-detail-metadata { font-size: 12px; color: rgb(213,207,183); }

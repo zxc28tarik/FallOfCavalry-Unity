@@ -216,10 +216,11 @@ namespace FOC.Presentation.Core
             return new ArmyReadModel(Standard(PresentationScreenId.Army, "presentation.screen.army", subject, fields, null, risks, details));
         }
 
-        public DiplomacyReadModel BuildDiplomacy(PresentationViewerContext viewer, string? missionId = null)
+        public DiplomacyReadModel BuildDiplomacy(PresentationViewerContext viewer, string? missionId = null, PresentationEntityRef? record = null)
         {
             var actions = _campaign.Diplomacy.Actions.OrderedActions.Where(x => x.SourceActorId.Equals(viewer.ActorId));
             var missions = _campaign.Diplomacy.Missions.OrderedMissions.Where(x => x.SourceActorId.Equals(viewer.ActorId));
+            var relations = _campaign.Diplomacy.Relations.OrderedRelations.Where(x => (x.Pair.First.Equals(viewer.ActorId) || x.Pair.Second.Equals(viewer.ActorId)) && x.UpdatedAt.Ticks <= _campaign.Clock.Now.Ticks);
             var fields = new[]
             {
                 Field("presentation.diplomacy.actor", viewer.ActorId.Value, PresentationKnowledge.ExactSelf),
@@ -228,8 +229,8 @@ namespace FOC.Presentation.Core
             };
             var details = new[]
             {
-                new PresentationSection("presentation.diplomacy.relations", PresentationAvailability.Available, _campaign.Diplomacy.Relations.OrderedRelations.Where(x => x.Pair.First.Equals(viewer.ActorId) || x.Pair.Second.Equals(viewer.ActorId)).Select(x => Field("presentation.diplomacy.relation", "presentation.disposition." + Key(x.Disposition), PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Faction, x.Pair.First.Equals(viewer.ActorId) ? x.Pair.Second.Value : x.Pair.First.Value)))),
-                new PresentationSection("presentation.diplomacy.factors", PresentationAvailability.Available, _campaign.Diplomacy.Relations.OrderedRelations.Where(x => x.Pair.First.Equals(viewer.ActorId) || x.Pair.Second.Equals(viewer.ActorId)).SelectMany(x => x.OrderedFactors).Select(x => Field("presentation.diplomatic-factor." + Key(x.Source), "presentation.factor-direction." + Key(x.Direction), PresentationKnowledge.ExactSelf))),
+                new PresentationSection("presentation.diplomacy.relations", PresentationAvailability.Available, relations.Select(x => Field("presentation.diplomacy.relation", "presentation.disposition." + Key(x.Disposition), PresentationKnowledge.ExactSelf, Entity(PresentationEntityKind.Faction, x.Pair.First.Equals(viewer.ActorId) ? x.Pair.Second.Value : x.Pair.First.Value)))),
+                new PresentationSection("presentation.diplomacy.factors", PresentationAvailability.Available, relations.SelectMany(x => x.OrderedFactors).Where(x => x.OccurredAt.Ticks <= _campaign.Clock.Now.Ticks).Select(x => Field("presentation.diplomatic-factor." + Key(x.Source), "presentation.factor-direction." + Key(x.Direction), PresentationKnowledge.ExactSelf))),
                 new PresentationSection("presentation.diplomacy.actions", PresentationAvailability.Available, actions.Select(x => Field("presentation.diplomatic-action." + Key(x.Kind),
                     viewer.CanReadExact(Entity(PresentationEntityKind.EnvoyMission, x.MissionId.Value)) ? "presentation.action-status." + Key(x.Status)
                     : missions.Any(m => m.Id.Equals(x.MissionId) && m.DepartedAt.HasValue && m.DepartedAt.Value.Ticks <= _campaign.Clock.Now.Ticks) ? "Sevk edildi; uzak sonuç bilinmiyor" : "Yerel emir kaydı", PresentationKnowledge.ExactSelf))),
@@ -238,7 +239,7 @@ namespace FOC.Presentation.Core
             var availableActions = actions.Where(x => x.Status == DiplomaticActionStatus.Ordered).Select(x => new PresentationActionDescriptor(
                 "diplomacy.dispatch:" + x.Id.Value, "presentation.action.dispatch-envoy", false, "S2 salt okunur; elçi gönderim bağlantısı henüz etkin değil.",
                 Entity(PresentationEntityKind.Faction, x.TargetActorId.Value), PresentationConfirmationPolicy.None, "diplomacy-command-adapter"));
-            return new DiplomacyReadModel(Standard(PresentationScreenId.Diplomacy, "presentation.screen.diplomacy", missionId == null ? Entity(PresentationEntityKind.Faction, viewer.ActorId.Value) : Entity(PresentationEntityKind.EnvoyMission, missionId), fields, null, null, details, availableActions));
+            return new DiplomacyReadModel(Standard(PresentationScreenId.Diplomacy, "presentation.screen.diplomacy", record ?? (missionId == null ? Entity(PresentationEntityKind.Faction, viewer.ActorId.Value) : Entity(PresentationEntityKind.EnvoyMission, missionId)), fields, null, null, details, availableActions));
         }
 
         public BattleReadModel BuildBattle(PresentationViewerContext viewer, BattleId battleId)

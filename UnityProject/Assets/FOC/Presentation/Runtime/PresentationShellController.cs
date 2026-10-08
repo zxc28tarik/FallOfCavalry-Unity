@@ -41,8 +41,10 @@ namespace FOC.Presentation.Unity
         private ReportInboxPanel? _reportsPanel;
         private readonly EnvoyTrackingSession? _envoys;
         private EnvoyTrackingPanel? _envoysPanel;
+        private readonly DiplomaticRecordsSession? _diplomatic;
+        private DiplomaticRecordsPanel? _diplomaticPanel;
 
-        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null, CityInspectionSession? city = null, ReportInboxSession? reports = null, EnvoyTrackingSession? envoys = null)
+        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null, CityInspectionSession? city = null, ReportInboxSession? reports = null, EnvoyTrackingSession? envoys = null, DiplomaticRecordsSession? diplomatic = null)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
@@ -53,6 +55,7 @@ namespace FOC.Presentation.Unity
             _city = city;
             _reports = reports;
             _envoys = envoys;
+            _diplomatic = diplomatic;
             _keyHandler = OnKeyDown;
             _geometryHandler = OnGeometryChanged;
             LocalizeTemplate();
@@ -168,6 +171,19 @@ namespace FOC.Presentation.Unity
                 else { _reportsPanel?.Dispose(); _reportsPanel = null; }
             }
             var armyRoot = _root.Q<VisualElement>("army-panel");
+            var diplomaticRoot = _root.Q<VisualElement>("diplomatic-records-panel");
+            if (diplomaticRoot != null)
+            {
+                var visible = state.ScreenId == PresentationScreenId.Diplomacy && _diplomatic != null;
+                diplomaticRoot.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (visible)
+                {
+                    _diplomaticPanel ??= new DiplomaticRecordsPanel(diplomaticRoot, _diplomatic!,
+                        subject => _viewModel.Open(new PresentationRoute(PresentationScreenId.Diplomacy, subject)));
+                    _diplomaticPanel.Render(state.Subject?.Kind == PresentationEntityKind.DiplomaticRelation || state.Subject?.Kind == PresentationEntityKind.DiplomaticAgreement ? state.Subject : null);
+                }
+                else { _diplomaticPanel?.Dispose(); _diplomaticPanel = null; }
+            }
             var envoysRoot = _root.Q<VisualElement>("envoy-tracking-panel");
             if (envoysRoot != null)
             {
@@ -412,6 +428,7 @@ namespace FOC.Presentation.Unity
             _cityPanel?.Dispose(); _cityPanel = null; _city?.Dispose();
             _reportsPanel?.Dispose(); _reportsPanel = null; _reports?.Dispose();
             _envoysPanel?.Dispose(); _envoysPanel = null; _envoys?.Dispose();
+            _diplomaticPanel?.Dispose(); _diplomaticPanel = null; _diplomatic?.Dispose();
             _root.UnregisterCallback(_keyHandler);
             _root.UnregisterCallback(_geometryHandler);
             foreach (var binding in _buttonHandlers) binding.Item1.clicked -= binding.Item2;

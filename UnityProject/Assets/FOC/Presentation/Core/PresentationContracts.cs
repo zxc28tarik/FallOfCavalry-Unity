@@ -14,7 +14,8 @@ namespace FOC.Presentation.Core
     public enum PresentationEntityKind
     {
         None, City, Character, Organization, House, Clique, Caravan, Army,
-        UnitGroup, Soldier, Faction, Battle, Report, Encounter, Contract, WorldLocation, EnvoyMission
+        UnitGroup, Soldier, Faction, Battle, Report, Encounter, Contract, WorldLocation, EnvoyMission,
+        DiplomaticRelation, DiplomaticAgreement
     }
 
     public readonly struct PresentationEntityRef : IEquatable<PresentationEntityRef>, IComparable<PresentationEntityRef>
