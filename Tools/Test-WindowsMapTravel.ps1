@@ -51,7 +51,13 @@ try{
         $source=Join-Path $saveRoot $file
         if((Get-Item -LiteralPath $source).Length -le 0){throw "Missing screenshot $file"}
         Copy-Item -LiteralPath $source -Destination (Join-Path $output $file)
+        $pixels=[IO.File]::ReadAllBytes($source)
+        if($pixels.Length -lt 24 -or [BitConverter]::ToString($pixels,0,8) -ne '89-50-4E-47-0D-0A-1A-0A'){throw "Invalid PNG $file"}
+        $actualWidth=([uint32]$pixels[16]*16777216)+([uint32]$pixels[17]*65536)+([uint32]$pixels[18]*256)+$pixels[19]
+        $actualHeight=([uint32]$pixels[20]*16777216)+([uint32]$pixels[21]*65536)+([uint32]$pixels[22]*256)+$pixels[23]
+        if($actualWidth -ne $Width -or $actualHeight -ne $Height){throw "Render size mismatch in $file requested=${Width}x${Height} actual=${actualWidth}x${actualHeight}"}
     }
+    if($report.renderWidth -ne $Width -or $report.renderHeight -ne $Height){throw 'Actual panel target dimensions differ from requested test dimensions'}
     if($exitCode -ne 0 -or $report.status -ne 'PASS' -or $report.graphicsDevice -eq 'Null' -or $report.arrivals -ne 3 -or $report.saveRoundtrips -ne 3 -or $report.screenshots -ne 6 -or $report.saveVersion -ne 14){throw "Map travel gate failed: exit=$exitCode status=$($report.status) error=$($report.error)"}
     if(-not (Get-Content -LiteralPath $log -Raw).Contains('FOC_MAP_TRAVEL_PASS root='+$saveRoot)){throw 'Successful player marker missing'}
 }catch{$failure=$_.Exception.Message}

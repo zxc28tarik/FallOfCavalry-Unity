@@ -48,7 +48,12 @@ namespace FOC.Bootstrap.Unity
             Require(Document.panel != null, "UI_NOT_ATTACHED");
             // Batch players do not expose a readable system framebuffer. Render the actual shipped
             // UI Toolkit panel into its own D3D11 target; no alternate UI or mockup is constructed.
-            _captureTarget = new RenderTexture(Screen.width, Screen.height, 0, RenderTextureFormat.ARGB32);
+            // A window can be clamped to the desktop resolution. The actual UI panel target
+            // must use the requested test size, and evidence records both sizes explicitly.
+            _report.screenWidth = Screen.width; _report.screenHeight = Screen.height;
+            _report.renderWidth = CaptureDimension("-screen-width", Screen.width);
+            _report.renderHeight = CaptureDimension("-screen-height", Screen.height);
+            _captureTarget = new RenderTexture(_report.renderWidth, _report.renderHeight, 0, RenderTextureFormat.ARGB32);
             _captureTarget.Create();
             GetComponent<UIDocument>().panelSettings.targetTexture = _captureTarget;
             yield return null; yield return new WaitForEndOfFrame();
@@ -127,18 +132,28 @@ namespace FOC.Bootstrap.Unity
         private string Fingerprint() => SavePayloadFingerprint.Compute(new CampaignSaveTextSerializer(), CampaignSaveMapper.ToSaveData(_bootstrap.CurrentCampaign!));
         private void Capture(string file)
         {
-            var texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            Require(_captureTarget != null, "RENDER_TARGET_MISSING");
+            var texture = new Texture2D(_captureTarget!.width, _captureTarget.height, TextureFormat.RGB24, false);
             var previous = RenderTexture.active;
             try
             {
                 RenderTexture.active = _captureTarget;
-                texture.ReadPixels(new Rect(0,0,Screen.width,Screen.height),0,0); texture.Apply();
+                texture.ReadPixels(new Rect(0,0,texture.width,texture.height),0,0); texture.Apply();
                 var pixels = texture.GetPixels32();
                 var min = pixels.Min(x => (int)x.r + x.g + x.b); var max = pixels.Max(x => (int)x.r + x.g + x.b);
                 Require(max - min > 30, "BLANK_RUNTIME_PANEL_CAPTURE");
                 File.WriteAllBytes(Path.Combine(_root,file), texture.EncodeToPNG()); _report.screenshots++;
             }
             finally { RenderTexture.active = previous; Destroy(texture); }
+        }
+        private static int CaptureDimension(string name, int fallback)
+        {
+            var args=Environment.GetCommandLineArgs();
+            var index=Array.FindIndex(args,x=>string.Equals(x,name,StringComparison.OrdinalIgnoreCase));
+            if(index<0)return fallback;
+            if(index+1>=args.Length||!int.TryParse(args[index+1],out var size)||size<640||size>4096)
+                throw new InvalidOperationException("INVALID_CAPTURE_SIZE_"+name);
+            return size;
         }
         private void OnLog(string message, string trace, LogType type)
         { if (type == LogType.Error || type == LogType.Exception || type == LogType.Assert) _unexpectedError ??= message; }
@@ -162,6 +177,7 @@ namespace FOC.Bootstrap.Unity
             public string input = "Synthetic UI Toolkit change and NavigationSubmit events on attached controls; not physical OS input";
             public string rendering = "Actual Windows D3D11 runtime UI Toolkit panel rendered to PanelSettings.targetTexture, not a system desktop capture";
             public int selections, activations, hourSteps, arrivals, saveRoundtrips, screenshots, saveVersion;
+            public int screenWidth, screenHeight, renderWidth, renderHeight;
         }
     }
 }

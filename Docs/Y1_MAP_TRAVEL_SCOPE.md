@@ -40,6 +40,8 @@ Windows harita testi gerçek UI Toolkit kontrollerinden İstanbul Edirne Çorlu 
 
 Fiziksel giriş denemesinde Windows güvenlik duvarı penceresi görüldü; izin değiştirilmedi. Bu kapı ayrı kalır.
 
+2560×1440 isteğinin fiziksel Windows penceresinde 1920×1080'e düşebildiği PNG başlığından doğrulandı. İlk bu boyuttaki akış sonucu yalnız 1920×1080 kanıtı sayılır. Test düzeltmesi gerçek UI panel render hedefini istenen boyutta kurar; pencere boyutu ve render boyutu ayrı raporlanır, altı PNG'nin gerçek başlık boyutları kontrol edilir. Böylece 2560 render testi fiziksel 2560 masaüstü testi diye sunulmaz.
+
 ## Harita sunumu
 
 Mevcut Marmara arka planının provenance kaydı onu dekoratif olarak tanımlar; resim gerçek MapPoint koordinatlarına kayıtlı değildir. Geniş alanda crop edilince kara yolları denizin üzerinde görünüyordu. Konumları resme uydurmak yerine yolculuk paneli açıkça etiketlenmiş şematik görünüm kullanır. Eski resim silinmez veya değiştirilmez. Konum noktaları ve yol grafiği korunur; yalnız çakışan etiketler bağlantı çizgileriyle kaydırılır. Coğrafi olarak hizalı kıyı/zemin katmanı ve zoom/pan bu pakette yoktur.
