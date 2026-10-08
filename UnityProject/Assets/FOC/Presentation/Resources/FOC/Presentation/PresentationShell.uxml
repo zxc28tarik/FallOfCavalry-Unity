@@ -39,6 +39,7 @@
                 <ui:VisualElement name="world-map-travel" class="foc-travel-toolbar" />
                 <ui:VisualElement name="world-map-panel" class="foc-world-map" />
                 <ui:VisualElement name="trade-panel" class="foc-trade-panel" />
+                <ui:VisualElement name="army-panel" class="foc-trade-panel" />
                 <ui:VisualElement class="foc-summary-grid">
                     <ui:VisualElement class="foc-card foc-card--primary">
                         <ui:Label text="presentation.section.current" class="foc-card-title" />

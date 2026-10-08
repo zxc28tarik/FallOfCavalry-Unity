@@ -38,8 +38,8 @@ Y kodları yalnız bu planın takip etiketleridir; yeni Implementation numaralar
 | --- | --- | --- | --- | --- |
 | Y0 Kararlılık | Uzun kullanımda güvenilir ekran ve kayıt akışı | Mevcut başarısız testin teşhisi | 1–3 gün ilk teşhis ve düzeltme turu | NOT READY; temiz 4b4d015 testi 1194 saniyede bellek sınırından kaldı |
 | Y1 Harita ve yolculuk | Konum seçme, rota ve varış bilgisi, yolculuk başlatma | Birleşik kabul için Y0 | 2–4 gün | Ayrı dalda geliştirme adayı; kapanış bekliyor |
-| Y2 Ticaret | Gerçek alım ve satım, stok, para ve kapasite geri bildirimi | Y1 ve mevcut ekonomi servisleri | 2–4 gün | Planlandı |
-| Y3 Ordu yönetimi | Asker toplama, ikmal, maaş ve mevcut komuta işlemleri | Y2 ve mevcut askerî servisler | 3–5 gün | Planlandı |
+| Y2 Ticaret | Gerçek alım ve satım, stok, para ve kapasite geri bildirimi | Y1 ve mevcut ekonomi servisleri | 2–4 gün | Teknik aday PASS; Hasan ticaret yetkisi ve birleşik kabul açık |
+| Y3 Ordu yönetimi | Asker toplama, ikmal, maaş ve mevcut komuta işlemleri | Y2 ve mevcut askerî servisler | 3–5 gün | Sınırlı teknik UI adayı; final SHA raporu ayrı, birleşik kabul açık |
 | Y4 Kampanya zamanı ve kervan | Zamanla ilerleyen üretim, tüketim, yolculuk, teslim ve kervan muhasebesi | Y1–Y3 ve onaylı zamanlama kuralları | 5–10 gün | Karar gerekli |
 | Y5 Şehir ve üretim | Alanlar, üretim, ihtiyaçlar ve yetkililerin kullanılabilir ekranı | Y2 ve Y4 | 5–10 gün | Kısmen karar gerekli |
 | Y6 Diplomasi ve raporlar | Yetkili gönderim, teslim durumu ve bilgi güncelliği | Y4 ve mevcut Diplomacy servisleri | 4–7 gün | Kısmen karar gerekli |
@@ -145,6 +145,8 @@ Hane, tımar, siyasi tepkiler, Soldier→Character ilerlemesi ve büyük tarihse
 ## Dayanak belgeler
 
 Y2 geliştirme adayı [pazar ekranı kapsamına](Y2_PLAYABLE_TRADE_SCOPE.md) kaydedildi. Başlangıç kervanı NPC yöneticisine aittir; Hasan'ın ticaret yetkisi uydurulmaz. Y0, fiziksel giriş ve tam Y2 oyuncu döngüsü kabulü açık kalır. Bu çalışma Y1 adayının üzerine eklenir; art/Implementation 15 ilerlemesi değildir.
+
+Y3 adayı [ordu ve ikmal kapsamına](Y3_ARMY_LOGISTICS_UI.md) kaydedildi. Y2 teknik temel `c6b0c4694497f2561b8f1691cce3e2faee418112` korunur. Yeni personel kaydı ekipmanlı Soldier üretmez; mevcut maaş yükümlülüğü olmayan kampanyaya ücret uydurulmaz. Komuta ataması salt okunurdur. Teknik testler ve Windows kanıtı ayrı raporlanır; Y0/fiziksel giriş kapıları açık kalır.
 
 - [Mevcut Windows sürümü ve doğrulama sınırları](DEVELOPMENT_PLAYABLE_BUILD.md)
 - [Kampanya entegrasyonu ve test kapsamı](FULL_CAMPAIGN_INTEGRATION.md)

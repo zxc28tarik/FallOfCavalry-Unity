@@ -14,7 +14,7 @@ namespace FOC.Presentation.Unity
         private PresentationShellController? _controller;
         private PanelSettings? _runtimePanelSettings;
 
-        public void Configure(IPresentationScreenSource source, IPresentationLocalizer? localizer = null, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null)
+        public void Configure(IPresentationScreenSource source, IPresentationLocalizer? localizer = null, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null)
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
             Release();
@@ -34,7 +34,7 @@ namespace FOC.Presentation.Unity
             document.visualTreeAsset = template;
             _navigator = new PresentationNavigator();
             _viewModel = new PresentationShellViewModel(_navigator, source);
-            _controller = new PresentationShellController(document.rootVisualElement, _viewModel, localizer ?? new KeyFallbackLocalizer(), dispatcher, trade);
+            _controller = new PresentationShellController(document.rootVisualElement, _viewModel, localizer ?? new KeyFallbackLocalizer(), dispatcher, trade, army);
             // Unity reports a zero-sized screen while a headless player/editor is
             // initializing. Start from the supported compact desktop baseline and
             // let the normal geometry callback apply the real dimensions later.

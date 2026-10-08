@@ -33,14 +33,17 @@ namespace FOC.Presentation.Unity
         private WorldMapTravelPanel? _travelPanel;
         private readonly TradePanelSession? _trade;
         private TradePanel? _tradePanel;
+        private readonly ArmyPanelSession? _army;
+        private ArmyPanel? _armyPanel;
 
-        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null)
+        public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null, TradePanelSession? trade = null, ArmyPanelSession? army = null)
         {
             _root = root ?? throw new ArgumentNullException(nameof(root));
             _viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
             _localizer = localizer ?? throw new ArgumentNullException(nameof(localizer));
             _dispatcher = dispatcher;
             _trade = trade;
+            _army = army;
             _keyHandler = OnKeyDown;
             _geometryHandler = OnGeometryChanged;
             LocalizeTemplate();
@@ -127,6 +130,19 @@ namespace FOC.Presentation.Unity
                     _tradePanel.Render(state.Subject?.Id);
                 }
                 else { _tradePanel?.Dispose(); _tradePanel = null; }
+            }
+            var armyRoot = _root.Q<VisualElement>("army-panel");
+            if (armyRoot != null)
+            {
+                var visible = state.ScreenId == PresentationScreenId.Army && state.Current.Availability == PresentationAvailability.Available && _army != null;
+                armyRoot.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (visible)
+                {
+                    _armyPanel ??= new ArmyPanel(armyRoot, _army!,
+                        id => _viewModel.Open(new PresentationRoute(PresentationScreenId.Army, new PresentationEntityRef(PresentationEntityKind.Army, id))), ShowActionResult);
+                    _armyPanel.Render(state.Subject?.Id);
+                }
+                else { _armyPanel?.Dispose(); _armyPanel = null; }
             }
         }
 
@@ -343,6 +359,7 @@ namespace FOC.Presentation.Unity
             _travelPanel?.Dispose(); _travelPanel = null;
             _viewModel.Changed -= Render;
             _tradePanel?.Dispose(); _tradePanel = null; _trade?.Dispose();
+            _armyPanel?.Dispose(); _armyPanel = null; _army?.Dispose();
             _root.UnregisterCallback(_keyHandler);
             _root.UnregisterCallback(_geometryHandler);
             foreach (var binding in _buttonHandlers) binding.Item1.clicked -= binding.Item2;
