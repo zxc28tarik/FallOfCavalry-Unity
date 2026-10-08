@@ -57,6 +57,9 @@ namespace FOC.Bootstrap.Unity
                 var manualTravel = HasCommandLineArgument("-focMapTravelManual");
                 var cityAcceptance = HasCommandLineArgument("-focCityInspectionAcceptance");
                 var reportAcceptance = HasCommandLineArgument("-focReportInboxAcceptance");
+                var envoyAcceptance = HasCommandLineArgument("-focEnvoyTrackingAcceptance");
+                if (envoyAcceptance && (reportAcceptance || cityAcceptance || armyAcceptance || tradeAcceptance || smoke || soak || mapAcceptance || manualTravel || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
+                    throw new InvalidOperationException("Envoy tracking acceptance must run separately from other diagnostics.");
                 if (reportAcceptance && (cityAcceptance || armyAcceptance || tradeAcceptance || smoke || soak || mapAcceptance || manualTravel || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
                     throw new InvalidOperationException("Report inbox acceptance must run separately from other diagnostics.");
                 if (cityAcceptance && (armyAcceptance || tradeAcceptance || smoke || soak || mapAcceptance || manualTravel || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
@@ -82,7 +85,7 @@ namespace FOC.Bootstrap.Unity
                 if (!smoke && (HasCommandLineArgument("-focSmokeSlot") || HasCommandLineArgument("-focSmokeCorruptAfterSave")))
                     throw new InvalidOperationException("Smoke diagnostics require -focSmokeTest.");
                 var playerSaveRoot = Path.Combine(UnityEngine.Application.persistentDataPath, "FOC", "VerticalSliceSaves");
-                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke || soak || mapAcceptance || manualTravel || tradeAcceptance || armyAcceptance || cityAcceptance || reportAcceptance, requestedRoot);
+                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke || soak || mapAcceptance || manualTravel || tradeAcceptance || armyAcceptance || cityAcceptance || reportAcceptance || envoyAcceptance, requestedRoot);
                 _saveRoot = root;
                 var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice location content is missing.");
                 var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice route content is missing.");
@@ -122,6 +125,7 @@ namespace FOC.Bootstrap.Unity
                 else if (armyAcceptance) gameObject.AddComponent<DevelopmentArmyAcceptance>().Configure(this, root);
                 else if (cityAcceptance) gameObject.AddComponent<DevelopmentCityInspectionAcceptance>().Configure(this, root);
                 else if (reportAcceptance) gameObject.AddComponent<DevelopmentReportInboxAcceptance>().Configure(this, root);
+                else if (envoyAcceptance) gameObject.AddComponent<DevelopmentEnvoyTrackingAcceptance>().Configure(this, root);
             }
             catch (Exception exception)
             {
@@ -133,6 +137,7 @@ namespace FOC.Bootstrap.Unity
                 if (HasCommandLineArgument("-focArmyAcceptance")) UnityEngine.Application.Quit(1);
                 if (HasCommandLineArgument("-focCityInspectionAcceptance")) UnityEngine.Application.Quit(1);
                 if (HasCommandLineArgument("-focReportInboxAcceptance")) UnityEngine.Application.Quit(1);
+                if (HasCommandLineArgument("-focEnvoyTrackingAcceptance")) UnityEngine.Application.Quit(1);
                 if (HasCommandLineArgument("-focSmokeTest"))
                 {
                     Debug.LogError("FOC_DEVELOPMENT_SMOKE_FAIL STARTUP_FAILED " + exception.Message);
@@ -149,7 +154,7 @@ namespace FOC.Bootstrap.Unity
         private void PresentCampaign()
         {
             if (_host == null || _campaign == null || _viewer == null || _map == null) return;
-            _host.Configure(new CampaignPresentationScreenSource(_campaign, _viewer, _map),new SlicePresentationLocalizer(),_bindings,new TradePanelSession(_campaign,_viewer),new ArmyPanelSession(_campaign,_viewer),new CityInspectionSession(_campaign,_viewer),new ReportInboxSession(_campaign,_viewer));
+            _host.Configure(new CampaignPresentationScreenSource(_campaign, _viewer, _map),new SlicePresentationLocalizer(),_bindings,new TradePanelSession(_campaign,_viewer),new ArmyPanelSession(_campaign,_viewer),new CityInspectionSession(_campaign,_viewer),new ReportInboxSession(_campaign,_viewer),new EnvoyTrackingSession(_campaign,_viewer));
             OpenCommandLineScreen();
             BindSaveLoadSurface();
         }

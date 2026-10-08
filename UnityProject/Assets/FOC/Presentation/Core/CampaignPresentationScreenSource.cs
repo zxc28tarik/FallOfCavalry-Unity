@@ -56,7 +56,7 @@ namespace FOC.Presentation.Core
                     var id = Subject(route, PresentationEntityKind.Army) ?? _campaign.Military.Armies.OrderedArmies.FirstOrDefault()?.Id.Value;
                     return id == null ? _queries.BuildEmpty(route.Screen) : _queries.BuildArmy(_viewer, ArmyId.Create(id)).State;
                 }
-                case PresentationScreenId.Diplomacy: return _queries.BuildDiplomacy(_viewer).State;
+                case PresentationScreenId.Diplomacy: return _queries.BuildDiplomacy(_viewer, Subject(route, PresentationEntityKind.EnvoyMission)).State;
                 case PresentationScreenId.Battle:
                 {
                     var id = Subject(route, PresentationEntityKind.Battle) ?? _campaign.Battles.Battles.OrderedBattles.FirstOrDefault()?.Id.Value;
