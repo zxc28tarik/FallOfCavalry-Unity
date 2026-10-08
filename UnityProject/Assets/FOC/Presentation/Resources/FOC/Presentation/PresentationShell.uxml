@@ -36,6 +36,7 @@
             <ui:ScrollView class="foc-workspace" horizontal-scroller-visibility="Hidden">
                 <ui:Label name="breadcrumb" text="presentation.navigation.root" class="foc-breadcrumb" />
                 <ui:Label name="screen-title" text="presentation.screen.map" class="foc-screen-title" />
+                <ui:VisualElement name="world-map-travel" class="foc-travel-toolbar" />
                 <ui:VisualElement name="world-map-panel" class="foc-world-map" />
                 <ui:VisualElement class="foc-summary-grid">
                     <ui:VisualElement class="foc-card foc-card--primary">

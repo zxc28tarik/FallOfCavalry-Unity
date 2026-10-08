@@ -8,7 +8,7 @@
 .foc-virtual-list { flex-shrink: 0; border-width: 0; background-color: rgba(0,0,0,0); }
 .foc-details { margin-top: 8px; }
 .foc-world-map {
-    height: 460px;
+    height: 380px;
     margin-bottom: 14px;
     border-width: 1px;
     border-color: rgba(176, 151, 101, 0.8);
@@ -16,6 +16,21 @@
     -unity-background-scale-mode: scale-and-crop;
     overflow: hidden;
 }
+
+.foc-travel-toolbar { padding: 12px; margin-bottom: 8px; background-color: rgb(30,34,34); border-color: rgb(83,84,75); border-width: 1px; }
+.foc-travel-top { flex-direction: row; align-items: center; flex-wrap: wrap; }
+#travel-destination { width: 240px; margin-right: 12px; }
+#travel-destination > .unity-base-field__label { min-width: 80px; width: 80px; max-width: 80px; }
+.foc-travel-summary { flex-grow: 1; min-width: 270px; padding: 4px; }
+.foc-travel-route { font-size: 16px; -unity-font-style: bold; color: rgb(239,201,130); }
+.foc-travel-buttons { flex-direction: row; flex-wrap: wrap; }
+.foc-travel-buttons > Button { height: 32px; padding-left: 12px; padding-right: 12px; color: rgb(240,226,195); background-color: rgb(58,63,51); }
+#travel-start { background-color: rgb(103,78,40); }
+#travel-summary, #travel-stops, #travel-help { white-space: normal; font-size: 11px; }
+#travel-stops { color: rgb(181,181,153); margin-top: 5px; }
+.foc-travel-status { white-space: normal; margin-top: 5px; margin-bottom: 3px; }
+.foc-map-marker--selected { border-color: rgb(255,224,137); border-width: 2px; background-color: rgb(110,79,32); }
+#travel-progress { height: 18px; margin-top: 4px; }
 
 .foc-map-marker {
     width: 110px;

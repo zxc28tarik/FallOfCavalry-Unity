@@ -21,3 +21,9 @@
 *.meta -whitespace
 *.prefab -whitespace
 *.unity -whitespace
+
+# These three immutable provenance inputs were reviewed and SHA-256 signed as CRLF.
+# Preserve those exact bytes in fresh Windows/linked worktree checkouts.
+UnityProject/Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/media-strip-audit.json text eol=crlf
+UnityProject/Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/optimization-manifest.json text eol=crlf
+UnityProject/Assets/FOC/ArtSource/HistoricalSlice/MeshyPilot/Source/Hasan_Meshy_LOD1.json text eol=crlf

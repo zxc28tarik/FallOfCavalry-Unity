@@ -1,5 +1,13 @@
 # Y0 devam notu — 7–8 Ekim 2026
 
+## 8 Ekim oynanış ekranlarına dönüş
+
+Kullanıcı kılıç ve eyer sonucunu onayladı ve karakter görseli dışındaki büyük işlere devam edilmesini istedi. Kabul edilen görsele dönülmeyecek; Implementation 15 başlamayacak. Harita ve yolculuk geliştirme adayı `codex/y1-map-travel-ui` dalında, ana çalışma kopyasından ayrı tutuluyor. Kapsam: [Y1 harita ve yolculuk](Y1_MAP_TRAVEL_SCOPE.md).
+
+Ana kopyada temiz `4b4d015f867266bef4e31ddca7da2a228b1f4ab6` üzerinde yeniden çalıştırılan normal 7200 saniyelik Y0 testi **1193.999 saniye / 211 kayıt döngüsünde FAIL** oldu: `MANAGED_GROWTH_OVER_64_MIB`, managed artış 68,050,944 bayt. Test iki saati tamamlamadı; UI eleman sayısı 244 kaldı, normal oyuncu kayıtları değişmedi. Yerel kanıt: `TestResults/WindowsPlayerSoak/4b4d015f867266bef4e31ddca7da2a228b1f4ab6/457b4142866146149224c2f0746bfc7f/manifest.json`. Bu test Y1 kodunu içermez.
+
+Y0 NOT READY kalır. Y1 geliştirme adayı Y0'ı kapatmaz ve yeni paketlerin toplu kabulü anlamına gelmez. Aşağıdaki eski 3D öncelik notu bu yeni kullanıcı isteğinden öncedir.
+
 Güncel kullanıcı önceliği: Y0 bellek çalışması durduruldu; Implementation 14C Meshy idle ve sağ el kılıç saldırısına dönüldü. Yeni iki saatlik RAM denemesi başlatma. Y0 READY değildir; Implementation 15 ve Y1 başlamadı. Bellek değişikliklerini koru, ancak bunları 3D pilotunun ön koşulu olarak dayatma. Aşağıdaki eski kapanış kanıtları kendi SHA'larına aittir.
 
 Repository: `zxc28tarik/FallOfCavalry-Unity`

@@ -35,6 +35,7 @@ namespace FOC.Bootstrap.Unity
         private IMapPresentationDataProvider? _map;
         private PresentationCommandBindingRegistry? _bindings;
         private TravelCommandService? _travel;
+        private TravelPresentationCommands? _travelCommands;
         private Label? _feedback;
         private TextField? _slot;
         private VisualSoldier3D? _previewView;
@@ -50,6 +51,10 @@ namespace FOC.Bootstrap.Unity
             {
                 var smoke = HasCommandLineArgument("-focSmokeTest");
                 var soak = HasCommandLineArgument("-focPlayerSoak");
+                var mapAcceptance = HasCommandLineArgument("-focMapTravelAcceptance");
+                var manualTravel = HasCommandLineArgument("-focMapTravelManual");
+                if ((mapAcceptance || manualTravel) && (smoke || soak || mapAcceptance && manualTravel || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
+                    throw new InvalidOperationException("Map travel acceptance must run separately from other diagnostics.");
                 if (soak && (smoke || HasCommandLineArgument("-focCaptureScreenshot") || HasCommandLineArgument("-focSoldierPreview") || HasCommandLineArgument("-focTravelDemo")))
                     throw new InvalidOperationException("Player soak must run separately from other diagnostic modes.");
                 if (!soak && HasCommandLineArgument("-focSoakSeconds")) throw new InvalidOperationException("Soak duration requires -focPlayerSoak.");
@@ -65,7 +70,7 @@ namespace FOC.Bootstrap.Unity
                 if (!smoke && (HasCommandLineArgument("-focSmokeSlot") || HasCommandLineArgument("-focSmokeCorruptAfterSave")))
                     throw new InvalidOperationException("Smoke diagnostics require -focSmokeTest.");
                 var playerSaveRoot = Path.Combine(UnityEngine.Application.persistentDataPath, "FOC", "VerticalSliceSaves");
-                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke || soak, requestedRoot);
+                var root = DevelopmentSmokeSaveDirectory.Resolve(playerSaveRoot, smoke || soak || mapAcceptance || manualTravel, requestedRoot);
                 _saveRoot = root;
                 var locations=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-locations") ?? throw new InvalidOperationException("Vertical-slice location content is missing.");
                 var routes=Resources.Load<TextAsset>("FOC/Geography/vertical-slice-routes") ?? throw new InvalidOperationException("Vertical-slice route content is missing.");
@@ -100,12 +105,14 @@ namespace FOC.Bootstrap.Unity
                 if (HasCommandLineArgument("-focCaptureScreenshot")) StartCoroutine(CaptureScreenshot());
                 else if (smoke) StartCoroutine(RunSmoke());
                 else if (soak) gameObject.AddComponent<DevelopmentPlayerSoak>().Configure(this, root, soakSeconds);
+                else if (mapAcceptance) gameObject.AddComponent<DevelopmentMapTravelAcceptance>().Configure(this, root);
             }
             catch (Exception exception)
             {
                 Debug.LogException(exception);
                 Debug.LogError("FOC_DEVELOPMENT_BOOTSTRAP_FAILED " + exception.Message);
                 enabled = false;
+                if (HasCommandLineArgument("-focMapTravelAcceptance")) UnityEngine.Application.Quit(1);
                 if (HasCommandLineArgument("-focSmokeTest"))
                 {
                     Debug.LogError("FOC_DEVELOPMENT_SMOKE_FAIL STARTUP_FAILED " + exception.Message);
@@ -319,21 +326,17 @@ namespace FOC.Bootstrap.Unity
 
         private void ConfigureTravelPresentation()
         {
-            if(_campaign==null)return;_bindings?.Dispose();_travel=new TravelCommandService(_campaign);_map=new WorldMapPresentationDataProvider(_campaign);_bindings=new PresentationCommandBindingRegistry();
+            if(_campaign==null||_viewer==null)return;_bindings?.Dispose();_travel=new TravelCommandService(_campaign);_travelCommands=new TravelPresentationCommands(_campaign,_viewer);_map=new WorldMapPresentationDataProvider(_campaign);_bindings=new PresentationCommandBindingRegistry();
             foreach(var location in _campaign.Geography.World.OrderedLocations)
             {
-                if(location.Id.Value=="istanbul")continue;var destination=location.Id;_bindings.Register("travel.start:"+destination.Value,()=>StartPlayerTravel(destination));
+                var destination=location.Id;_bindings.Register("travel.start:"+destination.Value,()=>StartPlayerTravel(destination));
             }
-            _bindings.Register("travel.advance-one-hour",()=>{try{_travel!.Advance(WorldDuration.FromMinutes(60));return PresentationActionResult.Success("presentation.travel.advanced");}catch(InvalidOperationException){return PresentationActionResult.Rejected("presentation.action.validation-rejected");}});
+            _bindings.Register("travel.advance-one-hour",()=>_travelCommands!.AdvanceOneHour());
         }
 
         private PresentationActionResult StartPlayerTravel(WorldLocationId destination)
         {
-            try
-            {
-                if(_campaign==null||_travel==null)throw new InvalidOperationException();var player=_campaign.Characters.GetRequired(CharacterId.Create("hasan-aga"));if(player.Location.Kind!=CharacterLocationKind.City||!player.Location.CityId.HasValue)throw new InvalidOperationException();var origin=_campaign.Geography.World.LocationForCity(player.Location.CityId.Value).Id;_travel.Start(JourneyId.Create("journey-player-"+_campaign.Clock.Now.Ticks+"-"+destination.Value),TravelActorRef.Character(player.Id),origin,destination);return PresentationActionResult.Success("presentation.travel.started");
-            }
-            catch(InvalidOperationException){return PresentationActionResult.Rejected("presentation.action.validation-rejected");}
+            return _travelCommands?.Start(destination) ?? PresentationActionResult.Rejected("presentation.action.binding-unavailable");
         }
     }
 }

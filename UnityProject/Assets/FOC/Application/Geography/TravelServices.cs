@@ -81,6 +81,50 @@ namespace FOC.Application.Geography
             return journey;
         }
 
+        public WorldLocationDefinition? CharacterOrigin(CharacterId characterId)
+        {
+            var character = _campaign.Characters.OrderedCharacters.FirstOrDefault(x => x.Id.Equals(characterId));
+            if (character == null) return null;
+            return _campaign.Geography.World.OrderedLocations.FirstOrDefault(x => CharacterIsAt(character, x));
+        }
+
+        public CharacterTravelPreview PreviewCharacter(CharacterId characterId, WorldLocationId destinationId)
+        {
+            var character = _campaign.Characters.OrderedCharacters.FirstOrDefault(x => x.Id.Equals(characterId));
+            if (character == null) return new CharacterTravelPreview(TravelPreviewFailure.ActorUnavailable);
+            var origin = CharacterOrigin(characterId);
+            var destination = _campaign.Geography.World.OrderedLocations.FirstOrDefault(x => x.Id.Equals(destinationId));
+            if (character.IsDead) return new CharacterTravelPreview(TravelPreviewFailure.Dead, origin, destination);
+            if (character.Captivity != null) return new CharacterTravelPreview(TravelPreviewFailure.Captive, origin, destination);
+            if (_campaign.Geography.Travel.ActiveFor(TravelActorRef.Character(characterId)) != null)
+                return new CharacterTravelPreview(TravelPreviewFailure.AlreadyTravelling, origin, destination);
+            if (origin == null) return new CharacterTravelPreview(TravelPreviewFailure.OriginUnavailable, null, destination);
+            if (destination == null) return new CharacterTravelPreview(TravelPreviewFailure.DestinationUnavailable, origin);
+            if (origin.Id.Equals(destination.Id)) return new CharacterTravelPreview(TravelPreviewFailure.AlreadyAtDestination, origin, destination);
+            RoutePath path;
+            try { path = _pathfinder.Find(_campaign.Geography.World, origin.Id, destination.Id); }
+            catch (InvalidOperationException) { return new CharacterTravelPreview(TravelPreviewFailure.NoRoute, origin, destination); }
+            var ticks = path.Routes.Sum(x => _time.SegmentTicks(TravelActorKind.Character, _campaign.Geography.World.Route(x).DistanceMeters));
+            return new CharacterTravelPreview(TravelPreviewFailure.None, origin, destination, path, ticks);
+        }
+
+        public TravelJourneyState StartCharacter(JourneyId id, CharacterId characterId, WorldLocationId destination)
+        {
+            var plan = PreviewCharacter(characterId, destination);
+            if (!plan.CanStart) throw new InvalidOperationException("Character travel rejected: " + plan.Failure);
+            return Start(id, TravelActorRef.Character(characterId), plan.Origin!.Id, destination);
+        }
+
+        private static bool CharacterIsAt(CharacterState character, WorldLocationDefinition origin)
+        {
+            if (character.Location.Kind == CharacterLocationKind.City)
+                return origin.CityId.HasValue && character.Location.CityId.HasValue && character.Location.CityId.Value.Equals(origin.CityId.Value);
+            // Arrival at an authored non-City node already uses WorldPosition. Match exactly;
+            // never snap an arbitrary point or an in-transit actor onto a nearby road.
+            return !origin.CityId.HasValue && character.Location.Kind == CharacterLocationKind.WorldPosition
+                && character.Location.Position.X == origin.MapPoint.X && character.Location.Position.Y == origin.MapPoint.Y;
+        }
+
         public void Advance(WorldDuration duration)
         {
             if (duration.Ticks < 0) throw new ArgumentOutOfRangeException(nameof(duration));
@@ -138,7 +182,7 @@ namespace FOC.Application.Geography
             {
                 case TravelActorKind.Character:
                     var character = _campaign.Characters.GetRequired(CharacterId.Create(actor.Id));
-                    if (character.IsDead || character.Captivity != null || !origin.CityId.HasValue || character.Location.Kind != CharacterLocationKind.City || !character.Location.CityId!.Value.Equals(origin.CityId.Value)) throw new InvalidOperationException("Character is unavailable or not at the journey origin.");
+                    if (character.IsDead || character.Captivity != null || !CharacterIsAt(character, origin)) throw new InvalidOperationException("Character is unavailable or not at the journey origin.");
                     break;
                 case TravelActorKind.Army:
                     var army = _campaign.Military.Armies.GetRequired(ArmyId.Create(actor.Id));
@@ -202,13 +246,7 @@ namespace FOC.Application.Geography
             if (!at.Equals(_campaign.Clock.Now) || owner.Kind != AIDecisionOwnerKind.Character || target.Kind != AITargetKind.WorldLocation) return false;
             try
             {
-                var actor = TravelActorRef.Character(CharacterId.Create(owner.Id)); if (_campaign.Geography.Travel.ActiveFor(actor) != null) return false;
-                var character = _campaign.Characters.GetRequired(CharacterId.Create(owner.Id));
-                if (character.IsDead || character.Captivity != null || character.Location.Kind != CharacterLocationKind.City || !character.Location.CityId.HasValue) return false;
-                var origin = _campaign.Geography.World.LocationForCity(character.Location.CityId.Value).Id; var destination = WorldLocationId.Create(target.Id);
-                if (origin.Equals(destination)) return false;
-                new DeterministicRoutePathfinder().Find(_campaign.Geography.World, origin, destination);
-                return true;
+                return _travel.PreviewCharacter(CharacterId.Create(owner.Id), WorldLocationId.Create(target.Id)).CanStart;
             }
             catch { return false; }
         }

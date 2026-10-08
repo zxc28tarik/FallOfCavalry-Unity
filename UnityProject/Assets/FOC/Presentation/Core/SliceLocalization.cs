@@ -8,6 +8,23 @@ namespace FOC.Presentation.Core
     {
         public static IReadOnlyDictionary<string,string> Turkish { get; } = new Dictionary<string,string>
         {
+            ["presentation.map.traveller"]="Yolcu",
+            ["presentation.travel.select-destination"]="Haritadan veya listeden gidilecek yeri seç.",
+            ["presentation.travel.preview-ready"]="Rota hazır. Yola çık emri verilene kadar zaman ilerlemez.",
+            ["presentation.travel.in-progress"]="Yolculuk sürüyor. İlerlettiğin zaman mevcut yolculuk servisine uygulanır.",
+            ["presentation.travel.paused"]="Kampanya saati duraklatılmış; zaman ilerletilemiyor.",
+            ["presentation.travel.blocked.actorunavailable"]="Denetlediğin bir yolcu bulunamadı.",
+            ["presentation.travel.blocked.dead"]="Hayatta olmayan karakter yola çıkamaz.",
+            ["presentation.travel.blocked.captive"]="Esir karakter yola çıkamaz.",
+            ["presentation.travel.blocked.alreadytravelling"]="Yolculuk bitmeden yeni bir yolculuk başlatılamaz.",
+            ["presentation.travel.blocked.originunavailable"]="Karakter bilinen bir hareket noktasında değil.",
+            ["presentation.travel.blocked.destinationunavailable"]="Seçilen hedef mevcut yol ağında bulunmuyor.",
+            ["presentation.travel.blocked.alreadyatdestination"]="Zaten bu konumdasın. Başka bir hedef seç.",
+            ["presentation.travel.blocked.noroute"]="Bu hedefe mevcut yol ağı üzerinden ulaşılamıyor.",
+            ["presentation.action.no-active-journey"]="İlerletilecek kendi yolculuğun yok.",
+            ["presentation.action.advance-one-hour"]="1 saat ilerlet",
+            ["presentation.action.already-travelling"]="Yolculuk zaten sürüyor.",
+            ["presentation.route-mode.road"]="Kara yolu", ["presentation.route-mode.sea"]="Deniz yolu", ["presentation.route-mode.crossing"]="Geçiş",
             ["presentation.screen.map"]="Marmara Haritası",["presentation.screen.city"]="Şehir",["presentation.screen.character"]="Karakter",["presentation.screen.organization"]="Teşkilat",["presentation.screen.trade"]="Ticaret",["presentation.screen.army"]="Ordu",["presentation.screen.diplomacy"]="Diplomasi",["presentation.screen.battle"]="Muharebe",["presentation.screen.reports"]="Raporlar",["presentation.screen.ledger"]="Hesap Defteri",["presentation.screen.encounter-contract"]="Karşılaşma ve Sözleşme",
             ["presentation.section.current"]="Mevcut Durum",["presentation.section.details"]="Ayrıntılar",["presentation.section.trend"]="Eğilim",["presentation.section.why"]="Neden",["presentation.section.risk"]="Riskler",["presentation.section.opportunity"]="Fırsatlar",["presentation.section.actions"]="Emirler",["presentation.navigation.root"]="Fall of Cavalry · 1648",["presentation.navigation.campaign"]="Sefer Defteri",["presentation.navigation.back"]="Geri",["presentation.navigation.forward"]="İleri",["presentation.clock.unavailable"]="1 Eylül 1648",["presentation.alerts"]="Uyarılar",["presentation.context.title"]="Bağlam",["presentation.context.no-selection"]="Ek bağlam seçilmedi",["presentation.preview.visual-soldier-reuse"]="Asker görünümü seçili birlikten üretilir",["presentation.empty.risks"]="Bilinen kritik risk yok",["presentation.empty.opportunities"]="Kayıtlı fırsat yok",["presentation.empty.actions"]="Uygulanabilir emir yok",
             ["presentation.city.name"]="Şehir",["presentation.city.population"]="Nüfus (slice ayarı)",["presentation.city.areas"]="Şehir alanları",["presentation.city.officials"]="Şehir görevlileri",["presentation.city.market"]="Pazar",["presentation.city.production"]="Üretim",["presentation.city.infrastructure"]="Altyapı",["presentation.city.religion"]="Dinî profil",
@@ -26,6 +43,7 @@ namespace FOC.Presentation.Core
         public string Get(string key)
         {
             if(string.IsNullOrWhiteSpace(key))return string.Empty;if(SliceLocalization.Turkish.TryGetValue(key,out var translated))return translated;if(!key.StartsWith("presentation.",StringComparison.Ordinal))return key;
+            if(key.StartsWith("presentation.action.travel-to.",StringComparison.Ordinal))return key.Substring("presentation.action.travel-to.".Length)+" yönüne yola çık";
             var segment=key.Substring(key.LastIndexOf('.')+1).Replace('-',' ');return CultureInfo.GetCultureInfo("tr-TR").TextInfo.ToTitleCase(segment);
         }
     }

@@ -30,6 +30,7 @@ namespace FOC.Presentation.Unity
         private readonly List<ListView> _detailFieldLists = new List<ListView>();
         private readonly List<Label> _detailUnavailable = new List<Label>();
         private bool _disposed;
+        private WorldMapTravelPanel? _travelPanel;
 
         public PresentationShellController(VisualElement root, PresentationShellViewModel viewModel, IPresentationLocalizer localizer, IPresentationActionDispatcher? dispatcher = null)
         {
@@ -232,6 +233,8 @@ namespace FOC.Presentation.Unity
 
         private void ShowActionResult(PresentationActionResult result)
         {
+            var travelFeedback = _root.Q<Label>("travel-feedback");
+            if (travelFeedback != null) travelFeedback.text = _localizer.Get(result.MessageKey);
             var feedback = _root.Q<Label>("action-feedback");
             if (feedback == null) return;
             feedback.text = _localizer.Get(result.MessageKey);
@@ -280,6 +283,19 @@ namespace FOC.Presentation.Unity
         private Label StatusLabel(string key, string className) { var label = new Label(_localizer.Get(key)); label.AddToClassList(className); return label; }
         private void RenderMap(ScreenPresentationState state)
         {
+            var toolbar = _root.Q<VisualElement>("world-map-travel");
+            var map = _root.Q<VisualElement>("world-map-panel");
+            if (toolbar != null && map != null && state.Map?.Travel != null)
+            {
+                toolbar.style.display = DisplayStyle.Flex; map.style.display = DisplayStyle.Flex;
+                _travelPanel ??= new WorldMapTravelPanel(map, toolbar, _localizer, OpenEntity,
+                    action => { if (!_disposed) ShowActionResult(_dispatcher?.Dispatch(action) ?? PresentationActionResult.Rejected("presentation.action.binding-unavailable")); });
+                _travelPanel.Render(state);
+                SetText("campaign-clock", TravelPresentationText.Clock(state.Map.Travel.ClockTicks));
+                return;
+            }
+            if (toolbar != null) toolbar.style.display = DisplayStyle.None;
+            _travelPanel?.Dispose(); _travelPanel = null;
             var panel=_root.Q<VisualElement>("world-map-panel");if(panel==null)return;panel.style.display=state.ScreenId==PresentationScreenId.Map?DisplayStyle.Flex:DisplayStyle.None;panel.Clear();if(state.ScreenId!=PresentationScreenId.Map||state.Map==null)return;
             var texture=Resources.Load<Texture2D>("FOC/Geography/MarmaraStrategyMap");if(texture!=null)panel.style.backgroundImage=new StyleBackground(texture);
             var routes=new VisualElement();routes.style.position=Position.Absolute;routes.style.left=0;routes.style.right=0;routes.style.top=0;routes.style.bottom=0;routes.pickingMode=PickingMode.Ignore;var routeSnapshot=state.Map.Routes;routes.generateVisualContent+=context=>{var painter=context.painter2D;painter.lineWidth=2f;foreach(var route in routeSnapshot){painter.strokeColor=route.Active?new Color(0.9f,0.25f,0.12f,0.95f):new Color(0.26f,0.19f,0.11f,0.72f);painter.BeginPath();painter.MoveTo(new Vector2(route.FirstX*routes.contentRect.width,route.FirstY*routes.contentRect.height));painter.LineTo(new Vector2(route.SecondX*routes.contentRect.width,route.SecondY*routes.contentRect.height));painter.Stroke();}};panel.Add(routes);
@@ -308,6 +324,7 @@ namespace FOC.Presentation.Unity
         public void Dispose()
         {
             if (_disposed) return;
+            _travelPanel?.Dispose(); _travelPanel = null;
             _viewModel.Changed -= Render;
             _root.UnregisterCallback(_keyHandler);
             _root.UnregisterCallback(_geometryHandler);

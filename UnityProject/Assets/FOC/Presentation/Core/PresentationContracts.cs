@@ -313,7 +313,8 @@ namespace FOC.Presentation.Core
     }
     public sealed class MapPresentationSnapshot
     {
-        public MapPresentationSnapshot(IReadOnlyList<MapMarkerPresentation> markers,IReadOnlyList<MapRoutePresentation> routes,IReadOnlyList<MapJourneyPresentation> journeys){Markers=markers??throw new ArgumentNullException(nameof(markers));Routes=routes??throw new ArgumentNullException(nameof(routes));Journeys=journeys??throw new ArgumentNullException(nameof(journeys));}
+        public MapPresentationSnapshot(IReadOnlyList<MapMarkerPresentation> markers,IReadOnlyList<MapRoutePresentation> routes,IReadOnlyList<MapJourneyPresentation> journeys,MapTravelPresentation? travel = null){Markers=markers??throw new ArgumentNullException(nameof(markers));Routes=routes??throw new ArgumentNullException(nameof(routes));Journeys=journeys??throw new ArgumentNullException(nameof(journeys));Travel=travel;}
+        public MapTravelPresentation? Travel { get; }
         public IReadOnlyList<MapMarkerPresentation> Markers{get;}public IReadOnlyList<MapRoutePresentation> Routes{get;}public IReadOnlyList<MapJourneyPresentation> Journeys{get;}
     }
 

@@ -1,6 +1,8 @@
 # Fall of Cavalry oynanabilir ekranlar ilerleme planı
 
-Son durma noktası ve devam sırası: [Y0 devam notu](Y0_HANDOFF.md).
+Son durma noktası ve devam sırası: [Y0 devam notu](Y0_HANDOFF.md). Yeni harita adayı: [Y1 kapsamı](Y1_MAP_TRAVEL_SCOPE.md).
+
+8 Ekim 2026 önceliği: kullanıcı kılıç ve eyer sonucunu onaylayıp karakter görseli dışındaki büyük işlere devam edilmesini istedi. Y1 ayrı bir dalda geliştirme adayı olarak hazırlanır; Y0 uzun kullanım kabulü ve Y1'in birleşik kabul önkoşulu açık kalır. Bu geliştirme önceliği Implementation 15'i veya sanat kapılarını açmaz.
 
 Harita ve normal oyun ekranları, şehir ve asker sanatını beklemeden geliştirilecek. Amaç, mevcut sistemleri oyuncunun gerçekten kullanabildiği bir kampanya döngüsüne bağlamak. Şehir yönetim ekranının tamamlanması şehirlerin 3D görünüşünün; ordu veya savaş sonuç ekranının tamamlanması asker görsellerinin kabul edildiği anlamına gelmez.
 
@@ -34,8 +36,8 @@ Y kodları yalnız bu planın takip etiketleridir; yeni Implementation numaralar
 
 | Paket | Oyuncuya sunulan sonuç | Önkoşul | Tahmini süre | Durum |
 | --- | --- | --- | --- | --- |
-| Y0 Kararlılık | Uzun kullanımda güvenilir ekran ve kayıt akışı | Mevcut başarısız testin teşhisi | 1–3 gün ilk teşhis ve düzeltme turu | Teşhis ve geliştirme doğrulaması sürüyor |
-| Y1 Harita ve yolculuk | Konum seçme, rota ve varış bilgisi, yolculuk başlatma | Y0 | 2–4 gün | Planlandı |
+| Y0 Kararlılık | Uzun kullanımda güvenilir ekran ve kayıt akışı | Mevcut başarısız testin teşhisi | 1–3 gün ilk teşhis ve düzeltme turu | NOT READY; temiz 4b4d015 testi 1194 saniyede bellek sınırından kaldı |
+| Y1 Harita ve yolculuk | Konum seçme, rota ve varış bilgisi, yolculuk başlatma | Birleşik kabul için Y0 | 2–4 gün | Ayrı dalda geliştirme adayı; kapanış bekliyor |
 | Y2 Ticaret | Gerçek alım ve satım, stok, para ve kapasite geri bildirimi | Y1 ve mevcut ekonomi servisleri | 2–4 gün | Planlandı |
 | Y3 Ordu yönetimi | Asker toplama, ikmal, maaş ve mevcut komuta işlemleri | Y2 ve mevcut askerî servisler | 3–5 gün | Planlandı |
 | Y4 Kampanya zamanı ve kervan | Zamanla ilerleyen üretim, tüketim, yolculuk, teslim ve kervan muhasebesi | Y1–Y3 ve onaylı zamanlama kuralları | 5–10 gün | Karar gerekli |

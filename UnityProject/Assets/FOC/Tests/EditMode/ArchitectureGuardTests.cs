@@ -162,7 +162,8 @@ namespace FOC.Tests
             var directory = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
             while (directory != null)
             {
-                if (Directory.Exists(Path.Combine(directory.FullName, ".git")) &&
+                // A normal checkout has a .git directory; a linked worktree has a .git file.
+                if ((Directory.Exists(Path.Combine(directory.FullName, ".git")) || File.Exists(Path.Combine(directory.FullName, ".git"))) &&
                     Directory.Exists(Path.Combine(directory.FullName, "UnityProject")))
                 {
                     return directory.FullName;

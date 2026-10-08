@@ -30,7 +30,7 @@ namespace FOC.Presentation.Core
         {
             switch (route.Screen)
             {
-                case PresentationScreenId.Map: return _queries.BuildMap(_viewer, _map).State;
+                case PresentationScreenId.Map: return _queries.BuildMap(_viewer, _map, Subject(route, PresentationEntityKind.WorldLocation)).State;
                 case PresentationScreenId.City:
                 {
                     var id = Subject(route, PresentationEntityKind.City) ?? _campaign.Cities.OrderedCities.FirstOrDefault()?.Id.Value;
