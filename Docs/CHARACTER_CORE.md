@@ -24,6 +24,10 @@ Alive/dead state, injury and captivity are orthogonal outcomes. Injury supports 
 
 `ICharacterDeathPolicy` is the future story-system hook. The baseline `ImportanceStoryGuardDeathPolicy` deterministically rejects arbitrary-random death for A/B characters and returns a typed `InjuryOrCaptivity` preference to the future outcome resolver. It neither makes them universally immortal nor implements story content, probabilities or battle outcomes.
 
+## NPC creation service
+
+The opt-in `NpcGenerationService` uses the existing roster, clock and deterministic RNG to register bounded batches of `GeneratedPerson` with unique stable IDs, culture-fed names and archetype-influenced **initial stats only**. See [NPC_GENERATION.md](NPC_GENERATION.md). It creates no implicit relation graph, player avatar, house membership, religion, military ownership or combat modifier. Importance remains null until promotion.
+
 ## Persistence
 
 Schema v2 persists all Character Core semantics through dedicated SaveData DTOs. `CampaignSaveMapper` validates DTO invariants before reconstruction. The v1→v2 migration preserves foundation metadata and creates no fictional characters. Stable roster/relation/history ordering makes equivalent state serialize identically.
