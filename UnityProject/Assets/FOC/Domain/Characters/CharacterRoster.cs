@@ -19,6 +19,8 @@ namespace FOC.Domain.Characters
             _characters.Add(character.Id, character);
         }
 
+        public bool Contains(CharacterId id) => id.IsValid && _characters.ContainsKey(id);
+
         public CharacterState GetRequired(CharacterId id)
         {
             if (!_characters.TryGetValue(id, out var character)) throw new KeyNotFoundException($"Character '{id.Value}' was not found.");
