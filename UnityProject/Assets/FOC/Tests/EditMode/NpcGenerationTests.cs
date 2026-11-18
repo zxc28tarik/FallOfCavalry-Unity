@@ -45,7 +45,7 @@ namespace FOC.Tests
             Assert.That(generated.Count, Is.EqualTo(12));
             Assert.That(state.Characters.Count, Is.EqualTo(12));
             Assert.That(state.Characters.Relations.Count, Is.EqualTo(0));
-            Assert.That(state.Soldiers.Soldiers.Count, Is.EqualTo(0));
+            Assert.That(state.Soldiers.Soldiers.OrderedSoldiers.Count, Is.EqualTo(0));
             Assert.That(generated.Select(x => x.Character.Id.Value).Distinct().Count(), Is.EqualTo(12));
             foreach (var item in generated)
             {
