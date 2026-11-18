@@ -11,6 +11,10 @@ Implementation 0 established the deterministic, save-safe foundation. Implementa
 - `Build/` — Unity-independent .NET project mirrors used for fast local/CI validation.
 - `Docs/` — architecture, determinism, save schema, testing, scope, and audit records.
 
+## Game-world NPC generation (new)
+
+[Docs/NPC_GENERATION.md](Docs/NPC_GENERATION.md) documents the seeded, content-driven generation of ordinary campaign people through the existing Character Core. It is **not** a player character creator and does not modify the separate web game. Historical demographic, role and age persistence remains a future explicit design/save migration scope.
+
 ## Local validation
 
 ```powershell
